@@ -6,24 +6,19 @@ using System.Windows.Forms;
 
 namespace Configuration_Manager.CustomControls
 {
-    class CTextBox : TextBox, ICustomControl
+    class CComboBox : ComboBox , ICustomControl
     {
         static int count = 0;
 
-        private TextBox c;
+        private ComboBox c;
         public List<ICustomControl> RelatedControls { get; private set; }
 
-        public CTextBox(TextBox textBox)
+        public CComboBox(ComboBox comboBox)
         {
-            this.c = textBox;
+            this.c = comboBox;
 
-            this.Name = "TextBox" + count;
+            this.Name = "ComboBox" + count;
             count++;
-        }
-
-        public TextBox getTextBox()
-        {
-            return c;
         }
 
         public void SetControlDescription(ControlDescription cd)

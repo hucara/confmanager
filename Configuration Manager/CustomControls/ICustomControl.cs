@@ -8,7 +8,9 @@ namespace Configuration_Manager.CustomControls
 {
     interface ICustomControl
     {
-        public Control c;
-        public List<Control> RelatedControls;
+        //List<Control> RelatedControls { get; set; }
+
+        void SetControlDescription(ControlDescription cd);
+        //void addRelatedControl(Control c);
     }
 }

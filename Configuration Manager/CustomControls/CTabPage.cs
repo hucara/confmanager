@@ -6,22 +6,23 @@ using System.Windows.Forms;
 
 namespace Configuration_Manager.CustomControls
 {
-    class CTextBox : TextBox, ICustomControl
+    class CTabPage : TabPage, ICustomControl
     {
         static int count = 0;
 
-        private TextBox c;
+        private TabPage c;
         public List<ICustomControl> RelatedControls { get; private set; }
 
-        public CTextBox(TextBox textBox)
+        public CTabPage(TabPage tabPage)
         {
-            this.c = textBox;
+            this.c = tabPage;
 
-            this.Name = "TextBox" + count;
+            this.Name = "CTabPage" + count;
+            this.Text = this.Name;
             count++;
         }
 
-        public TextBox getTextBox()
+        public TabPage GetTabPage()
         {
             return c;
         }
