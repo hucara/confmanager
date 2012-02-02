@@ -10,19 +10,19 @@ namespace Configuration_Manager
     {
         private static Model model;
 
-        private bool progMode = false;
-        private bool editingUI = false;
-        private bool creatingNewComponent = false;
-        private bool editingOldComponent = false;
+        public bool progMode = false;
+        public bool editingUI = false;
+        public bool creatingNewComponent = false;
+        public bool editingOldComponent = false;
 
         public bool ObjectDefinitionExists { get; set; }
 
-        private List<String> sections;
+        public List<String> sections;
         
         public List<System.Windows.Forms.ToolStripItem> toolStripItems {get; private set;}
         public List<ICustomControl> AllControls { get; private set; }
 
-        private String CurrentLanguageFile;
+        public String CurrentLanguageFile;
         
         // Constructor
         private Model()
@@ -40,6 +40,5 @@ namespace Configuration_Manager
             }
             return model;
         }
-
     }
 }

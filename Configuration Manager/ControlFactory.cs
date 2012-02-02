@@ -34,7 +34,8 @@ namespace Configuration_Manager
 
         public CLabel BuildCLabel(ControlDescription cd)
         {
-            CLabel lbl = new CLabel(new Label());
+            CLabel lbl = new CLabel();
+            //CLabel lbl = new CLabel(new Label());
             lbl.SetControlDescription(cd);
             return lbl;
         }

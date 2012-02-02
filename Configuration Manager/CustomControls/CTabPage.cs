@@ -22,6 +22,13 @@ namespace Configuration_Manager.CustomControls
             count++;
         }
 
+        public CTabPage()
+        {
+            this.Name = "CTabPage" + count;
+            this.Text = this.Name;
+            count++;
+        }
+
         public TabPage GetTabPage()
         {
             return c;

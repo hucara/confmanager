@@ -96,12 +96,14 @@ namespace Configuration_Manager
             {
                 ConfigObjects = XDocument.Load(ObjectDefinitionsPath);
                 Model.getInstance().ObjectDefinitionExists = true;
-                System.Diagnostics.Debug.WriteLine(" ** OK ** " + ObjectDefinitionsPath + " - File found");
+                System.Diagnostics.Debug.WriteLine("** OK ** " + ObjectDefinitionsPath + " - File found");
+                System.Diagnostics.Debug.WriteLine("** Setting up last UI ** ");
             }
             catch (FileNotFoundException)
             {
                 Model.getInstance().ObjectDefinitionExists = false;
-                System.Diagnostics.Debug.WriteLine(" ** INFO ** " + ObjectDefinitionsPath + " - File not found");
+                System.Diagnostics.Debug.WriteLine("** INFO ** " + ObjectDefinitionsPath + " - File not found");
+                System.Diagnostics.Debug.WriteLine("** Creating a new empty UI ** ");
             }
         }
     }

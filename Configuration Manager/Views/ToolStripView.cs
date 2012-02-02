@@ -11,17 +11,23 @@ namespace Configuration_Manager.Views
     class ToolStripView : IView
     {
         Model model;
-        ToolStrip ts;
-        TabControl tc;
-        
+        ToolStrip ToolStrip;
+        TabControl TabControl;
+
         XDocument xdoc;
         ControlFactory cf;
 
+        List<CTabPage> CTabPages;
+        List<CToolStripButton> CToolStripButtons;
+
         public ToolStripView(ToolStrip ts, TabControl tc, Model model)
         {
+            CTabPages = new List<CTabPage>();
+            CToolStripButtons = new List<CToolStripButton>();
+
             this.model = model;
-            this.ts = ts;
-            this.tc = tc;
+            this.ToolStrip = ts;
+            this.TabControl = tc;
             this.xdoc = Resources.getInstance().ConfigObjects;
             this.cf = ControlFactory.getInstance();
         }
@@ -39,7 +45,7 @@ namespace Configuration_Manager.Views
         }
 
         // Reads the objects contained inside the ObjectDefinition file.
-        // Taking care only of the ToolStrip / Navigation Bar ones.
+        // Taking care only of the ToolStripButton ones.
         public void ReadObjectDefinition()
         {
             var items = from item in xdoc.Descendants("NavigationBar")
@@ -52,14 +58,16 @@ namespace Configuration_Manager.Views
                 CreateToolStripButton();
                 CreateTabPage();
             }
+
+            SetUpToolStripButtonHandlers();
         }
-        
+
         private ToolStripButton CreateToolStripButton()
         {
             CToolStripButton ctsb = ControlFactory.getInstance().BuildCToolStripButton(null);
             //ts.Items.Add(ctsb.GetToolStripButton());      // Add the wrapped ToolStripButton
-            ts.Items.Add(ctsb);                             // Add the CToolStripButton
-            
+            ToolStrip.Items.Add(ctsb);                      // Add the CToolStripButton
+
             System.Diagnostics.Debug.WriteLine("+ Loaded: " + ctsb.Name);
 
             return ctsb;
@@ -69,11 +77,33 @@ namespace Configuration_Manager.Views
         {
             CTabPage ctp = ControlFactory.getInstance().BuildCTabPage(null);
             //tc.TabPages.Add(ctp.GetTabPage());          // Add the wrapped TabPage
-            tc.TabPages.Add(ctp);                         // Add the CTabPage 
+            TabControl.TabPages.Add(ctp);                 // Add the CTabPage
 
             System.Diagnostics.Debug.WriteLine("+ Loaded: " + ctp.Name);
 
             return ctp;
+        }
+
+        private void SetUpToolStripButtonHandlers()
+        {
+            for (int i = 0; i < ToolStrip.Items.Count; i++)
+            {
+                if (ToolStrip.Items[i] is CToolStripButton)
+                {
+                    ToolStrip.Items[i].Click += new EventHandler(this.ToolStripButton_Click);
+                }
+            }
+        }
+
+        private void ToolStripButton_Click(object sender, EventArgs e)
+        {
+            if (sender is ToolStripButton)
+            {
+                CToolStripButton b = (CToolStripButton)sender;
+                System.Diagnostics.Debug.WriteLine("! Clicked: " + b.Name + " ID: " +b.Id);
+                TabControl.SelectTab(b.Id);
+                System.Diagnostics.Debug.WriteLine("! Selected Tab: " + TabControl.SelectedTab.Name);
+            } 
         }
     }
 }

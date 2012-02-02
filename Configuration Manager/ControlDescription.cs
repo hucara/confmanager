@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Configuration_Manager
 {
+
+    /// Description class with the needed parameters to create a Control.
+    /// If the Control needs / uses all of just some of the properties,
+    /// it is defined in the build method of each Custom Control.
+
     class ControlDescription
     {
-        int Id;
+        //int Id;
         int Top, Left, Width, Height;
         String Name, Text, Hint, Type;
 
@@ -23,7 +29,7 @@ namespace Configuration_Manager
         {
         }
 
-        public void getDescriptionFromClick(object sender, EventArgs e)
+        public void getDescriptionFromClick(int x, int y)
         {
             // takes coords, etc from the mouse possition when clicked
             this.Top = 0;
