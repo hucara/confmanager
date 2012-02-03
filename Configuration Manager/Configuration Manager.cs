@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Configuration_Manager.Views;
+using Configuration_Manager.CustomControls;
 
 namespace Configuration_Manager
 {
@@ -16,6 +17,9 @@ namespace Configuration_Manager
         private Model model = Model.getInstance();
         private ControlFactory cf = ControlFactory.getInstance();
 
+        TabControlView tabControlView;
+        ToolStripView toolStripView;
+
         public MainForm()
         {
             InitializeComponent();
@@ -24,10 +28,10 @@ namespace Configuration_Manager
 
         private void InitViews()
         {
-            TabControlView tabControlView = new TabControlView(tabControl, model);
-            ToolStripView toolStripView = new ToolStripView(toolStrip, tabControl, model);
+            tabControlView = new TabControlView(tabControl, contextEditMenu, model);
+            toolStripView = new ToolStripView(toolStrip, tabControl, model);
 
-            if(model.ObjectDefinitionExists) toolStripView.ReadObjectDefinition();
+            if(model.ObjectDefinitionExists) toolStripView.ReadObjectDefinitionFile();
             tabControlView.SetProgModeHandlers();
         }
 
@@ -58,8 +62,42 @@ namespace Configuration_Manager
             if (model.progMode)
             {
                 System.Diagnostics.Debug.WriteLine("** INFO ** Clicked in tab.");
-                contextMenuStrip1.Show();
+                contextEditMenu.Show();
             }
+        }
+
+        private void labelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CButton cb = ControlFactory.getInstance().BuildCButton(null);
+            tabControl.SelectedTab.Controls.Add(cb);
+            tabControl.Refresh();
+        }
+
+        private void newSectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripView.AddNewToolStripButton();
+        }
+
+        private void toolStrip_RightClick(object sender, EventArgs e)
+        {
+            MouseEventArgs me = e as MouseEventArgs;
+            Control c = sender as Control;
+
+            if(model.progMode && me.Button == MouseButtons.Right)
+            {
+                toolStripView.SelectCToolStripButton(me.X, me.Y);
+                contextNavMenu.Show(c, me.X, me.Y);
+            }
+        }
+
+        private void deleteSectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripView.RemoveToolStripButton();
         }
     }
 }

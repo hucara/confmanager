@@ -48,6 +48,9 @@
   <ItemGroup>
     <Compile Include="ControlFactory.cs" />
     <Compile Include="ControlDescription.cs" />
+    <Compile Include="CustomControls\CButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CustomControls\CComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -71,6 +74,12 @@
     <Compile Include="Configuration Manager.Designer.cs">
       <DependentUpon>Configuration Manager.cs</DependentUpon>
     </Compile>
+    <Compile Include="Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editor.Designer.cs">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +89,9 @@
     <Compile Include="Views\ToolStripView.cs" />
     <EmbeddedResource Include="Configuration Manager.resx">
       <DependentUpon>Configuration Manager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor.resx">
+      <DependentUpon>Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

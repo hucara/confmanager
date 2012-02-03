@@ -21,10 +21,11 @@ namespace Configuration_Manager
         
         public List<System.Windows.Forms.ToolStripItem> toolStripItems {get; private set;}
         public List<ICustomControl> AllControls { get; private set; }
+        public Dictionary<int, ICustomControl> DictControls { get; private set; }
 
         public String CurrentLanguageFile;
         
-        // Constructor
+        // Private constructor
         private Model()
         {
             AllControls = new List<ICustomControl>();

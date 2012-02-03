@@ -27,15 +27,16 @@ namespace Configuration_Manager
             return cf;
         }
 
-        public CComboBox BuildCButton(ControlDescription cd)
+        public CButton BuildCButton(ControlDescription cd)
         {
-            return null;
+            CButton cb = new CButton();
+            cb.SetControlDescription(cd);
+            return cb;
         }
 
         public CLabel BuildCLabel(ControlDescription cd)
         {
             CLabel lbl = new CLabel();
-            //CLabel lbl = new CLabel(new Label());
             lbl.SetControlDescription(cd);
             return lbl;
         }
@@ -43,14 +44,13 @@ namespace Configuration_Manager
         public CToolStripButton BuildCToolStripButton(ControlDescription cd)
         {
             CToolStripButton tsb = new CToolStripButton();
-            //CToolStripButton tsb = new CToolStripButton(new ToolStripButton());
             tsb.SetControlDescription(cd);
             return tsb;
         }
 
         public CTabPage BuildCTabPage(ControlDescription cd)
         {
-            CTabPage ctp = new CTabPage(new TabPage());
+            CTabPage ctp = new CTabPage();
             ctp.SetControlDescription(cd);
             return ctp;
         }

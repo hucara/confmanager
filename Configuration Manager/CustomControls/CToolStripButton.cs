@@ -9,32 +9,20 @@ namespace Configuration_Manager.CustomControls
     class CToolStripButton : ToolStripButton, ICustomControl
     {
         static int count = 0;
-        public int Id;
+        public int RelatedTabPageIndex;
+        public int TypeId { get; private set; }
+        public int gId { get; private set; }
 
-        //private ToolStripButton c;
-        public List<ICustomControl> RelatedControls { get; private set; }
-
-        public CToolStripButton(ToolStripButton tsButton)
-        {
-            //this.c = tsButton;
-            this.Id = count;
-            this.Name = "CToolStripButton" + count;
-            this.Text = this.Name;
-            count++;
-        }
+        //public List<ICustomControl> RelatedControls { get; private set; }
 
         public CToolStripButton()
         {
-            this.Id = count;
+            this.TypeId = count;
             this.Name = "CToolStripButton" + count;
             this.Text = this.Name;
+           
             count++;
         }
-
-        //public ToolStripButton GetToolStripButton()
-        //{
-        //    //return this.c;
-        //}
 
         public void SetControlDescription(ControlDescription cd)
         {

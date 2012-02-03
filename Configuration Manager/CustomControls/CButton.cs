@@ -6,33 +6,29 @@ using System.Windows.Forms;
 
 namespace Configuration_Manager.CustomControls
 {
-    class CTextBox : TextBox, ICustomControl
+    class CButton : Button, ICustomControl
     {
         static int count = 0;
         public int typeId;
 
-        private TextBox c;
         public List<ICustomControl> RelatedControls { get; private set; }
 
-        public CTextBox(TextBox textBox)
+        public CButton()
         {
-            this.c = textBox;
-
-            typeId = count;
-            this.Name = "TextBox" + count;
+            this.typeId = count;
+            this.Name = "CButton" + count;
+            this.Text = this.Name;
             count++;
+
+            printInfo();
         }
 
-        public CTextBox()
+        private void printInfo()
         {
-            typeId = count;
-            this.Name = "TextBox" + count;
-            count++;
-        }
-
-        public TextBox getTextBox()
-        {
-            return c;
+            if(Model.getInstance().progMode)
+            {
+                System.Diagnostics.Debug.WriteLine("+ Added: " +this.Name+ " - Parent: ");
+            }
         }
 
         public void SetControlDescription(ControlDescription cd)

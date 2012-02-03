@@ -126,21 +126,5 @@ namespace Configuration_Manager.Tests
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
-
-        /// <summary>
-        ///A test for BuildCButton
-        ///</summary>
-        [TestMethod()]
-        [DeploymentItem("Configuration Manager.exe")]
-        public void BuildCButtonTest()
-        {
-            ControlFactory_Accessor target = new ControlFactory_Accessor(); // TODO: Initialize to an appropriate value
-            ControlDescription_Accessor cd = null; // TODO: Initialize to an appropriate value
-            CComboBox_Accessor expected = null; // TODO: Initialize to an appropriate value
-            CComboBox_Accessor actual;
-            actual = target.BuildCButton(cd);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
     }
 }

@@ -9,6 +9,7 @@ namespace Configuration_Manager.CustomControls
     class CLabel : Label, ICustomControl
     {
         static int count = 0;
+        public int typeId;
 
         //private Label c;
         public List<ICustomControl> RelatedControls { get; private set; }
@@ -23,7 +24,9 @@ namespace Configuration_Manager.CustomControls
 
         public CLabel()
         {
+            this.typeId = count;
             this.Name = "CLabel" + count;
+            this.Text = this.Name;
             count++;
         }
 

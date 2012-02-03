@@ -9,11 +9,16 @@ namespace Configuration_Manager.Views
 {
     class TabControlView : IView
     {
+        int xPos;
+        int yPos;
+
         TabControl TabControl;
+        ContextMenuStrip mStrip;
         Model model;
 
-        public TabControlView(TabControl tc, Model model)
+        public TabControlView(TabControl tc, ContextMenuStrip cms, Model model)
         {
+            this.mStrip = cms;
             this.TabControl = tc;
             this.model = model;
         }
@@ -34,11 +39,11 @@ namespace Configuration_Manager.Views
         {
             foreach (TabPage t in TabControl.TabPages)
             {
-                t.Click += new EventHandler(this.TabPage_ProgMode_MouseClick);
+                t.Click += new EventHandler(this.TabPage_ProgMode_Click);
             }
         }
 
-        public void TabPage_ProgMode_MouseClick(object sender, EventArgs e)
+        public void TabPage_ProgMode_Click(object sender, EventArgs e)
         {
             MouseEventArgs me = e as MouseEventArgs;
             MouseButtons buttonPushed = me.Button;
@@ -47,10 +52,11 @@ namespace Configuration_Manager.Views
 
             if (model.progMode && me.Button == MouseButtons.Right)
             {
-                int xPos = me.X;
-                int yPos = me.Y;
+                xPos = me.X;
+                yPos = me.Y;
 
-                System.Diagnostics.Debug.WriteLine("! Clicked : " + c.Name + " in X: "+ xPos + " and Y: " +yPos);
+                mStrip.Show(c, new System.Drawing.Point(xPos, yPos));
+                System.Diagnostics.Debug.WriteLine("! Clicked : " + c.Name + " in X: " + xPos + " and Y: " + yPos);
             }
         }
     }

@@ -9,29 +9,17 @@ namespace Configuration_Manager.CustomControls
     class CTabPage : TabPage, ICustomControl
     {
         static int count = 0;
+        public int TypeId;
+        public int RelatedButtonIndex;
 
-        private TabPage c;
-        public List<ICustomControl> RelatedControls { get; private set; }
-
-        public CTabPage(TabPage tabPage)
-        {
-            this.c = tabPage;
-
-            this.Name = "CTabPage" + count;
-            this.Text = this.Name;
-            count++;
-        }
+        //public List<ICustomControl> RelatedControls { get; private set; }
 
         public CTabPage()
         {
+            this.TypeId = count;
             this.Name = "CTabPage" + count;
             this.Text = this.Name;
             count++;
-        }
-
-        public TabPage GetTabPage()
-        {
-            return c;
         }
 
         public void SetControlDescription(ControlDescription cd)
