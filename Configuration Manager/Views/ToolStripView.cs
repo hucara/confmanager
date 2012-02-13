@@ -6,41 +6,33 @@ using System.Xml.Linq;
 using System.Windows.Forms;
 using Configuration_Manager.CustomControls;
 
+using Debug = System.Diagnostics.Debug;
+
 namespace Configuration_Manager.Views
 {
     class ToolStripView : IView
     {
-        int CurrentButtonIndex = 0;
-        int CurrentTabIndex = 0;
-
-        Dictionary<CToolStripButton, CTabPage> ButtonTabDict;
-
         Model model;
+        ControlFactory cf;
         ToolStrip navigationBar;
         TabControl configurationTabs;
+        ContextMenuStrip tabContextMenu;
 
         CToolStripButton ctsb;
         CTabPage ctp;
 
-        XDocument xdoc;
-        ControlFactory cf;
-
-        CToolStripButton CurrentButton { get; set; }
-        CTabPage CurrentTab { get; set; }
-
-        List<CTabPage> CTabPages;
+        CToolStripButton SelectedButton;
         List<CToolStripButton> CToolStripButtons;
 
-        public ToolStripView(ToolStrip ts, TabControl tc, Model model)
+        public ToolStripView(ToolStrip ts, TabControl tc, ContextMenuStrip cms, Model model)
         {
-            CTabPages = new List<CTabPage>();
             CToolStripButtons = new List<CToolStripButton>();
-            ButtonTabDict = new Dictionary<CToolStripButton, CTabPage>();
 
             this.model = model;
             this.navigationBar = ts;
+            this.tabContextMenu = cms;
             this.configurationTabs = tc;
-            this.xdoc = Resources.getInstance().ConfigObjects;
+
             this.cf = ControlFactory.getInstance();
         }
 
@@ -54,119 +46,116 @@ namespace Configuration_Manager.Views
         // UI with that info, refreshing the components.
         public void readAndShow()
         {
-        }
+            CleanUpView();
 
-        public void AddNewSection(String name)
-        {
-            CreateToolStripButton();
-            CreateTabPage();
-        }
-
-        public void RemoveSection(String name)
-        {
-            RemoveToolStripButton();
-            RemoveTabPage();
-        }
-
-        private void RemoveTabPage()
-        {
-        }
-
-        public void ReadObjectDefinitionFile()
-        {
-            var items = from item in xdoc.Descendants("NavigationBar")
-                        .Descendants("Objects")
-                        .Descendants("ToolStripButton")
-                        select item;
- 
-
-            System.Diagnostics.Debug.WriteLine("** Reading Object Definition File **");
-        }
-
-        public void AddNewToolStripButton()
-        {
-            ButtonTabDict.Add(CreateToolStripButton(), CreateTabPage());
-            ctsb.Click += ToolStripButton_Click;
-        }
-
-        // Reads the objects contained inside the ObjectDefinition file.
-        // Taking care only of the ToolStripButton ones.
-        public void ReadObjectDefinitionFile()
-        {
-            var items = from item in xdoc.Descendants("NavigationBar")
-                        .Descendants("Objects")
-                        .Descendants("ToolStripButton")
-                        select item;
-
-            System.Diagnostics.Debug.WriteLine("** Reading Object Definition File **");
-
-            foreach (var i in items)
+            foreach (Section s in model.Sections)
             {
-                CreateToolStripButton();
-                CreateTabPage();
-                ctsb.Click += ToolStripButton_Click;
+                navigationBar.Items.Add(s.Button);
+                configurationTabs.TabPages.Add(s.Tab);
+
+                // Set the handlers event. Safe in case of duplicated handlers.
+                s.Button.Click -= ToolStripButton_Click;
+                s.Button.Click += ToolStripButton_Click;
             }
 
-            System.Diagnostics.Debug.WriteLine("** End of Object Definition File **");
+            navigationBar.Refresh();
+            configurationTabs.Refresh();
         }
 
-        private CToolStripButton CreateToolStripButton()
+        private void CleanUpView()
         {
-            CToolStripButton ctsb = ControlFactory.getInstance().BuildCToolStripButton(null);
-            CurrentButtonIndex = navigationBar.Items.Add(ctsb);
+            navigationBar.Items.Clear();
+            configurationTabs.TabPages.Clear();
+        }
 
-            System.Diagnostics.Debug.WriteLine("+ Added: " + ctsb.Name);
+        public void AddNewSection(String text)
+        {
+            if (!MaxSectionsReached())
+            {
+                ctsb = CreateToolStripButton(text);
+                ctp = CreateTabPage();
+                Section s = new Section(ctsb, ctp, text, false);
 
+                if (!model.Sections.Contains(s))
+                {
+                    model.Sections.Add(s);
+                    Debug.WriteLine("+ Added: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name+"}");
+                }
+
+                ctsb.PerformClick();
+                UnCheckButtons(ctsb);
+            }
+
+            readAndShow();
+        }        
+
+        public void RemoveSection()
+        {
+            if (SelectedButton != null && model.Sections.Count > 0)
+            {
+                Section s = model.Sections.Find(se => se.Button == SelectedButton);
+                Debug.WriteLine("! Removed: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
+
+                model.Sections.Remove(s);
+            }
+
+            readAndShow();
+        }
+
+        private CToolStripButton CreateToolStripButton(String text)
+        {
+            CToolStripButton ctsb = ControlFactory.getInstance().BuildCToolStripButton(text);
+            navigationBar.Items.Add(ctsb);
             return ctsb;
         }
 
         private CTabPage CreateTabPage()
         {
-            CTabPage ctp = ControlFactory.getInstance().BuildCTabPage(null);
+            CTabPage ctp = ControlFactory.getInstance().BuildCTabPage();
             configurationTabs.TabPages.Add(ctp);
-            CurrentTabIndex = configurationTabs.TabPages.IndexOf(ctp);
-
-            System.Diagnostics.Debug.WriteLine("+ Added: " + ctp.Name);
-
             return ctp;
         }
 
         private void ToolStripButton_Click(object sender, EventArgs e)
         {
-            if (sender is ToolStripButton)
+            if (sender is CToolStripButton)
             {
                 CToolStripButton b = (CToolStripButton)sender;
+                SelectedButton = b;
 
-                System.Diagnostics.Debug.WriteLine("! Clicked: " + b.Name + " ID: " + b.RelatedTabPageIndex);
-                configurationTabs.SelectTab(b.TypeId);
-                System.Diagnostics.Debug.WriteLine("! Selected Tab: " + configurationTabs.SelectedTab.Name);
+                UnCheckButtons(b);
+
+                Section s = model.Sections.Find(se => se.Button == SelectedButton);
+
+                Debug.WriteLine("! Clicked: " + b.Name + " \"" + b.Text +"\"");
+                configurationTabs.SelectTab(s.Tab);
+                Debug.WriteLine("! Selected Tab: " + s.Tab.Name);
             }
         }
 
-        public void RemoveToolStripButton()
+        private void UnCheckButtons(CToolStripButton b)
         {
-            navigationBar.Items.RemoveAt(CurrentButtonIndex);
-            configurationTabs.TabPages.RemoveAt(CurrentTabIndex);
-
-            System.Diagnostics.Debug.WriteLine("- Removed: " + ctsb.Name);
-            System.Diagnostics.Debug.WriteLine("- Removed: " + ctp.Name);
-        }
-
-        public void SelectCToolStripButton(int x, int y)
-        {
-            if (navigationBar.GetItemAt(x, y) is CToolStripButton)
+            foreach (CToolStripButton bt in navigationBar.Items)
             {
-                navigationBar.GetItemAt(x, y).PerformClick();
-
-                CurrentTabIndex = configurationTabs.SelectedIndex;
-                CurrentButtonIndex = navigationBar.Items.IndexOf((CToolStripButton)navigationBar.GetItemAt(x, y));
+                if (bt != b)
+                {
+                    bt.Checked = false;
+                }
             }
         }
 
-        private void UpdateCurrents()
+        public void SetSelectedButton(CToolStripButton toolStripItem)
         {
-            CurrentTabIndex = configurationTabs.SelectedIndex;
-            CurrentButtonIndex = navigationBar.Items.IndexOf(CurrentButton);
+            if (toolStripItem == null) throw new ArgumentNullException();
+
+            SelectedButton = toolStripItem;
+            UnCheckButtons(SelectedButton);
+        }
+
+        private bool MaxSectionsReached()
+        {
+            if (model.Sections.Count < Model.MAX_SECTIONS) return false;
+            else return true;
         }
     }
 }

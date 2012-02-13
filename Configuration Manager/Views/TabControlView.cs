@@ -5,21 +5,20 @@ using System.Text;
 using System.Windows.Forms;
 using Configuration_Manager.CustomControls;
 
+using Debug = System.Diagnostics.Debug;
+
 namespace Configuration_Manager.Views
 {
     class TabControlView : IView
     {
-        int xPos;
-        int yPos;
-
-        TabControl TabControl;
-        ContextMenuStrip mStrip;
+        TabControl configurationTabs;
+        ContextMenuStrip tabContextMenu;
         Model model;
 
         public TabControlView(TabControl tc, ContextMenuStrip cms, Model model)
         {
-            this.mStrip = cms;
-            this.TabControl = tc;
+            this.tabContextMenu = cms;
+            this.configurationTabs = tc;
             this.model = model;
         }
 
@@ -33,30 +32,36 @@ namespace Configuration_Manager.Views
         // UI with that info, refreshing the components.
         public void readAndShow()
         {
-        }
-
-        public void SetProgModeHandlers()
-        {
-            foreach (TabPage t in TabControl.TabPages)
+            foreach (Section s in model.Sections)
             {
-                t.Click += new EventHandler(this.TabPage_ProgMode_Click);
+                s.Tab.Click -= TabControl_RightClick;
+                s.Tab.Click += TabControl_RightClick;
             }
+
+            configurationTabs.Refresh();
         }
 
-        public void TabPage_ProgMode_Click(object sender, EventArgs e)
+        private void CleanUpView()
         {
-            MouseEventArgs me = e as MouseEventArgs;
-            MouseButtons buttonPushed = me.Button;
+        }
 
+        private void TabControl_RightClick(object sender, EventArgs e)
+        {
             Control c = sender as Control;
+
+            MouseEventArgs me = e as MouseEventArgs;
+            TabPage tc = sender as TabPage;
 
             if (model.progMode && me.Button == MouseButtons.Right)
             {
-                xPos = me.X;
-                yPos = me.Y;
+                tabContextMenu.Show(tc, me.X, me.Y);
 
-                mStrip.Show(c, new System.Drawing.Point(xPos, yPos));
-                System.Diagnostics.Debug.WriteLine("! Clicked : " + c.Name + " in X: " + xPos + " and Y: " + yPos);
+                model.CurrentClickParent = c;
+                model.CurrentX = me.X;
+                model.CurrentY = me.Y;
+
+                Debug.WriteLine("! Clicked: " + c.Name);
+                Debug.WriteLine("! Clicked: " + model.CurrentClickParent + " in X: " +model.CurrentX+ " - Y: "+model.CurrentY);
             }
         }
     }

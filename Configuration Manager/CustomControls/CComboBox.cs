@@ -10,19 +10,25 @@ namespace Configuration_Manager.CustomControls
     {
         static int count = 0;
 
-        private ComboBox c;
         public List<ICustomControl> RelatedControls { get; private set; }
 
-        public CComboBox(ComboBox comboBox)
+        public CComboBox()
         {
-            this.c = comboBox;
-
             this.Name = "ComboBox" + count;
+            this.Size = this.DefaultSize;
             count++;
         }
 
         public void SetControlDescription(ControlDescription cd)
         {
+            this.Text = cd.Text;
+            this.Top = cd.Top;
+            this.Left = cd.Left;
+            this.Height = cd.Height;
+            this.Width = cd.Width;
+
+            this.Font = cd.CurrentFont;
+            this.BackColor = cd.BackColor;
         }
     }
 }

@@ -12,15 +12,28 @@ namespace Configuration_Manager.CustomControls
         public int RelatedTabPageIndex;
         public int TypeId { get; private set; }
         public int gId { get; private set; }
-
-        //public List<ICustomControl> RelatedControls { get; private set; }
+        public CTabPage RelatedTabPage;
 
         public CToolStripButton()
         {
             this.TypeId = count;
             this.Name = "CToolStripButton" + count;
-            this.Text = this.Name;
-           
+            this.CheckOnClick = true;
+
+            count++;
+        }
+
+        public CToolStripButton(Section s)
+        {
+            if (s == null) throw new ArgumentNullException();
+
+            this.TypeId = count;
+            this.Name = s.Name;
+            this.Text = s.Text;
+            this.RelatedTabPage = null;
+
+            this.CheckOnClick = true;
+
             count++;
         }
 
@@ -28,14 +41,17 @@ namespace Configuration_Manager.CustomControls
         {
         }
 
-        public void SetHandler()
+        public void SetSectionDescription(Section s)
         {
-            this.Click += new EventHandler(ToolStripButton_Click);
+            if (s == null) throw new ArgumentNullException();
+
+            this.Name = s.Name;
+            this.Text = s.Text;
         }
 
-        public void ToolStripButton_Click(object sender, EventArgs e)
+        public void SetSectionName(String s)
         {
-
+            this.Text = s;
         }
     }
 }

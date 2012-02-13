@@ -37,22 +37,49 @@ namespace Configuration_Manager
         public CLabel BuildCLabel(ControlDescription cd)
         {
             CLabel lbl = new CLabel();
-            lbl.SetControlDescription(cd);
+            //lbl.SetControlDescription(cd);
             return lbl;
         }
 
-        public CToolStripButton BuildCToolStripButton(ControlDescription cd)
+        public CToolStripButton BuildCToolStripButton(Section s)
         {
-            CToolStripButton tsb = new CToolStripButton();
-            tsb.SetControlDescription(cd);
+            CToolStripButton tsb = new CToolStripButton(s);
+            tsb.SetSectionDescription(s);
             return tsb;
         }
 
-        public CTabPage BuildCTabPage(ControlDescription cd)
+        public CTabPage BuildCTabPage(Section s)
         {
             CTabPage ctp = new CTabPage();
-            ctp.SetControlDescription(cd);
+            ctp.SetNavBarDescription(s);
             return ctp;
+        }
+
+        public CToolStripButton BuildCToolStripButton(String s)
+        {
+            CToolStripButton tsb = new CToolStripButton();
+            tsb.SetSectionName(s);
+            return tsb;
+        }
+
+        public CTabPage BuildCTabPage()
+        {
+            CTabPage ctp = new CTabPage();
+            return ctp;
+        }
+
+        public CComboBox BuildCComboBox(ControlDescription cd)
+        {
+            CComboBox ccb = new CComboBox();
+            //ccb.SetControlDescription(cd);
+            return ccb;
+        }
+
+        public CTextBox BuildCTextBox(ControlDescription cd)
+        {
+            CTextBox ctb = new CTextBox();
+            //ccb.SetControlDescription(cd);
+            return ctb;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Configuration_Manager
         private Resources res = Resources.getInstance();
         private Model model = Model.getInstance();
         private ControlFactory cf = ControlFactory.getInstance();
+        private ObjectDefinitionReader odr = ObjectDefinitionReader.getInstance();
 
         TabControlView tabControlView;
         ToolStripView toolStripView;
@@ -29,10 +30,15 @@ namespace Configuration_Manager
         private void InitViews()
         {
             tabControlView = new TabControlView(tabControl, contextEditMenu, model);
-            toolStripView = new ToolStripView(toolStrip, tabControl, model);
+            toolStripView = new ToolStripView(toolStrip, tabControl, contextEditMenu, model);
 
-            if(model.ObjectDefinitionExists) toolStripView.ReadObjectDefinitionFile();
-            tabControlView.SetProgModeHandlers();
+            if (model.ObjectDefinitionExists)
+            {
+                odr.BuildDefinedSectionList(res.ConfigObjects);
+                toolStripView.readAndShow();
+                tabControlView.readAndShow();
+                //toolStripView.SetDefinedSections(model.Sections);
+            }
         }
 
         private void SetProgMode()
@@ -57,18 +63,14 @@ namespace Configuration_Manager
             }
         }
 
-        private void tabControl_Click(object sender, EventArgs e)
-        {
-            if (model.progMode)
-            {
-                System.Diagnostics.Debug.WriteLine("** INFO ** Clicked in tab.");
-                contextEditMenu.Show();
-            }
-        }
-
         private void labelToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            CLabel label = cf.BuildCLabel(null);
+            tabControl.SelectedTab.Controls.Add(label);
 
+            Editor editor = new Editor(label);
+            //Editor editor = new Editor("CLabel", tabControl.SelectedTab);
+            editor.Show();
         }
 
         private void buttonToolStripMenuItem_Click(object sender, EventArgs e)
@@ -80,7 +82,16 @@ namespace Configuration_Manager
 
         private void newSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            toolStripView.AddNewToolStripButton();
+            SectionForm sf = new SectionForm();
+            sf.ShowDialog();
+            toolStripView.AddNewSection(sf.SectionName);
+            tabControlView.readAndShow();
+        }
+
+        private void deleteSectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripView.RemoveSection();
+            tabControlView.readAndShow();
         }
 
         private void toolStrip_RightClick(object sender, EventArgs e)
@@ -88,16 +99,49 @@ namespace Configuration_Manager
             MouseEventArgs me = e as MouseEventArgs;
             Control c = sender as Control;
 
-            if(model.progMode && me.Button == MouseButtons.Right)
+            if (model.progMode && me.Button == MouseButtons.Right)
             {
-                toolStripView.SelectCToolStripButton(me.X, me.Y);
+                if (toolStrip.GetItemAt(me.X, me.Y) is CToolStripButton)
+                {
+                    toolStrip.GetItemAt(me.X, me.Y).PerformClick();
+                    deleteSectionToolStripMenuItem.Enabled = true;
+                    toolStripView.SetSelectedButton(toolStrip.GetItemAt(me.X, me.Y) as CToolStripButton);
+                }
+                else
+                {
+                    deleteSectionToolStripMenuItem.Enabled = false;
+                }
+
+                if (model.Sections.Count >= Model.MAX_SECTIONS)
+                {
+                    newSectionToolStripMenuItem.Enabled = false;
+                }
+                else
+                {
+                    newSectionToolStripMenuItem.Enabled = true;
+                }
+
                 contextNavMenu.Show(c, me.X, me.Y);
             }
         }
 
-        private void deleteSectionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void comboBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            toolStripView.RemoveToolStripButton();
+            CComboBox ccb = cf.BuildCComboBox(null);
+            tabControl.SelectedTab.Controls.Add(ccb);
+
+            Editor editor = new Editor(ccb);
+            //Editor editor = new Editor("CLabel", tabControl.SelectedTab);
+            editor.Show();
+        }
+
+        private void textBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CTextBox ctb = cf.BuildCTextBox(null);
+            tabControl.SelectedTab.Controls.Add(ctb);
+
+            Editor editor = new Editor(ctb);
+            editor.Show();
         }
     }
 }
