@@ -19,6 +19,7 @@ namespace Configuration_Manager
         int top, left, height, width;
 
         String type;
+        String ErrorMsg;
 
         Font controlFont;
         Color fontColor, backColor;
@@ -28,49 +29,81 @@ namespace Configuration_Manager
         ControlFactory cf;
         ControlDescription cd;
         Model model;
-        
-        public Editor(String type, Control parent)
+
+        // //
+        // Constructor
+        // //
+        public Editor()
         {
             InitializeComponent();
 
             this.cf = ControlFactory.getInstance();
             this.model = Model.getInstance();
             this.cd = new ControlDescription();
-
-            this.type = type;
-            this.parent = parent;
-
-            ShowMousePosition();
-            ShowHeadLine();
+            this.ErrorMsg = "";
 
             fontDialog1.ShowColor = true;
             fontDialog1.ShowApply = true;
+            visibleCheckBox.Checked = true;
 
-            DisableControls(type);
+            SetOpenFileDialog();
+            FillOutCheckedListBox();
+            FillOutRelationsComboBox();
+            FillOutFileTypeComboBox();
         }
 
-        public Editor(Control control)
+        // //
+        // Control.Show() method overload
+        // //
+        public void Show(Control c)
         {
-            InitializeComponent();
-
-            this.control = control;
-            this.cf = ControlFactory.getInstance();
-            this.model = Model.getInstance();
-            this.cd = new ControlDescription();
-
-            ShowMousePosition();
-
+            this.control = c;
+            this.parent = control.Parent;
             this.type = ReadControlType(control);
 
+            ShowMousePosition();
             ShowHeadLine();
             ShowDefaultSize();
-            //this.type = type;
-            this.parent = parent;
-
-            fontDialog1.ShowColor = true;
-            fontDialog1.ShowApply = true;
-
             DisableControls(type);
+
+            base.Show();
+        }
+
+        //public Editor(Control control)
+        //{
+            //InitializeComponent();
+
+            //this.control = control;
+            //this.cf = ControlFactory.getInstance();
+            //this.model = Model.getInstance();
+            //this.cd = new ControlDescription();
+
+            //ShowMousePosition();
+
+            //this.type = ReadControlType(control);
+            //this.ErrorMsg = "";
+
+            //ShowHeadLine();
+            //ShowDefaultSize();
+
+            //this.parent = control.Parent;
+
+            //fontDialog1.ShowColor = true;
+            //fontDialog1.ShowApply = true;
+            //visibleCheckBox.Checked = true;
+
+            //DisableControls(type);
+            //SetOpenFileDialog();
+            //FillOutCheckedListBox();
+            //FillOutRelationsComboBox();
+            //FillOutFileTypeComboBox();
+        //}
+
+        private void SetOpenFileDialog()
+        {
+            openFileDialog1.Multiselect = false;
+            openFileDialog1.FileName = "";
+            openFileDialog1.Filter = "INI File | *.ini |XML File | *.xml|Text File|*.txt";
         }
 
         private void ShowDefaultSize()
@@ -81,19 +114,15 @@ namespace Configuration_Manager
 
         private String ReadControlType(Control control)
         {
-            if (control is CLabel)
-            {
-                //control.Top = this.Top;
-                //this.Left = this.Left + 112;
-                return "CLabel";
-            }
-            else return "empty";
+            return control.GetType().Name.ToString();
         }
 
         private void ShowHeadLine()
         {
             controlNameLabel.Text = "Control: " + type;
             parentNameLabel.Text = "Parent: " + model.CurrentClickParent.Name;
+
+            textTextBox.Text = control.Name;
         }
 
         private void ShowMousePosition()
@@ -125,6 +154,50 @@ namespace Configuration_Manager
 
                 fontLabel.Text = fontDialog1.Font.Name +" "+ fontDialog1.Font.Size;
             }
+        }
+
+        // //
+        // Filling out stuff inside the Edit Form
+        // //
+        private void FillOutCheckedListBox()
+        {
+            foreach (ICustomControl c in model.AllControls)
+            {
+                controlListBox.Items.Add((c as Control).Name);
+            }
+        }
+
+        private void FillOutRelationsComboBox()
+        {
+            if (type == "CComboBox" || type == "CCheckBox")
+            {
+                relationsComboBox.Items.Add("Related Write");
+                relationsComboBox.Items.Add("Related Read");
+                relationsComboBox.Items.Add("Related Visibility");
+                relationsComboBox.Items.Add("Coupled controls");
+
+                relationsComboBox.SelectedIndex = 0;
+            }
+            else if (type == "CTextBox")
+            {
+                relationsComboBox.Items.Add("Related Write");
+                relationsComboBox.Items.Add("Related Read");
+
+                relationsComboBox.SelectedIndex = 0;
+            }
+            else
+            {
+                //deactivated or empty
+            }
+        }
+
+        private void FillOutFileTypeComboBox()
+        {
+            foreach (String s in model.DestinationFileTypes)
+            {
+                destinationTypeComboBox.Items.Add(s);
+            }
+            destinationTypeComboBox.SelectedIndex = 0;
         }
 
         private void EnableControls()
@@ -170,9 +243,27 @@ namespace Configuration_Manager
                     subDestinationLabel.Enabled = false;
                     subDestinatonTextBox.Enabled = false;
                     break;
+                
+                case "CTextBox":
+                    textTextBox.Enabled = false;
+                    visibleCheckBox.Enabled = false;
+                    break;
+
+                case "CCheckBox":
+                    //Everything is enabled
+                    break;
+
+                case "CGroupBox":
+                    relationsComboBox.Enabled = false;
+                    controlListBox.Enabled = false;
+                    break;
             }
         }
 
+
+        // //
+        // Handlers
+        // //
         private void backColorButton_Click(object sender, EventArgs e)
         {
             int c = ColorTranslator.ToWin32(Color.FromKnownColor(KnownColor.Control));
@@ -187,7 +278,11 @@ namespace Configuration_Manager
 
         private void fileDestinationButton_Click(object sender, EventArgs e)
         {
-            openFileDialog1.ShowDialog();
+            DialogResult dr = openFileDialog1.ShowDialog();
+            if(dr == DialogResult.OK && openFileDialog1.CheckFileExists)
+            {
+                fileDestinationTextBox.Text = openFileDialog1.FileName;
+            }
         }
 
         private void SetLabel()
@@ -202,43 +297,60 @@ namespace Configuration_Manager
 
         private void CheckLabelInfo()
         {
-            CheckHint();
             CheckText();
+            CheckCommonAttributes();
+        }
 
+        private void CheckCommonAttributes()
+        {
             ParseTop();
             ParseLeft();
             ParseWidth();
             ParseHeight();
 
-            CheckTop();
-            CheckLeft();
-            CheckWidth();
-            CheckHeight();
+            if (!CheckHint()) ErrorMsg += "\n- Hint is empty.";
+            if (!CheckTop()) ErrorMsg += "\n- Top value is too low or too high.";
+            if (!CheckLeft()) ErrorMsg += "\n- Left value is too low or too high.";
+            if (!CheckWidth()) ErrorMsg += "\n- Width value is too low or too high.";
+            if (!CheckHeight()) ErrorMsg += "\n- Height value is too low or too high.";
+            if (!CheckSubDestination()) ErrorMsg += "\n- Sub Destination value is empty.";
         }
 
-        private bool ParseTop()
+        private void ParseTop()
         {
-            return Int32.TryParse(topTextBox.Text, out top);
+            if (!Int32.TryParse(topTextBox.Text, out top))
+            {
+                ErrorMsg += "\n- Top is not a valid value.";
+            }
         }
 
-        private bool ParseLeft()
+        private void ParseLeft()
         {
-            return Int32.TryParse(leftTextBox.Text, out left);
+            if (!Int32.TryParse(leftTextBox.Text, out left))
+            {
+                ErrorMsg += "\n- Left is not a valid value.";
+            }
         }
 
-        private bool ParseWidth()
+        private void ParseWidth()
         {
-            return Int32.TryParse(widthTextBox.Text, out width);
+            if (!Int32.TryParse(widthTextBox.Text, out width))
+            {
+                ErrorMsg += "\n- Width is not a valid value.";
+            }
         }
 
-        private bool ParseHeight()
+        private void ParseHeight()
         {
-            return Int32.TryParse(heightTextBox.Text, out height);
+            if (!Int32.TryParse(heightTextBox.Text, out height))
+            {
+                ErrorMsg += "\n- Height is not a valid value.";
+            }
         }
 
         private bool CheckText()
         {
-            if (hintTextBox.Text != "") return OK;
+            if (textTextBox.Text != "") return OK;
             return ERROR;
         }
 
@@ -250,41 +362,92 @@ namespace Configuration_Manager
 
         private bool CheckTop()
         {
-            if (top < MR && top + height > parent.Height - MR) return ERROR;
+            if (top < MR || top + height > parent.Height - MR) return ERROR;
             return OK;
         }
 
         private bool CheckLeft()
         {
-            if (left < MR && left + width > parent.Width - MR) return ERROR;
+            if (left < MR || left + width > parent.Width - MR) return ERROR;
             return OK;
         }
 
         private bool CheckHeight()
         {
-            if (height < MR && height + top > parent.Height - MR) return ERROR;
+            if (height < MR || height + top > parent.Height - MR) return ERROR;
             return OK;
         }
 
         private bool CheckWidth()
         {
-            if (width < MR && width + left > parent.Width - MR) return ERROR;
+            if (width < MR || width + left > parent.Width - MR) return ERROR;
+            return OK;
+        }
+
+        private bool CheckSubDestination()
+        {
+            if (subDestinatonTextBox.Text == "") return ERROR;
             return OK;
         }
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            switch (this.type)
+            //SetControlDescription here
+            CheckCommonAttributes();
+            if (ErrorMsg != "")
             {
-                case "CLabel":
-                    cf.BuildCLabel(cd);
-                    break;
-                case "CComboBox":
-                    cf.BuildCComboBox(cd);
-                    break;
-                default:
-                    break;
+                ErrorMsg = "Some problems were found: \n" + ErrorMsg;
+                MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            else
+            {
+                switch (this.type)
+                {
+                    case "CLabel":
+                        CheckLabelInfo();
+                        (control as CLabel).SetControlDescription(null);
+                        break;
+                    case "CComboBox":
+                        (control as CComboBox).SetControlDescription(null);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            ErrorMsg = "";
+        }
+
+        private void CheckBounds()
+        {
+            if (parent.Bounds.Contains(control.Bounds))
+            {
+                System.Diagnostics.Debug.WriteLine("! " + control.Name + " is inside " + parent.Name + ".");
+                System.Diagnostics.Debug.WriteLine("\tC: " + control.Bounds.ToString());
+                System.Diagnostics.Debug.WriteLine("\tP: " + parent.Bounds.ToString());
+            }
+        }
+
+        private void updateButton_Click(object sender, EventArgs e)
+        {
+            CheckLabelInfo();
+            control.Top = top;
+            control.Left = left;
+
+            control.Width = width;
+            control.Height = height;
+
+            control.BackColor = backColor;
+            control.Font = controlFont;
+            control.ForeColor = fontColor;
+
+            control.Text = textTextBox.Text;
+            control.Visible = visibleCheckBox.Checked;
+
+            CheckBounds();
+
+            control.Refresh();
+            ErrorMsg = "";
         }
     }
 }

@@ -81,5 +81,23 @@ namespace Configuration_Manager
             //ccb.SetControlDescription(cd);
             return ctb;
         }
+
+        public CCheckBox BuildCCheckBox(ControlDescription cd)
+        {
+            CCheckBox ccb = new CCheckBox();
+            return ccb;
+        }
+
+        public CGroupBox BuildCGroupBox(ControlDescription cd)
+        {
+            CGroupBox cgb = new CGroupBox();
+            return cgb;
+        }
+
+        public CPanel BuildCPanel(ControlDescription cd)
+        {
+            CPanel cpn = new CPanel();
+            return cpn;
+        }
     }
 }

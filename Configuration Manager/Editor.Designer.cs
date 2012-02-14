@@ -62,6 +62,7 @@
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.updateButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -152,35 +153,35 @@
             this.leftTextBox.Location = new System.Drawing.Point(267, 154);
             this.leftTextBox.Name = "leftTextBox";
             this.leftTextBox.Size = new System.Drawing.Size(56, 20);
-            this.leftTextBox.TabIndex = 22;
+            this.leftTextBox.TabIndex = 8;
             // 
             // heightTextBox
             // 
             this.heightTextBox.Location = new System.Drawing.Point(93, 154);
             this.heightTextBox.Name = "heightTextBox";
             this.heightTextBox.Size = new System.Drawing.Size(56, 20);
-            this.heightTextBox.TabIndex = 21;
+            this.heightTextBox.TabIndex = 6;
             // 
             // topTextBox
             // 
             this.topTextBox.Location = new System.Drawing.Point(267, 128);
             this.topTextBox.Name = "topTextBox";
             this.topTextBox.Size = new System.Drawing.Size(56, 20);
-            this.topTextBox.TabIndex = 20;
+            this.topTextBox.TabIndex = 7;
             // 
             // widthTextBox
             // 
             this.widthTextBox.Location = new System.Drawing.Point(93, 128);
             this.widthTextBox.Name = "widthTextBox";
             this.widthTextBox.Size = new System.Drawing.Size(56, 20);
-            this.widthTextBox.TabIndex = 19;
+            this.widthTextBox.TabIndex = 5;
             // 
             // backColorButton
             // 
             this.backColorButton.Location = new System.Drawing.Point(16, 90);
             this.backColorButton.Name = "backColorButton";
             this.backColorButton.Size = new System.Drawing.Size(57, 23);
-            this.backColorButton.TabIndex = 17;
+            this.backColorButton.TabIndex = 4;
             this.backColorButton.Text = "backcolor";
             this.backColorButton.UseVisualStyleBackColor = true;
             this.backColorButton.Click += new System.EventHandler(this.backColorButton_Click);
@@ -190,7 +191,7 @@
             this.fontButton.Location = new System.Drawing.Point(16, 54);
             this.fontButton.Name = "fontButton";
             this.fontButton.Size = new System.Drawing.Size(57, 23);
-            this.fontButton.TabIndex = 15;
+            this.fontButton.TabIndex = 3;
             this.fontButton.Text = "font";
             this.fontButton.UseVisualStyleBackColor = true;
             this.fontButton.Click += new System.EventHandler(this.fontButton_Click);
@@ -201,7 +202,7 @@
             this.fontLabel.Name = "fontLabel";
             this.fontLabel.Size = new System.Drawing.Size(229, 59);
             this.fontLabel.TabIndex = 13;
-            this.fontLabel.Text = "label1";
+            this.fontLabel.Text = "\"example text\"";
             this.fontLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textTextBox
@@ -209,7 +210,7 @@
             this.textTextBox.Location = new System.Drawing.Point(92, 20);
             this.textTextBox.Name = "textTextBox";
             this.textTextBox.Size = new System.Drawing.Size(230, 20);
-            this.textTextBox.TabIndex = 3;
+            this.textTextBox.TabIndex = 1;
             // 
             // HintLabel
             // 
@@ -226,7 +227,7 @@
             this.hintTextBox.Multiline = true;
             this.hintTextBox.Name = "hintTextBox";
             this.hintTextBox.Size = new System.Drawing.Size(138, 131);
-            this.hintTextBox.TabIndex = 1;
+            this.hintTextBox.TabIndex = 2;
             // 
             // textLabel
             // 
@@ -261,7 +262,7 @@
             this.subDestinatonTextBox.Location = new System.Drawing.Point(106, 114);
             this.subDestinatonTextBox.Name = "subDestinatonTextBox";
             this.subDestinatonTextBox.Size = new System.Drawing.Size(178, 20);
-            this.subDestinatonTextBox.TabIndex = 11;
+            this.subDestinatonTextBox.TabIndex = 13;
             // 
             // subDestinationLabel
             // 
@@ -277,7 +278,7 @@
             this.fileDestinationButton.Location = new System.Drawing.Point(290, 88);
             this.fileDestinationButton.Name = "fileDestinationButton";
             this.fileDestinationButton.Size = new System.Drawing.Size(36, 23);
-            this.fileDestinationButton.TabIndex = 9;
+            this.fileDestinationButton.TabIndex = 12;
             this.fileDestinationButton.Text = "search";
             this.fileDestinationButton.UseVisualStyleBackColor = true;
             this.fileDestinationButton.Click += new System.EventHandler(this.fileDestinationButton_Click);
@@ -287,7 +288,7 @@
             this.fileDestinationTextBox.Location = new System.Drawing.Point(106, 88);
             this.fileDestinationTextBox.Name = "fileDestinationTextBox";
             this.fileDestinationTextBox.Size = new System.Drawing.Size(178, 20);
-            this.fileDestinationTextBox.TabIndex = 8;
+            this.fileDestinationTextBox.TabIndex = 11;
             // 
             // fileDestinationLabel
             // 
@@ -304,7 +305,7 @@
             this.destinationTypeComboBox.Location = new System.Drawing.Point(106, 61);
             this.destinationTypeComboBox.Name = "destinationTypeComboBox";
             this.destinationTypeComboBox.Size = new System.Drawing.Size(61, 21);
-            this.destinationTypeComboBox.TabIndex = 6;
+            this.destinationTypeComboBox.TabIndex = 10;
             // 
             // destinationTypeLabel
             // 
@@ -321,7 +322,7 @@
             this.visibleCheckBox.Location = new System.Drawing.Point(18, 23);
             this.visibleCheckBox.Name = "visibleCheckBox";
             this.visibleCheckBox.Size = new System.Drawing.Size(55, 17);
-            this.visibleCheckBox.TabIndex = 3;
+            this.visibleCheckBox.TabIndex = 9;
             this.visibleCheckBox.Text = "visible";
             this.visibleCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -331,7 +332,7 @@
             this.controlListBox.Location = new System.Drawing.Point(344, 46);
             this.controlListBox.Name = "controlListBox";
             this.controlListBox.Size = new System.Drawing.Size(138, 259);
-            this.controlListBox.TabIndex = 2;
+            this.controlListBox.TabIndex = 15;
             // 
             // relationsComboBox
             // 
@@ -339,7 +340,7 @@
             this.relationsComboBox.Location = new System.Drawing.Point(344, 19);
             this.relationsComboBox.Name = "relationsComboBox";
             this.relationsComboBox.Size = new System.Drawing.Size(138, 21);
-            this.relationsComboBox.TabIndex = 0;
+            this.relationsComboBox.TabIndex = 14;
             // 
             // fontDialog1
             // 
@@ -350,7 +351,7 @@
             this.okButton.Location = new System.Drawing.Point(421, 543);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(79, 27);
-            this.okButton.TabIndex = 4;
+            this.okButton.TabIndex = 16;
             this.okButton.Text = "ok";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
@@ -360,7 +361,7 @@
             this.cancelButton.Location = new System.Drawing.Point(336, 543);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(79, 27);
-            this.cancelButton.TabIndex = 5;
+            this.cancelButton.TabIndex = 17;
             this.cancelButton.Text = "cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
@@ -368,11 +369,22 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // updateButton
+            // 
+            this.updateButton.Location = new System.Drawing.Point(12, 543);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(79, 27);
+            this.updateButton.TabIndex = 18;
+            this.updateButton.Text = "update";
+            this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(509, 572);
+            this.Controls.Add(this.updateButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.groupBox2);
@@ -428,5 +440,6 @@
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button updateButton;
     }
 }

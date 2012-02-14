@@ -56,6 +56,11 @@ namespace Configuration_Manager.Views
                 // Set the handlers event. Safe in case of duplicated handlers.
                 s.Button.Click -= ToolStripButton_Click;
                 s.Button.Click += ToolStripButton_Click;
+
+                if (s.Selected == true)
+                {
+                    s.Button.PerformClick();
+                }
             }
 
             navigationBar.Refresh();

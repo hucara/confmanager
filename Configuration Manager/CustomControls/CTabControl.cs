@@ -5,19 +5,17 @@ using System.Text;
 
 namespace Configuration_Manager.CustomControls
 {
-    class CShape
+    class CTabControl : System.Windows.Forms.TabControl, ICustomControl
     {
         static int count = 0;
-        public int typeId;
 
-        public List<ICustomControl> RelatedControls { get; private set; }
+        public int TypeId;
 
-        public CShape()
+        public CTabControl()
         {
-
         }
 
-        public void setControlDescription(ControlDescription cd)
+        public void SetControlDescription(ControlDescription cd)
         {
         }
     }

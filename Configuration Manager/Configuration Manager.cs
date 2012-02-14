@@ -25,11 +25,23 @@ namespace Configuration_Manager
         {
             InitializeComponent();
             InitViews();
+            InitHandlers();
+        }
+
+        private void InitHandlers()
+        {
+            this.labelToolStripMenuItem.Click += tabControlView.labelToolStripMenuItem_Click;
+            this.textBoxToolStripMenuItem.Click += tabControlView.textBoxToolStripMenuItem_Click;
+            this.checkBoxToolStripMenuItem.Click += tabControlView.checkBoxToolStripMenuItem_Click;
+            this.comboBoxToolStripMenuItem.Click += tabControlView.comboBoxToolStripMenuItem_Click;
+
+            this.groupBoxToolStripMenuItem.Click += tabControlView.groupBoxToolStripMenuItem_Click;
+            this.shapeToolStripMenuItem.Click += tabControlView.shapeToolStripMenuItem_Click;
         }
 
         private void InitViews()
         {
-            tabControlView = new TabControlView(tabControl, contextEditMenu, model);
+            tabControlView = new TabControlView(tabControl, contextEditMenu);
             toolStripView = new ToolStripView(toolStrip, tabControl, contextEditMenu, model);
 
             if (model.ObjectDefinitionExists)
@@ -61,16 +73,6 @@ namespace Configuration_Manager
             {
                 SetProgMode();
             }
-        }
-
-        private void labelToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CLabel label = cf.BuildCLabel(null);
-            tabControl.SelectedTab.Controls.Add(label);
-
-            Editor editor = new Editor(label);
-            //Editor editor = new Editor("CLabel", tabControl.SelectedTab);
-            editor.Show();
         }
 
         private void buttonToolStripMenuItem_Click(object sender, EventArgs e)
@@ -123,25 +125,6 @@ namespace Configuration_Manager
 
                 contextNavMenu.Show(c, me.X, me.Y);
             }
-        }
-
-        private void comboBoxToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CComboBox ccb = cf.BuildCComboBox(null);
-            tabControl.SelectedTab.Controls.Add(ccb);
-
-            Editor editor = new Editor(ccb);
-            //Editor editor = new Editor("CLabel", tabControl.SelectedTab);
-            editor.Show();
-        }
-
-        private void textBoxToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CTextBox ctb = cf.BuildCTextBox(null);
-            tabControl.SelectedTab.Controls.Add(ctb);
-
-            Editor editor = new Editor(ctb);
-            editor.Show();
         }
     }
 }

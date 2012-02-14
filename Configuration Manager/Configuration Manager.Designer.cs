@@ -1,4 +1,5 @@
-﻿namespace Configuration_Manager
+﻿using Configuration_Manager.Views;
+namespace Configuration_Manager
 {
     partial class MainForm
     {
@@ -37,13 +38,14 @@
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.groupBoxToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextNavMenu.SuspendLayout();
             this.contextEditMenu.SuspendLayout();
             this.SuspendLayout();
@@ -88,20 +90,21 @@
             // 
             this.contextEditMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
+            this.editToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.contextEditMenu.Name = "contextMenuStrip1";
             this.contextEditMenu.ShowImageMargin = false;
-            this.contextEditMenu.Size = new System.Drawing.Size(128, 70);
+            this.contextEditMenu.Size = new System.Drawing.Size(83, 70);
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.labelToolStripMenuItem,
             this.textBoxToolStripMenuItem,
-            this.groupBoxToolStripMenuItem,
+            this.checkBoxToolStripMenuItem,
             this.comboBoxToolStripMenuItem,
             this.toolStripSeparator1,
-            this.groupBoxToolStripMenuItem1,
+            this.groupBoxToolStripMenuItem,
             this.shapeToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
@@ -112,50 +115,41 @@
             this.labelToolStripMenuItem.Name = "labelToolStripMenuItem";
             this.labelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.labelToolStripMenuItem.Text = "Label";
-            this.labelToolStripMenuItem.Click += new System.EventHandler(this.labelToolStripMenuItem_Click);
             // 
             // textBoxToolStripMenuItem
             // 
             this.textBoxToolStripMenuItem.Name = "textBoxToolStripMenuItem";
             this.textBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.textBoxToolStripMenuItem.Text = "TextBox";
-            this.textBoxToolStripMenuItem.Click += new System.EventHandler(this.textBoxToolStripMenuItem_Click);
             // 
-            // groupBoxToolStripMenuItem
+            // checkBoxToolStripMenuItem
             // 
-            this.groupBoxToolStripMenuItem.Name = "groupBoxToolStripMenuItem";
-            this.groupBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.groupBoxToolStripMenuItem.Text = "CheckBox";
+            this.checkBoxToolStripMenuItem.Name = "checkBoxToolStripMenuItem";
+            this.checkBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.checkBoxToolStripMenuItem.Text = "CheckBox";
             // 
             // comboBoxToolStripMenuItem
             // 
             this.comboBoxToolStripMenuItem.Name = "comboBoxToolStripMenuItem";
             this.comboBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.comboBoxToolStripMenuItem.Text = "ComboBox";
-            this.comboBoxToolStripMenuItem.Click += new System.EventHandler(this.comboBoxToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
-            // groupBoxToolStripMenuItem1
+            // groupBoxToolStripMenuItem
             // 
-            this.groupBoxToolStripMenuItem1.Name = "groupBoxToolStripMenuItem1";
-            this.groupBoxToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.groupBoxToolStripMenuItem1.Text = "GroupBox";
+            this.groupBoxToolStripMenuItem.Name = "groupBoxToolStripMenuItem";
+            this.groupBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.groupBoxToolStripMenuItem.Text = "GroupBox";
             // 
             // shapeToolStripMenuItem
             // 
             this.shapeToolStripMenuItem.Name = "shapeToolStripMenuItem";
             this.shapeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.shapeToolStripMenuItem.Text = "Shape";
-            // 
-            // deleteToolStripMenuItem
-            // 
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // tabControl
             // 
@@ -166,6 +160,18 @@
             this.tabControl.Size = new System.Drawing.Size(680, 596);
             this.tabControl.TabIndex = 0;
             this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // MainForm
             // 
@@ -190,18 +196,19 @@
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ContextMenuStrip contextEditMenu;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem labelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textBoxToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem groupBoxToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkBoxToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem comboBoxToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem groupBoxToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem groupBoxToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shapeToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextNavMenu;
         private System.Windows.Forms.ToolStripMenuItem newSectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteSectionToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
 
     }
 }

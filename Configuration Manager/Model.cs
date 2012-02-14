@@ -10,7 +10,6 @@ namespace Configuration_Manager
     class Model
     {
         private static Model model;
-
         public const int MAX_SECTIONS = 6;
         public const int MAX_COMPONENTS_PER_PAGE = 30;
 
@@ -24,6 +23,8 @@ namespace Configuration_Manager
         public bool editingOldComponent = false;
 
         public bool ObjectDefinitionExists { get; set; }
+
+        public List<String> DestinationFileTypes;
         
         public List<System.Windows.Forms.ToolStripItem> toolStripItems {get; private set;}
         public List<ICustomControl> AllControls { get; private set; }
@@ -40,8 +41,11 @@ namespace Configuration_Manager
         {
             AllControls = new List<ICustomControl>();
             Sections = new List<Section>();
+            DestinationFileTypes = new List<String>();
 
             ObjectDefinitionExists = false;
+
+            FillDestinationFileTypes();
         }
 
         // Singleton approach
@@ -52,6 +56,13 @@ namespace Configuration_Manager
                 model = new Model();
             }
             return model;
+        }
+
+        public void FillDestinationFileTypes()
+        {
+            DestinationFileTypes.Add(".INI");
+            DestinationFileTypes.Add(".XML");
+            DestinationFileTypes.Add(".TXT");
         }
     }
 }

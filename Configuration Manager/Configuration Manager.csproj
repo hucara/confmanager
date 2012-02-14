@@ -53,16 +53,27 @@
     <Compile Include="CustomControls\CButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CustomControls\CCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CustomControls\CComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomControls\CGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CustomControls\CLabel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CustomControls\CTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CustomControls\CTabPage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CustomControls\CShape.cs" />
+    <Compile Include="CustomControls\CPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CustomControls\CTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
