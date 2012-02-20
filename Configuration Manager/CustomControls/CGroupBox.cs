@@ -9,21 +9,12 @@ namespace Configuration_Manager.CustomControls
     class CGroupBox : GroupBox, ICustomControl
     {
         static int count = 0;
-
-        public int TypeId { get; private set; }
-        public int Id { get; private set; }
-
-        public List<ICustomControl> RelatedControls { get; private set; }
+        ControlDescription cd;
 
         public CGroupBox()
         {
-            this.TypeId = count;
             this.Name = "CGroupBox" + count;
-
             this.Text = this.Name;
-            this.Size = this.DefaultSize;
-            this.Click += CGroupBox_Click;
-
             count++;
         }
 
@@ -39,17 +30,21 @@ namespace Configuration_Manager.CustomControls
             this.BackColor = cd.BackColor;
         }
 
-        public void CGroupBox_Click(object sender, EventArgs e)
+        ControlDescription ICustomControl.cd
         {
-            MouseEventArgs me = e as MouseEventArgs;
-            CGroupBox c = sender as CGroupBox;
-
-            if (Model.getInstance().progMode && me.Button == System.Windows.Forms.MouseButtons.Right)
+            get
             {
-                // Call the edit menu
-                
-                System.Diagnostics.Debug.WriteLine("! Clicked: " +c.Name+ ": in X: " +me.X+ " - Y: "+me.Y);
+                return cd;
             }
+            set
+            {
+                cd = value;
+            }
+        }
+
+        public void SetControlDescription()
+        {
+            cd = new ControlDescription(this);
         }
     }
 }

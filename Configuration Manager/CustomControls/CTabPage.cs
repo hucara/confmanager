@@ -9,26 +9,35 @@ namespace Configuration_Manager.CustomControls
     class CTabPage : TabPage, ICustomControl
     {
         static int count = 0;
-        private ContextMenu cm;
-
-        public int TypeId;
-        public int RelatedButtonIndex;
+        ControlDescription cd = null;
 
         public CTabPage()
         {
-            this.TypeId = count;
             this.Name = "CTabPage" + count;
             this.Text = this.Name;
             count++;
         }
 
-        public void SetControlDescription(ControlDescription cd)
-        {
-        }
-
         internal void SetNavBarDescription(Section s)
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        ControlDescription ICustomControl.cd
+        {
+            get
+            {
+                return cd;
+            }
+            set
+            {
+                cd = value;
+            }
+        }
+
+        void SetControlDescription(ControlDescription cd)
+        {
+            throw new NotImplementedException();
         }
     }
 }

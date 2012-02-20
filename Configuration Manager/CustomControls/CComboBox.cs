@@ -9,8 +9,7 @@ namespace Configuration_Manager.CustomControls
     class CComboBox : ComboBox , ICustomControl
     {
         static int count = 0;
-
-        public List<ICustomControl> RelatedControls { get; private set; }
+        ControlDescription cd;
 
         public CComboBox()
         {
@@ -29,6 +28,23 @@ namespace Configuration_Manager.CustomControls
 
             this.Font = cd.CurrentFont;
             this.BackColor = cd.BackColor;
+        }
+
+        ControlDescription ICustomControl.cd
+        {
+            get
+            {
+                return cd;
+            }
+            set
+            {
+                cd = value;
+            }
+        }
+
+        public void SetControlDescription()
+        {
+            cd = new ControlDescription(this);
         }
     }
 }

@@ -25,14 +25,13 @@ namespace Configuration_Manager
         public bool ObjectDefinitionExists { get; set; }
 
         public List<String> DestinationFileTypes;
-        
-        public List<System.Windows.Forms.ToolStripItem> toolStripItems {get; private set;}
+        public List<String> RelationTypes;
+       
         public List<ICustomControl> AllControls { get; private set; }
-        public Dictionary<int, ICustomControl> DictControls { get; private set; }
 
-        public Control CurrentClickParent { get; set; }
-        public int CurrentX { get; set; }
-        public int CurrentY { get; set; }
+        public Control LastClickedControl { get; set; }
+        public int LastClickedX { get; set; }
+        public int LastClickedY { get; set; }
 
         public List<Section> Sections { get; set; }
         
@@ -42,10 +41,12 @@ namespace Configuration_Manager
             AllControls = new List<ICustomControl>();
             Sections = new List<Section>();
             DestinationFileTypes = new List<String>();
+            RelationTypes = new List<String>();
 
             ObjectDefinitionExists = false;
 
             FillDestinationFileTypes();
+            FillOutRelationTypes();
         }
 
         // Singleton approach
@@ -58,11 +59,19 @@ namespace Configuration_Manager
             return model;
         }
 
-        public void FillDestinationFileTypes()
+        private void FillDestinationFileTypes()
         {
             DestinationFileTypes.Add(".INI");
             DestinationFileTypes.Add(".XML");
             DestinationFileTypes.Add(".TXT");
+        }
+
+        private void FillOutRelationTypes()
+        {
+            //RelationTypes.Add("Write related");
+            //RelationTypes.Add("Read related");
+            //RelationTypes.Add("Visibility related");
+            //RelationTypes.Add("Coupled controls");
         }
     }
 }

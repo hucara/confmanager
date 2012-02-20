@@ -43,9 +43,9 @@ namespace Configuration_Manager
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.groupBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabControl = new System.Windows.Forms.TabControl();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.contextNavMenu.SuspendLayout();
             this.contextEditMenu.SuspendLayout();
             this.SuspendLayout();
@@ -107,59 +107,49 @@ namespace Configuration_Manager
             this.groupBoxToolStripMenuItem,
             this.shapeToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
             this.newToolStripMenuItem.Text = "New";
             // 
             // labelToolStripMenuItem
             // 
             this.labelToolStripMenuItem.Name = "labelToolStripMenuItem";
-            this.labelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.labelToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.labelToolStripMenuItem.Text = "Label";
             // 
             // textBoxToolStripMenuItem
             // 
             this.textBoxToolStripMenuItem.Name = "textBoxToolStripMenuItem";
-            this.textBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.textBoxToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.textBoxToolStripMenuItem.Text = "TextBox";
             // 
             // checkBoxToolStripMenuItem
             // 
             this.checkBoxToolStripMenuItem.Name = "checkBoxToolStripMenuItem";
-            this.checkBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.checkBoxToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.checkBoxToolStripMenuItem.Text = "CheckBox";
             // 
             // comboBoxToolStripMenuItem
             // 
             this.comboBoxToolStripMenuItem.Name = "comboBoxToolStripMenuItem";
-            this.comboBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.comboBoxToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.comboBoxToolStripMenuItem.Text = "ComboBox";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(130, 6);
             // 
             // groupBoxToolStripMenuItem
             // 
             this.groupBoxToolStripMenuItem.Name = "groupBoxToolStripMenuItem";
-            this.groupBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.groupBoxToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.groupBoxToolStripMenuItem.Text = "GroupBox";
             // 
             // shapeToolStripMenuItem
             // 
             this.shapeToolStripMenuItem.Name = "shapeToolStripMenuItem";
-            this.shapeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.shapeToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.shapeToolStripMenuItem.Text = "Shape";
-            // 
-            // tabControl
-            // 
-            this.tabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.tabControl.Location = new System.Drawing.Point(115, -24);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(680, 596);
-            this.tabControl.TabIndex = 0;
-            this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             // 
             // editToolStripMenuItem
             // 
@@ -172,6 +162,16 @@ namespace Configuration_Manager
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
+            // 
+            // tabControl
+            // 
+            this.tabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+            this.tabControl.Location = new System.Drawing.Point(115, -24);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(680, 596);
+            this.tabControl.TabIndex = 0;
+            this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             // 
             // MainForm
             // 

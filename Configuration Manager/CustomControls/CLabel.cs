@@ -8,35 +8,31 @@ namespace Configuration_Manager.CustomControls
 {
     class CLabel : Label, ICustomControl
     {
-        static int count = 0;
-
-        public int typeId { get; private set; }
-        public int id { get; private set; }
-
-        //private Label c;
-        public List<ICustomControl> RelatedControls { get; private set; }
+        public static int count = 0;
+        public ControlDescription cd;
 
         public CLabel()
         {
-            this.typeId = count;
             this.Name = "CLabel" + count;
-
             this.Text = this.Name;
-            this.Size = this.DefaultSize;
-
             count++;
         }
 
-        public void SetControlDescription(ControlDescription cd)
+        public void SetControlDescription()
         {
-            this.Text = cd.Text;
-            this.Top = cd.Top;
-            this.Left = cd.Left;
-            this.Height = cd.Height;
-            this.Width = cd.Width;
+            cd = new ControlDescription(this);
+        }
 
-            this.Font = cd.CurrentFont;
-            this.BackColor = cd.BackColor;
+        ControlDescription ICustomControl.cd
+        {
+            get
+            {
+                return cd;
+            }
+            set
+            {
+                cd = value;
+            }
         }
     }
 }

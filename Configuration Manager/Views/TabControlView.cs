@@ -21,7 +21,7 @@ namespace Configuration_Manager.Views
         {
             this.tabControl = tc;
             this.contextMenu = cms;
-            
+
             this.model = Model.getInstance();
             this.cf = ControlFactory.getInstance();
         }
@@ -58,27 +58,29 @@ namespace Configuration_Manager.Views
             {
                 contextMenu.Items[0].Enabled = true;
                 contextMenu.Items[1].Enabled = true;
-                contextMenu.Items[2].Enabled = true;
+                contextMenu.Items[2].Enabled = false;
+
+                if (tc is CTabPage) contextMenu.Items[1].Enabled = false;
 
                 contextMenu.Show(tc, me.X, me.Y);
-                
-                model.CurrentClickParent = tc;
-                model.CurrentX = me.X;
-                model.CurrentY = me.Y;
+
+                model.LastClickedControl = tc;
+                model.LastClickedX = me.X;
+                model.LastClickedY = me.Y;
 
                 Debug.WriteLine("! Clicked: " + tc.Name);
-                Debug.WriteLine("! Clicked: " + model.CurrentClickParent + " in X: " +model.CurrentX+ " - Y: "+model.CurrentY);
+                Debug.WriteLine("! Clicked: " + model.LastClickedControl + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
             }
         }
 
         public void labelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CLabel label = cf.BuildCLabel(null);
-            model.CurrentClickParent.Controls.Add(label);
-            //tabControl.SelectedTab.Controls.Add(label);
+            model.LastClickedControl.Controls.Add(label);
 
             label.Click += Control_RightClick;
             model.AllControls.Add(label);
+            label.SetControlDescription();
 
             editor = new Editor();
             editor.Show(label);
@@ -87,10 +89,12 @@ namespace Configuration_Manager.Views
         public void textBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CTextBox textBox = cf.BuildCTextBox(null);
-            model.CurrentClickParent.Controls.Add(textBox);
+            model.LastClickedControl.Controls.Add(textBox);
             //tabControl.SelectedTab.Controls.Add(textBox);
 
+            textBox.Click += Control_RightClick;
             model.AllControls.Add(textBox);
+            textBox.SetControlDescription();
 
             editor = new Editor();
             editor.Show(textBox);
@@ -99,10 +103,12 @@ namespace Configuration_Manager.Views
         public void comboBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CComboBox comboBox = cf.BuildCComboBox(null);
-            model.CurrentClickParent.Controls.Add(comboBox);
+            model.LastClickedControl.Controls.Add(comboBox);
             //tabControl.SelectedTab.Controls.Add(comboBox);
 
+            comboBox.Click += Control_RightClick;
             model.AllControls.Add(comboBox);
+            comboBox.SetControlDescription();
 
             editor = new Editor();
             editor.Show(comboBox);
@@ -111,10 +117,12 @@ namespace Configuration_Manager.Views
         public void checkBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CCheckBox checkBox = cf.BuildCCheckBox(null);
-            model.CurrentClickParent.Controls.Add(checkBox);
+            model.LastClickedControl.Controls.Add(checkBox);
             //tabControl.SelectedTab.Controls.Add(checkBox);
 
+            checkBox.Click += Control_RightClick;
             model.AllControls.Add(checkBox);
+            checkBox.SetControlDescription();
 
             editor = new Editor();
             editor.Show(checkBox);
@@ -123,12 +131,12 @@ namespace Configuration_Manager.Views
         public void groupBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CGroupBox groupBox = cf.BuildCGroupBox(null);
-            model.CurrentClickParent.Controls.Add(groupBox);
+            model.LastClickedControl.Controls.Add(groupBox);
             //tabControl.SelectedTab.Controls.Add(groupBox);
 
-            model.AllControls.Add(groupBox);
             groupBox.Click += ContainerControl_RightClick;
-
+            model.AllControls.Add(groupBox);
+            groupBox.SetControlDescription();
 
             editor = new Editor();
             editor.Show(groupBox);
@@ -137,10 +145,12 @@ namespace Configuration_Manager.Views
         public void shapeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CPanel panel = cf.BuildCPanel(null);
-            model.CurrentClickParent.Controls.Add(panel);
+            model.LastClickedControl.Controls.Add(panel);
             //tabControl.SelectedTab.Controls.Add(panel);
 
+            panel.Click += ContainerControl_RightClick;
             model.AllControls.Add(panel);
+            panel.SetControlDescription();
 
             editor = new Editor();
             editor.Show(panel);
@@ -159,12 +169,12 @@ namespace Configuration_Manager.Views
 
                 contextMenu.Show(c, me.X, me.Y);
 
-                model.CurrentClickParent = c;
-                model.CurrentX = me.X;
-                model.CurrentY = me.Y;
+                model.LastClickedControl = c;
+                model.LastClickedX = me.X;
+                model.LastClickedY = me.Y;
 
                 Debug.WriteLine("! Clicked: " + c.Name);
-                Debug.WriteLine("! Clicked: " + model.CurrentClickParent + " in X: " + model.CurrentX + " - Y: " + model.CurrentY);
+                Debug.WriteLine("! Clicked: " + model.LastClickedControl + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
             }
         }
 
@@ -181,13 +191,23 @@ namespace Configuration_Manager.Views
 
                 contextMenu.Show(c, me.X, me.Y);
 
-                model.CurrentClickParent = c;
-                model.CurrentX = me.X;
-                model.CurrentY = me.Y;
+                model.LastClickedControl = c;
+                model.LastClickedX = me.X;
+                model.LastClickedY = me.Y;
 
                 Debug.WriteLine("! Clicked: " + c.Name);
-                Debug.WriteLine("! Clicked: " + model.CurrentClickParent + " in X: " + model.CurrentX + " - Y: " + model.CurrentY);
+                Debug.WriteLine("! Clicked: " + model.LastClickedControl + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
             }
+        }
+
+        public void editToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            editor = new Editor();
+
+            model.LastClickedX = model.LastClickedControl.Location.X;
+            model.LastClickedY = model.LastClickedControl.Location.Y;
+
+            editor.Show(model.LastClickedControl);
         }
     }
 }

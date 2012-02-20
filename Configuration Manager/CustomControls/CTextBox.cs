@@ -9,34 +9,32 @@ namespace Configuration_Manager.CustomControls
     class CTextBox : TextBox, ICustomControl
     {
         static int count = 0;
-        public int typeId;
-
-        private TextBox c;
-        public List<ICustomControl> RelatedControls { get; private set; }
-
-        public CTextBox(TextBox textBox)
-        {
-            this.c = textBox;
-
-            typeId = count;
-            this.Name = "TextBox" + count;
-            count++;
-        }
+        ControlDescription cd;
 
         public CTextBox()
         {
-            typeId = count;
             this.Name = "TextBox" + count;
             count++;
         }
 
-        public TextBox getTextBox()
+        public void SetControlDescription(ControlDescription cd)
+        {}
+
+        ControlDescription ICustomControl.cd
         {
-            return c;
+            get
+            {
+                return cd;
+            }
+            set
+            {
+                cd = value;
+            }
         }
 
-        public void SetControlDescription(ControlDescription cd)
+        public void SetControlDescription()
         {
+            cd = new ControlDescription(this);
         }
     }
 }

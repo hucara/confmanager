@@ -50,9 +50,6 @@
   <ItemGroup>
     <Compile Include="ControlFactory.cs" />
     <Compile Include="ControlDescription.cs" />
-    <Compile Include="CustomControls\CButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="CustomControls\CCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>

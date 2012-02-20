@@ -27,17 +27,10 @@ namespace Configuration_Manager
             return cf;
         }
 
-        public CButton BuildCButton(ControlDescription cd)
-        {
-            CButton cb = new CButton();
-            cb.SetControlDescription(cd);
-            return cb;
-        }
-
         public CLabel BuildCLabel(ControlDescription cd)
         {
             CLabel lbl = new CLabel();
-            //lbl.SetControlDescription(cd);
+            //lbl.SetControlDescription();
             return lbl;
         }
 

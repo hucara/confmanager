@@ -6,8 +6,10 @@ using System.Windows.Forms;
 
 namespace Configuration_Manager.CustomControls
 {
-    interface ICustomControl
+    public interface ICustomControl
     {
-        void SetControlDescription(ControlDescription cd);
+        ControlDescription cd { get; set; }
+        //void SetControlDescription(ControlDescription cd);
+        //void SetControlDescription();
     }
 }

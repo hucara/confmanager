@@ -8,19 +8,15 @@ namespace Configuration_Manager.CustomControls
 {
     class CCheckBox : CheckBox, ICustomControl
     {
+        ControlDescription cd = null;
         static int count = 0;
-
-        public int TypeId { get; private set; }
-        public int Id { get; private set; }
-
-        public List<ICustomControl> RelatedControls { get; private set; }
-
+        
         public CCheckBox()
         {
-            this.TypeId = count;
-            this.Name = "CCheckBox" + count;
+            cd = new ControlDescription(this);
 
-            this.Text = this.Name;
+            cd.TypeId = count;
+            this.Name = "CCheckBox" + count;
             this.Size = this.DefaultSize;
 
             count++;
@@ -36,6 +32,23 @@ namespace Configuration_Manager.CustomControls
 
             this.Font = cd.CurrentFont;
             this.BackColor = cd.BackColor;
+        }
+
+        ControlDescription ICustomControl.cd
+        {
+            get
+            {
+                return cd;
+            }
+            set
+            {
+                cd = value;
+            }
+        }
+
+        public void SetControlDescription()
+        {
+            cd = new ControlDescription(this);
         }
     }
 }

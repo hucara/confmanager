@@ -9,9 +9,16 @@ namespace Configuration_Manager.CustomControls
     class CToolStripButton : ToolStripButton, ICustomControl
     {
         static int count = 0;
-        public int RelatedTabPageIndex;
+
         public int TypeId { get; private set; }
-        public int gId { get; private set; }
+        public int Id { get; private set; }
+        public String Hint { get; private set; }
+
+        public List<ICustomControl> RelatedRead { get; private set; }
+        public List<ICustomControl> RelatedWrite { get; private set; }
+        public List<ICustomControl> RelatedVisibility { get; private set; }
+        public List<ICustomControl> CoupledControls { get; private set; }
+
         public CTabPage RelatedTabPage;
 
         public CToolStripButton()
@@ -52,6 +59,18 @@ namespace Configuration_Manager.CustomControls
         public void SetSectionName(String s)
         {
             this.Text = s;
+        }
+
+        public ControlDescription cd
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

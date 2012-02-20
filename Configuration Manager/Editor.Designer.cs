@@ -333,6 +333,7 @@
             this.controlListBox.Name = "controlListBox";
             this.controlListBox.Size = new System.Drawing.Size(138, 259);
             this.controlListBox.TabIndex = 15;
+            this.controlListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.controlListBox_ItemCheck);
             // 
             // relationsComboBox
             // 
@@ -341,10 +342,7 @@
             this.relationsComboBox.Name = "relationsComboBox";
             this.relationsComboBox.Size = new System.Drawing.Size(138, 21);
             this.relationsComboBox.TabIndex = 14;
-            // 
-            // fontDialog1
-            // 
-            this.fontDialog1.Apply += new System.EventHandler(this.fontDialog1_Apply);
+            this.relationsComboBox.SelectedIndexChanged += new System.EventHandler(this.relationsComboBox_SelectedIndexChanged);
             // 
             // okButton
             // 
@@ -417,7 +415,6 @@
         private System.Windows.Forms.FontDialog fontDialog1;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.CheckedListBox controlListBox;
-        private System.Windows.Forms.ComboBox relationsComboBox;
         private System.Windows.Forms.Button backColorButton;
         private System.Windows.Forms.Button fontButton;
         private System.Windows.Forms.Label fontLabel;
@@ -441,5 +438,6 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button updateButton;
+        private System.Windows.Forms.ComboBox relationsComboBox;
     }
 }

@@ -37,6 +37,8 @@ namespace Configuration_Manager
 
             this.groupBoxToolStripMenuItem.Click += tabControlView.groupBoxToolStripMenuItem_Click;
             this.shapeToolStripMenuItem.Click += tabControlView.shapeToolStripMenuItem_Click;
+
+            this.editToolStripMenuItem.Click += tabControlView.editToolStripMenuItem_Click;
         }
 
         private void InitViews()
@@ -73,13 +75,6 @@ namespace Configuration_Manager
             {
                 SetProgMode();
             }
-        }
-
-        private void buttonToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CButton cb = ControlFactory.getInstance().BuildCButton(null);
-            tabControl.SelectedTab.Controls.Add(cb);
-            tabControl.Refresh();
         }
 
         private void newSectionToolStripMenuItem_Click(object sender, EventArgs e)
