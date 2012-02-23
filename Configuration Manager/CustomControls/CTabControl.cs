@@ -7,15 +7,26 @@ namespace Configuration_Manager.CustomControls
 {
     class CTabControl : System.Windows.Forms.TabControl, ICustomControl
     {
-        ControlDescription cd;
+        public ControlDescription cd;
         static int count = 0;
         
-        public CTabControl()
+        public CTabControl(CTabPage tp)
         {
+            this.Name = "CTabControl" + count;
+            this.TabPages.Add(tp);
+            count++;
         }
 
-        public void SetControlDescription(ControlDescription cd)
+        public CTabControl()
         {
+            this.Name = "CTabControl" + count;
+
+            CTabPage ctp = ControlFactory.getInstance().BuildCTabPage(this);
+            ctp.SetControlDescription();
+            ctp.cd.Parent = this;
+
+            this.TabPages.Add(ctp);
+            count++;
         }
 
         ControlDescription ICustomControl.cd
@@ -28,6 +39,11 @@ namespace Configuration_Manager.CustomControls
             {
                 cd = value;
             }
+        }
+
+        internal void SetControlDescription()
+        {
+            cd = new ControlDescription(this);
         }
     }
 }

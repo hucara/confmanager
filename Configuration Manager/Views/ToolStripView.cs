@@ -131,10 +131,11 @@ namespace Configuration_Manager.Views
                 UnCheckButtons(b);
 
                 Section s = model.Sections.Find(se => se.Button == SelectedButton);
+                model.CurrentSection = s;
 
                 Debug.WriteLine("! Clicked: " + b.Name + " \"" + b.Text +"\"");
                 configurationTabs.SelectTab(s.Tab);
-                Debug.WriteLine("! Selected Tab: " + s.Tab.Name);
+                Debug.WriteLine("! Selected: " + model.CurrentSection.Name + " with Text: "+ s.Text);
             }
         }
 

@@ -17,8 +17,10 @@ namespace Configuration_Manager.CustomControls
             count++;
         }
 
-        public void SetControlDescription(ControlDescription cd)
-        {}
+        public void SetControlDescription()
+        {
+            cd = new ControlDescription(this);
+        }
 
         ControlDescription ICustomControl.cd
         {
@@ -32,9 +34,6 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
-        public void SetControlDescription()
-        {
-            cd = new ControlDescription(this);
-        }
+
     }
 }

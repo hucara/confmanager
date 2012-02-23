@@ -16,7 +16,7 @@ namespace Configuration_Manager
         private Resources res = Resources.getInstance();
         private Model model = Model.getInstance();
         private ControlFactory cf = ControlFactory.getInstance();
-        private ObjectDefinitionReader odr = ObjectDefinitionReader.getInstance();
+        private ObjectDefinitionManager odr = ObjectDefinitionManager.getInstance();
 
         TabControlView tabControlView;
         ToolStripView toolStripView;
@@ -38,7 +38,12 @@ namespace Configuration_Manager
             this.groupBoxToolStripMenuItem.Click += tabControlView.groupBoxToolStripMenuItem_Click;
             this.shapeToolStripMenuItem.Click += tabControlView.shapeToolStripMenuItem_Click;
 
+            this.tabControlMenuItem.Click += tabControlView.tabControlToolStripMenuItem_Click;
+            this.tabPageMenuItem.Click += tabControlView.tabPageToolStripMenuItem_Click;
+
+            //this.contextEditMenu.Opening += tabControlView.contextEditMenu_Opening;
             this.editToolStripMenuItem.Click += tabControlView.editToolStripMenuItem_Click;
+            this.deleteToolStripMenuItem.Click += tabControlView.deleteToolStripMenuItem_Click;
         }
 
         private void InitViews()
@@ -74,6 +79,11 @@ namespace Configuration_Manager
             if (e.Alt && e.Control && e.KeyCode == Keys.P)
             {
                 SetProgMode();
+            }
+
+            if (e.Alt && e.Control && e.KeyCode == Keys.S)
+            {
+                odr.SerializeObjectDefinition();
             }
         }
 

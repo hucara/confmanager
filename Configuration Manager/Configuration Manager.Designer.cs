@@ -43,6 +43,9 @@ namespace Configuration_Manager
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.groupBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tabControlMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
@@ -59,7 +62,7 @@ namespace Configuration_Manager
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.toolStrip.ShowItemToolTips = false;
-            this.toolStrip.Size = new System.Drawing.Size(112, 572);
+            this.toolStrip.Size = new System.Drawing.Size(131, 572);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             this.toolStrip.Click += new System.EventHandler(this.toolStrip_RightClick);
@@ -105,7 +108,10 @@ namespace Configuration_Manager
             this.comboBoxToolStripMenuItem,
             this.toolStripSeparator1,
             this.groupBoxToolStripMenuItem,
-            this.shapeToolStripMenuItem});
+            this.shapeToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.tabControlMenuItem,
+            this.tabPageMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
             this.newToolStripMenuItem.Text = "New";
@@ -113,43 +119,60 @@ namespace Configuration_Manager
             // labelToolStripMenuItem
             // 
             this.labelToolStripMenuItem.Name = "labelToolStripMenuItem";
-            this.labelToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.labelToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.labelToolStripMenuItem.Text = "Label";
             // 
             // textBoxToolStripMenuItem
             // 
             this.textBoxToolStripMenuItem.Name = "textBoxToolStripMenuItem";
-            this.textBoxToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.textBoxToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.textBoxToolStripMenuItem.Text = "TextBox";
             // 
             // checkBoxToolStripMenuItem
             // 
             this.checkBoxToolStripMenuItem.Name = "checkBoxToolStripMenuItem";
-            this.checkBoxToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.checkBoxToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.checkBoxToolStripMenuItem.Text = "CheckBox";
             // 
             // comboBoxToolStripMenuItem
             // 
             this.comboBoxToolStripMenuItem.Name = "comboBoxToolStripMenuItem";
-            this.comboBoxToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.comboBoxToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.comboBoxToolStripMenuItem.Text = "ComboBox";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(130, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(131, 6);
             // 
             // groupBoxToolStripMenuItem
             // 
             this.groupBoxToolStripMenuItem.Name = "groupBoxToolStripMenuItem";
-            this.groupBoxToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.groupBoxToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.groupBoxToolStripMenuItem.Text = "GroupBox";
             // 
             // shapeToolStripMenuItem
             // 
             this.shapeToolStripMenuItem.Name = "shapeToolStripMenuItem";
-            this.shapeToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.shapeToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.shapeToolStripMenuItem.Text = "Shape";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(131, 6);
+            // 
+            // tabControlMenuItem
+            // 
+            this.tabControlMenuItem.Name = "tabControlMenuItem";
+            this.tabControlMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.tabControlMenuItem.Text = "TabControl";
+            // 
+            // tabPageMenuItem
+            // 
+            this.tabPageMenuItem.Name = "tabPageMenuItem";
+            this.tabPageMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.tabPageMenuItem.Text = "TabPage";
             // 
             // editToolStripMenuItem
             // 
@@ -166,10 +189,10 @@ namespace Configuration_Manager
             // tabControl
             // 
             this.tabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.tabControl.Location = new System.Drawing.Point(115, -24);
+            this.tabControl.Location = new System.Drawing.Point(134, -24);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(680, 596);
+            this.tabControl.Size = new System.Drawing.Size(661, 596);
             this.tabControl.TabIndex = 0;
             this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             // 
@@ -209,6 +232,9 @@ namespace Configuration_Manager
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem tabControlMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tabPageMenuItem;
 
     }
 }

@@ -33,6 +33,7 @@ namespace Configuration_Manager
         public int LastClickedX { get; set; }
         public int LastClickedY { get; set; }
 
+        public Section CurrentSection;
         public List<Section> Sections { get; set; }
         
         // Private constructor

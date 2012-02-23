@@ -20,16 +20,16 @@ namespace Configuration_Manager
 
         String type;
         String ErrorMsg;
-        String hint;
 
         Font controlFont;
         Color fontColor, backColor;
+
+        //ControlDescription cd;
 
         Control parent;
         ICustomControl control;
         List<ICustomControl> currentVisibleList;
         ControlFactory cf;
-        ControlDescription cd;
         Model model;
 
         // //
@@ -39,9 +39,14 @@ namespace Configuration_Manager
         {
             InitializeComponent();
 
+#if DEBUG
+            updateButton.Visible = true;
+#else
+            updateButton.Visible = false;
+#endif
+
             this.cf = ControlFactory.getInstance();
             this.model = Model.getInstance();
-            //this.cd = new ControlDescription();
             this.ErrorMsg = "";
 
             fontDialog1.ShowColor = true;
@@ -243,7 +248,6 @@ namespace Configuration_Manager
             }
         }
 
-
         // //
         // Handlers
         // //
@@ -278,19 +282,7 @@ namespace Configuration_Manager
             }
             else
             {
-                switch (this.type)
-                {
-                    case "CLabel":
-                        CheckLabelInfo();
-                        SaveToControl();
-                        //(control as CLabel).SetControlDescription(null);
-                        break;
-                    case "CComboBox":
-                        //(control as CComboBox).SetControlDescription(null);
-                        break;
-                    default:
-                        break;
-                }
+                SaveToControl();
             }
 
             ErrorMsg = "";
@@ -300,19 +292,9 @@ namespace Configuration_Manager
         {
             CheckLabelInfo();
             SaveToControl();
-            //HighLightRequiredControls();
+            if (currentVisibleList != null) HighLightRequiredControls();
             parent.Refresh();
             ErrorMsg = "";
-        }
-
-        private void SetLabel()
-        {
-            CheckLabelInfo();
-
-            cd.Hint = hintTextBox.Text;
-            cd.Text = textTextBox.Text;
-
-            cf.BuildCLabel(cd);
         }
 
         private void CheckLabelInfo()
@@ -328,6 +310,7 @@ namespace Configuration_Manager
             ParseWidth();
             ParseHeight();
 
+            if (!CheckText()) ErrorMsg += "\n- Text is empty.";
             if (!CheckHint()) ErrorMsg += "\n- Hint is empty.";
             if (!CheckTop()) ErrorMsg += "\n- Top value is too low or too high.";
             if (!CheckLeft()) ErrorMsg += "\n- Left value is too low or too high.";
@@ -339,7 +322,7 @@ namespace Configuration_Manager
 
         private void ParseTop()
         {
-            if (!Int32.TryParse(topTextBox.Text, out top))
+            if (topTextBox.Enabled && !Int32.TryParse(topTextBox.Text, out top))
             {
                 ErrorMsg += "\n- Top is not a valid value.";
             }
@@ -347,7 +330,7 @@ namespace Configuration_Manager
 
         private void ParseLeft()
         {
-            if (!Int32.TryParse(leftTextBox.Text, out left))
+            if (leftTextBox.Enabled && !Int32.TryParse(leftTextBox.Text, out left))
             {
                 ErrorMsg += "\n- Left is not a valid value.";
             }
@@ -355,7 +338,7 @@ namespace Configuration_Manager
 
         private void ParseWidth()
         {
-            if (!Int32.TryParse(widthTextBox.Text, out width))
+            if (widthTextBox.Enabled && !Int32.TryParse(widthTextBox.Text, out width))
             {
                 ErrorMsg += "\n- Width is not a valid value.";
             }
@@ -363,7 +346,7 @@ namespace Configuration_Manager
 
         private void ParseHeight()
         {
-            if (!Int32.TryParse(heightTextBox.Text, out height))
+            if (heightTextBox.Enabled && !Int32.TryParse(heightTextBox.Text, out height))
             {
                 ErrorMsg += "\n- Height is not a valid value.";
             }
@@ -371,13 +354,14 @@ namespace Configuration_Manager
 
         private bool CheckText()
         {
-            if (textTextBox.Text != "") return OK;
+            if (textTextBox.Enabled && textTextBox.Text != "") return OK;
+            if (!textTextBox.Enabled) return OK;
             return ERROR;
         }
 
         private bool CheckHint()
         {
-            if (hintTextBox.Text != "") return OK;
+            if (hintTextBox.Enabled && hintTextBox.Text != "") return OK;
             return ERROR;
         }
 
@@ -407,13 +391,15 @@ namespace Configuration_Manager
 
         private bool CheckFileDestination()
         {
-            if (fileDestinationTextBox.Text == "") return ERROR;
+            if (fileDestinationTextBox.Enabled &&
+                fileDestinationTextBox.Text == "") return ERROR;
             return OK;
         }
 
         private bool CheckSubDestination()
         {
-            if (subDestinatonTextBox.Text == "") return ERROR;
+            if (subDestinatonTextBox.Enabled &&
+                subDestinatonTextBox.Text == "") return ERROR;
             return OK;
         }
 
@@ -431,7 +417,7 @@ namespace Configuration_Manager
             control.cd.Left = this.left;
 
             control.cd.Visible = this.visibleCheckBox.Checked;
-            control.cd.DestinationType = this.destinationTypeComboBox.SelectedText;
+            control.cd.DestinationType = this.destinationTypeComboBox.SelectedItem.ToString();
             control.cd.MainDestination = this.fileDestinationTextBox.Text;
             control.cd.SubDestination = this.subDestinatonTextBox.Text;
         }
@@ -459,6 +445,7 @@ namespace Configuration_Manager
 
             this.visibleCheckBox.Checked = control.cd.Visible;
 
+            this.destinationTypeComboBox.SelectedText = control.cd.DestinationType;
             this.fileDestinationTextBox.Text = control.cd.MainDestination;
             this.subDestinatonTextBox.Text = control.cd.SubDestination;
 
@@ -483,34 +470,13 @@ namespace Configuration_Manager
                 System.Diagnostics.Debug.WriteLine("- [" + relationsComboBox.SelectedItem + "] Unchecked: " + controlListBox.Items[e.Index].ToString());
             }
 
-            System.Diagnostics.Debug.WriteLine("! "+relationsComboBox.SelectedItem +" has: "+ currentVisibleList.Count+" items.");
-            //if (!controlListBox.GetItemChecked(controlListBox.SelectedIndex))
-            //{
-            //    //if (model.AllControls.Exists(c => c.cd.Name == controlListBox.SelectedItem.ToString()))
-            //    if (!currentVisibleList.Contains(model.AllControls.Find(c => c.cd.Name == controlListBox.SelectedItem.ToString())))
-            //    {
-            //        currentVisibleList.Add(model.AllControls.Find(c => c.cd.Name == controlListBox.SelectedItem.ToString()));
-            //        //System.Diagnostics.Debug.WriteLine("! Checked: " + controlListBox.SelectedItem.ToString());
-            //        System.Diagnostics.Debug.WriteLine("+ [" + relationsComboBox.SelectedItem + "] Checked: " + controlListBox.Items[e.Index].ToString());
-            //    }
-            //}
-            //else
-            //{
-            //    //if (model.AllControls.Exists(c => c.cd.Name == controlListBox.SelectedItem.ToString()))
-            //    if (currentVisibleList.Contains(model.AllControls.Find(c => c.cd.Name == controlListBox.SelectedItem.ToString())))
-            //    {
-            //        if (currentVisibleList.Remove(model.AllControls.Find(c => c.cd.Name == controlListBox.SelectedItem.ToString())))                    //System.Diagnostics.Debug.WriteLine("! Unchecked: " + controlListBox.SelectedItem.ToString());
-            //            System.Diagnostics.Debug.WriteLine("- [" + relationsComboBox.SelectedItem + "] Unchecked: " + controlListBox.Items[e.Index].ToString());
-            //        else
-            //            System.Diagnostics.Debug.WriteLine("ERROR :: Tried to delete: " + relationsComboBox.SelectedItem + "--" + controlListBox.Items[e.Index].ToString());
-            //    }
-            //}
+            System.Diagnostics.Debug.WriteLine("! " + relationsComboBox.SelectedItem + " has: " + currentVisibleList.Count + " items.");
         }
 
         private void relationsComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             currentVisibleList = GetCurrentVisibleList();
-            
+
             for (int i = 0; i < controlListBox.Items.Count; i++)
             {
                 if (currentVisibleList.Exists(c => c.cd.Name == controlListBox.Items[i].ToString()))
@@ -552,21 +518,21 @@ namespace Configuration_Manager
         private void HighLightRequiredControls()
         {
             Rectangle rect = default(Rectangle);
-            
+
             Pen p = new Pen(Color.Red, 3);
             Graphics g = parent.CreateGraphics();
 
             foreach (Control c in currentVisibleList)
             {
-                if(c.Visible)
+                if (c.Visible && model.AllControls.Contains(c as ICustomControl))
                 {
-                    //g = c.CreateGraphics();
                     rect = c.Bounds;
                     rect.Inflate(3, 3);
                     g.DrawRectangle(p, rect);
                     g.DrawLine(p, (control as Control).Location, c.Location);
                 }
             }
+
         }
     }
 }

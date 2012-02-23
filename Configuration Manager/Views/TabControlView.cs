@@ -38,8 +38,8 @@ namespace Configuration_Manager.Views
         {
             foreach (Section s in model.Sections)
             {
-                s.Tab.Click -= TabControl_RightClick;
-                s.Tab.Click += TabControl_RightClick;
+                s.Tab.Click -= Control_RightClick;
+                s.Tab.Click += Control_RightClick;
             }
 
             tabControl.Refresh();
@@ -49,38 +49,97 @@ namespace Configuration_Manager.Views
         {
         }
 
-        private void TabControl_RightClick(object sender, EventArgs e)
+        private void Control_RightClick(object sender, EventArgs e)
         {
             MouseEventArgs me = e as MouseEventArgs;
-            TabPage tc = sender as TabPage;
+            Control c = sender as Control;
+            String type = sender.GetType().Name;
 
             if (model.progMode && me.Button == MouseButtons.Right)
             {
-                contextMenu.Items[0].Enabled = true;
-                contextMenu.Items[1].Enabled = true;
-                contextMenu.Items[2].Enabled = false;
+                SetContextMenuStrip(type);
 
-                if (tc is CTabPage) contextMenu.Items[1].Enabled = false;
-
-                contextMenu.Show(tc, me.X, me.Y);
-
-                model.LastClickedControl = tc;
+                model.LastClickedControl = c;
                 model.LastClickedX = me.X;
                 model.LastClickedY = me.Y;
 
-                Debug.WriteLine("! Clicked: " + tc.Name);
+                contextMenu.Show(c, me.X, me.Y);
+
+                Debug.WriteLine("! Clicked: " + c.Name);
                 Debug.WriteLine("! Clicked: " + model.LastClickedControl + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
+            }
+        }
+
+        private void SetContextMenuStrip(string type)
+        {
+            enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, -1, true);
+
+            if (type == "CGroupBox" || type == "CPanel")
+            {
+                // Editable Containers
+                contextMenu.Items[0].Enabled = true;  // Disable the New> option
+                contextMenu.Items[1].Enabled = true;
+                contextMenu.Items[2].Enabled = true;
+            }
+            else if (type == "TabPage")
+            {
+                // Section Tabs
+                contextMenu.Items[0].Enabled = true;
+                contextMenu.Items[1].Enabled = false;
+                contextMenu.Items[2].Enabled = false;
+            }
+            else if (type == "CTabPage")
+            {
+                // Custom Tabs
+                contextMenu.Items[0].Enabled = true;
+                contextMenu.Items[1].Enabled = true;
+                contextMenu.Items[2].Enabled = true;
+            }
+            else if (type == "CTabControl")
+            {
+                contextMenu.Items[0].Enabled = true;
+
+                enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 9, true);
+
+                contextMenu.Items[1].Enabled = true;
+                contextMenu.Items[2].Enabled = true;
+            }
+            else
+            {
+                // Not a container
+                contextMenu.Items[0].Enabled = false;
+                contextMenu.Items[1].Enabled = true;
+                contextMenu.Items[2].Enabled = true;
+            }
+        }
+
+        private void enableDropDownItems(ToolStripMenuItem it, int index, bool status)
+        {
+            if (index > -1)
+            {
+                it.DropDownItems[index].Enabled = status;
+
+                for (int i = 0; i < it.DropDownItems.Count; i++)
+                {
+                    if (i != index)
+                    {
+                        it.DropDownItems[i].Enabled = !status;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < it.DropDownItems.Count; i++)
+                {
+                    it.DropDownItems[i].Enabled = status;
+                }
             }
         }
 
         public void labelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CLabel label = cf.BuildCLabel(null);
-            model.LastClickedControl.Controls.Add(label);
-
-            label.Click += Control_RightClick;
-            model.AllControls.Add(label);
-            label.SetControlDescription();
+            CLabel label = cf.BuildCLabel(model.LastClickedControl);
+            label.Click += Control_RightClick; 
 
             editor = new Editor();
             editor.Show(label);
@@ -88,13 +147,9 @@ namespace Configuration_Manager.Views
 
         public void textBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CTextBox textBox = cf.BuildCTextBox(null);
-            model.LastClickedControl.Controls.Add(textBox);
-            //tabControl.SelectedTab.Controls.Add(textBox);
-
+            CTextBox textBox = cf.BuildCTextBox(model.LastClickedControl);
+            textBox.ContextMenuStrip = contextMenu;
             textBox.Click += Control_RightClick;
-            model.AllControls.Add(textBox);
-            textBox.SetControlDescription();
 
             editor = new Editor();
             editor.Show(textBox);
@@ -102,13 +157,9 @@ namespace Configuration_Manager.Views
 
         public void comboBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CComboBox comboBox = cf.BuildCComboBox(null);
-            model.LastClickedControl.Controls.Add(comboBox);
-            //tabControl.SelectedTab.Controls.Add(comboBox);
-
+            CComboBox comboBox = cf.BuildCComboBox(model.LastClickedControl);
+            comboBox.ContextMenuStrip = contextMenu;
             comboBox.Click += Control_RightClick;
-            model.AllControls.Add(comboBox);
-            comboBox.SetControlDescription();
 
             editor = new Editor();
             editor.Show(comboBox);
@@ -116,13 +167,8 @@ namespace Configuration_Manager.Views
 
         public void checkBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CCheckBox checkBox = cf.BuildCCheckBox(null);
-            model.LastClickedControl.Controls.Add(checkBox);
-            //tabControl.SelectedTab.Controls.Add(checkBox);
-
+            CCheckBox checkBox = cf.BuildCCheckBox(model.LastClickedControl);
             checkBox.Click += Control_RightClick;
-            model.AllControls.Add(checkBox);
-            checkBox.SetControlDescription();
 
             editor = new Editor();
             editor.Show(checkBox);
@@ -130,13 +176,8 @@ namespace Configuration_Manager.Views
 
         public void groupBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CGroupBox groupBox = cf.BuildCGroupBox(null);
-            model.LastClickedControl.Controls.Add(groupBox);
-            //tabControl.SelectedTab.Controls.Add(groupBox);
-
-            groupBox.Click += ContainerControl_RightClick;
-            model.AllControls.Add(groupBox);
-            groupBox.SetControlDescription();
+            CGroupBox groupBox = cf.BuildCGroupBox(model.LastClickedControl);
+            groupBox.Click += Control_RightClick;
 
             editor = new Editor();
             editor.Show(groupBox);
@@ -144,60 +185,35 @@ namespace Configuration_Manager.Views
 
         public void shapeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CPanel panel = cf.BuildCPanel(null);
-            model.LastClickedControl.Controls.Add(panel);
-            //tabControl.SelectedTab.Controls.Add(panel);
-
-            panel.Click += ContainerControl_RightClick;
-            model.AllControls.Add(panel);
-            panel.SetControlDescription();
+            CPanel panel = cf.BuildCPanel(model.LastClickedControl);
+            panel.Click += Control_RightClick;
 
             editor = new Editor();
             editor.Show(panel);
         }
 
-        public void ContainerControl_RightClick(object sender, EventArgs e)
+        public void tabControlToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Control c = sender as Control;
+            CTabControl tabControl = cf.BuildCTabControl(model.LastClickedControl);
 
-            MouseEventArgs me = e as MouseEventArgs;
-            if (model.progMode && me.Button == MouseButtons.Right)
-            {
-                contextMenu.Items[0].Enabled = true;
-                contextMenu.Items[1].Enabled = true;
-                contextMenu.Items[2].Enabled = true;
+            CTabPage tab = tabControl.TabPages[0] as CTabPage;
+            tab.cd.Parent = tabControl;
 
-                contextMenu.Show(c, me.X, me.Y);
+            tabControl.Click += Control_RightClick;
+            tabControl.TabPages[0].Click += Control_RightClick;
 
-                model.LastClickedControl = c;
-                model.LastClickedX = me.X;
-                model.LastClickedY = me.Y;
-
-                Debug.WriteLine("! Clicked: " + c.Name);
-                Debug.WriteLine("! Clicked: " + model.LastClickedControl + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
-            }
+            editor = new Editor();
+            editor.Show(tabControl);
         }
 
-        public void Control_RightClick(object sender, EventArgs e)
+        public void tabPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Control c = sender as Control;
+            CTabPage tabPage = cf.BuildCTabPage(model.LastClickedControl);
+            //tabPage.ContextMenuStrip = contextMenu;
+            tabPage.Click += Control_RightClick;
 
-            MouseEventArgs me = e as MouseEventArgs;
-            if (model.progMode && me.Button == MouseButtons.Right)
-            {
-                contextMenu.Items[0].Enabled = false;  // Disable the New> option
-                contextMenu.Items[1].Enabled = true;
-                contextMenu.Items[2].Enabled = true;
-
-                contextMenu.Show(c, me.X, me.Y);
-
-                model.LastClickedControl = c;
-                model.LastClickedX = me.X;
-                model.LastClickedY = me.Y;
-
-                Debug.WriteLine("! Clicked: " + c.Name);
-                Debug.WriteLine("! Clicked: " + model.LastClickedControl + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
-            }
+            editor = new Editor();
+            editor.Show(tabPage);
         }
 
         public void editToolStripMenuItem_Click(object sender, EventArgs e)
@@ -208,6 +224,16 @@ namespace Configuration_Manager.Views
             model.LastClickedY = model.LastClickedControl.Location.Y;
 
             editor.Show(model.LastClickedControl);
+        }
+
+        public void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Control p = model.LastClickedControl.Parent;
+
+            p.Controls.Remove(model.LastClickedControl);
+            model.AllControls.Remove(model.LastClickedControl as ICustomControl);
+
+            p.Refresh();
         }
     }
 }

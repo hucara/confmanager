@@ -92,7 +92,7 @@
     </Compile>
     <Compile Include="Model.cs" />
     <Compile Include="Section.cs" />
-    <Compile Include="ObjectDefinitionReader.cs" />
+    <Compile Include="ObjectDefinitionManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.cs" />

@@ -27,10 +27,14 @@ namespace Configuration_Manager
             return cf;
         }
 
-        public CLabel BuildCLabel(ControlDescription cd)
+        public CLabel BuildCLabel(Control parent)
         {
             CLabel lbl = new CLabel();
-            //lbl.SetControlDescription();
+            parent.Controls.Add(lbl);
+
+            Model.getInstance().AllControls.Add(lbl);
+            lbl.SetControlDescription();
+
             return lbl;
         }
 
@@ -58,38 +62,88 @@ namespace Configuration_Manager
         public CTabPage BuildCTabPage()
         {
             CTabPage ctp = new CTabPage();
+
+            Model.getInstance().AllControls.Add(ctp);
+            ctp.SetControlDescription();
+
             return ctp;
         }
 
-        public CComboBox BuildCComboBox(ControlDescription cd)
+        public CTabPage BuildCTabPage(Control parent)
+        {
+            CTabPage ctp = new CTabPage();
+            parent.Controls.Add(ctp);
+
+            Model.getInstance().AllControls.Add(ctp);
+            ctp.SetControlDescription();
+            ctp.Parent = parent;
+
+            return ctp;
+        }
+
+        public CTabControl BuildCTabControl(Control parent)
+        {
+            CTabControl ctc = new CTabControl(BuildCTabPage());
+            parent.Controls.Add(ctc);
+
+            ctc.SetControlDescription();
+            Model.getInstance().AllControls.Add(ctc);
+
+            return ctc;
+        }
+
+        public CComboBox BuildCComboBox(Control parent)
         {
             CComboBox ccb = new CComboBox();
-            //ccb.SetControlDescription(cd);
+            parent.Controls.Add(ccb);
+
+            Model.getInstance().AllControls.Add(ccb);
+            ccb.SetControlDescription();
+
             return ccb;
         }
 
-        public CTextBox BuildCTextBox(ControlDescription cd)
+        public CTextBox BuildCTextBox(Control parent)
         {
             CTextBox ctb = new CTextBox();
-            //ccb.SetControlDescription(cd);
+            parent.Controls.Add(ctb);
+
+            Model.getInstance().AllControls.Add(ctb);
+            ctb.SetControlDescription();
+
             return ctb;
         }
 
-        public CCheckBox BuildCCheckBox(ControlDescription cd)
+        public CCheckBox BuildCCheckBox(Control parent)
         {
             CCheckBox ccb = new CCheckBox();
+            parent.Controls.Add(ccb);
+
+            Model.getInstance().AllControls.Add(ccb);
+            ccb.SetControlDescription();
+
             return ccb;
         }
 
-        public CGroupBox BuildCGroupBox(ControlDescription cd)
+        public CGroupBox BuildCGroupBox(Control parent)
         {
             CGroupBox cgb = new CGroupBox();
+            parent.Controls.Add(cgb);
+
+            Model.getInstance().AllControls.Add(cgb);
+            cgb.SetControlDescription();
+
             return cgb;
         }
 
-        public CPanel BuildCPanel(ControlDescription cd)
+        public CPanel BuildCPanel(Control parent)
         {
             CPanel cpn = new CPanel();
+            parent.Controls.Add(cpn);
+
+            Model.getInstance().AllControls.Add(cpn);
+            cpn.SetControlDescription();
+
             return cpn;
         }
     }

@@ -6,10 +6,10 @@ using System.Windows.Forms;
 
 namespace Configuration_Manager.CustomControls
 {
-    class CTabPage : TabPage, ICustomControl
+    public class CTabPage : TabPage, ICustomControl
     {
         static int count = 0;
-        ControlDescription cd = null;
+        public ControlDescription cd = null;
 
         public CTabPage()
         {
@@ -35,9 +35,9 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
-        void SetControlDescription(ControlDescription cd)
+        public void SetControlDescription()
         {
-            throw new NotImplementedException();
+            cd = new ControlDescription(this);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using Configuration_Manager.CustomControls;
+using System.Xml.Linq;
 
 namespace Configuration_Manager
 {
@@ -49,10 +50,13 @@ namespace Configuration_Manager
         public List<ICustomControl> RelatedVisibility { get; set; }
         public List<ICustomControl> CoupledControls { get; set; }
 
+        private Section parentSection;
+
         public ControlDescription(Control c)
         {
             this.control = c;
             this.parent = c.Parent;
+            this.Type = c.GetType().Name;
 
             this.text = c.Text;
             this.Name = c.Name;
@@ -72,6 +76,10 @@ namespace Configuration_Manager
             this.RelatedWrite = new List<ICustomControl>();
             this.RelatedVisibility = new List<ICustomControl>();
             this.CoupledControls = new List<ICustomControl>();
+
+            this.parentSection = Model.getInstance().CurrentSection;
+
+            this.control.BringToFront();
 
             count++;
         }
@@ -173,6 +181,11 @@ namespace Configuration_Manager
                 this.control.Height = value;
                 this.height = value;
             }
+        }
+
+        public Section ParentSection
+        {
+            get { return this.parentSection;}
         }
     }
 }

@@ -6,18 +6,14 @@ using System.Windows.Forms;
 
 namespace Configuration_Manager.CustomControls
 {
-    class CToolStripButton : ToolStripButton, ICustomControl
+    public class CToolStripButton : ToolStripButton, ICustomControl
     {
         static int count = 0;
 
         public int TypeId { get; private set; }
         public int Id { get; private set; }
-        public String Hint { get; private set; }
 
-        public List<ICustomControl> RelatedRead { get; private set; }
-        public List<ICustomControl> RelatedWrite { get; private set; }
-        public List<ICustomControl> RelatedVisibility { get; private set; }
-        public List<ICustomControl> CoupledControls { get; private set; }
+        ControlDescription cd;
 
         public CTabPage RelatedTabPage;
 
@@ -61,15 +57,15 @@ namespace Configuration_Manager.CustomControls
             this.Text = s;
         }
 
-        public ControlDescription cd
+        ControlDescription ICustomControl.cd
         {
             get
             {
-                throw new NotImplementedException();
+                return cd;
             }
             set
             {
-                throw new NotImplementedException();
+                cd = value;
             }
         }
     }

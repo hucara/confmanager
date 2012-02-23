@@ -18,16 +18,9 @@ namespace Configuration_Manager.CustomControls
             count++;
         }
 
-        public void SetControlDescription(ControlDescription cd)
+        public void SetControlDescription()
         {
-            this.Text = cd.Text;
-            this.Top = cd.Top;
-            this.Left = cd.Left;
-            this.Height = cd.Height;
-            this.Width = cd.Width;
-
-            this.Font = cd.CurrentFont;
-            this.BackColor = cd.BackColor;
+            cd = new ControlDescription(this);
         }
 
         ControlDescription ICustomControl.cd
@@ -40,11 +33,6 @@ namespace Configuration_Manager.CustomControls
             {
                 cd = value;
             }
-        }
-
-        public void SetControlDescription()
-        {
-            cd = new ControlDescription(this);
         }
     }
 }
