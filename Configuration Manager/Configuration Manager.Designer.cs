@@ -34,7 +34,7 @@ namespace Configuration_Manager
             this.contextNavMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newSectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteSectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextEditMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +50,7 @@ namespace Configuration_Manager
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.contextNavMenu.SuspendLayout();
-            this.contextEditMenu.SuspendLayout();
+            this.contextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -89,15 +89,15 @@ namespace Configuration_Manager
             this.deleteSectionToolStripMenuItem.Text = "Delete Section";
             this.deleteSectionToolStripMenuItem.Click += new System.EventHandler(this.deleteSectionToolStripMenuItem_Click);
             // 
-            // contextEditMenu
+            // contextMenu
             // 
-            this.contextEditMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.editToolStripMenuItem,
             this.deleteToolStripMenuItem});
-            this.contextEditMenu.Name = "contextMenuStrip1";
-            this.contextEditMenu.ShowImageMargin = false;
-            this.contextEditMenu.Size = new System.Drawing.Size(83, 70);
+            this.contextMenu.Name = "contextMenuStrip1";
+            this.contextMenu.ShowImageMargin = false;
+            this.contextMenu.Size = new System.Drawing.Size(128, 92);
             // 
             // newToolStripMenuItem
             // 
@@ -113,7 +113,7 @@ namespace Configuration_Manager
             this.tabControlMenuItem,
             this.tabPageMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.newToolStripMenuItem.Text = "New";
             // 
             // labelToolStripMenuItem
@@ -177,13 +177,13 @@ namespace Configuration_Manager
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // tabControl
@@ -209,7 +209,7 @@ namespace Configuration_Manager
             this.Text = "Configuration Manager";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.contextNavMenu.ResumeLayout(false);
-            this.contextEditMenu.ResumeLayout(false);
+            this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -217,7 +217,7 @@ namespace Configuration_Manager
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ContextMenuStrip contextEditMenu;
+        private System.Windows.Forms.ContextMenuStrip contextMenu;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem labelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textBoxToolStripMenuItem;

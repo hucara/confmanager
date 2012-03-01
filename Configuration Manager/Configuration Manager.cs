@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using Configuration_Manager.Views;
 using Configuration_Manager.CustomControls;
 
+using Debug = System.Diagnostics.Debug;
+
 namespace Configuration_Manager
 {
     public partial class MainForm : Form
@@ -16,47 +18,57 @@ namespace Configuration_Manager
         private Resources res = Resources.getInstance();
         private Model model = Model.getInstance();
         private ControlFactory cf = ControlFactory.getInstance();
-        private ObjectDefinitionManager odr = ObjectDefinitionManager.getInstance();
+        private ObjectDefinitionManager odm = ObjectDefinitionManager.getInstance();
+
+        private Editor editor;
 
         TabControlView tabControlView;
         ToolStripView toolStripView;
+        CustomHandler ch;
+
 
         public MainForm()
         {
             InitializeComponent();
+            InitCustomHandler();
             InitViews();
             InitHandlers();
         }
 
+        private void InitCustomHandler()
+        {
+            ch = new CustomHandler(contextMenu);
+            cf.SetCustomHandler(ch);
+        }
+
         private void InitHandlers()
         {
-            this.labelToolStripMenuItem.Click += tabControlView.labelToolStripMenuItem_Click;
-            this.textBoxToolStripMenuItem.Click += tabControlView.textBoxToolStripMenuItem_Click;
-            this.checkBoxToolStripMenuItem.Click += tabControlView.checkBoxToolStripMenuItem_Click;
-            this.comboBoxToolStripMenuItem.Click += tabControlView.comboBoxToolStripMenuItem_Click;
+            this.labelToolStripMenuItem.Click += ch.labelToolStripMenuItem_Click;
+            this.textBoxToolStripMenuItem.Click += ch.textBoxToolStripMenuItem_Click;
+            this.checkBoxToolStripMenuItem.Click += ch.checkBoxToolStripMenuItem_Click;
+            this.comboBoxToolStripMenuItem.Click += ch.comboBoxToolStripMenuItem_Click;
 
-            this.groupBoxToolStripMenuItem.Click += tabControlView.groupBoxToolStripMenuItem_Click;
-            this.shapeToolStripMenuItem.Click += tabControlView.shapeToolStripMenuItem_Click;
+            this.groupBoxToolStripMenuItem.Click += ch.groupBoxToolStripMenuItem_Click;
+            this.shapeToolStripMenuItem.Click += ch.shapeToolStripMenuItem_Click;
 
-            this.tabControlMenuItem.Click += tabControlView.tabControlToolStripMenuItem_Click;
-            this.tabPageMenuItem.Click += tabControlView.tabPageToolStripMenuItem_Click;
+            this.tabControlMenuItem.Click += ch.tabControlToolStripMenuItem_Click;
+            this.tabPageMenuItem.Click += ch.tabPageToolStripMenuItem_Click;
 
-            //this.contextEditMenu.Opening += tabControlView.contextEditMenu_Opening;
-            this.editToolStripMenuItem.Click += tabControlView.editToolStripMenuItem_Click;
-            this.deleteToolStripMenuItem.Click += tabControlView.deleteToolStripMenuItem_Click;
+            this.editToolStripMenuItem.Click += ch.editToolStripMenuItem_Click;
+            this.deleteToolStripMenuItem.Click += ch.deleteToolStripMenuItem_Click;
         }
 
         private void InitViews()
         {
-            tabControlView = new TabControlView(tabControl, contextEditMenu);
-            toolStripView = new ToolStripView(toolStrip, tabControl, contextEditMenu, model);
+            tabControlView = new TabControlView(tabControl, ch);
+            toolStripView = new ToolStripView(toolStrip, tabControl, contextMenu, model);
 
             if (model.ObjectDefinitionExists)
             {
-                odr.BuildDefinedSectionList(res.ConfigObjects);
+                odm.SetDocument(res.ConfigObjects);
+                odm.RestoreOldUI();
                 toolStripView.readAndShow();
                 tabControlView.readAndShow();
-                //toolStripView.SetDefinedSections(model.Sections);
             }
         }
 
@@ -65,12 +77,12 @@ namespace Configuration_Manager
             if (model.progMode == false)
             {
                 model.progMode = true;
-                System.Diagnostics.Debug.WriteLine("** INFO ** Programmer mode ACTIVE.");
+                Debug.WriteLine("** INFO ** Programmer mode ACTIVE.");
             }
             else
             {
                 model.progMode = false;
-                System.Diagnostics.Debug.WriteLine("** INFO ** Programmer mode INACTIVE.");
+                Debug.WriteLine("** INFO ** Programmer mode INACTIVE.");
             }
         }
 
@@ -83,7 +95,21 @@ namespace Configuration_Manager
 
             if (e.Alt && e.Control && e.KeyCode == Keys.S)
             {
-                odr.SerializeObjectDefinition();
+                odm.SerializeObjectDefinition();
+            }
+
+            if (e.Alt && e.Control && e.KeyCode == Keys.P)
+            {
+                System.Diagnostics.Debug.WriteLine("\n! PRINTING LIST OF CONTROLS !");
+                foreach (ICustomControl c in model.AllControls)
+                {
+                    String line = "- ";
+                    if (c.cd.Name != null) line += c.cd.Name + " -- ";
+                    if (c.cd.Parent != null) line += c.cd.Parent.Name;
+                    System.Diagnostics.Debug.WriteLine(line);
+
+                }
+                System.Diagnostics.Debug.WriteLine("\n! ######################### !");
             }
         }
 

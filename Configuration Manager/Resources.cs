@@ -82,7 +82,7 @@ namespace Configuration_Manager
 
         private string getConfigObjectsPath()
         {
-            return this.ConfigFolderPath + "\\ObjectDefinition.xml";
+            return this.ConfigFolderPath + "\\testing.xml";
         }
 
         private string getConfigFilePath()

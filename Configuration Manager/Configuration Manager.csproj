@@ -77,6 +77,7 @@
     <Compile Include="CustomControls\CToolStripButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CustomControls\CustomHandler.cs" />
     <Compile Include="CustomControls\ICustomControl.cs" />
     <Compile Include="Configuration Manager.cs">
       <SubType>Form</SubType>

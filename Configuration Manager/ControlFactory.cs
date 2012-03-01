@@ -6,10 +6,8 @@ using System.Windows.Forms;
 using Configuration_Manager.CustomControls;
 
 /* 
- * DESIGN PATTERN
- * ControlFactory.cs 
- * - Implementation of the Factory Design Pattern, 
- *   meant to create objects on demand.
+ * Implementation of the Factory Design Pattern, 
+ * meant to create objects on demand.
  */
 
 namespace Configuration_Manager
@@ -17,6 +15,8 @@ namespace Configuration_Manager
     class ControlFactory
     {
         private static ControlFactory cf;
+
+        CustomHandler ch;
 
         public static ControlFactory getInstance()
         {
@@ -27,124 +27,181 @@ namespace Configuration_Manager
             return cf;
         }
 
+        public void SetCustomHandler(CustomHandler ch)
+        {
+            this.ch = ch;
+        }
+
         public CLabel BuildCLabel(Control parent)
         {
-            CLabel lbl = new CLabel();
-            parent.Controls.Add(lbl);
+            CLabel c = new CLabel();
+            parent.Controls.Add(c);
 
-            Model.getInstance().AllControls.Add(lbl);
-            lbl.SetControlDescription();
+            c.MouseDown += ch.Control_RightClick;
 
-            return lbl;
+            Model.getInstance().AllControls.Add(c);
+            c.SetControlDescription();
+
+            return c;
         }
 
         public CToolStripButton BuildCToolStripButton(Section s)
         {
-            CToolStripButton tsb = new CToolStripButton(s);
-            tsb.SetSectionDescription(s);
-            return tsb;
+            CToolStripButton c = new CToolStripButton(s);
+            c.SetSectionDescription(s);
+
+            return c;
         }
 
         public CTabPage BuildCTabPage(Section s)
         {
-            CTabPage ctp = new CTabPage();
-            ctp.SetNavBarDescription(s);
-            return ctp;
+            CTabPage c = new CTabPage();
+            c.MouseDown += ch.Control_RightClick;
+            c.SetNavBarDescription(s);
+
+            return c;
         }
 
         public CToolStripButton BuildCToolStripButton(String s)
         {
-            CToolStripButton tsb = new CToolStripButton();
-            tsb.SetSectionName(s);
-            return tsb;
+            CToolStripButton c = new CToolStripButton();
+            c.SetSectionName(s);
+
+            return c;
         }
 
+        // This builder is just for using with the TabControl.
+        // Here the tabpage is not referenced inside the Allcontrols.
+        // So be careful! D:
         public CTabPage BuildCTabPage()
         {
-            CTabPage ctp = new CTabPage();
+            CTabPage c = new CTabPage();
 
-            Model.getInstance().AllControls.Add(ctp);
-            ctp.SetControlDescription();
+            c.MouseDown += ch.Control_RightClick;
 
-            return ctp;
+            //Model.getInstance().AllControls.Add(c);
+            c.SetControlDescription();
+
+            return c;
         }
 
         public CTabPage BuildCTabPage(Control parent)
         {
-            CTabPage ctp = new CTabPage();
-            parent.Controls.Add(ctp);
+            CTabPage c = new CTabPage();
+            parent.Controls.Add(c);
 
-            Model.getInstance().AllControls.Add(ctp);
-            ctp.SetControlDescription();
-            ctp.Parent = parent;
+            c.MouseDown += ch.Control_RightClick;
 
-            return ctp;
+            Model.getInstance().AllControls.Add(c);
+            c.SetControlDescription();
+            c.Parent = parent;
+
+            return c;
         }
 
         public CTabControl BuildCTabControl(Control parent)
         {
-            CTabControl ctc = new CTabControl(BuildCTabPage());
-            parent.Controls.Add(ctc);
 
-            ctc.SetControlDescription();
-            Model.getInstance().AllControls.Add(ctc);
+            CTabControl c = new CTabControl(BuildCTabPage());
+            parent.Controls.Add(c);
 
-            return ctc;
+            c.MouseDown += ch.Control_RightClick;
+
+            c.SetControlDescription();
+            Model.getInstance().AllControls.Add(c);
+
+            return c;
+        }
+
+        public CTabControl BuildCTabControl(Control parent, int n)
+        {
+            CTabControl c = new CTabControl();
+
+            if (n > 0)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    c.TabPages.Add(BuildCTabPage(c as Control));
+                }
+            }
+            else
+            {
+                c.TabPages.Clear();
+            }
+
+            parent.Controls.Add(c);
+
+            c.MouseDown += ch.Control_RightClick;
+
+            c.SetControlDescription();
+            Model.getInstance().AllControls.Add(c);
+
+            return c;
         }
 
         public CComboBox BuildCComboBox(Control parent)
         {
-            CComboBox ccb = new CComboBox();
-            parent.Controls.Add(ccb);
+            CComboBox c = new CComboBox();
+            parent.Controls.Add(c);
 
-            Model.getInstance().AllControls.Add(ccb);
-            ccb.SetControlDescription();
+            c.MouseDown += ch.Control_RightClick;
 
-            return ccb;
+            Model.getInstance().AllControls.Add(c);
+            c.SetControlDescription();
+
+            return c;
         }
 
         public CTextBox BuildCTextBox(Control parent)
         {
-            CTextBox ctb = new CTextBox();
-            parent.Controls.Add(ctb);
+            CTextBox c = new CTextBox();
+            parent.Controls.Add(c);
 
-            Model.getInstance().AllControls.Add(ctb);
-            ctb.SetControlDescription();
+            c.MouseDown += ch.CTextBox_RightClick;
 
-            return ctb;
+            Model.getInstance().AllControls.Add(c);
+            c.SetControlDescription();
+
+            return c;
         }
 
         public CCheckBox BuildCCheckBox(Control parent)
         {
-            CCheckBox ccb = new CCheckBox();
-            parent.Controls.Add(ccb);
+            CCheckBox c = new CCheckBox();
+            parent.Controls.Add(c);
 
-            Model.getInstance().AllControls.Add(ccb);
-            ccb.SetControlDescription();
+            c.MouseDown += ch.Control_RightClick;
 
-            return ccb;
+            Model.getInstance().AllControls.Add(c);
+            c.SetControlDescription();
+
+            return c;
         }
 
         public CGroupBox BuildCGroupBox(Control parent)
         {
-            CGroupBox cgb = new CGroupBox();
-            parent.Controls.Add(cgb);
+            CGroupBox c = new CGroupBox();
+            parent.Controls.Add(c);
 
-            Model.getInstance().AllControls.Add(cgb);
-            cgb.SetControlDescription();
+            c.MouseDown += ch.Control_RightClick;
 
-            return cgb;
+            Model.getInstance().AllControls.Add(c);
+            c.SetControlDescription();
+
+            return c;
         }
 
         public CPanel BuildCPanel(Control parent)
         {
-            CPanel cpn = new CPanel();
-            parent.Controls.Add(cpn);
+            CPanel c = new CPanel();
+            parent.Controls.Add(c);
 
-            Model.getInstance().AllControls.Add(cpn);
-            cpn.SetControlDescription();
+            c.MouseDown += ch.Control_RightClick;
 
-            return cpn;
+            Model.getInstance().AllControls.Add(c);
+            c.SetControlDescription();
+
+            return c;
         }
     }
 }

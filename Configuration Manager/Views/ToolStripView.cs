@@ -19,7 +19,7 @@ namespace Configuration_Manager.Views
         ContextMenuStrip tabContextMenu;
 
         CToolStripButton ctsb;
-        CTabPage ctp;
+        TabPage ctp;
 
         CToolStripButton SelectedButton;
         List<CToolStripButton> CToolStripButtons;
@@ -114,9 +114,10 @@ namespace Configuration_Manager.Views
             return ctsb;
         }
 
-        private CTabPage CreateTabPage()
+        private TabPage CreateTabPage()
         {
-            CTabPage ctp = ControlFactory.getInstance().BuildCTabPage();
+            TabPage ctp = new TabPage();
+            //CTabPage ctp = ControlFactory.getInstance().BuildCTabPage();
             configurationTabs.TabPages.Add(ctp);
             return ctp;
         }

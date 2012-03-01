@@ -9,7 +9,7 @@ namespace Configuration_Manager.CustomControls
     class CComboBox : ComboBox , ICustomControl
     {
         static int count = 0;
-        ControlDescription cd;
+        public ControlDescription cd;
 
         public CComboBox()
         {

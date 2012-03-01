@@ -9,13 +9,15 @@ namespace Configuration_Manager.CustomControls
     class CGroupBox : GroupBox, ICustomControl
     {
         static int count = 0;
-        ControlDescription cd;
+        public ControlDescription cd;
 
         public CGroupBox()
         {
-            this.Name = "CGroupBox" + count;
+            this.Name = "CGroupBox" + CGroupBox.count;
             this.Text = this.Name;
-            count++;
+            CGroupBox.count++;
+
+            System.Diagnostics.Debug.WriteLine("+ Created: "+this.Name);
         }
 
         public void SetControlDescription()

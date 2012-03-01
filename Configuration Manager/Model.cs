@@ -29,7 +29,8 @@ namespace Configuration_Manager
        
         public List<ICustomControl> AllControls { get; private set; }
 
-        public Control LastClickedControl { get; set; }
+        public Control CurrentClickedControl { get; set; }
+        public ControlDescription CurrentControlDescription { get; set; }
         public int LastClickedX { get; set; }
         public int LastClickedY { get; set; }
 

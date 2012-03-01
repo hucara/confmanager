@@ -41,7 +41,7 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
-        internal void SetControlDescription()
+        public void SetControlDescription()
         {
             cd = new ControlDescription(this);
         }

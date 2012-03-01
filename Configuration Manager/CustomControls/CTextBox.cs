@@ -9,7 +9,7 @@ namespace Configuration_Manager.CustomControls
     class CTextBox : TextBox, ICustomControl
     {
         static int count = 0;
-        ControlDescription cd;
+        public ControlDescription cd;
 
         public CTextBox()
         {

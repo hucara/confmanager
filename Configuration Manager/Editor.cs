@@ -84,7 +84,7 @@ namespace Configuration_Manager
         {
             openFileDialog1.Multiselect = false;
             openFileDialog1.FileName = "";
-            openFileDialog1.Filter = "INI File | *.ini |XML File | *.xml|Text File|*.txt";
+            openFileDialog1.Filter = "INI File|*.ini | XML File|*.xml | Text File|*.txt";
         }
 
         private void ShowDefaultSize()
@@ -151,6 +151,7 @@ namespace Configuration_Manager
         private void FillOutRelationsComboBox()
         {
             relationsComboBox.Items.Clear();
+
             if (type == "CComboBox" || type == "CCheckBox")
             {
                 relationsComboBox.Items.Add("Related Read");
@@ -420,6 +421,8 @@ namespace Configuration_Manager
             control.cd.DestinationType = this.destinationTypeComboBox.SelectedItem.ToString();
             control.cd.MainDestination = this.fileDestinationTextBox.Text;
             control.cd.SubDestination = this.subDestinatonTextBox.Text;
+
+            //control.cd.ParentSection = model.CurrentSection;
         }
 
         private void ReadFromControl()
@@ -532,7 +535,6 @@ namespace Configuration_Manager
                     g.DrawLine(p, (control as Control).Location, c.Location);
                 }
             }
-
         }
     }
 }

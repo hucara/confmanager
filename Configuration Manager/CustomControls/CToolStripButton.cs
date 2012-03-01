@@ -13,7 +13,7 @@ namespace Configuration_Manager.CustomControls
         public int TypeId { get; private set; }
         public int Id { get; private set; }
 
-        ControlDescription cd;
+        public ControlDescription cd;
 
         public CTabPage RelatedTabPage;
 
@@ -40,7 +40,7 @@ namespace Configuration_Manager.CustomControls
             count++;
         }
 
-        public void SetControlDescription(ControlDescription cd)
+        public void SetControlDescription()
         {
         }
 

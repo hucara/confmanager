@@ -186,6 +186,7 @@ namespace Configuration_Manager
         public Section ParentSection
         {
             get { return this.parentSection;}
+            set { this.parentSection = value; }
         }
     }
 }

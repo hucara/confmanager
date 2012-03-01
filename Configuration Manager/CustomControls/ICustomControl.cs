@@ -10,6 +10,6 @@ namespace Configuration_Manager.CustomControls
     {
         ControlDescription cd { get; set; }
         //void SetControlDescription(ControlDescription cd);
-        //void SetControlDescription();
+        void SetControlDescription();
     }
 }
