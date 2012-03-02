@@ -107,7 +107,6 @@ namespace Configuration_Manager
                     if (c.cd.Name != null) line += c.cd.Name + " -- ";
                     if (c.cd.Parent != null) line += c.cd.Parent.Name;
                     System.Diagnostics.Debug.WriteLine(line);
-
                 }
                 System.Diagnostics.Debug.WriteLine("\n! ######################### !");
             }

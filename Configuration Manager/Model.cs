@@ -75,5 +75,20 @@ namespace Configuration_Manager
             //RelationTypes.Add("Visibility related");
             //RelationTypes.Add("Coupled controls");
         }
+
+        public String DeleteControlReferences(Control c)
+        {
+            ICustomControl d = c as ICustomControl;
+
+            foreach (ICustomControl s in AllControls)
+            {
+                s.cd.RelatedRead.Remove(d);
+                s.cd.RelatedVisibility.Remove(d);
+                s.cd.RelatedWrite.Remove(d);
+                s.cd.CoupledControls.Remove(d);
+            }
+
+            return "";
+        }
     }
 }

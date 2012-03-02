@@ -243,8 +243,9 @@ namespace Configuration_Manager.CustomControls
         {
             Control p = model.CurrentClickedControl.Parent;
 
-            p.Controls.Remove(model.CurrentClickedControl);
             model.AllControls.Remove(model.CurrentClickedControl as ICustomControl);
+            model.DeleteControlReferences(model.CurrentClickedControl);
+            p.Controls.Remove(model.CurrentClickedControl);
 
             p.Refresh();
         }
