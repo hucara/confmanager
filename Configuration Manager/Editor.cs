@@ -293,7 +293,7 @@ namespace Configuration_Manager
         {
             CheckLabelInfo();
             SaveToControl();
-            if (currentVisibleList != null) HighLightRequiredControls();
+			//if (currentVisibleList != null) HighLightRequiredControls();
             parent.Refresh();
             ErrorMsg = "";
         }
@@ -465,7 +465,7 @@ namespace Configuration_Manager
                     currentVisibleList.Add(model.AllControls.Find(c => c.cd.Name == controlListBox.Items[e.Index].ToString()));
                     System.Diagnostics.Debug.WriteLine("+ [" + relationsComboBox.SelectedItem + "] Checked: " + controlListBox.Items[e.Index].ToString());
                 }
-                HighLightRequiredControls();
+				//HighLightRequiredControls();
             }
             else
             {
@@ -525,16 +525,16 @@ namespace Configuration_Manager
             Pen p = new Pen(Color.Red, 3);
             Graphics g = parent.CreateGraphics();
 
-            foreach (Control c in currentVisibleList)
-            {
-                if (c.Visible && model.AllControls.Contains(c as ICustomControl))
-                {
-                    rect = c.Bounds;
-                    rect.Inflate(3, 3);
-                    g.DrawRectangle(p, rect);
-                    g.DrawLine(p, (control as Control).Location, c.Location);
-                }
-            }
+			foreach (Control c in currentVisibleList)
+			{
+				if (c.Visible && model.AllControls.Contains(c as ICustomControl))
+				{
+					rect = c.Bounds;
+					rect.Inflate(3, 3);
+					g.DrawRectangle(p, rect);
+					g.DrawLine(p, (control as Control).Location, c.Location);
+				}
+			}
         }
     }
 }

@@ -76,9 +76,7 @@ namespace Configuration_Manager
         public CTabPage BuildCTabPage()
         {
             CTabPage c = new CTabPage();
-
             c.MouseDown += ch.Control_RightClick;
-
             //Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
 
@@ -101,7 +99,6 @@ namespace Configuration_Manager
 
         public CTabControl BuildCTabControl(Control parent)
         {
-
             CTabControl c = new CTabControl(BuildCTabPage());
             parent.Controls.Add(c);
 

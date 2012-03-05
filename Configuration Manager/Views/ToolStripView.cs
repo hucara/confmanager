@@ -117,7 +117,6 @@ namespace Configuration_Manager.Views
         private TabPage CreateTabPage()
         {
             TabPage ctp = new TabPage();
-            //CTabPage ctp = ControlFactory.getInstance().BuildCTabPage();
             configurationTabs.TabPages.Add(ctp);
             return ctp;
         }
@@ -129,6 +128,7 @@ namespace Configuration_Manager.Views
                 CToolStripButton b = (CToolStripButton)sender;
                 SelectedButton = b;
 
+				SelectedButton.Checked = true;
                 UnCheckButtons(b);
 
                 Section s = model.Sections.Find(se => se.Button == SelectedButton);

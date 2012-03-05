@@ -207,12 +207,28 @@ namespace Configuration_Manager
 				{
 					if (c.cd.Name == i.Descendants("Name").FirstOrDefault().Value)
 					{
+						
 						SetRealParent(c, i as XContainer);
+						
 						SetRealProperties(c, i);
+						SetPaths(c, i);
+
+						SetRelatedReadList(c, i);
+						SetRelatedWriteList(c, i);
+						SetRelatedVisibility(c, i);
+						SetCoupledControls(c, i);
+
 						System.Diagnostics.Debug.WriteLine("! Building : " + c.cd.Name + " with parent: " + c.cd.Parent.Name + " in Section: " + c.cd.ParentSection.Name);
 					}
 				}
 			}
+		}
+
+		private void SetPaths(ICustomControl c, XElement i)
+		{
+			c.cd.DestinationType = i.Descendants("Paths").Descendants("DestinationType").FirstOrDefault().Value;
+			c.cd.MainDestination = i.Descendants("Paths").Descendants("DestinationFile").FirstOrDefault().Value;
+			c.cd.SubDestination = i.Descendants("Paths").Descendants("SubDestination").FirstOrDefault().Value;
 		}
 
 		private void CreatePreviewControls(Section s, XElement i)
@@ -306,6 +322,59 @@ namespace Configuration_Manager
 
 			newColor = (Color)colorConverter.ConvertFromString(i.Descendants("BackColor").FirstOrDefault().Value);
 			c.cd.BackColor = newColor;
+		}
+
+		private void SetRelatedReadList(ICustomControl c, XElement i)
+		{
+			string s = i.Descendants("Relations").Descendants("Read").FirstOrDefault().Value;
+			string[] f = {", "};
+
+			List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
+			
+			foreach (String r in rel)
+			{
+				c.cd.RelatedRead.Add(Model.getInstance().AllControls.Find(p => p.cd.Name == r));
+			}
+
+		}
+
+		private void SetCoupledControls(ICustomControl c, XElement i)
+		{
+			string s = i.Descendants("Relations").Descendants("Coupled").FirstOrDefault().Value;
+			string[] f = { ", " };
+
+			List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+			foreach (String r in rel)
+			{
+				c.cd.CoupledControls.Add(Model.getInstance().AllControls.Find(p => p.cd.Name == r));
+			}
+		}
+
+		private void SetRelatedVisibility(ICustomControl c, XElement i)
+		{
+			string s = i.Descendants("Relations").Descendants("Visibility").FirstOrDefault().Value;
+			string[] f = { ", " };
+
+			List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+			foreach (String r in rel)
+			{
+				c.cd.RelatedVisibility.Add(Model.getInstance().AllControls.Find(p => p.cd.Name == r));
+			}
+		}
+
+		private void SetRelatedWriteList(ICustomControl c, XElement i)
+		{
+			string s = i.Descendants("Relations").Descendants("Write").FirstOrDefault().Value;
+			string[] f = { ", " };
+
+			List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+			foreach (String r in rel)
+			{
+				c.cd.RelatedWrite.Add(Model.getInstance().AllControls.Find(p => p.cd.Name == r));
+			}
 		}
 	}
 }
