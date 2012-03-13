@@ -79,6 +79,7 @@ namespace Configuration_Manager.Views
             {
                 ctsb = CreateToolStripButton(text);
                 ctp = CreateTabPage();
+
                 Section s = new Section(ctsb, ctp, text, false);
 
                 if (!model.Sections.Contains(s))

@@ -13,7 +13,7 @@ namespace Configuration_Manager.CustomControls
 
         public CTextBox()
         {
-            this.Name = "TextBox" + count;
+            this.Name = "CTextBox" + count;
             count++;
         }
 

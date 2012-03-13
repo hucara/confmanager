@@ -12,6 +12,9 @@ namespace Configuration_Manager
 {
 	class ObjectDefinitionManager
 	{
+		private ControlFactory cf = ControlFactory.getInstance();
+		private Model model = Model.getInstance();
+
 		private static ObjectDefinitionManager odr;
 		private XDocument xdoc;
 
@@ -54,12 +57,12 @@ namespace Configuration_Manager
 
 				foreach (var i in items)
 				{
-					if (Model.getInstance().Sections.Count < Model.MAX_SECTIONS)
+					if (model.Sections.Count < Model.MAX_SECTIONS)
 					{
 						Section s = CreateDefinedSection(i);
-						Model.getInstance().Sections.Add(s);
+						model.Sections.Add(s);
 
-						if (s.Selected) Model.getInstance().CurrentSection = s;
+						if (s.Selected) model.CurrentSection = s;
 
 						System.Diagnostics.Debug.WriteLine("+ Read: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
 					}
@@ -75,15 +78,15 @@ namespace Configuration_Manager
 		private Section CreateDefinedSection(XElement i)
 		{
 			String name = i.Name.ToString() + i.FirstAttribute.Value.ToString();
-			String text = i.Descendants("Text").FirstOrDefault().Value.ToString();
+			String text = i.Element("Text").Value.ToString();
 			bool selected = false;
 
-			if (i.Descendants("Selected").FirstOrDefault().Value.ToString() == "true")
+			if (i.Element("Selected").Value.ToString() == "true")
 			{
 				selected = true;
 			}
 
-			CustomControls.CToolStripButton ctsb = ControlFactory.getInstance().BuildCToolStripButton(text);
+			CustomControls.CToolStripButton ctsb = cf.BuildCToolStripButton(text);
 			System.Windows.Forms.TabPage ctp = new System.Windows.Forms.TabPage();
 			ctp.Name = name;
 
@@ -129,6 +132,14 @@ namespace Configuration_Manager
 										new XElement("FontColor", colorConverter.ConvertToString(item.cd.ForeColor)),
 										new XElement("BackColor", colorConverter.ConvertToString(item.cd.BackColor))
 									),
+
+									item.cd.Type == "CComboBox" ?
+									new XElement("Items",
+										  WriteComboBoxItems(item as ComboBox)) : null,
+
+									item.cd.Type == "CCheckBox" ?
+									new XElement("Checked", (item as CheckBox).Checked.ToString()) : null,
+
 									new XElement("Paths",
 										new XElement("DestinationType", item.cd.DestinationType),
 										new XElement("DestinationFile", item.cd.MainDestination),
@@ -154,14 +165,28 @@ namespace Configuration_Manager
 							)
 						);
 
-				System.Diagnostics.Debug.WriteLine("XML: " + doc.ToString());
 				doc.Save(Resources.getInstance().ConfigFolderPath + "\\testing.xml");
 				System.Diagnostics.Debug.WriteLine("*** Testing Object Definition File created ***");
 			}
 			catch (Exception e)
 			{
+				String errMsg = "Something went wrong while writing the Object Definition file.\nPlease, try again.";
+				MessageBox.Show(errMsg, " Error creating XML file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
 				System.Diagnostics.Debug.WriteLine("[ERROR] Something went wrong when creating Object Definition File.");
 				System.Diagnostics.Debug.WriteLine(e);
+			}
+		}
+
+		private IEnumerable<XElement> WriteComboBoxItems(ComboBox cb)
+		{
+			if (cb.SelectedItem != null)
+			{
+				yield return new XElement("Selected", cb.SelectedItem.ToString());
+			}
+			foreach (object o in cb.Items)
+			{
+				yield return new XElement("Item", o.ToString());
 			}
 		}
 
@@ -175,13 +200,13 @@ namespace Configuration_Manager
 							.Descendants("Control")
 						select item;
 
-			// Create preview controls. Everyone with its section as a parent
+			// Create preview controls. Everyone is assigned a section as its parent.
 			foreach (var i in items)
 			{
 				if (i.Attribute("type").Value == "CTabPage") CTabs.Add(i);
 				else
 				{
-					Section s = Model.getInstance().Sections.Find(se => se.Name == i.Descendants("Section").FirstOrDefault().Value);
+					Section s = model.Sections.Find(se => se.Name == i.Element("Section").Value);
 					CreatePreviewControls(s, i);
 				}
 			}
@@ -192,43 +217,79 @@ namespace Configuration_Manager
 			{
 				foreach (XElement e in CTabs)
 				{
-					CTabControl parentControl = Model.getInstance().AllControls.Find(p => p.cd.Name == e.Descendants("Parent").FirstOrDefault().Value) as CTabControl;
+					CTabControl parentControl = model.AllControls.Find(p => p.cd.Name == e.Element("Parent").Value) as CTabControl;
 
-					CTabPage ctp = ControlFactory.getInstance().BuildCTabPage(parentControl);
-					ctp.cd.Name = e.Descendants("Name").FirstOrDefault().Value;
-					ctp.cd.Text = e.Descendants("Text").FirstOrDefault().Value;
+					CTabPage ctp = cf.BuildCTabPage(parentControl);
+					ctp.cd.Name = e.Element("Name").Value;
+					ctp.cd.Text = e.Element("Text").Value;
 				}
 			}
 
 			// Now it is time to fill out the controls with the info from ObjectDefinition.xml
 			foreach (var i in items)
 			{
-				foreach (ICustomControl c in Model.getInstance().AllControls)
+				foreach (ICustomControl c in model.AllControls)
 				{
-					if (c.cd.Name == i.Descendants("Name").FirstOrDefault().Value)
+					if (c.cd.Name == i.Element("Name").Value)
 					{
-						
 						SetRealParent(c, i as XContainer);
-						
+
 						SetRealProperties(c, i);
 						SetPaths(c, i);
+						SetControlSpecificProperties(c, i);
 
 						SetRelatedReadList(c, i);
 						SetRelatedWriteList(c, i);
 						SetRelatedVisibility(c, i);
 						SetCoupledControls(c, i);
 
-						System.Diagnostics.Debug.WriteLine("! Building : " + c.cd.Name + " with parent: " + c.cd.Parent.Name + " in Section: " + c.cd.ParentSection.Name);
+						System.Diagnostics.Debug.WriteLine("+ Added : " + c.cd.Name + " with parent: " + c.cd.Parent.Name + " in Section: " + c.cd.ParentSection.Name);
 					}
+				}
+			}
+		}
+
+		private void SetControlSpecificProperties(ICustomControl c, XElement i)
+		{
+			if (c.cd.Type == "CComboBox")
+			{
+				ComboBox cb = c as ComboBox;
+				foreach (XElement e in i.Element("Items").Descendants("Item"))
+				{
+					cb.Items.Add(e.Value.ToString());
+				}
+
+				try
+				{
+					if (!i.Element("Items").Element("Selected").IsEmpty)
+					{
+						cb.SelectedItem = i.Element("Items").Element("Selected").Value;
+					}
+				}
+				catch (NullReferenceException e)
+				{
+				}
+			}
+
+			if (c.cd.Type == "CCheckBox")
+			{
+				CheckBox cb = c as CheckBox;
+				try
+				{
+					if (i.Element("Checked").Value == "True") cb.Checked = true;
+					else cb.Checked = false;
+				}
+				catch (NullReferenceException e)
+				{
 				}
 			}
 		}
 
 		private void SetPaths(ICustomControl c, XElement i)
 		{
-			c.cd.DestinationType = i.Descendants("Paths").Descendants("DestinationType").FirstOrDefault().Value;
-			c.cd.MainDestination = i.Descendants("Paths").Descendants("DestinationFile").FirstOrDefault().Value;
-			c.cd.SubDestination = i.Descendants("Paths").Descendants("SubDestination").FirstOrDefault().Value;
+			c.cd.DestinationType = i.Element("Paths").Element("DestinationType").Value;
+			c.cd.MainDestination = i.Element("Paths").Element("DestinationFile").Value;
+			c.cd.SubDestination = i.Element("Paths").Element("SubDestination").Value;
 		}
 
 		private void CreatePreviewControls(Section s, XElement i)
@@ -236,38 +297,38 @@ namespace Configuration_Manager
 			switch (i.Attribute("type").Value)
 			{
 				case "CLabel":
-					CLabel lbl = ControlFactory.getInstance().BuildCLabel(s.Tab);
-					lbl.cd.Name = i.Descendants("Name").FirstOrDefault().Value;
+					CLabel lbl = cf.BuildCLabel(s.Tab);
+					lbl.cd.Name = i.Element("Name").Value;
 					break;
 
 				case "CComboBox":
-					CComboBox cb = ControlFactory.getInstance().BuildCComboBox(s.Tab);
-					cb.cd.Name = i.Descendants("Name").FirstOrDefault().Value;
+					CComboBox cb = cf.BuildCComboBox(s.Tab);
+					cb.cd.Name = i.Element("Name").Value;
 					break;
 
 				case "CGroupBox":
-					CGroupBox gb = ControlFactory.getInstance().BuildCGroupBox(s.Tab);
-					gb.cd.Name = i.Descendants("Name").FirstOrDefault().Value;
+					CGroupBox gb = cf.BuildCGroupBox(s.Tab);
+					gb.cd.Name = i.Element("Name").Value;
 					break;
 
 				case "CPanel":
-					CPanel pl = ControlFactory.getInstance().BuildCPanel(s.Tab);
-					pl.cd.Name = i.Descendants("Name").FirstOrDefault().Value;
+					CPanel pl = cf.BuildCPanel(s.Tab);
+					pl.cd.Name = i.Element("Name").Value;
 					break;
 
 				case "CTextBox":
-					CTextBox tb = ControlFactory.getInstance().BuildCTextBox(s.Tab);
-					tb.cd.Name = i.Descendants("Name").FirstOrDefault().Value;
+					CTextBox tb = cf.BuildCTextBox(s.Tab);
+					tb.cd.Name = i.Element("Name").Value;
 					break;
 
 				case "CCheckBox":
-					CCheckBox ccb = ControlFactory.getInstance().BuildCCheckBox(s.Tab);
-					ccb.cd.Name = i.Descendants("Name").FirstOrDefault().Value;
+					CCheckBox ccb = cf.BuildCCheckBox(s.Tab);
+					ccb.cd.Name = i.Element("Name").Value;
 					break;
 
 				case "CTabControl":
-					CTabControl ctc = ControlFactory.getInstance().BuildCTabControl(s.Tab);
-					ctc.cd.Name = i.Descendants("Name").FirstOrDefault().Value;
+					CTabControl ctc = cf.BuildCTabControl(s.Tab);
+					ctc.cd.Name = i.Element("Name").Value;
 					ctc.TabPages.Clear();
 					break;
 
@@ -281,22 +342,21 @@ namespace Configuration_Manager
 		{
 			if (c == null) throw new ArgumentNullException();
 
-			if (i.Descendants("Parent").FirstOrDefault().Value.Contains("Section"))
+			if (i.Element("Parent").Value.Contains("Section"))
 			{
-				c.cd.Parent = Model.getInstance().Sections.Find(s => s.Name == i.Descendants("Parent").FirstOrDefault().Value).Tab;
+				c.cd.Parent = model.Sections.Find(s => s.Name == i.Element("Parent").Value).Tab;
 			}
 			else
 			{
-				String definedParent = i.Descendants("Parent").FirstOrDefault().Value;
-				String definedName = i.Descendants("Name").FirstOrDefault().Value;
-
-				System.Diagnostics.Debug.WriteLine("Defined parent: " + definedParent);
+				String definedParent = i.Element("Parent").Value;
+				String definedName = i.Element("Name").Value;
 
 				foreach (ICustomControl p in Model.getInstance().AllControls)
 				{
 					if (p.cd.Name == definedParent)
 					{
 						c.cd.Parent = p as Control;
+						System.Diagnostics.Debug.WriteLine("\n! Building: " +c.cd.Name+" with Parent: "+p.cd.Name);
 					}
 				}
 			}
@@ -304,76 +364,76 @@ namespace Configuration_Manager
 
 		private void SetRealProperties(ICustomControl c, XElement i)
 		{
-			c.cd.Text = i.Descendants("Text").FirstOrDefault().Value;
-			c.cd.ParentSection = Model.getInstance().Sections.Find(se => se.Name == i.Descendants("Section").FirstOrDefault().Value);
+			Font newFont;
+			Color newColor;
 
-			c.cd.Top = Convert.ToInt32(i.Descendants("Top").FirstOrDefault().Value);
-			c.cd.Left = Convert.ToInt32(i.Descendants("Left").FirstOrDefault().Value);
-			c.cd.Width = Convert.ToInt32(i.Descendants("Width").FirstOrDefault().Value);
-			c.cd.Height = Convert.ToInt32(i.Descendants("Height").FirstOrDefault().Value);
+			c.cd.Text = i.Element("Text").Value;
+			c.cd.ParentSection = Model.getInstance().Sections.Find(se => se.Name == i.Element("Section").Value);
 
-			Font newFont = (Font)fontConverter.ConvertFromString(i.Descendants("Font").FirstOrDefault().Value);
+			c.cd.Top = Convert.ToInt32(i.Element("Settings").Element("Top").Value);
+			c.cd.Left = Convert.ToInt32(i.Element("Settings").Element("Left").Value);
+			c.cd.Width = Convert.ToInt32(i.Element("Settings").Element("Width").Value);
+			c.cd.Height = Convert.ToInt32(i.Element("Settings").Element("Height").Value);
+
+			newFont = (Font)fontConverter.ConvertFromString(i.Element("Settings").Element("Font").Value);
 			c.cd.CurrentFont = newFont;
 
 			colorConverter = TypeDescriptor.GetConverter(typeof(Color));
-
-			Color newColor = (Color)colorConverter.ConvertFromString(i.Descendants("FontColor").FirstOrDefault().Value);
+			newColor = (Color)colorConverter.ConvertFromString(i.Element("Settings").Element("FontColor").Value);
 			c.cd.ForeColor = newColor;
-
-			newColor = (Color)colorConverter.ConvertFromString(i.Descendants("BackColor").FirstOrDefault().Value);
+			newColor = (Color)colorConverter.ConvertFromString(i.Element("Settings").Element("BackColor").Value);
 			c.cd.BackColor = newColor;
 		}
 
 		private void SetRelatedReadList(ICustomControl c, XElement i)
 		{
-			string s = i.Descendants("Relations").Descendants("Read").FirstOrDefault().Value;
-			string[] f = {", "};
-
-			List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
-			
-			foreach (String r in rel)
-			{
-				c.cd.RelatedRead.Add(Model.getInstance().AllControls.Find(p => p.cd.Name == r));
-			}
-
-		}
-
-		private void SetCoupledControls(ICustomControl c, XElement i)
-		{
-			string s = i.Descendants("Relations").Descendants("Coupled").FirstOrDefault().Value;
+			string s = i.Element("Relations").Element("Read").Value;
 			string[] f = { ", " };
 
 			List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
 
 			foreach (String r in rel)
 			{
-				c.cd.CoupledControls.Add(Model.getInstance().AllControls.Find(p => p.cd.Name == r));
+				c.cd.RelatedRead.Add(model.AllControls.Find(p => p.cd.Name == r));
+			}
+		}
+
+		private void SetCoupledControls(ICustomControl c, XElement i)
+		{
+			string s = i.Element("Relations").Element("Coupled").Value;
+			string[] f = { ", " };
+
+			List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+			foreach (String r in rel)
+			{
+				c.cd.CoupledControls.Add(model.AllControls.Find(p => p.cd.Name == r));
 			}
 		}
 
 		private void SetRelatedVisibility(ICustomControl c, XElement i)
 		{
-			string s = i.Descendants("Relations").Descendants("Visibility").FirstOrDefault().Value;
+			string s = i.Element("Relations").Element("Visibility").Value;
 			string[] f = { ", " };
 
 			List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
 
 			foreach (String r in rel)
 			{
-				c.cd.RelatedVisibility.Add(Model.getInstance().AllControls.Find(p => p.cd.Name == r));
+				c.cd.RelatedVisibility.Add(model.AllControls.Find(p => p.cd.Name == r));
 			}
 		}
 
 		private void SetRelatedWriteList(ICustomControl c, XElement i)
 		{
-			string s = i.Descendants("Relations").Descendants("Write").FirstOrDefault().Value;
+			string s = i.Element("Relations").Element("Write").Value;
 			string[] f = { ", " };
 
 			List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
 
 			foreach (String r in rel)
 			{
-				c.cd.RelatedWrite.Add(Model.getInstance().AllControls.Find(p => p.cd.Name == r));
+				c.cd.RelatedWrite.Add(model.AllControls.Find(p => p.cd.Name == r));
 			}
 		}
 	}

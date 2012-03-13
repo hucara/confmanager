@@ -15,6 +15,8 @@ namespace Configuration_Manager.CustomControls
         {
             this.Name = "CTabPage" + count;
             this.Text = this.Name;
+			this.AllowDrop = true;
+
             count++;
         }
 

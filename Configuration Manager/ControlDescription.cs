@@ -17,7 +17,7 @@ namespace Configuration_Manager
     {
         static int count = 0;
 
-        public String Name { get; set; }
+		private String name;
         public String Hint { get; set; }
         private String text;
         public String Type { get; set; }
@@ -50,6 +50,8 @@ namespace Configuration_Manager
         public List<ICustomControl> RelatedVisibility { get; set; }
         public List<ICustomControl> CoupledControls { get; set; }
 
+		private ComboBox.ObjectCollection comboBoxItems;
+
         private Section parentSection;
 
         public ControlDescription(Control c)
@@ -77,6 +79,8 @@ namespace Configuration_Manager
             this.RelatedVisibility = new List<ICustomControl>();
             this.CoupledControls = new List<ICustomControl>();
 
+			if(this.Type == "CComboBox") this.comboBoxItems = new ComboBox.ObjectCollection(null);
+			
             this.parentSection = Model.getInstance().CurrentSection;
 
             this.control.BringToFront();
@@ -103,6 +107,16 @@ namespace Configuration_Manager
                 this.parent = value;
             }
         }
+
+		public String Name
+		{
+			get { return this.name; }
+			set
+			{
+				this.control.Name = value;
+				this.name = value;
+			}
+		}
 
         public String Text
         {
@@ -188,5 +202,19 @@ namespace Configuration_Manager
             get { return this.parentSection;}
             set { this.parentSection = value; }
         }
+
+		public ComboBox.ObjectCollection ComboBoxItems
+		{
+			get { return this.comboBoxItems; }
+			set
+			{
+				this.comboBoxItems = value;
+				(this.control as ComboBox).Items.Clear();
+				foreach (ComboBox.ObjectCollection i in comboBoxItems)
+				{
+					(this.control as ComboBox).Items.Add(i);
+				}
+			}
+		}
     }
 }

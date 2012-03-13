@@ -13,7 +13,7 @@ namespace Configuration_Manager.CustomControls
 
         public CComboBox()
         {
-            this.Name = "ComboBox" + count;
+            this.Name = "CComboBox" + count;
             this.Size = this.DefaultSize;
             count++;
         }

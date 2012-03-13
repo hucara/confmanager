@@ -13,6 +13,7 @@ namespace Configuration_Manager.CustomControls
         public CPanel()
         {
             this.Name = "CPanel" + count;
+			this.AllowDrop = true;
 
             this.Text = this.Name;
             count++;

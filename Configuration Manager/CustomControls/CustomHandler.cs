@@ -11,16 +11,23 @@ namespace Configuration_Manager.CustomControls
 {
     class CustomHandler
     {
+		const int RGBMAX = 255;
+
         public ContextMenuStrip contextMenu;
         Model model;
         Editor editor;
         ControlFactory cf;
+
+		Timer t = new Timer();
 
         public CustomHandler(ContextMenuStrip cms)
         {
             this.contextMenu = cms;
             this.model = Model.getInstance();
             this.cf = ControlFactory.getInstance();
+			
+			this.t.Interval = 800;
+			this.t.Tick += TimerElapsed;
         }
 
         public void Control_RightClick(object sender, EventArgs e)
@@ -74,20 +81,7 @@ namespace Configuration_Manager.CustomControls
             }
 			else if (model.progMode && me.Button == MouseButtons.Left)
 			{
-				//c.Parent.Refresh();
 
-				//model.CurrentClickedControl = c;
-				//model.LastClickedX = me.X;
-				//model.LastClickedY = me.Y;
-
-				//Rectangle rect = default(Rectangle);
-
-				//Pen p = new Pen(Color.Red, 1);
-				//Graphics g = c.Parent.CreateGraphics();
-
-				//rect = c.Bounds;
-				//rect.Inflate(1, 1);
-				//g.DrawRectangle(p, rect);
 			}
         }
 
@@ -258,65 +252,218 @@ namespace Configuration_Manager.CustomControls
 
         public void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-			//bool referencesOthers = ReferencesOthers(model.CurrentClickedControl as ICustomControl);
-			//bool isReferenced = IsReferenced(model.CurrentClickedControl as ICustomControl);
-
-			//String msg = "This control is related by other controls.\nAre you sure you want to delete it? ";
-			//MessageBox.Show(msg, "Control is referenced", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
             Control p = model.CurrentClickedControl.Parent;
 
-			CheckRelations(model.CurrentClickedControl);
+			// In this function, the children controls will be deleted. 
+			// There should be a recursive loop that goes inside each children control,
+			// removing also those. From deepest level to highest level.
+			if (model.CurrentClickedControl.Controls.Count > 0)
+			{
+				Control c = model.CurrentClickedControl;
+				MessageBox.Show("This will kill all of my children.");
 
-            model.AllControls.Remove(model.CurrentClickedControl as ICustomControl);
-            model.DeleteControlReferences(model.CurrentClickedControl);
-            p.Controls.Remove(model.CurrentClickedControl);
+				DeleteChildren(model.CurrentClickedControl);
+			}
 
-            p.Refresh();
+			if (CheckRelations(model.CurrentClickedControl) == DialogResult.OK)
+			{
+				model.AllControls.Remove(model.CurrentClickedControl as ICustomControl);
+				model.DeleteControlReferences(model.CurrentClickedControl);
+				p.Controls.Remove(model.CurrentClickedControl);
+
+				p.Refresh();
+			}
         }
 
-		private void CheckRelations(Control control)
+		private void DeleteChildren(Control c)
 		{
-			String msg;
-			bool references = false;
-			ICustomControl c = control as ICustomControl;
-			// Check if this control has anything else inside the related list
-			msg = IsReferenced(c);
-
-			if (msg != "" || msg != null)
+			String ls = "";
+			System.Diagnostics.Debug.WriteLine("! Now in: " + c.Name);
+			foreach (Control child in c.Controls)
 			{
+				ls += ls + " " + child.Name;
+				DeleteChildren(child);
 
+				model.AllControls.Remove(child as ICustomControl);
+				model.DeleteControlReferences(child);
+			}
+			System.Diagnostics.Debug.WriteLine(ls);
+		}
+
+		private DialogResult CheckRelations(Control control)
+		{
+			String msg = "";
+			String references = "";
+			String referencedBy = "";
+
+			ICustomControl c = control as ICustomControl;
+			
+			// Check if this control has anything else inside the related list
+			if (ControlReferencesOthers(c, out references))
+			{
+				msg += c.cd.Name + " is related to some other controls:\n";
+				msg += references + "\n\n";
 			}
 
 			// Check if this control is inside the related lists of other controls
-			references = ReferencesOthers(c);
+			if (ControlIsReferenced(c, out referencedBy))
+			{
+				msg += c.cd.Name + " is being related by some other controls:\n";
+				msg += referencedBy;
+			}
+
+			return MessageBox.Show(msg, " Deleting control", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 		}
 
-		private String IsReferenced(ICustomControl c)
+		private bool ControlIsReferenced(ICustomControl c, out String referencedBy)
 		{
-			String read = "";
-			String write = "";
-			String visib = "";
-			String coupled = "";
+			referencedBy = "";
 
 			foreach (ICustomControl co in model.AllControls)
 			{
-				if (co.cd.RelatedRead.Contains(c)) read += " " + co.cd.Name;
-				if (co.cd.RelatedWrite.Contains(c)) write += " " + co.cd.Name;
-				if (co.cd.RelatedVisibility.Contains(c)) visib += " " + co.cd.Name;
-				if (co.cd.CoupledControls.Contains(c)) coupled += " " + co.cd.Name;
+				if (co.cd.RelatedRead.Contains(c)) referencedBy += co.cd.Name + " ";
+				else if (co.cd.RelatedWrite.Contains(c)) referencedBy += co.cd.Name + " ";
+				else if (co.cd.RelatedVisibility.Contains(c)) referencedBy += co.cd.Name + " ";
+				else if (co.cd.CoupledControls.Contains(c)) referencedBy += co.cd.Name + " ";
 			}
-			return "Related read: "+ read + "\nRelated write: " + write + "\nRelated visibility: " + visib + "\nCoupled controls: " + coupled;
-		}
 
-		private bool ReferencesOthers(ICustomControl c)
-		{
-			if(c.cd.RelatedRead.Count > 0 || c.cd.RelatedVisibility.Count > 0 
-				|| c.cd.RelatedWrite.Count > 0 || c.cd.CoupledControls.Count > 0)
-			{
-				return true;
-			}
+			if (referencedBy != "") return true;
 			return false;
 		}
-    }
+
+		private bool ControlReferencesOthers(ICustomControl c, out String references)
+		{
+			references = "";
+			if (c.cd.RelatedRead.Count > 0)
+			{
+				references += "- Related read: ";
+				foreach (Control co in c.cd.RelatedRead)
+				{
+					references += (co as ICustomControl).cd.Name + " ";
+				}
+				references += "\n";
+			}
+
+			if (c.cd.RelatedWrite.Count > 0)
+			{
+				references += "- Related write: ";
+				foreach (Control co in c.cd.RelatedWrite)
+				{
+					references += (co as ICustomControl).cd.Name + " ";
+				}
+				references += "\n";
+			}
+
+			if (c.cd.RelatedVisibility.Count > 0)
+			{
+				references += "- Related visibility: ";
+				foreach (Control co in c.cd.RelatedVisibility)
+				{
+					references += (co as ICustomControl).cd.Name + " ";
+				}
+				references += "\n";
+			}
+
+			if (c.cd.CoupledControls.Count > 0)
+			{
+				references += "- Coupled controls: ";
+				foreach (Control co in c.cd.CoupledControls)
+				{
+					references += (co as ICustomControl).cd.Name + " ";
+				}
+				references += "\n";
+			}
+
+			if (references != "") return true;
+			return false;
+		}
+
+		public void TextChanged(object sender, EventArgs e)
+		{
+			ICustomControl c = sender as ICustomControl;
+
+			if ((sender as Control).Text == "") c.cd.Text = "0";
+			else c.cd.Text = (sender as Control).Text;
+		}
+
+		public void Control_LeftClick(object sender, EventArgs e)
+		{
+			MouseEventArgs me = e as MouseEventArgs;
+			Control c = sender as Control;
+			String type = sender.GetType().Name;
+
+			Rectangle rect = default(Rectangle);
+			Pen p = new Pen(SystemColors.Highlight, 1);
+			Graphics g = c.Parent.CreateGraphics();
+
+			if (model.progMode && me.Button == MouseButtons.Left)
+			{
+				t.Start();
+				Debug.WriteLine("! Timer Started");
+
+				model.CurrentSection.Tab.Refresh();
+
+				model.CurrentClickedControl = c;
+				model.LastClickedX = me.X;
+				model.LastClickedY = me.Y;
+
+				rect = c.Bounds;
+				rect.Inflate(1, 1);
+				g.DrawRectangle(p, rect);
+
+				Debug.WriteLine("! Clicked: " + model.CurrentClickedControl.Name + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
+			}
+		}
+
+		private void TimerElapsed(object sender, EventArgs e)
+		{
+			(sender as Timer).Stop();
+			MouseEventArgs me = e as MouseEventArgs;
+
+			if (model.CurrentClickedControl != null)
+			{
+				String name = (model.CurrentClickedControl as ICustomControl).cd.Name;
+				Debug.WriteLine("! Got the control: " + name);
+				model.CurrentClickedControl.DoDragDrop(name, DragDropEffects.Move);
+			}
+		}
+
+		public void OnDragDrop(object sender, DragEventArgs dea)
+		{
+			//dea.Effect = DragDropEffects.Move;
+			String name;
+			ICustomControl c = null;
+			Control parent = sender as Control;
+			
+			if ((sender as ICustomControl).cd.Type == "CGroupBox")
+			{
+				name = (string)dea.Data.GetData(typeof(System.String));
+				c = model.AllControls.Find(control => control.cd.Name == name);
+			}
+
+			c.cd.Parent = parent;
+			parent.Refresh();
+
+			Point cord = new Point(dea.X, dea.Y);
+			cord = parent.PointToClient(cord);
+			c.cd.Top = cord.Y;
+			c.cd.Left = cord.X;
+
+			Debug.WriteLine("! Dropped the control: " + c.cd.Name+ " Parent: " +c.cd.Parent.Name+" X: "+cord.X+" Y: "+cord.Y);
+		}
+
+		public void OnDragEnter(object sender, DragEventArgs dea)
+		{
+			dea.Effect = DragDropEffects.Move;
+		}
+
+		public void CancelDragDropTimer(object sender, EventArgs me)
+		{
+			if ((me as MouseEventArgs).Button == MouseButtons.Left)
+			{
+				t.Stop();
+				Debug.WriteLine("! Timer Stopped");
+			}
+		}
+	}
 }

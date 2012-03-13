@@ -14,7 +14,7 @@ namespace Configuration_Manager
     {
         const bool OK = true;
         const bool ERROR = false;
-        const int MR = 5;
+        const int MR = 12;
 
         int top, left, height, width;
 
@@ -23,8 +23,6 @@ namespace Configuration_Manager
 
         Font controlFont;
         Color fontColor, backColor;
-
-        //ControlDescription cd;
 
         Control parent;
         ICustomControl control;
@@ -144,7 +142,7 @@ namespace Configuration_Manager
         {
             foreach (ICustomControl c in model.AllControls)
             {
-                if (c != this.control) controlListBox.Items.Add((c as Control).Name);
+                if (c.cd.Name != this.control.cd.Name) controlListBox.Items.Add(c.cd.Name);
             }
         }
 
@@ -201,6 +199,7 @@ namespace Configuration_Manager
             {
                 case "CComboBox":
                     // Everything is enabled
+					CComboBoxEditorSetUp();
                     break;
 
                 case "CLabel":
@@ -228,6 +227,7 @@ namespace Configuration_Manager
                     break;
 
                 case "CTextBox":
+					CTextBoxEditorSetup();
                     textTextBox.Enabled = false;
                     visibleCheckBox.Enabled = false;
                     break;
@@ -248,6 +248,11 @@ namespace Configuration_Manager
                     break;
             }
         }
+
+		private void CTextBoxEditorSetup()
+		{
+			textTextBox.Text = (control as TextBox).Text;
+		}
 
         // //
         // Handlers
@@ -291,9 +296,10 @@ namespace Configuration_Manager
 
         private void updateButton_Click(object sender, EventArgs e)
         {
+			if (type == "CComboBox") CComboBoxUpdateSetUp();
+
             CheckLabelInfo();
             SaveToControl();
-			//if (currentVisibleList != null) HighLightRequiredControls();
             parent.Refresh();
             ErrorMsg = "";
         }
@@ -312,7 +318,7 @@ namespace Configuration_Manager
             ParseHeight();
 
             if (!CheckText()) ErrorMsg += "\n- Text is empty.";
-            if (!CheckHint()) ErrorMsg += "\n- Hint is empty.";
+            //if (!CheckHint()) ErrorMsg += "\n- Hint is empty.";
             if (!CheckTop()) ErrorMsg += "\n- Top value is too low or too high.";
             if (!CheckLeft()) ErrorMsg += "\n- Left value is too low or too high.";
             if (!CheckWidth()) ErrorMsg += "\n- Width value is too low or too high.";
@@ -422,12 +428,23 @@ namespace Configuration_Manager
             control.cd.MainDestination = this.fileDestinationTextBox.Text;
             control.cd.SubDestination = this.subDestinatonTextBox.Text;
 
+			if (this.type == "CGroupBox")
+			{
+				control.cd.ComboBoxItems = this.comboBoxEditor.Items;
+			}
+
             //control.cd.ParentSection = model.CurrentSection;
         }
 
         private void ReadFromControl()
         {
             this.textTextBox.Text = control.cd.Text;
+
+			//if (control is CTextBox)
+			//{
+			//    this.textTextBox.Text = (control as TextBox).Text;
+			//}
+
             this.type = control.cd.Type;
             this.hintTextBox.Text = control.cd.Hint;
             this.controlFont = control.cd.CurrentFont;
@@ -518,10 +535,13 @@ namespace Configuration_Manager
             }
         }
 
+
+		//
+		// Function not working or creating weird / nullException stuff
+		//
         private void HighLightRequiredControls()
         {
             Rectangle rect = default(Rectangle);
-
             Pen p = new Pen(Color.Red, 3);
             Graphics g = parent.CreateGraphics();
 
@@ -536,5 +556,66 @@ namespace Configuration_Manager
 				}
 			}
         }
-    }
+
+		private void CComboBoxEditorSetUp()
+		{
+			EnableControls();
+
+			textTextBox.Hide();
+			comboBoxEditPanel.Show();
+
+			addItemButton.MouseDown -= addItemToComboBox;
+			addItemButton.MouseDown += addItemToComboBox;
+
+			delItemButton.MouseDown -= delItemFromComboBox;
+			delItemButton.MouseDown += delItemFromComboBox;
+
+			// Copy items from real comboBox to the fake comboBox inside Editor form.
+			comboBoxEditor.Items.Clear();
+			object[] items = new object[(control as ComboBox).Items.Count];
+			(control as ComboBox).Items.CopyTo(items, 0);
+			comboBoxEditor.Items.AddRange(items);
+
+			comboBoxEditor.SelectedItem = (control as ComboBox).SelectedItem;
+		}
+
+		private void CComboBoxUpdateSetUp()
+		{
+			(control as ComboBox).SelectedItem = comboBoxEditor.SelectedItem;
+			(control as ComboBox).Update();
+		}
+
+		private void addItemToComboBox(object sender, EventArgs e)
+		{
+			if (!(control as ComboBox).Items.Contains(comboBoxEditor.Text))
+			{
+				(control as ComboBox).Items.Add(comboBoxEditor.Text);
+				int index = comboBoxEditor.Items.Add(comboBoxEditor.Text);
+
+				comboBoxEditor.SelectedIndex = index;
+			}
+
+			(control as ComboBox).SelectedItem = comboBoxEditor.SelectedItem;
+		}
+
+		private void delItemFromComboBox(object sender, EventArgs e)
+		{
+			if (comboBoxEditor.Text == (control as ComboBox).SelectedText)
+			{
+				(control as ComboBox).Items.Remove(comboBoxEditor.Text);
+				comboBoxEditor.Items.Remove(comboBoxEditor.Text);
+				comboBoxEditor.SelectedItem = null;
+				(control as ComboBox).SelectedItem = null;
+			}
+			else
+			{
+				(control as ComboBox).Items.Remove(comboBoxEditor.Text);
+				comboBoxEditor.Items.Remove(comboBoxEditor.Text);
+
+				comboBoxEditor.SelectedItem = null;
+				comboBoxEditor.Text = null;
+
+			}
+		}
+	}
 }

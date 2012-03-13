@@ -15,6 +15,9 @@ namespace Configuration_Manager.CustomControls
         {
             this.Name = "CGroupBox" + CGroupBox.count;
             this.Text = this.Name;
+			this.DoubleBuffered = true;
+			this.AllowDrop = true;
+
             CGroupBox.count++;
 
             System.Diagnostics.Debug.WriteLine("+ Created: "+this.Name);

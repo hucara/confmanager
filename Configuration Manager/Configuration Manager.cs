@@ -29,6 +29,8 @@ namespace Configuration_Manager
 
         public MainForm()
         {
+			this.DoubleBuffered = true;
+
             InitializeComponent();
             InitCustomHandler();
             InitViews();
@@ -98,17 +100,19 @@ namespace Configuration_Manager
                 odm.SerializeObjectDefinition();
             }
 
-            if (e.Alt && e.Control && e.KeyCode == Keys.P)
+            if (e.Alt && e.Control && e.KeyCode == Keys.D)
             {
-                System.Diagnostics.Debug.WriteLine("\n! PRINTING LIST OF CONTROLS !");
+                System.Diagnostics.Debug.WriteLine("\n! Printing List of Controls: ");
+				System.Diagnostics.Debug.WriteLine("\tControl      Parent");
+				System.Diagnostics.Debug.WriteLine("_______________________________");
                 foreach (ICustomControl c in model.AllControls)
                 {
-                    String line = "- ";
-                    if (c.cd.Name != null) line += c.cd.Name + " -- ";
+                    String line = "\t";
+                    if (c.cd.Name != null) line += c.cd.Name + " ..... ";
                     if (c.cd.Parent != null) line += c.cd.Parent.Name;
                     System.Diagnostics.Debug.WriteLine(line);
                 }
-                System.Diagnostics.Debug.WriteLine("\n! ######################### !");
+                System.Diagnostics.Debug.WriteLine("-- -- -- -- -- -- --");
             }
         }
 
