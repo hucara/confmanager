@@ -23,6 +23,7 @@ namespace Configuration_Manager
 
         Font controlFont;
         Color fontColor, backColor;
+		Util.TokenTextTranslator ttt = new Util.TokenTextTranslator("@@", Resources.getInstance().CurrentLangPath);
 
         Control parent;
         ICustomControl control;
@@ -30,9 +31,9 @@ namespace Configuration_Manager
         ControlFactory cf;
         Model model;
 
-        // //
+		// //////////////////
         // Constructor
-        // //
+		// //////////////////
         public Editor()
         {
             InitializeComponent();
@@ -412,7 +413,8 @@ namespace Configuration_Manager
 
         private void SaveToControl()
         {
-            control.cd.Text = this.textTextBox.Text;
+			control.cd.Text = ttt.TranslateFromTextFile(this.textTextBox.Text);
+			control.cd.RealText = this.textTextBox.Text;
             control.cd.Type = this.type;
             control.cd.Hint = this.hintTextBox.Text;
             control.cd.CurrentFont = this.controlFont;
@@ -438,7 +440,7 @@ namespace Configuration_Manager
 
         private void ReadFromControl()
         {
-            this.textTextBox.Text = control.cd.Text;
+            this.textTextBox.Text = control.cd.RealText;
 
 			//if (control is CTextBox)
 			//{

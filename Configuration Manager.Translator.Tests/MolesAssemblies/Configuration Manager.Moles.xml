@@ -1,0 +1,1896 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Configuration Manager.Moles</name>
+    </assembly>
+    <members>
+        <member name="T:Configuration_Manager.CustomControls.Moles.MCTabPage">
+            <summary>Mole type of <see cref="T:Configuration_Manager.CustomControls.CTabPage"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.#ctor(Configuration_Manager.CustomControls.CTabPage)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.Bind(Configuration_Manager.CustomControls.ICustomControl)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.Bind(System.ComponentModel.IComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.Bind(System.ComponentModel.ISynchronizeInvoke)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.Bind(System.Windows.Forms.IBindableComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.Bind(System.Windows.Forms.IDropTarget)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.Bind(System.Windows.Forms.IWin32Window)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCTabPage.Bind(System.IDisposable)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCTabPage.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCTabPage.Constructor">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CTabPage.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCTabPage.ManagerCustomControlsICustomControlget_cdConfiguration">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CTabPage.Configuration_Manager.CustomControls.ICustomControl.get_cd"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCTabPage.ManagerCustomControlsICustomControlset_cdConfigurationControlDescription">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CTabPage.Configuration_Manager.CustomControls.ICustomControl.set_cd(Configuration_Manager.ControlDescription)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCTabPage.SetControlDescription">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CTabPage.SetControlDescription"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCTabPage.SetNavBarDescriptionSection">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CTabPage.SetNavBarDescription(Configuration_Manager.Section)"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.CustomControls.Moles.MCTabPage.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCTabPage.AllInstances.ManagerCustomControlsICustomControlget_cdConfiguration">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CTabPage.Configuration_Manager.CustomControls.ICustomControl.get_cd"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCTabPage.AllInstances.ManagerCustomControlsICustomControlset_cdConfigurationControlDescription">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CTabPage.Configuration_Manager.CustomControls.ICustomControl.set_cd(Configuration_Manager.ControlDescription)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCTabPage.AllInstances.SetControlDescription">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CTabPage.SetControlDescription"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCTabPage.AllInstances.SetNavBarDescriptionSection">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CTabPage.SetNavBarDescription(Configuration_Manager.Section)"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.CustomControls.Moles.MCToolStripButton">
+            <summary>Mole type of <see cref="T:Configuration_Manager.CustomControls.CToolStripButton"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCToolStripButton.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCToolStripButton.#ctor(Configuration_Manager.CustomControls.CToolStripButton)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCToolStripButton.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCToolStripButton.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCToolStripButton.Bind(Configuration_Manager.CustomControls.ICustomControl)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCToolStripButton.Bind(System.ComponentModel.IComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCToolStripButton.Bind(System.Windows.Forms.IDropTarget)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.MCToolStripButton.Bind(System.IDisposable)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.Constructor">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.ConstructorSection">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.#ctor(Configuration_Manager.Section)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.IdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.CustomControls.CToolStripButton.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.IdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.CustomControls.CToolStripButton.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.ManagerCustomControlsICustomControlget_cdConfiguration">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.Configuration_Manager.CustomControls.ICustomControl.get_cd"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.ManagerCustomControlsICustomControlset_cdConfigurationControlDescription">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.Configuration_Manager.CustomControls.ICustomControl.set_cd(Configuration_Manager.ControlDescription)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.SetControlDescription">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.SetControlDescription"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.SetSectionDescriptionSection">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.SetSectionDescription(Configuration_Manager.Section)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.SetSectionNameString">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.SetSectionName(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.TypeIdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.CustomControls.CToolStripButton.TypeId"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.TypeIdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.CustomControls.CToolStripButton.TypeId"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.CustomControls.Moles.MCToolStripButton.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.AllInstances.IdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.CustomControls.CToolStripButton.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.AllInstances.IdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.CustomControls.CToolStripButton.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.AllInstances.ManagerCustomControlsICustomControlget_cdConfiguration">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.Configuration_Manager.CustomControls.ICustomControl.get_cd"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.AllInstances.ManagerCustomControlsICustomControlset_cdConfigurationControlDescription">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.Configuration_Manager.CustomControls.ICustomControl.set_cd(Configuration_Manager.ControlDescription)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.AllInstances.SetControlDescription">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.SetControlDescription"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.AllInstances.SetSectionDescriptionSection">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.SetSectionDescription(Configuration_Manager.Section)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.AllInstances.SetSectionNameString">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.CustomControls.CToolStripButton.SetSectionName(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.AllInstances.TypeIdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.CustomControls.CToolStripButton.TypeId"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.MCToolStripButton.AllInstances.TypeIdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.CustomControls.CToolStripButton.TypeId"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MControlDescription">
+            <summary>Mole type of <see cref="T:Configuration_Manager.ControlDescription"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MControlDescription.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MControlDescription.#ctor(Configuration_Manager.ControlDescription)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MControlDescription.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MControlDescription.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.BackColorGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.BackColor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.BackColorSetColor">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.BackColor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ComboBoxItemsGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ComboBoxItems"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ComboBoxItemsSetComboBoxObjectCollection">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ComboBoxItems"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ConstructorControl">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.ControlDescription.#ctor(System.Windows.Forms.Control)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ConstructorStringStringString">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.ControlDescription.#ctor(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.CoupledControlsGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.CoupledControls"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.CoupledControlsSetListOfICustomControl">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.CoupledControls"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.CurrentFontGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.CurrentFont"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.CurrentFontSetFont">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.CurrentFont"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.DestinationTypeGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.DestinationType"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.DestinationTypeSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.DestinationType"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ForeColorGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ForeColor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ForeColorSetColor">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ForeColor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.HeightGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Height"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.HeightSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Height"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.HintGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Hint"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.HintSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Hint"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.IdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.IdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.LeftGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Left"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.LeftSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Left"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.MainDestinationGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.MainDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.MainDestinationSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.MainDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ModificationRightGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ModificationRight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ModificationRightSetByte">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ModificationRight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.NameGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Name"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.NameSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Name"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ParentGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Parent"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ParentSectionGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ParentSection"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ParentSectionSetSection">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ParentSection"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.ParentSetControl">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Parent"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.RealTextGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RealText"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.RealTextSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RealText"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.RelatedReadGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedRead"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.RelatedReadSetListOfICustomControl">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedRead"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.RelatedVisibilityGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedVisibility"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.RelatedVisibilitySetListOfICustomControl">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedVisibility"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.RelatedWriteGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedWrite"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.RelatedWriteSetListOfICustomControl">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedWrite"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.SubDestinationGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.SubDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.SubDestinationSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.SubDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.TextGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Text"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.TextSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Text"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.TopGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Top"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.TopSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Top"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.TypeGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Type"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.TypeIdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.TypeId"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.TypeIdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.TypeId"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.TypeSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Type"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.VisibilityRightGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.VisibilityRight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.VisibilityRightSetByte">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.VisibilityRight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.VisibleGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Visible"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.VisibleSetBoolean">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Visible"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.WidthGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Width"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.WidthSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Width"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MControlDescription.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.BackColorGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.BackColor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.BackColorSetColor">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.BackColor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.ComboBoxItemsGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ComboBoxItems"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.ComboBoxItemsSetComboBoxObjectCollection">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ComboBoxItems"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.CoupledControlsGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.CoupledControls"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.CoupledControlsSetListOfICustomControl">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.CoupledControls"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.CurrentFontGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.CurrentFont"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.CurrentFontSetFont">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.CurrentFont"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.DestinationTypeGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.DestinationType"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.DestinationTypeSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.DestinationType"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.ForeColorGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ForeColor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.ForeColorSetColor">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ForeColor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.HeightGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Height"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.HeightSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Height"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.HintGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Hint"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.HintSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Hint"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.IdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.IdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.LeftGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Left"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.LeftSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Left"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.MainDestinationGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.MainDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.MainDestinationSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.MainDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.ModificationRightGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ModificationRight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.ModificationRightSetByte">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ModificationRight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.NameGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Name"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.NameSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Name"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.ParentGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Parent"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.ParentSectionGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ParentSection"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.ParentSectionSetSection">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.ParentSection"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.ParentSetControl">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Parent"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.RealTextGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RealText"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.RealTextSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RealText"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.RelatedReadGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedRead"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.RelatedReadSetListOfICustomControl">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedRead"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.RelatedVisibilityGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedVisibility"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.RelatedVisibilitySetListOfICustomControl">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedVisibility"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.RelatedWriteGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedWrite"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.RelatedWriteSetListOfICustomControl">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.RelatedWrite"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.SubDestinationGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.SubDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.SubDestinationSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.SubDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.TextGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Text"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.TextSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Text"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.TopGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Top"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.TopSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Top"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.TypeGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Type"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.TypeIdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.TypeId"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.TypeIdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.TypeId"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.TypeSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Type"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.VisibilityRightGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.VisibilityRight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.VisibilityRightSetByte">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.VisibilityRight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.VisibleGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Visible"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.VisibleSetBoolean">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Visible"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.WidthGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Width"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MControlDescription.AllInstances.WidthSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.ControlDescription.Width"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MEditor">
+            <summary>Mole type of <see cref="T:Configuration_Manager.Editor"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.#ctor(Configuration_Manager.Editor)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.Bind(System.ComponentModel.IComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.Bind(System.ComponentModel.ISynchronizeInvoke)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.Bind(System.Windows.Forms.IBindableComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.Bind(System.Windows.Forms.IContainerControl)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.Bind(System.Windows.Forms.IDropTarget)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.Bind(System.Windows.Forms.IWin32Window)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MEditor.Bind(System.IDisposable)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CComboBoxEditorSetUp">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CComboBoxEditorSetUp"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CComboBoxUpdateSetUp">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CComboBoxUpdateSetUp"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CTextBoxEditorSetup">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CTextBoxEditorSetup"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CheckCommonAttributes">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckCommonAttributes"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CheckFileDestination">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckFileDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CheckHeight">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckHeight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CheckHint">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckHint"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CheckLabelInfo">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckLabelInfo"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CheckLeft">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckLeft"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CheckSubDestination">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckSubDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CheckText">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckText"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CheckTop">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckTop"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.CheckWidth">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckWidth"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.Constructor">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.DisableControlsString">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.DisableControls(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.DisposeBoolean">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.EnableControls">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.EnableControls"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.FillOutCheckedListBox">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.FillOutCheckedListBox"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.FillOutFileTypeComboBox">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.FillOutFileTypeComboBox"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.FillOutRelationsComboBox">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.FillOutRelationsComboBox"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.GetCurrentVisibleList">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.GetCurrentVisibleList"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.HighLightRequiredControls">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.HighLightRequiredControls"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.InitializeComponent">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.InitializeComponent"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.ParseHeight">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ParseHeight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.ParseLeft">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ParseLeft"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.ParseTop">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ParseTop"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.ParseWidth">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ParseWidth"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.ReadControlTypeControl">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ReadControlType(System.Windows.Forms.Control)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.ReadFromControl">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ReadFromControl"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.SaveToControl">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.SaveToControl"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.SetExampleTextLabel">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.SetExampleTextLabel"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.SetOpenFileDialog">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.SetOpenFileDialog"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.ShowControl">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.Show(System.Windows.Forms.Control)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.ShowDefaultSize">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ShowDefaultSize"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.ShowHeadLine">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ShowHeadLine"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.ShowMousePosition">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ShowMousePosition"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.addItemToComboBoxObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.addItemToComboBox(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.backColorButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.backColorButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.controlListBox_ItemCheckObjectItemCheckEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.controlListBox_ItemCheck(System.Object,System.Windows.Forms.ItemCheckEventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.delItemFromComboBoxObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.delItemFromComboBox(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.fileDestinationButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.fileDestinationButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.fontButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.fontButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.okButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.okButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.relationsComboBox_SelectedIndexChangedObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.relationsComboBox_SelectedIndexChanged(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.updateButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.updateButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MEditor.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CComboBoxEditorSetUp">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CComboBoxEditorSetUp"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CComboBoxUpdateSetUp">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CComboBoxUpdateSetUp"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CTextBoxEditorSetup">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CTextBoxEditorSetup"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CheckCommonAttributes">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckCommonAttributes"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CheckFileDestination">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckFileDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CheckHeight">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckHeight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CheckHint">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckHint"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CheckLabelInfo">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckLabelInfo"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CheckLeft">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckLeft"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CheckSubDestination">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckSubDestination"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CheckText">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckText"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CheckTop">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckTop"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.CheckWidth">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.CheckWidth"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.DisableControlsString">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.DisableControls(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.DisposeBoolean">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.EnableControls">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.EnableControls"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.FillOutCheckedListBox">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.FillOutCheckedListBox"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.FillOutFileTypeComboBox">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.FillOutFileTypeComboBox"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.FillOutRelationsComboBox">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.FillOutRelationsComboBox"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.GetCurrentVisibleList">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.GetCurrentVisibleList"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.HighLightRequiredControls">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.HighLightRequiredControls"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.InitializeComponent">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.InitializeComponent"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.ParseHeight">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ParseHeight"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.ParseLeft">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ParseLeft"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.ParseTop">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ParseTop"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.ParseWidth">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ParseWidth"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.ReadControlTypeControl">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ReadControlType(System.Windows.Forms.Control)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.ReadFromControl">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ReadFromControl"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.SaveToControl">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.SaveToControl"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.SetExampleTextLabel">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.SetExampleTextLabel"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.SetOpenFileDialog">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.SetOpenFileDialog"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.ShowControl">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.Show(System.Windows.Forms.Control)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.ShowDefaultSize">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ShowDefaultSize"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.ShowHeadLine">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ShowHeadLine"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.ShowMousePosition">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.ShowMousePosition"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.addItemToComboBoxObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.addItemToComboBox(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.backColorButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.backColorButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.controlListBox_ItemCheckObjectItemCheckEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.controlListBox_ItemCheck(System.Object,System.Windows.Forms.ItemCheckEventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.delItemFromComboBoxObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.delItemFromComboBox(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.fileDestinationButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.fileDestinationButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.fontButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.fontButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.okButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.okButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.relationsComboBox_SelectedIndexChangedObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.relationsComboBox_SelectedIndexChanged(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MEditor.AllInstances.updateButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Editor.updateButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MMainForm">
+            <summary>Mole type of <see cref="T:Configuration_Manager.MainForm"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.#ctor(Configuration_Manager.MainForm)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.Bind(System.ComponentModel.IComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.Bind(System.ComponentModel.ISynchronizeInvoke)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.Bind(System.Windows.Forms.IBindableComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.Bind(System.Windows.Forms.IContainerControl)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.Bind(System.Windows.Forms.IDropTarget)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.Bind(System.Windows.Forms.IWin32Window)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MMainForm.Bind(System.IDisposable)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.Constructor">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.DisposeBoolean">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.InitCustomHandler">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.InitCustomHandler"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.InitHandlers">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.InitHandlers"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.InitViews">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.InitViews"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.InitializeComponent">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.InitializeComponent"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.MainForm_KeyDownObjectKeyEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.MainForm_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.SetProgMode">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.SetProgMode"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.deleteSectionToolStripMenuItem_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.deleteSectionToolStripMenuItem_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.newSectionToolStripMenuItem_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.newSectionToolStripMenuItem_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.toolStrip_RightClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.toolStrip_RightClick(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MMainForm.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.AllInstances.DisposeBoolean">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.AllInstances.InitCustomHandler">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.InitCustomHandler"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.AllInstances.InitHandlers">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.InitHandlers"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.AllInstances.InitViews">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.InitViews"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.AllInstances.InitializeComponent">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.InitializeComponent"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.AllInstances.MainForm_KeyDownObjectKeyEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.MainForm_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.AllInstances.SetProgMode">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.SetProgMode"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.AllInstances.deleteSectionToolStripMenuItem_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.deleteSectionToolStripMenuItem_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.AllInstances.newSectionToolStripMenuItem_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.newSectionToolStripMenuItem_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MMainForm.AllInstances.toolStrip_RightClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.MainForm.toolStrip_RightClick(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MResources">
+            <summary>Mole type of <see cref="T:Configuration_Manager.Resources"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MResources.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MResources.#ctor(Configuration_Manager.Resources)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MResources.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MResources.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AppFolderPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.AppFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AppFolderPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.AppFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ConfigFilePathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigFilePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ConfigFilePathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigFilePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ConfigFolderPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ConfigFolderPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ConfigObjectsGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigObjects"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ConfigObjectsSetXDocument">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigObjects"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.Constructor">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.CurrentLangPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.CurrentLangPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.CurrentLangPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.CurrentLangPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ExePathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ExePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ExePathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ExePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.LangFolderPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LangFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.LangFolderPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LangFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.LangsPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LangsPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.LangsPathSetListOfString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LangsPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.LogFolderPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LogFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.LogFolderPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LogFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.MainFolderPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.MainFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.MainFolderPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.MainFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ObjectDefinitionExistsGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ObjectDefinitionExists"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ObjectDefinitionExistsSetBoolean">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ObjectDefinitionExists"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ObjectDefinitionsPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ObjectDefinitionsPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.ObjectDefinitionsPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ObjectDefinitionsPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.getConfigFilePath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getConfigFilePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.getConfigFolderPath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getConfigFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.getConfigObjectsPath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getConfigObjectsPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.getExePath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getExePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.getInstance">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getInstance"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.getLangFolderPath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getLangFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.getLogFolderPath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getLogFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.getMainFolderPath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getMainFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.loadObjectDefinition">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.loadObjectDefinition"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MResources.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.AppFolderPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.AppFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.AppFolderPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.AppFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ConfigFilePathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigFilePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ConfigFilePathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigFilePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ConfigFolderPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ConfigFolderPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ConfigObjectsGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigObjects"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ConfigObjectsSetXDocument">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ConfigObjects"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.CurrentLangPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.CurrentLangPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.CurrentLangPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.CurrentLangPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ExePathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ExePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ExePathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ExePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.LangFolderPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LangFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.LangFolderPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LangFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.LangsPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LangsPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.LangsPathSetListOfString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LangsPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.LogFolderPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LogFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.LogFolderPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.LogFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.MainFolderPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.MainFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.MainFolderPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.MainFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ObjectDefinitionExistsGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ObjectDefinitionExists"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ObjectDefinitionExistsSetBoolean">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ObjectDefinitionExists"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ObjectDefinitionsPathGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ObjectDefinitionsPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.ObjectDefinitionsPathSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Resources.ObjectDefinitionsPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.getConfigFilePath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getConfigFilePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.getConfigFolderPath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getConfigFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.getConfigObjectsPath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getConfigObjectsPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.getExePath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getExePath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.getLangFolderPath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getLangFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.getLogFolderPath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getLogFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.getMainFolderPath">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.getMainFolderPath"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MResources.AllInstances.loadObjectDefinition">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Resources.loadObjectDefinition"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MSection">
+            <summary>Mole type of <see cref="T:Configuration_Manager.Section"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSection.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSection.#ctor(Configuration_Manager.Section)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSection.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSection.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.ButtonGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Button"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.ButtonSetCToolStripButton">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Button"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.ConstructorCToolStripButtonTabPageStringBoolean">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.Section.#ctor(Configuration_Manager.CustomControls.CToolStripButton,System.Windows.Forms.TabPage,System.String,System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.GlobalIdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.GlobalId"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.GlobalIdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.GlobalId"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.IdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.IdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.NameGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Name"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.NameSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Name"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.RelatedTabIndexGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.RelatedTabIndex"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.RelatedTabIndexSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.RelatedTabIndex"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.SelectedGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Selected"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.SelectedSetBoolean">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Selected"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.TabGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Tab"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.TabSetTabPage">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Tab"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.TextGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Text"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.TextSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Text"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MSection.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.ButtonGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Button"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.ButtonSetCToolStripButton">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Button"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.GlobalIdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.GlobalId"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.GlobalIdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.GlobalId"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.IdGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.IdSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Id"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.NameGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Name"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.NameSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Name"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.RelatedTabIndexGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.RelatedTabIndex"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.RelatedTabIndexSetInt32">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.RelatedTabIndex"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.SelectedGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Selected"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.SelectedSetBoolean">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Selected"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.TabGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Tab"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.TabSetTabPage">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Tab"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.TextGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Text"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSection.AllInstances.TextSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.Section.Text"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MSectionForm">
+            <summary>Mole type of <see cref="T:Configuration_Manager.SectionForm"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.#ctor(Configuration_Manager.SectionForm)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.Bind(System.ComponentModel.IComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.Bind(System.ComponentModel.ISynchronizeInvoke)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.Bind(System.Windows.Forms.IBindableComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.Bind(System.Windows.Forms.IContainerControl)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.Bind(System.Windows.Forms.IDropTarget)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.Bind(System.Windows.Forms.IWin32Window)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.MSectionForm.Bind(System.IDisposable)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.Constructor">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.SectionForm.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.DisposeBoolean">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.SectionForm.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.InitializeComponent">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.SectionForm.InitializeComponent"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.NameTextBox_KeyDownObjectKeyEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.SectionForm.NameTextBox_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.OkButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.SectionForm.OkButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.SectionNameGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.SectionForm.SectionName"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.SectionNameSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.SectionForm.SectionName"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.MSectionForm.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.AllInstances.DisposeBoolean">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.SectionForm.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.AllInstances.InitializeComponent">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.SectionForm.InitializeComponent"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.AllInstances.NameTextBox_KeyDownObjectKeyEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.SectionForm.NameTextBox_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.AllInstances.OkButton_ClickObjectEventArgs">
+            <summary>Sets the mole of <see cref="M:Configuration_Manager.SectionForm.OkButton_Click(System.Object,System.EventArgs)"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.AllInstances.SectionNameGet">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.SectionForm.SectionName"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.MSectionForm.AllInstances.SectionNameSetString">
+            <summary>Sets the mole of <see cref="P:Configuration_Manager.SectionForm.SectionName"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.CustomControls.Moles.SCTabPage">
+            <summary>Stub type of <see cref="T:Configuration_Manager.CustomControls.CTabPage"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.SCTabPage.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.SCTabPage.InitializeStub">
+            <summary>Initializes a new instance of type SCTabPage</summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.SCTabPage.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.SCTabPage.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:Configuration_Manager.CustomControls.Moles.SCToolStripButton">
+            <summary>Stub type of <see cref="T:Configuration_Manager.CustomControls.CToolStripButton"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.SCToolStripButton.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.SCToolStripButton.#ctor(Configuration_Manager.Section)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.SCToolStripButton.InitializeStub">
+            <summary>Initializes a new instance of type SCToolStripButton</summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.SCToolStripButton.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.SCToolStripButton.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.SControlDescription">
+            <summary>Stub type of <see cref="T:Configuration_Manager.ControlDescription"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SControlDescription.#ctor(System.Windows.Forms.Control)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SControlDescription.#ctor(System.String,System.String,System.String)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SControlDescription.InitializeStub">
+            <summary>Initializes a new instance of type SControlDescription</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.SControlDescription.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.SControlDescription.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.SEditor">
+            <summary>Stub type of <see cref="T:Configuration_Manager.Editor"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SEditor.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SEditor.Dispose(System.Boolean)">
+            <summary>Sets the stub of <see cref="M:Configuration_Manager.Editor.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="F:Configuration_Manager.Moles.SEditor.DisposeBoolean">
+            <summary>Sets the stub of <see cref="M:Configuration_Manager.Editor.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SEditor.InitializeStub">
+            <summary>Initializes a new instance of type SEditor</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.SEditor.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.SEditor.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:Configuration_Manager.CustomControls.Moles.SICustomControl">
+            <summary>Stub type of <see cref="T:Configuration_Manager.CustomControls.ICustomControl"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.SICustomControl.#ctor">
+            <summary>Initializes a new instance of type SICustomControl</summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.SICustomControl.AttachBackingFieldTocd">
+            <summary>Attaches delegates to emulate SICustomControl.cd as a property with a backing field</summary>
+        </member>
+        <member name="F:Configuration_Manager.CustomControls.Moles.SICustomControl.CdGet">
+            <summary>Sets the stub of <see cref="P:Configuration_Manager.CustomControls.ICustomControl.cd"/>
+            </summary>
+        </member>
+        <member name="F:Configuration_Manager.CustomControls.Moles.SICustomControl.CdSetControlDescription">
+            <summary>Sets the stub of <see cref="P:Configuration_Manager.CustomControls.ICustomControl.cd"/>
+            </summary>
+        </member>
+        <member name="M:Configuration_Manager.CustomControls.Moles.SICustomControl.cm::Configuration_Manager#CustomControls#ICustomControl#SetControlDescription">
+            <summary>Sets the stub of <see cref="M:Configuration_Manager.CustomControls.ICustomControl.SetControlDescription"/>
+            </summary>
+        </member>
+        <member name="F:Configuration_Manager.CustomControls.Moles.SICustomControl.SetControlDescription">
+            <summary>Sets the stub of <see cref="M:Configuration_Manager.CustomControls.ICustomControl.SetControlDescription"/>
+            </summary>
+        </member>
+        <member name="P:Configuration_Manager.CustomControls.Moles.SICustomControl.cm::Configuration_Manager#CustomControls#ICustomControl#cd">
+            <summary>Sets the stub of <see cref="P:Configuration_Manager.CustomControls.ICustomControl.cd"/>
+            </summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.SMainForm">
+            <summary>Stub type of <see cref="T:Configuration_Manager.MainForm"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SMainForm.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SMainForm.Dispose(System.Boolean)">
+            <summary>Sets the stub of <see cref="M:Configuration_Manager.MainForm.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="F:Configuration_Manager.Moles.SMainForm.DisposeBoolean">
+            <summary>Sets the stub of <see cref="M:Configuration_Manager.MainForm.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SMainForm.InitializeStub">
+            <summary>Initializes a new instance of type SMainForm</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.SMainForm.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.SMainForm.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.SSection">
+            <summary>Stub type of <see cref="T:Configuration_Manager.Section"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SSection.#ctor(Configuration_Manager.CustomControls.CToolStripButton,System.Windows.Forms.TabPage,System.String,System.Boolean)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SSection.InitializeStub">
+            <summary>Initializes a new instance of type SSection</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.SSection.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.SSection.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:Configuration_Manager.Moles.SSectionForm">
+            <summary>Stub type of <see cref="T:Configuration_Manager.SectionForm"/>
+            .</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SSectionForm.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SSectionForm.Dispose(System.Boolean)">
+            <summary>Sets the stub of <see cref="M:Configuration_Manager.SectionForm.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="F:Configuration_Manager.Moles.SSectionForm.DisposeBoolean">
+            <summary>Sets the stub of <see cref="M:Configuration_Manager.SectionForm.Dispose(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="M:Configuration_Manager.Moles.SSectionForm.InitializeStub">
+            <summary>Initializes a new instance of type SSectionForm</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.SSectionForm.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Configuration_Manager.Moles.SSectionForm.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+    </members>
+</doc>

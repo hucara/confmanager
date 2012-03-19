@@ -20,6 +20,7 @@ namespace Configuration_Manager
 		private String name;
         public String Hint { get; set; }
         private String text;
+		public String RealText { get; set; }
         public String Type { get; set; }
 
         private Font currentFont;

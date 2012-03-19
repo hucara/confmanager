@@ -38,8 +38,8 @@ namespace Configuration_Manager.Views
         {
             foreach (Section s in model.Sections)
             {
-                s.Tab.MouseClick -= ch.Control_RightClick;
-                s.Tab.MouseClick += ch.Control_RightClick;
+				s.Tab.MouseClick -= ch.Control_Click;
+				s.Tab.MouseClick += ch.Control_Click;
             }
 
             tabControl.Refresh();

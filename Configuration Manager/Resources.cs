@@ -38,6 +38,7 @@ namespace Configuration_Manager
             this.LangFolderPath = getLangFolderPath();
             this.ObjectDefinitionsPath = getConfigObjectsPath();
             this.ConfigFilePath = getConfigFilePath();
+			this.CurrentLangPath = getDefaultLangPath();
 
             loadObjectDefinition();
         }
@@ -90,6 +91,11 @@ namespace Configuration_Manager
             return this.ConfigFolderPath + "\\ConfigurationManager.xml";
         }
 
+		private string getDefaultLangPath()
+		{
+			return this.LangFolderPath += "\\TextFile_ES.xml";
+		}
+
         private void loadObjectDefinition()
         {
             try
@@ -99,7 +105,7 @@ namespace Configuration_Manager
                 System.Diagnostics.Debug.WriteLine("** OK ** " + ObjectDefinitionsPath + " - File found");
                 System.Diagnostics.Debug.WriteLine("** Setting up last UI ** ");
             }
-            catch (FileNotFoundException)
+            catch (FileNotFoundException e)
             {
                 Model.getInstance().ObjectDefinitionExists = false;
                 System.Diagnostics.Debug.WriteLine("** INFO ** " + ObjectDefinitionsPath + " - File not found");

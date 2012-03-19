@@ -16,6 +16,7 @@ namespace Configuration_Manager
     {
         private static ControlFactory cf;
         CustomHandler ch;
+		Util.TokenTextTranslator tr = new Util.TokenTextTranslator("@@");
 
         public static ControlFactory getInstance()
         {
@@ -31,15 +32,21 @@ namespace Configuration_Manager
             this.ch = ch;
         }
 
-		public Section BuildSection()
+		public Section BuildSection(String name, String text, bool selected)
 		{
-		    CToolStripButton ctsb = BuildCToolStripButton("");
-		    TabPage tp = new TabPage("");
+		    CToolStripButton ctsb = BuildCToolStripButton(text);
+			TabPage tp = BuildTabPage(name);
 
-			Section s = new Section(ctsb, tp, "", false);
-
+			if (selected) ctsb.PerformClick();
+			Section s = new Section(ctsb, tp, text, selected);
 
 			return s;
+		}
+
+		public TabPage BuildTabPage(String name)
+		{
+			TabPage tp = new TabPage(name);
+			return tp;
 		}
 
         public CLabel BuildCLabel(Control parent)
@@ -47,12 +54,14 @@ namespace Configuration_Manager
             CLabel c = new CLabel();
             parent.Controls.Add(c);
 
-            c.MouseDown += ch.Control_RightClick;
-			c.MouseDown += ch.Control_LeftClick;
+			c.MouseDown += ch.Control_Click;
 			c.MouseUp += ch.CancelDragDropTimer;
+			c.MouseMove += ch.OnMouseMove;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
+
+			c.cd.RealText = c.cd.Text;
 
             return c;
         }
@@ -61,17 +70,6 @@ namespace Configuration_Manager
         {
             CToolStripButton c = new CToolStripButton(s);
             c.SetSectionDescription(s);
-
-            return c;
-        }
-
-        public CTabPage BuildCTabPage(Section s)
-        {
-            CTabPage c = new CTabPage();
-            c.MouseDown += ch.Control_RightClick;
-            c.SetNavBarDescription(s);
-
-			c.AllowDrop = true;
 
             return c;
         }
@@ -90,7 +88,7 @@ namespace Configuration_Manager
         public CTabPage BuildCTabPage()
         {
             CTabPage c = new CTabPage();
-            c.MouseDown += ch.Control_RightClick;
+			c.MouseDown += ch.Control_Click;
             //Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
 
@@ -102,11 +100,15 @@ namespace Configuration_Manager
             CTabPage c = new CTabPage();
             parent.Controls.Add(c);
 
-            c.MouseDown += ch.Control_RightClick;
+			c.MouseDown += ch.Control_Click;
+			c.DragDrop += ch.OnDragDrop;
+			c.DragEnter += ch.OnDragEnter;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
             c.Parent = parent;
+
+			c.cd.RealText = c.cd.Text;
 
             return c;
         }
@@ -116,35 +118,12 @@ namespace Configuration_Manager
             CTabControl c = new CTabControl(BuildCTabPage());
             parent.Controls.Add(c);
 
-            c.MouseDown += ch.Control_RightClick;
+			c.MouseDown += ch.Control_Click;
+			c.MouseUp += ch.CancelDragDropTimer;
 
             c.SetControlDescription();
-            Model.getInstance().AllControls.Add(c);
+			c.cd.RealText = c.cd.Text;
 
-            return c;
-        }
-
-        public CTabControl BuildCTabControl(Control parent, int n)
-        {
-            CTabControl c = new CTabControl();
-
-            if (n > 0)
-            {
-                for (int i = 0; i < n; i++)
-                {
-                    c.TabPages.Add(BuildCTabPage(c as Control));
-                }
-            }
-            else
-            {
-                c.TabPages.Clear();
-            }
-
-            parent.Controls.Add(c);
-
-            c.MouseDown += ch.Control_RightClick;
-
-            c.SetControlDescription();
             Model.getInstance().AllControls.Add(c);
 
             return c;
@@ -155,7 +134,8 @@ namespace Configuration_Manager
             CComboBox c = new CComboBox();
             parent.Controls.Add(c);
 
-            c.MouseDown += ch.Control_RightClick;
+			c.MouseDown += ch.Control_Click;
+			c.MouseUp += ch.CancelDragDropTimer;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -171,10 +151,14 @@ namespace Configuration_Manager
             parent.Controls.Add(c);
 
             c.MouseDown += ch.CTextBox_RightClick;
+			c.MouseDown += ch.Control_Click;
+			c.MouseUp += ch.CancelDragDropTimer;
 			c.TextChanged += ch.TextChanged;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
+
+			c.cd.RealText = c.cd.Text;
 
             return c;
         }
@@ -184,10 +168,13 @@ namespace Configuration_Manager
             CCheckBox c = new CCheckBox();
             parent.Controls.Add(c);
 
-            c.MouseDown += ch.Control_RightClick;
+			c.MouseDown += ch.Control_Click;
+			c.MouseUp += ch.CancelDragDropTimer;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
+
+			c.cd.RealText = c.cd.Text;
 
             return c;
         }
@@ -197,7 +184,8 @@ namespace Configuration_Manager
             CGroupBox c = new CGroupBox();
             parent.Controls.Add(c);
 
-            c.MouseDown += ch.Control_RightClick;
+			c.MouseDown += ch.Control_Click;
+			c.MouseUp += ch.CancelDragDropTimer;
 
 			c.DragDrop += ch.OnDragDrop;
 			c.DragEnter += ch.OnDragEnter;
@@ -205,6 +193,7 @@ namespace Configuration_Manager
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
 
+			c.cd.RealText = c.cd.Text;
 			c.AllowDrop = true;
 			
             return c;
@@ -215,11 +204,13 @@ namespace Configuration_Manager
             CPanel c = new CPanel();
             parent.Controls.Add(c);
 
-            c.MouseDown += ch.Control_RightClick;
+			c.MouseDown += ch.Control_Click;
+			c.MouseUp += ch.CancelDragDropTimer;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
 
+			c.cd.RealText = c.cd.Text;
 			c.AllowDrop = true;
 
             return c;

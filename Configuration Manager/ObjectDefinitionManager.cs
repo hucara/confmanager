@@ -74,7 +74,6 @@ namespace Configuration_Manager
 			}
 		}
 
-
 		private Section CreateDefinedSection(XElement i)
 		{
 			String name = i.Name.ToString() + i.FirstAttribute.Value.ToString();
@@ -86,12 +85,7 @@ namespace Configuration_Manager
 				selected = true;
 			}
 
-			CustomControls.CToolStripButton ctsb = cf.BuildCToolStripButton(text);
-			System.Windows.Forms.TabPage ctp = new System.Windows.Forms.TabPage();
-			ctp.Name = name;
-
-			if (selected) ctsb.PerformClick();
-			return new Section(ctsb, ctp, text, selected);
+			return cf.BuildSection(name, text, selected);
 		}
 
 		public void SerializeObjectDefinition()
@@ -118,7 +112,7 @@ namespace Configuration_Manager
 									new XAttribute("id", item.cd.Id),
 									new XAttribute("type", item.cd.Type),
 									new XElement("Name", item.cd.Name),
-									new XElement("Text", item.cd.Text),
+									new XElement("Text", item.cd.RealText),
 									new XElement("Hint", item.cd.Hint),
 									new XElement("Parent", item.cd.Parent.Name),
 									new XElement("Section", item.cd.ParentSection.Name),
@@ -164,7 +158,6 @@ namespace Configuration_Manager
 							)
 							)
 						);
-
 				doc.Save(Resources.getInstance().ConfigFolderPath + "\\testing.xml");
 				System.Diagnostics.Debug.WriteLine("*** Testing Object Definition File created ***");
 			}
@@ -221,7 +214,7 @@ namespace Configuration_Manager
 
 					CTabPage ctp = cf.BuildCTabPage(parentControl);
 					ctp.cd.Name = e.Element("Name").Value;
-					ctp.cd.Text = e.Element("Text").Value;
+					ctp.cd.RealText = e.Element("Text").Value;
 				}
 			}
 
@@ -367,7 +360,11 @@ namespace Configuration_Manager
 			Font newFont;
 			Color newColor;
 
-			c.cd.Text = i.Element("Text").Value;
+			Util.TokenTextTranslator ttt = new Util.TokenTextTranslator("@@", Resources.getInstance().CurrentLangPath);
+
+			c.cd.RealText = i.Element("Text").Value;
+			c.cd.Text = ttt.TranslateFromTextFile(c.cd.RealText);
+
 			c.cd.ParentSection = Model.getInstance().Sections.Find(se => se.Name == i.Element("Section").Value);
 
 			c.cd.Top = Convert.ToInt32(i.Element("Settings").Element("Top").Value);

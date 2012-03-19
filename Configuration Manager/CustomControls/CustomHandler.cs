@@ -17,6 +17,7 @@ namespace Configuration_Manager.CustomControls
         Model model;
         Editor editor;
         ControlFactory cf;
+		Rectangle previewRect = new Rectangle(0, 0, 0, 0);
 
 		Timer t = new Timer();
 
@@ -26,29 +27,8 @@ namespace Configuration_Manager.CustomControls
             this.model = Model.getInstance();
             this.cf = ControlFactory.getInstance();
 			
-			this.t.Interval = 800;
-			this.t.Tick += TimerElapsed;
-        }
-
-        public void Control_RightClick(object sender, EventArgs e)
-        {
-            MouseEventArgs me = e as MouseEventArgs;
-            Control c = sender as Control;
-            String type = sender.GetType().Name;
-
-            if (model.progMode && me.Button == MouseButtons.Right)
-            {
-                model.CurrentClickedControl = c;
-                model.LastClickedX = me.X;
-                model.LastClickedY = me.Y;
-
-                SetContextMenuStrip(type);
-
-                contextMenu.Show(c, me.X, me.Y);
-
-                Debug.WriteLine("! Clicked: " + c.Name);
-                Debug.WriteLine("! Clicked: " + model.CurrentClickedControl + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
-            }
+			this.t.Interval = 200;
+			this.t.Tick += TimerTick;
         }
 
         public void CTextBox_RightClick(object sender, EventArgs e)
@@ -224,8 +204,8 @@ namespace Configuration_Manager.CustomControls
             CTabPage tab = tabControl.TabPages[0] as CTabPage;
             tab.cd.Parent = tabControl;
 
-            tabControl.MouseDown += Control_RightClick;
-            tabControl.TabPages[0].Click += Control_RightClick;
+			tabControl.MouseDown += Control_Click;
+			tabControl.TabPages[0].Click += Control_Click;
 
             editor = new Editor();
             editor.Show(tabControl);
@@ -234,7 +214,7 @@ namespace Configuration_Manager.CustomControls
         public void tabPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CTabPage tabPage = cf.BuildCTabPage(model.CurrentClickedControl);
-            tabPage.MouseDown += Control_RightClick;
+			tabPage.MouseDown += Control_Click;
 
             editor = new Editor();
             editor.Show(tabPage);
@@ -386,7 +366,7 @@ namespace Configuration_Manager.CustomControls
 			else c.cd.Text = (sender as Control).Text;
 		}
 
-		public void Control_LeftClick(object sender, EventArgs e)
+		public void Control_Click(object sender, EventArgs e)
 		{
 			MouseEventArgs me = e as MouseEventArgs;
 			Control c = sender as Control;
@@ -396,26 +376,34 @@ namespace Configuration_Manager.CustomControls
 			Pen p = new Pen(SystemColors.Highlight, 1);
 			Graphics g = c.Parent.CreateGraphics();
 
-			if (model.progMode && me.Button == MouseButtons.Left)
+			model.CurrentSection.Tab.Refresh();
+
+			rect = c.Bounds;
+			rect.Inflate(1, 1);
+			g.DrawRectangle(p, rect);
+
+			model.CurrentClickedControl = c;
+			model.LastClickedX = me.X;
+			model.LastClickedY = me.Y;
+
+			if (model.progMode && me.Button == MouseButtons.Right)
 			{
-				t.Start();
-				Debug.WriteLine("! Timer Started");
-
-				model.CurrentSection.Tab.Refresh();
-
-				model.CurrentClickedControl = c;
-				model.LastClickedX = me.X;
-				model.LastClickedY = me.Y;
-
-				rect = c.Bounds;
-				rect.Inflate(1, 1);
-				g.DrawRectangle(p, rect);
-
-				Debug.WriteLine("! Clicked: " + model.CurrentClickedControl.Name + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
+				SetContextMenuStrip(type);
+				contextMenu.Show(c, me.X, me.Y);
 			}
+			else if (model.progMode && me.Button == MouseButtons.Left)
+			{
+				if (type != "TabControl" && type != "TabPage" && type != "CTabControl" && type != "CTabPage")
+				{
+					t.Start();
+					Debug.WriteLine("! Timer Started");
+				}
+			}
+
+			Debug.WriteLine("! Clicked: " + model.CurrentClickedControl.Name + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
 		}
 
-		private void TimerElapsed(object sender, EventArgs e)
+		private void TimerTick(object sender, EventArgs e)
 		{
 			(sender as Timer).Stop();
 			MouseEventArgs me = e as MouseEventArgs;
@@ -423,33 +411,40 @@ namespace Configuration_Manager.CustomControls
 			if (model.CurrentClickedControl != null)
 			{
 				String name = (model.CurrentClickedControl as ICustomControl).cd.Name;
-				Debug.WriteLine("! Got the control: " + name);
+				String parent = (model.CurrentClickedControl as ICustomControl).cd.Parent.Name;
+				Debug.WriteLine("! Got the control: " + name + " with Parent: " +parent);
 				model.CurrentClickedControl.DoDragDrop(name, DragDropEffects.Move);
 			}
 		}
 
 		public void OnDragDrop(object sender, DragEventArgs dea)
 		{
-			//dea.Effect = DragDropEffects.Move;
-			String name;
+			String name = "";
 			ICustomControl c = null;
 			Control parent = sender as Control;
-			
-			if ((sender as ICustomControl).cd.Type == "CGroupBox")
+			dea.Effect = DragDropEffects.Move;
+
+			if (parent != model.CurrentClickedControl)
 			{
 				name = (string)dea.Data.GetData(typeof(System.String));
 				c = model.AllControls.Find(control => control.cd.Name == name);
+
+				if (c != null)
+				{
+					c.cd.Parent = parent;
+					Point cord = new Point(dea.X, dea.Y);
+					cord = parent.PointToClient(cord);
+					c.cd.Top = cord.Y - model.LastClickedY;
+					c.cd.Left = cord.X - model.LastClickedX;
+
+					Debug.WriteLine("! Dropped the control: " + c.cd.Name + " Parent: " + c.cd.Parent.Name + " X: " + cord.X + " Y: " + cord.Y);
+					model.CurrentSection.Tab.Refresh();
+				}
 			}
-
-			c.cd.Parent = parent;
-			parent.Refresh();
-
-			Point cord = new Point(dea.X, dea.Y);
-			cord = parent.PointToClient(cord);
-			c.cd.Top = cord.Y;
-			c.cd.Left = cord.X;
-
-			Debug.WriteLine("! Dropped the control: " + c.cd.Name+ " Parent: " +c.cd.Parent.Name+" X: "+cord.X+" Y: "+cord.Y);
+			else
+			{
+				Debug.WriteLine("! But you tried to drop it into itself...");
+			}
 		}
 
 		public void OnDragEnter(object sender, DragEventArgs dea)
@@ -457,13 +452,17 @@ namespace Configuration_Manager.CustomControls
 			dea.Effect = DragDropEffects.Move;
 		}
 
-		public void CancelDragDropTimer(object sender, EventArgs me)
+		public void CancelDragDropTimer(object sender, EventArgs e)
 		{
-			if ((me as MouseEventArgs).Button == MouseButtons.Left)
+			if ((e as MouseEventArgs).Button == MouseButtons.Left)
 			{
 				t.Stop();
 				Debug.WriteLine("! Timer Stopped");
 			}
+		}
+
+		public void OnMouseMove(object sender, MouseEventArgs me)
+		{
 		}
 	}
 }
