@@ -149,7 +149,7 @@ namespace TokenTextTranslator_Tests
 		{
 			TokenTextTranslator_Accessor target = new TokenTextTranslator_Accessor("@@");
 			target.currentLang = @"C:\idontexist.xml";
-			target.GetTranslatedValues();
+			target.TranslateFromTextFile(null);
 		}
 
 		[TestMethod()]
@@ -206,7 +206,7 @@ namespace TokenTextTranslator_Tests
 		{
 			TokenTextTranslator_Accessor target = new TokenTextTranslator_Accessor("@@");
 			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\TextFile_EN.xml";
-			Assert.AreEqual("", target.TranslateFromTextFile("@1@@ Hola"));
+			Assert.AreEqual("*ERROR*", target.TranslateFromTextFile("@1@@ Hola"));
 		}
 
 		[TestMethod()]

@@ -9,10 +9,6 @@ using System.Xml.Linq;
 
 namespace Configuration_Manager
 {
-    /// Description class with the needed parameters to create a Control.
-    /// If the Control needs / uses all of just some of the properties,
-    /// it is defined in the build method of each Custom Control.
-
     public class ControlDescription
     {
         static int count = 0;
@@ -52,6 +48,7 @@ namespace Configuration_Manager
         public List<ICustomControl> CoupledControls { get; set; }
 
 		private ComboBox.ObjectCollection comboBoxItems;
+		private List<String> comboBoxRealItems;
 
         private Section parentSection;
 
@@ -80,7 +77,11 @@ namespace Configuration_Manager
             this.RelatedVisibility = new List<ICustomControl>();
             this.CoupledControls = new List<ICustomControl>();
 
-			if(this.Type == "CComboBox") this.comboBoxItems = new ComboBox.ObjectCollection(null);
+			if (this.Type == "CComboBox")
+			{
+				this.comboBoxItems = new ComboBox.ObjectCollection(control as ComboBox);
+				this.comboBoxRealItems = new List<string>();
+			}
 			
             this.parentSection = Model.getInstance().CurrentSection;
 
@@ -126,6 +127,7 @@ namespace Configuration_Manager
             {
                 this.control.Text = value;
                 this.text = value;
+				if (this.Type == "CTextBox") this.RealText = value;
             }
         }
 
@@ -215,6 +217,15 @@ namespace Configuration_Manager
 				{
 					(this.control as ComboBox).Items.Add(i);
 				}
+			}
+		}
+
+		public List<String> ComboBoxRealItems
+		{
+			get { return this.comboBoxRealItems; }
+			set
+			{
+				this.comboBoxRealItems = value;
 			}
 		}
     }

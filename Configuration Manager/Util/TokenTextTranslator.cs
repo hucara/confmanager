@@ -99,11 +99,15 @@ namespace Configuration_Manager.Util
 
 			if(this.textToTranslate != null && this.textToTranslate != "")
 			{
-				if(TextHasEvenTokens())
+				if (TextHasEvenTokens())
 				{
 					GetValuesToTranslate();
 					GetTranslatedValues();
 					this.translatedText = ReplaceValueToTranslation(this.textToTranslate);
+				}
+				else
+				{
+					return "*ERROR*";
 				}
 			}
 
@@ -122,6 +126,10 @@ namespace Configuration_Manager.Util
 					GetValuesToTranslate();
 					GetTranslatedValues();
 					ReplaceValueToTranslation(this.textToTranslate);
+				}
+				else
+				{
+					return "*ERROR*";
 				}
 			}
 			return "";

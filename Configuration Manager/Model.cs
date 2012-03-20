@@ -90,5 +90,10 @@ namespace Configuration_Manager
 
             return "";
         }
+
+		public void ReadConfigurationFile()
+		{
+
+		}
     }
 }

@@ -430,10 +430,10 @@ namespace Configuration_Manager
             control.cd.MainDestination = this.fileDestinationTextBox.Text;
             control.cd.SubDestination = this.subDestinatonTextBox.Text;
 
-			if (this.type == "CGroupBox")
-			{
-				control.cd.ComboBoxItems = this.comboBoxEditor.Items;
-			}
+			//if (this.type == "CGroupBox")
+			//{
+			//    control.cd.ComboBoxItems = this.comboBoxEditor.Items;
+			//}
 
             //control.cd.ParentSection = model.CurrentSection;
         }
@@ -441,12 +441,6 @@ namespace Configuration_Manager
         private void ReadFromControl()
         {
             this.textTextBox.Text = control.cd.RealText;
-
-			//if (control is CTextBox)
-			//{
-			//    this.textTextBox.Text = (control as TextBox).Text;
-			//}
-
             this.type = control.cd.Type;
             this.hintTextBox.Text = control.cd.Hint;
             this.controlFont = control.cd.CurrentFont;
@@ -484,14 +478,12 @@ namespace Configuration_Manager
                     currentVisibleList.Add(model.AllControls.Find(c => c.cd.Name == controlListBox.Items[e.Index].ToString()));
                     System.Diagnostics.Debug.WriteLine("+ [" + relationsComboBox.SelectedItem + "] Checked: " + controlListBox.Items[e.Index].ToString());
                 }
-				//HighLightRequiredControls();
             }
             else
             {
                 currentVisibleList.Remove(model.AllControls.Find(c => c.cd.Name == controlListBox.Items[e.Index].ToString()));
                 System.Diagnostics.Debug.WriteLine("- [" + relationsComboBox.SelectedItem + "] Unchecked: " + controlListBox.Items[e.Index].ToString());
             }
-
             System.Diagnostics.Debug.WriteLine("! " + relationsComboBox.SelectedItem + " has: " + currentVisibleList.Count + " items.");
         }
 
@@ -575,48 +567,50 @@ namespace Configuration_Manager
 			// Copy items from real comboBox to the fake comboBox inside Editor form.
 			comboBoxEditor.Items.Clear();
 			object[] items = new object[(control as ComboBox).Items.Count];
-			(control as ComboBox).Items.CopyTo(items, 0);
-			comboBoxEditor.Items.AddRange(items);
 
-			comboBoxEditor.SelectedItem = (control as ComboBox).SelectedItem;
+			foreach (String s in control.cd.ComboBoxRealItems)
+			{
+				comboBoxEditor.Items.Add(s);
+			}
+			//control.cd.ComboBoxRealItems.CopyTo(items, 0);
+			//comboBoxEditor.Items.AddRange(items);
+
+			comboBoxEditor.SelectedIndex = (control as ComboBox).SelectedIndex;
 		}
 
 		private void CComboBoxUpdateSetUp()
 		{
-			(control as ComboBox).SelectedItem = comboBoxEditor.SelectedItem;
+			(control as ComboBox).SelectedIndex = comboBoxEditor.SelectedIndex;
 			(control as ComboBox).Update();
 		}
 
 		private void addItemToComboBox(object sender, EventArgs e)
 		{
-			if (!(control as ComboBox).Items.Contains(comboBoxEditor.Text))
+			if (!control.cd.ComboBoxRealItems.Contains(comboBoxEditor.Text))
 			{
-				(control as ComboBox).Items.Add(comboBoxEditor.Text);
+				String text = ttt.TranslateFromTextFile(comboBoxEditor.Text);
+
 				int index = comboBoxEditor.Items.Add(comboBoxEditor.Text);
+				control.cd.ComboBoxRealItems.Add(comboBoxEditor.Text);
+				(control as ComboBox).Items.Add(text);
 
 				comboBoxEditor.SelectedIndex = index;
+				(control as ComboBox).SelectedIndex = index;
 			}
-
-			(control as ComboBox).SelectedItem = comboBoxEditor.SelectedItem;
 		}
 
 		private void delItemFromComboBox(object sender, EventArgs e)
 		{
-			if (comboBoxEditor.Text == (control as ComboBox).SelectedText)
+			int index = comboBoxEditor.SelectedIndex;
+
+			if (index > -1)
 			{
-				(control as ComboBox).Items.Remove(comboBoxEditor.Text);
-				comboBoxEditor.Items.Remove(comboBoxEditor.Text);
+				(control as ComboBox).Items.RemoveAt(index);
+				comboBoxEditor.Items.RemoveAt(index);
+				control.cd.ComboBoxRealItems.RemoveAt(index);
+
 				comboBoxEditor.SelectedItem = null;
 				(control as ComboBox).SelectedItem = null;
-			}
-			else
-			{
-				(control as ComboBox).Items.Remove(comboBoxEditor.Text);
-				comboBoxEditor.Items.Remove(comboBoxEditor.Text);
-
-				comboBoxEditor.SelectedItem = null;
-				comboBoxEditor.Text = null;
-
 			}
 		}
 	}

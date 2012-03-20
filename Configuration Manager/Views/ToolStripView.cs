@@ -77,10 +77,12 @@ namespace Configuration_Manager.Views
         {
             if (!MaxSectionsReached())
             {
-                ctsb = CreateToolStripButton(text);
-                ctp = CreateTabPage();
+				//ctsb = CreateToolStripButton(text);
+				//ctp = CreateTabPage();
 
-                Section s = new Section(ctsb, ctp, text, false);
+				//Section s = new Section(ctsb, ctp, text, false);
+
+				Section s = cf.BuildSection(text, text, false);
 
                 if (!model.Sections.Contains(s))
                 {
@@ -88,8 +90,8 @@ namespace Configuration_Manager.Views
                     Debug.WriteLine("+ Added: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name+"}");
                 }
 
-                ctsb.PerformClick();
-                UnCheckButtons(ctsb);
+                s.Button.PerformClick();
+				UnCheckButtons(s.Button);
             }
 
             readAndShow();

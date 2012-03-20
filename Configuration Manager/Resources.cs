@@ -63,7 +63,6 @@ namespace Configuration_Manager
             String p = Path.GetFullPath(System.Windows.Forms.Application.ExecutablePath);
             p = p.Substring(0, p.LastIndexOf("\\"));
             return p.Substring(0, p.LastIndexOf("\\"));
-            //return Path.GetFileName(System.Windows.Forms.Application.StartupPath);
         }
 
         private String getConfigFolderPath()
@@ -93,7 +92,7 @@ namespace Configuration_Manager
 
 		private string getDefaultLangPath()
 		{
-			return this.LangFolderPath += "\\TextFile_ES.xml";
+			return this.LangFolderPath += "\\TextFile_EN.xml";
 		}
 
         private void loadObjectDefinition()

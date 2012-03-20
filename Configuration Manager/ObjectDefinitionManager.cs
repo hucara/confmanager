@@ -20,6 +20,7 @@ namespace Configuration_Manager
 
 		private TypeConverter fontConverter = TypeDescriptor.GetConverter(typeof(Font));
 		private TypeConverter colorConverter = TypeDescriptor.GetConverter(typeof(Color));
+		private Util.TokenTextTranslator ttt = new Util.TokenTextTranslator("@@", Resources.getInstance().CurrentLangPath);
 
 		public static ObjectDefinitionManager getInstance()
 		{
@@ -129,7 +130,7 @@ namespace Configuration_Manager
 
 									item.cd.Type == "CComboBox" ?
 									new XElement("Items",
-										  WriteComboBoxItems(item as ComboBox)) : null,
+										  WriteComboBoxItems(item as CComboBox)) : null,
 
 									item.cd.Type == "CCheckBox" ?
 									new XElement("Checked", (item as CheckBox).Checked.ToString()) : null,
@@ -171,15 +172,15 @@ namespace Configuration_Manager
 			}
 		}
 
-		private IEnumerable<XElement> WriteComboBoxItems(ComboBox cb)
+		private IEnumerable<XElement> WriteComboBoxItems(CComboBox cb)
 		{
-			if (cb.SelectedItem != null)
+			if (cb.SelectedIndex > -1)
 			{
-				yield return new XElement("Selected", cb.SelectedItem.ToString());
+				yield return new XElement("Selected", cb.cd.ComboBoxRealItems[cb.SelectedIndex]);
 			}
-			foreach (object o in cb.Items)
+			foreach (String s in cb.cd.ComboBoxRealItems)
 			{
-				yield return new XElement("Item", o.ToString());
+				yield return new XElement("Item", s);
 			}
 		}
 
@@ -249,22 +250,22 @@ namespace Configuration_Manager
 				ComboBox cb = c as ComboBox;
 				foreach (XElement e in i.Element("Items").Descendants("Item"))
 				{
-					cb.Items.Add(e.Value.ToString());
+					c.cd.ComboBoxRealItems.Add(e.Value.ToString());
+					cb.Items.Add(ttt.TranslateFromTextFile(e.Value.ToString()));
 				}
 
 				try
 				{
 					if (!i.Element("Items").Element("Selected").IsEmpty)
 					{
-						cb.SelectedItem = i.Element("Items").Element("Selected").Value;
+						cb.SelectedItem = ttt.TranslateFromTextFile(i.Element("Items").Element("Selected").Value);
 					}
 				}
 				catch (NullReferenceException e)
 				{
 				}
 			}
-
-			if (c.cd.Type == "CCheckBox")
+			else if (c.cd.Type == "CCheckBox")
 			{
 				CheckBox cb = c as CheckBox;
 				try
@@ -359,8 +360,6 @@ namespace Configuration_Manager
 		{
 			Font newFont;
 			Color newColor;
-
-			Util.TokenTextTranslator ttt = new Util.TokenTextTranslator("@@", Resources.getInstance().CurrentLangPath);
 
 			c.cd.RealText = i.Element("Text").Value;
 			c.cd.Text = ttt.TranslateFromTextFile(c.cd.RealText);

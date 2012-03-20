@@ -40,6 +40,8 @@ namespace Configuration_Manager
 			if (selected) ctsb.PerformClick();
 			Section s = new Section(ctsb, tp, text, selected);
 
+			Model.getInstance().CurrentSection = s;
+
 			return s;
 		}
 
