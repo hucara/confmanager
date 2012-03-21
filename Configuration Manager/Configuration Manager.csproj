@@ -103,7 +103,6 @@
     <Compile Include="SectionForm.Designer.cs">
       <DependentUpon>SectionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs" />
     <Compile Include="Util\TokenTextTranslator.cs" />
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\TabControlView.cs" />

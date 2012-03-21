@@ -164,7 +164,7 @@ namespace Configuration_Manager.Views
 
         private bool MaxSectionsReached()
         {
-            if (model.Sections.Count < Model.MAX_SECTIONS) return false;
+			if (model.Sections.Count < Model.getInstance().maxSections) return false;
             else return true;
         }
     }

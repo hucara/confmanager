@@ -58,7 +58,7 @@ namespace Configuration_Manager
 
 				foreach (var i in items)
 				{
-					if (model.Sections.Count < Model.MAX_SECTIONS)
+					if (model.Sections.Count < Model.getInstance().maxSections)
 					{
 						Section s = CreateDefinedSection(i);
 						model.Sections.Add(s);

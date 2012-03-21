@@ -20,13 +20,15 @@ namespace Configuration_Manager
         public String ConfigFilePath { get; private set; }
 
         public String LangFolderPath { get; private set; }
-        public String CurrentLangPath { get; private set; }
+        public String CurrentLangPath { get; set; }
+		public String DefaultLangPath { get; set; }
         public List<String> LangsPath { get; private set; }
 
         public String ObjectDefinitionsPath { get; private set; }
         public bool ObjectDefinitionExists { get; private set; }
 
         public XDocument ConfigObjects { get; private set; }
+		public XDocument ConfigFile { get; private set; }
 
         // Singleton approach
         private Resources()
@@ -40,6 +42,7 @@ namespace Configuration_Manager
             this.ConfigFilePath = getConfigFilePath();
 			this.CurrentLangPath = getDefaultLangPath();
 
+			loadConfigurationFile();
             loadObjectDefinition();
         }
 
@@ -111,5 +114,22 @@ namespace Configuration_Manager
                 System.Diagnostics.Debug.WriteLine("** Creating a new empty UI ** ");
             }
         }
+
+		private void loadConfigurationFile()
+		{
+			try
+			{
+				ConfigFile = XDocument.Load(ConfigFilePath);
+				Model.getInstance().ConfigFileExists = true;
+				System.Diagnostics.Debug.WriteLine("** OK ** " + ConfigFilePath + " - File found");
+				System.Diagnostics.Debug.WriteLine("** Loading and setting up configuration **");
+			}
+			catch (FileNotFoundException e)
+			{
+				Model.getInstance().ConfigFileExists = false;
+				System.Diagnostics.Debug.WriteLine("** ERROR ** " + ConfigFilePath + " - File not found");
+				System.Diagnostics.Debug.WriteLine("** Loading and setting up configuration **");
+			}
+		}
     }
 }

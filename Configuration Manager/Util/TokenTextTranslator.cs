@@ -20,7 +20,7 @@ namespace Configuration_Manager.Util
 		private String defaultSubPath;				// Search 
 
 		private String currentLang;					// Language file from where we take the values out
-		private String currentSubPath;				
+		private String currentSubPath;
 
 		private String tokenKey;					// The defining characters that delimite a token
 		private int tokenLength;					// Number of tokens inside the value to translate
@@ -31,7 +31,7 @@ namespace Configuration_Manager.Util
 		private String textToTranslate;				// Text with the values to translate
 		private String valueToTranslate;			// Current text being translated
 		private String translatedText;				// Text with all the tokens translated
-		
+
 		private List<String> valuesToTranslate;		// List of values to translate inside the textToTranslate
 		private List<String> translatedValues;		// List of the values translated in the same order as the valuesToTranslate
 		private List<String> subPathElements;		// List representing the node tree to find the desired value to translate
@@ -97,7 +97,7 @@ namespace Configuration_Manager.Util
 			this.textToTranslate = textToTranslate;
 			this.translatedText = "";
 
-			if(this.textToTranslate != null && this.textToTranslate != "")
+			if (this.textToTranslate != null && this.textToTranslate != "")
 			{
 				if (TextHasEvenTokens())
 				{
@@ -147,8 +147,8 @@ namespace Configuration_Manager.Util
 
 		private bool ValidateText(System.Text.RegularExpressions.MatchCollection mc)
 		{
-			System.Diagnostics.Debug.WriteLine("! Count: " +mc.Count);
-			if(mc.Count > 0) return true;
+			System.Diagnostics.Debug.WriteLine("! Count: " + mc.Count);
+			if (mc.Count > 0) return true;
 			return false;
 		}
 
@@ -208,7 +208,7 @@ namespace Configuration_Manager.Util
 		//                e = xdoc.Element(s);
 		//                System.Diagnostics.Debug.WriteLine("! Getting into: "+s);
 		//            }
-					
+
 		//            translatedValues.Add(e.Value);
 		//        }
 		//        else
@@ -232,14 +232,18 @@ namespace Configuration_Manager.Util
 		{
 			try
 			{
-				XDocument xdoc = XDocument.Load(currentLang);
-				foreach (String s in valuesToTranslate)
+				if (System.IO.File.Exists(Resources.getInstance().CurrentLangPath))
 				{
-					var q = from c in xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text")
-							where c.Attribute("id").Value.ToString() == s
-							select (string)c.Value;
 
-					translatedValues.AddRange(q);
+					XDocument xdoc = XDocument.Load(Resources.getInstance().CurrentLangPath);
+					foreach (String s in valuesToTranslate)
+					{
+						var q = from c in xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text")
+								where c.Attribute("id").Value.ToString() == s
+								select (string)c.Value;
+
+						translatedValues.AddRange(q);
+					}
 				}
 			}
 			catch (System.IO.FileNotFoundException e)

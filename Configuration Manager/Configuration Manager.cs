@@ -32,7 +32,10 @@ namespace Configuration_Manager
 			this.DoubleBuffered = true;
 
             InitializeComponent();
-            InitCustomHandler();
+
+			model.ReadConfigurationFile();
+			
+			InitCustomHandler();
             InitViews();
             InitHandlers();
         }
@@ -85,6 +88,7 @@ namespace Configuration_Manager
             {
                 model.progMode = false;
                 Debug.WriteLine("** INFO ** Programmer mode INACTIVE.");
+				this.Refresh();
             }
         }
 
@@ -148,7 +152,7 @@ namespace Configuration_Manager
                     deleteSectionToolStripMenuItem.Enabled = false;
                 }
 
-                if (model.Sections.Count >= Model.MAX_SECTIONS)
+                if (model.Sections.Count >= Model.getInstance().maxSections)
                 {
                     newSectionToolStripMenuItem.Enabled = false;
                 }
