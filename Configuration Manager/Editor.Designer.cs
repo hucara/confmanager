@@ -51,7 +51,6 @@
 			this.delItemButton = new System.Windows.Forms.Button();
 			this.addItemButton = new System.Windows.Forms.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.checkedCheckBox = new System.Windows.Forms.CheckBox();
 			this.subDestinatonTextBox = new System.Windows.Forms.TextBox();
 			this.subDestinationLabel = new System.Windows.Forms.Label();
 			this.fileDestinationButton = new System.Windows.Forms.Button();
@@ -284,7 +283,6 @@
 			// 
 			// groupBox2
 			// 
-			this.groupBox2.Controls.Add(this.checkedCheckBox);
 			this.groupBox2.Controls.Add(this.subDestinatonTextBox);
 			this.groupBox2.Controls.Add(this.subDestinationLabel);
 			this.groupBox2.Controls.Add(this.fileDestinationButton);
@@ -301,17 +299,6 @@
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "groupBox2";
-			// 
-			// checkedCheckBox
-			// 
-			this.checkedCheckBox.AutoSize = true;
-			this.checkedCheckBox.Location = new System.Drawing.Point(106, 23);
-			this.checkedCheckBox.Name = "checkedCheckBox";
-			this.checkedCheckBox.Size = new System.Drawing.Size(68, 17);
-			this.checkedCheckBox.TabIndex = 16;
-			this.checkedCheckBox.Text = "checked";
-			this.checkedCheckBox.UseVisualStyleBackColor = true;
-			this.checkedCheckBox.Visible = false;
 			// 
 			// subDestinatonTextBox
 			// 
@@ -446,9 +433,13 @@
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.parentNameLabel);
 			this.Controls.Add(this.controlNameLabel);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.DoubleBuffered = true;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "Editor";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Editor";
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
@@ -497,7 +488,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button updateButton;
 		private System.Windows.Forms.ComboBox relationsComboBox;
-		private System.Windows.Forms.CheckBox checkedCheckBox;
 		private System.Windows.Forms.Panel comboBoxEditPanel;
 		private System.Windows.Forms.ComboBox comboBoxEditor;
 		private System.Windows.Forms.Button delItemButton;

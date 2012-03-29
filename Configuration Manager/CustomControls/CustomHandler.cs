@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Util;
+
 
 using Debug = System.Diagnostics.Debug;
 using System.Drawing;
@@ -218,144 +220,33 @@ namespace Configuration_Manager.CustomControls
 
 			editor = new Editor();
 			editor.Show(tabPage);
+
+			SetEditorPosition(editor);
+		}
+
+		private void SetEditorPosition(Editor editor)
+		{
+			editor.Top = model.top + model.height + 5;
+			editor.Left = model.left + model.width + 5;
 		}
 
 		public void editToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			editor = new Editor();
 
+			SetEditorPosition(editor);
+
 			model.LastClickedX = model.CurrentClickedControl.Location.X;
 			model.LastClickedY = model.CurrentClickedControl.Location.Y;
+
+			model.logCreator.Append("! Editing: " + model.CurrentClickedControl.Name);
 
 			editor.Show(model.CurrentClickedControl);
 		}
 
 		public void deleteToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Control p = model.CurrentClickedControl.Parent;
-
-			// In this function, the children controls will be deleted. 
-			// There should be a recursive loop that goes inside each children control,
-			// removing also those. From deepest level to highest level.
-			if (model.CurrentClickedControl.Controls.Count > 0)
-			{
-				Control c = model.CurrentClickedControl;
-				MessageBox.Show("This will kill all of my children.");
-
-				DeleteChildren(model.CurrentClickedControl);
-			}
-
-			if (CheckRelations(model.CurrentClickedControl) == DialogResult.OK)
-			{
-				model.AllControls.Remove(model.CurrentClickedControl as ICustomControl);
-				model.DeleteControlReferences(model.CurrentClickedControl);
-				p.Controls.Remove(model.CurrentClickedControl);
-
-				p.Refresh();
-			}
-		}
-
-		private void DeleteChildren(Control c)
-		{
-			String ls = "";
-			System.Diagnostics.Debug.WriteLine("! Now in: " + c.Name);
-			foreach (Control child in c.Controls)
-			{
-				ls += ls + " " + child.Name;
-				DeleteChildren(child);
-
-				model.AllControls.Remove(child as ICustomControl);
-				model.DeleteControlReferences(child);
-			}
-			System.Diagnostics.Debug.WriteLine(ls);
-		}
-
-		private DialogResult CheckRelations(Control control)
-		{
-			String msg = "";
-			String references = "";
-			String referencedBy = "";
-
-			ICustomControl c = control as ICustomControl;
-
-			// Check if this control has anything else inside the related list
-			if (ControlReferencesOthers(c, out references))
-			{
-				msg += c.cd.Name + " is related to some other controls:\n";
-				msg += references + "\n\n";
-			}
-
-			// Check if this control is inside the related lists of other controls
-			if (ControlIsReferenced(c, out referencedBy))
-			{
-				msg += c.cd.Name + " is being related by some other controls:\n";
-				msg += referencedBy;
-			}
-
-			return MessageBox.Show(msg, " Deleting control", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-		}
-
-		private bool ControlIsReferenced(ICustomControl c, out String referencedBy)
-		{
-			referencedBy = "";
-
-			foreach (ICustomControl co in model.AllControls)
-			{
-				if (co.cd.RelatedRead.Contains(c)) referencedBy += co.cd.Name + " ";
-				else if (co.cd.RelatedWrite.Contains(c)) referencedBy += co.cd.Name + " ";
-				else if (co.cd.RelatedVisibility.Contains(c)) referencedBy += co.cd.Name + " ";
-				else if (co.cd.CoupledControls.Contains(c)) referencedBy += co.cd.Name + " ";
-			}
-
-			if (referencedBy != "") return true;
-			return false;
-		}
-
-		private bool ControlReferencesOthers(ICustomControl c, out String references)
-		{
-			references = "";
-			if (c.cd.RelatedRead.Count > 0)
-			{
-				references += "- Related read: ";
-				foreach (Control co in c.cd.RelatedRead)
-				{
-					references += (co as ICustomControl).cd.Name + " ";
-				}
-				references += "\n";
-			}
-
-			if (c.cd.RelatedWrite.Count > 0)
-			{
-				references += "- Related write: ";
-				foreach (Control co in c.cd.RelatedWrite)
-				{
-					references += (co as ICustomControl).cd.Name + " ";
-				}
-				references += "\n";
-			}
-
-			if (c.cd.RelatedVisibility.Count > 0)
-			{
-				references += "- Related visibility: ";
-				foreach (Control co in c.cd.RelatedVisibility)
-				{
-					references += (co as ICustomControl).cd.Name + " ";
-				}
-				references += "\n";
-			}
-
-			if (c.cd.CoupledControls.Count > 0)
-			{
-				references += "- Coupled controls: ";
-				foreach (Control co in c.cd.CoupledControls)
-				{
-					references += (co as ICustomControl).cd.Name + " ";
-				}
-				references += "\n";
-			}
-
-			if (references != "") return true;
-			return false;
+			model.DeleteControl(model.CurrentClickedControl);
 		}
 
 		public void TextChanged(object sender, EventArgs e)
@@ -377,7 +268,6 @@ namespace Configuration_Manager.CustomControls
 				Rectangle rect = default(Rectangle);
 				Pen p = new Pen(SystemColors.Highlight, 1);
 				Graphics g = c.Parent.CreateGraphics();
-
 
 				model.CurrentSection.Tab.Refresh();
 
@@ -463,10 +353,6 @@ namespace Configuration_Manager.CustomControls
 				t.Stop();
 				Debug.WriteLine("! Timer Stopped");
 			}
-		}
-
-		public void OnMouseMove(object sender, MouseEventArgs me)
-		{
 		}
 	}
 }

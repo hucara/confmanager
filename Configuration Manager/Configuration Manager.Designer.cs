@@ -97,7 +97,7 @@ namespace Configuration_Manager
             this.deleteToolStripMenuItem});
 			this.contextMenu.Name = "contextMenuStrip1";
 			this.contextMenu.ShowImageMargin = false;
-			this.contextMenu.Size = new System.Drawing.Size(128, 92);
+			this.contextMenu.Size = new System.Drawing.Size(83, 70);
 			// 
 			// newToolStripMenuItem
 			// 
@@ -113,7 +113,7 @@ namespace Configuration_Manager
             this.tabControlMenuItem,
             this.tabPageMenuItem});
 			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-			this.newToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
 			this.newToolStripMenuItem.Text = "New";
 			// 
 			// labelToolStripMenuItem
@@ -177,13 +177,13 @@ namespace Configuration_Manager
 			// editToolStripMenuItem
 			// 
 			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-			this.editToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+			this.editToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
 			this.editToolStripMenuItem.Text = "Edit";
 			// 
 			// deleteToolStripMenuItem
 			// 
 			this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-			this.deleteToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+			this.deleteToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
 			this.deleteToolStripMenuItem.Text = "Delete";
 			// 
 			// tabControl
@@ -205,7 +205,9 @@ namespace Configuration_Manager
 			this.Controls.Add(this.toolStrip);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "MainForm";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Configuration Manager";
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
 			this.contextNavMenu.ResumeLayout(false);

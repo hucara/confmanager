@@ -9,7 +9,6 @@ namespace Configuration_Manager.CustomControls
     public interface ICustomControl
     {
         ControlDescription cd { get; set; }
-        //void SetControlDescription(ControlDescription cd);
         void SetControlDescription();
     }
 }

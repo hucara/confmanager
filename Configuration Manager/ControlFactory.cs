@@ -16,7 +16,8 @@ namespace Configuration_Manager
     {
         private static ControlFactory cf;
         CustomHandler ch;
-		Util.TokenTextTranslator tr = new Util.TokenTextTranslator("@@");
+		Model model = Model.getInstance();
+		Util.TokenTextTranslator tt = new Util.TokenTextTranslator("@@");
 
         public static ControlFactory getInstance()
         {
@@ -37,11 +38,11 @@ namespace Configuration_Manager
 		    CToolStripButton ctsb = BuildCToolStripButton(text);
 			TabPage tp = BuildTabPage(name);
 
-			if (selected) ctsb.PerformClick();
 			Section s = new Section(ctsb, tp, text, selected);
-
 			Model.getInstance().CurrentSection = s;
 
+			model.logCreator.Append("+ Added: "+s.Name);
+			
 			return s;
 		}
 
@@ -58,12 +59,13 @@ namespace Configuration_Manager
 
 			c.MouseDown += ch.Control_Click;
 			c.MouseUp += ch.CancelDragDropTimer;
-			c.MouseMove += ch.OnMouseMove;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
 
 			c.cd.RealText = c.cd.Text;
+
+			model.logCreator.Append("+ Added: " + c.cd.Name);
 
             return c;
         }
@@ -94,6 +96,8 @@ namespace Configuration_Manager
             //Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
 
+			model.logCreator.Append("+ Added: " + c.cd.Name );
+
             return c;
         }
 
@@ -112,6 +116,8 @@ namespace Configuration_Manager
 
 			c.cd.RealText = c.cd.Text;
 
+			model.logCreator.Append("+ Added: " + c.cd.Name);
+
             return c;
         }
 
@@ -128,6 +134,8 @@ namespace Configuration_Manager
 
             Model.getInstance().AllControls.Add(c);
 
+			model.logCreator.Append("+ Added: " + c.cd.Name);
+
             return c;
         }
 
@@ -143,6 +151,8 @@ namespace Configuration_Manager
             c.SetControlDescription();
 
 			c.DropDownStyle = ComboBoxStyle.DropDownList;
+
+			model.logCreator.Append("+ Added: " + c.cd.Name);
 
             return c;
         }
@@ -162,6 +172,8 @@ namespace Configuration_Manager
 
 			c.cd.RealText = c.cd.Text;
 
+			model.logCreator.Append("+ Added: " + c.cd.Name);
+
             return c;
         }
 
@@ -177,6 +189,8 @@ namespace Configuration_Manager
             c.SetControlDescription();
 
 			c.cd.RealText = c.cd.Text;
+
+			model.logCreator.Append("+ Added: " + c.cd.Name);
 
             return c;
         }
@@ -197,6 +211,8 @@ namespace Configuration_Manager
 
 			c.cd.RealText = c.cd.Text;
 			c.AllowDrop = true;
+
+			model.logCreator.Append("+ Added: " + c.cd.Name);
 			
             return c;
         }
@@ -214,6 +230,8 @@ namespace Configuration_Manager
 
 			c.cd.RealText = c.cd.Text;
 			c.AllowDrop = true;
+
+			model.logCreator.Append("+ Added: " + c.cd.Name);
 
             return c;
         }

@@ -9,7 +9,7 @@ namespace Configuration_Manager
     public class Section
     {
         static int count = 0;
-        public bool Selected { get; private set; }
+        public bool Selected { get; set; }
 
         public int Id { get; private set; }
         public int GlobalId { get; private set; }
@@ -30,6 +30,8 @@ namespace Configuration_Manager
 
             this.Button = b;
             this.Tab = t;
+
+			t.Name = this.Name;
 
             this.Button.Text = text;
             count++;

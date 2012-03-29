@@ -23,7 +23,7 @@ namespace Configuration_Manager
 
         Font controlFont;
         Color fontColor, backColor;
-		Util.TokenTextTranslator ttt = new Util.TokenTextTranslator("@@", Resources.getInstance().CurrentLangPath);
+		Util.TokenTextTranslator ttt = new Util.TokenTextTranslator("@@", Model.getInstance().CurrentLangPath);
 
         Control parent;
         ICustomControl control;
@@ -53,10 +53,17 @@ namespace Configuration_Manager
             visibleCheckBox.Checked = true;
 
             SetOpenFileDialog();
+			SetLocation();
 
             FillOutRelationsComboBox();
             FillOutFileTypeComboBox();
         }
+
+		private void SetLocation()
+		{
+			this.Top = model.top;
+			this.Left = model.left + model.width;
+		}
 
         // //
         // Control.Show() method overload
@@ -100,7 +107,7 @@ namespace Configuration_Manager
         private void ShowHeadLine()
         {
             controlNameLabel.Text = "Control: " + control.cd.Name;
-            parentNameLabel.Text = "Parent: " + control.cd.Parent.Name;
+			parentNameLabel.Text = "Parent: " + control.cd.Parent.Name;
         }
 
         private void ShowMousePosition()
@@ -322,10 +329,10 @@ namespace Configuration_Manager
             //if (!CheckHint()) ErrorMsg += "\n- Hint is empty.";
             if (!CheckTop()) ErrorMsg += "\n- Top value is too low or too high.";
             if (!CheckLeft()) ErrorMsg += "\n- Left value is too low or too high.";
-            if (!CheckWidth()) ErrorMsg += "\n- Width value is too low or too high.";
-            if (!CheckHeight()) ErrorMsg += "\n- Height value is too low or too high.";
-            if (!CheckFileDestination()) ErrorMsg += "\n- File Destination value is empty.";
-            if (!CheckSubDestination()) ErrorMsg += "\n- Sub Destination value is empty.";
+            //if (!CheckWidth()) ErrorMsg += "\n- Width value is too low or too high.";
+            //if (!CheckHeight()) ErrorMsg += "\n- Height value is too low or too high.";
+            //if (!CheckFileDestination()) ErrorMsg += "\n- File Destination value is empty.";
+            //if (!CheckSubDestination()) ErrorMsg += "\n- Sub Destination value is empty.";
         }
 
         private void ParseTop()

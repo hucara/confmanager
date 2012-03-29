@@ -20,7 +20,7 @@ namespace Configuration_Manager
 
 		private TypeConverter fontConverter = TypeDescriptor.GetConverter(typeof(Font));
 		private TypeConverter colorConverter = TypeDescriptor.GetConverter(typeof(Color));
-		private Util.TokenTextTranslator ttt = new Util.TokenTextTranslator("@@", Resources.getInstance().CurrentLangPath);
+		private Util.TokenTextTranslator ttt = new Util.TokenTextTranslator("@@", Model.getInstance().CurrentLangPath);
 
 		public static ObjectDefinitionManager getInstance()
 		{
@@ -38,10 +38,22 @@ namespace Configuration_Manager
 
 		public void RestoreOldUI()
 		{
+
 			System.Diagnostics.Debug.WriteLine("** Reading Object Definition File **");
+			System.Diagnostics.Debug.WriteLine("** Setting up last UI **");
+
+			model.logCreator.Append(" ");
+			model.logCreator.AppendCenteredWithFrame(" Reading Object Definition File ");
+			model.logCreator.AppendCenteredWithFrame(" Setting up last UI ");
+			model.logCreator.Append(" ");
+
 			BuildDefinedSectionList(xdoc);
 			CreateDefinedControls(xdoc);
+
+			model.logCreator.Append(" ");
 			System.Diagnostics.Debug.WriteLine("** End of Object Definition File **");
+			model.logCreator.AppendCenteredWithFrame("End of Object Definition File");
+			model.logCreator.Append(" ");
 		}
 
 		// Reads the sections defined inside the ObjectDefinition file.
@@ -72,6 +84,7 @@ namespace Configuration_Manager
 			catch
 			{
 				System.Diagnostics.Debug.WriteLine("! [ERROR] Something went wrong while reading Sections in Object Definition File.");
+				model.logCreator.Append("! ERROR: Something went wrong while reading Sections in Object Definition File");
 			}
 		}
 
@@ -159,8 +172,9 @@ namespace Configuration_Manager
 							)
 							)
 						);
-				doc.Save(Resources.getInstance().ConfigFolderPath + "\\testing.xml");
-				System.Diagnostics.Debug.WriteLine("*** Testing Object Definition File created ***");
+				doc.Save(Model.getInstance().ObjectDefinitionsPath);
+				System.Diagnostics.Debug.WriteLine("*** Object Definition File created ***");
+				model.logCreator.AppendCenteredWithFrame(" Object Definition File saved ");
 			}
 			catch (Exception e)
 			{
@@ -168,6 +182,7 @@ namespace Configuration_Manager
 				MessageBox.Show(errMsg, " Error creating XML file", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 				System.Diagnostics.Debug.WriteLine("[ERROR] Something went wrong when creating Object Definition File.");
+				model.logCreator.Append("! ERROR: Something went wrong when creating Object Definition File.");
 				System.Diagnostics.Debug.WriteLine(e);
 			}
 		}

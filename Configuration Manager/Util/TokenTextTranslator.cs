@@ -15,6 +15,8 @@ namespace Configuration_Manager.Util
 			private static int NODE_AND_ATTRIBUTE = 2;
 		}
 
+		private Boolean active = false;
+
 		private Boolean defaultMode;				// Shall we use a sidekick language file for not found tokens? 
 		private String defaultLang;					// In case the token is not found in the current language, search it here
 		private String defaultSubPath;				// Search 
@@ -23,13 +25,8 @@ namespace Configuration_Manager.Util
 		private String currentSubPath;
 
 		private String tokenKey;					// The defining characters that delimite a token
-		private int tokenLength;					// Number of tokens inside the value to translate
-
-		private Boolean formattingOK;				// The amount of tokens is pair, so the text has a correct format
-		private Boolean valuesOK;
 
 		private String textToTranslate;				// Text with the values to translate
-		private String valueToTranslate;			// Current text being translated
 		private String translatedText;				// Text with all the tokens translated
 
 		private List<String> valuesToTranslate;		// List of values to translate inside the textToTranslate
@@ -56,6 +53,8 @@ namespace Configuration_Manager.Util
 			this.tokenKey = tokenKey;
 			this.currentLang = language;
 			this.defaultMode = false;
+
+			if (System.IO.File.Exists(language)) this.active = true;
 
 			this.valuesToTranslate = new List<String>();
 			this.translatedValues = new List<String>();
@@ -90,24 +89,25 @@ namespace Configuration_Manager.Util
 
 		public String TranslateFromTextFile(String textToTranslate)
 		{
-			this.valuesToTranslate.Clear();
-			this.translatedValues.Clear();
-			this.subPathElements.Clear();
+			this.translatedText = textToTranslate;
 
-			this.textToTranslate = textToTranslate;
-			this.translatedText = "";
-
-			if (this.textToTranslate != null && this.textToTranslate != "")
+			if (active)
 			{
-				if (TextHasEvenTokens())
+				this.valuesToTranslate.Clear();
+				this.translatedValues.Clear();
+				this.subPathElements.Clear();
+
+				this.textToTranslate = textToTranslate;
+				//this.translatedText = this.textToTranslate;
+
+				if (this.textToTranslate != null && this.textToTranslate != "")
 				{
-					GetValuesToTranslate();
-					GetTranslatedValues();
-					this.translatedText = ReplaceValueToTranslation(this.textToTranslate);
-				}
-				else
-				{
-					return "*ERROR*";
+					if (TextHasEvenTokens())
+					{
+						GetValuesToTranslate();
+						GetTranslatedValues();
+						this.translatedText = ReplaceValueToTranslation(this.textToTranslate);
+					}
 				}
 			}
 
@@ -124,7 +124,6 @@ namespace Configuration_Manager.Util
 				if (TextHasEvenTokens())
 				{
 					GetValuesToTranslate();
-					GetTranslatedValues();
 					ReplaceValueToTranslation(this.textToTranslate);
 				}
 				else
@@ -232,10 +231,10 @@ namespace Configuration_Manager.Util
 		{
 			try
 			{
-				if (System.IO.File.Exists(Resources.getInstance().CurrentLangPath))
+				if (System.IO.File.Exists(Model.getInstance().CurrentLangPath))
 				{
 
-					XDocument xdoc = XDocument.Load(Resources.getInstance().CurrentLangPath);
+					XDocument xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
 					foreach (String s in valuesToTranslate)
 					{
 						var q = from c in xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text")

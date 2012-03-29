@@ -11,11 +11,15 @@ namespace Configuration_Manager
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string []args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            
+			//Model.getInstance().GetArguments(args);
+			//MainForm mf = new MainForm();
+
+			Application.Run(new MainForm());
         }
     }
 }

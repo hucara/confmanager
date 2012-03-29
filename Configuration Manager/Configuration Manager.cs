@@ -15,8 +15,7 @@ namespace Configuration_Manager
 {
     public partial class MainForm : Form
     {
-        private Resources res = Resources.getInstance();
-        private Model model = Model.getInstance();
+		private Model model = Model.getInstance();
         private ControlFactory cf = ControlFactory.getInstance();
         private ObjectDefinitionManager odm = ObjectDefinitionManager.getInstance();
 
@@ -26,7 +25,6 @@ namespace Configuration_Manager
         ToolStripView toolStripView;
         CustomHandler ch;
 
-
         public MainForm()
         {
 			this.DoubleBuffered = true;
@@ -34,11 +32,37 @@ namespace Configuration_Manager
             InitializeComponent();
 
 			model.ReadConfigurationFile();
+			SetUpMainForm();
+
+			PrintWellcomeLogMessage();
 			
 			InitCustomHandler();
             InitViews();
             InitHandlers();
-        }
+       }
+
+		private void PrintWellcomeLogMessage()
+		{
+			model.logCreator.Append(" ");
+			model.logCreator.AppendDividingLine();
+			model.logCreator.AppendCenteredWithFrame("");
+			model.logCreator.AppendCenteredWithFrame(" Configuration Manager ");
+			model.logCreator.AppendCenteredWithFrame("");
+			model.logCreator.AppendDividingLine();
+			model.logCreator.Append(" ");
+		}
+
+		private void SetUpMainForm()
+		{
+			this.TopMost = model.stayOnTop;
+			this.Width = model.width;
+			this.Height = model.height;
+
+			this.Top = model.top;
+			this.Left = model.left;
+
+			if (model.resizable) this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+		}
 
         private void InitCustomHandler()
         {
@@ -68,13 +92,19 @@ namespace Configuration_Manager
             tabControlView = new TabControlView(tabControl, ch);
             toolStripView = new ToolStripView(toolStrip, tabControl, contextMenu, model);
 
-            if (model.ObjectDefinitionExists)
-            {
-                odm.SetDocument(res.ConfigObjects);
-                odm.RestoreOldUI();
-                toolStripView.readAndShow();
-                tabControlView.readAndShow();
-            }
+			if (model.ObjectDefinitionExists)
+			{
+				odm.SetDocument(model.ConfigObjects);
+				odm.RestoreOldUI();
+				toolStripView.readAndShow();
+				tabControlView.readAndShow();
+			}
+			else
+			{
+				model.logCreator.AppendCenteredWithFrame(" ! Object Definition file not found ! ");
+				model.logCreator.AppendCenteredWithFrame(" Creating new empty UI ");
+				model.logCreator.Append(" ");
+			}
         }
 
         private void SetProgMode()
@@ -83,12 +113,17 @@ namespace Configuration_Manager
             {
                 model.progMode = true;
                 Debug.WriteLine("** INFO ** Programmer mode ACTIVE.");
+				model.logCreator.Append("");
+				model.logCreator.AppendCenteredWithFrame(" Programmer mode ACTIVE");
             }
             else
             {
                 model.progMode = false;
-                Debug.WriteLine("** INFO ** Programmer mode INACTIVE.");
+				Debug.WriteLine("** INFO ** Programmer mode INACTIVE.");
 				this.Refresh();
+
+				model.logCreator.Append("");
+				model.logCreator.AppendCenteredWithFrame(" Programmer mode ACTIVE");
             }
         }
 
@@ -106,9 +141,18 @@ namespace Configuration_Manager
 
             if (e.Alt && e.Control && e.KeyCode == Keys.D)
             {
-                System.Diagnostics.Debug.WriteLine("\n! Printing List of Controls: ");
-				System.Diagnostics.Debug.WriteLine("\tControl      Parent");
-				System.Diagnostics.Debug.WriteLine("_______________________________");
+				System.Diagnostics.Debug.WriteLine("\n###################################");
+				System.Diagnostics.Debug.WriteLine("! Printing Sections:");
+				
+				foreach(Section s in model.Sections)
+				{
+					System.Diagnostics.Debug.WriteLine(s.Name + " " +s.Tab.GetType().Name+ ":" +s.Tab.Name+ " "+s.Button.GetType().Name+ ":"+s.Button.Text);
+				}
+
+				System.Diagnostics.Debug.WriteLine("-----------------------------------");
+                System.Diagnostics.Debug.WriteLine("! Printing List of Controls: ");
+				System.Diagnostics.Debug.WriteLine("\tControl        Parent");
+				System.Diagnostics.Debug.WriteLine("___________________________________");
                 foreach (ICustomControl c in model.AllControls)
                 {
                     String line = "\t";
@@ -116,7 +160,7 @@ namespace Configuration_Manager
                     if (c.cd.Parent != null) line += c.cd.Parent.Name;
                     System.Diagnostics.Debug.WriteLine(line);
                 }
-                System.Diagnostics.Debug.WriteLine("-- -- -- -- -- -- --");
+                System.Diagnostics.Debug.WriteLine("#####################################");
             }
         }
 

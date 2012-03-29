@@ -18,9 +18,6 @@ namespace Configuration_Manager.Views
         TabControl configurationTabs;
         ContextMenuStrip tabContextMenu;
 
-        CToolStripButton ctsb;
-        TabPage ctp;
-
         CToolStripButton SelectedButton;
         List<CToolStripButton> CToolStripButtons;
 
@@ -77,12 +74,7 @@ namespace Configuration_Manager.Views
         {
             if (!MaxSectionsReached())
             {
-				//ctsb = CreateToolStripButton(text);
-				//ctp = CreateTabPage();
-
-				//Section s = new Section(ctsb, ctp, text, false);
-
-				Section s = cf.BuildSection(text, text, false);
+				Section s = cf.BuildSection(text, text, true);
 
                 if (!model.Sections.Contains(s))
                 {
@@ -90,10 +82,14 @@ namespace Configuration_Manager.Views
                     Debug.WriteLine("+ Added: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name+"}");
                 }
 
-                s.Button.PerformClick();
-				UnCheckButtons(s.Button);
-            }
+				model.logCreator.Append("+ Added: " + s.Name);
 
+				UnCheckButtons();
+				s.Button.Checked = true;
+
+				UnSelectSections();
+				s.Selected = true;
+            }
             readAndShow();
         }        
 
@@ -104,10 +100,15 @@ namespace Configuration_Manager.Views
                 Section s = model.Sections.Find(se => se.Button == SelectedButton);
                 Debug.WriteLine("! Removed: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
 
+				model.logCreator.Append("- Removed: " + s.Name);
+				model.DeleteControl(s.Tab);
                 model.Sections.Remove(s);
             }
 
+			if (model.Sections.Count > 0) model.Sections[0].Selected = true;
             readAndShow();
+
+			// Delete all the controls that have this section as parent.
         }
 
         private CToolStripButton CreateToolStripButton(String text)
@@ -131,11 +132,15 @@ namespace Configuration_Manager.Views
                 CToolStripButton b = (CToolStripButton)sender;
                 SelectedButton = b;
 
+				UnCheckButtons();
 				SelectedButton.Checked = true;
-                UnCheckButtons(b);
-
+                
                 Section s = model.Sections.Find(se => se.Button == SelectedButton);
-                model.CurrentSection = s;
+				
+				UnSelectSections();
+				s.Selected = true;
+                
+				model.CurrentSection = s;
 
                 Debug.WriteLine("! Clicked: " + b.Name + " \"" + b.Text +"\"");
                 configurationTabs.SelectTab(s.Tab);
@@ -143,23 +148,28 @@ namespace Configuration_Manager.Views
             }
         }
 
-        private void UnCheckButtons(CToolStripButton b)
+        private void UnCheckButtons()
         {
             foreach (CToolStripButton bt in navigationBar.Items)
             {
-                if (bt != b)
-                {
-                    bt.Checked = false;
-                }
+                bt.Checked = false;
             }
         }
+
+		private void UnSelectSections()
+		{
+			foreach(Section se in model.Sections)
+			{
+				se.Selected = false;
+			}
+		}
 
         public void SetSelectedButton(CToolStripButton toolStripItem)
         {
             if (toolStripItem == null) throw new ArgumentNullException();
 
+			UnCheckButtons();
             SelectedButton = toolStripItem;
-            UnCheckButtons(SelectedButton);
         }
 
         private bool MaxSectionsReached()

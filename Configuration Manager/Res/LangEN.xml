@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ConfigurationManager>
+  <Language name="English" id="EN">
+    <Text id="0"></Text>
+    <Text id="1"></Text>
+  </Language>
+</ConfigurationManager>

@@ -216,5 +216,13 @@ namespace TokenTextTranslator_Tests
 			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\TextFile_EN.xml";
 			Assert.AreEqual("Warning: standby, Hardw. error", target.TranslateFromTextFile("@@256@@: @@312@@, @@265@@"));
 		}
+
+		[TestMethod()]
+		public void TranslateFormTextFile_StringWithoutTokens_ReturnsSameString()
+		{
+			TokenTextTranslator_Accessor target = new TokenTextTranslator_Accessor("@@");
+			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
+			Assert.AreEqual("I don't have tokens!", target.TranslateFromTextFile("I don't have tokens!"));
+		}
 	}
 }
