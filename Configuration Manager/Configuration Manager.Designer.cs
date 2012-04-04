@@ -59,12 +59,14 @@ namespace Configuration_Manager
 			this.toolStrip.Dock = System.Windows.Forms.DockStyle.Left;
 			this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip.Location = new System.Drawing.Point(0, 0);
+			this.toolStrip.MaximumSize = new System.Drawing.Size(131, 572);
 			this.toolStrip.Name = "toolStrip";
 			this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
 			this.toolStrip.ShowItemToolTips = false;
 			this.toolStrip.Size = new System.Drawing.Size(131, 572);
 			this.toolStrip.TabIndex = 1;
 			this.toolStrip.Text = "toolStrip1";
+			this.toolStrip.SizeChanged += new System.EventHandler(this.toolStrip_SizeChanged);
 			this.toolStrip.Click += new System.EventHandler(this.toolStrip_RightClick);
 			// 
 			// contextNavMenu
@@ -236,7 +238,7 @@ namespace Configuration_Manager
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tabControlMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem tabPageMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem tabPageMenuItem;
 
     }
 }

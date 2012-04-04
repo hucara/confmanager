@@ -32,10 +32,12 @@ namespace Configuration_Manager
 		public int containerMargin = 10;
 
 		public uint ModificatioRights = 0x00000000;
-		public uint DisplayRights = 0x00000000;
+		public uint DisplayRights = 0xFFFFFFFF;
 
 		public bool createLogs = false;
 		public int maxAgeOfLogs = -1;
+
+		public int sectionMenuWidth = 131;
 
         public bool editingUI = false;
         public bool creatingNewComponent = false;
@@ -77,6 +79,8 @@ namespace Configuration_Manager
 
 		public LogCreation logCreator { get; private set; }
 		public LogDeletion logDeleter { get; private set; }
+
+		public ToolStripTextBox InfoLabel { get; set; }
         
         // Private constructor
         private Model()
@@ -213,7 +217,7 @@ namespace Configuration_Manager
 				ReadRightsSection(xdoc);
 				ReadLogsSection(xdoc);
 
-				string[] a = { "-st", "-p", "-r", "-t","0","-l", "0", "-dr", "64", "-mr", "F2"};
+				string[] a = {"-p", "-r", "-t","0","-l", "1376", "-dr", "64", "-mr", "F2"};
 				this.args = a;
 
 				if (this.args != null)
@@ -225,9 +229,6 @@ namespace Configuration_Manager
 					logCreator = new LogCreation("CM", 70, '#', this.createLogs);
 					logDeleter = new LogDeletion("ConfigurationManager", "CM", this.maxAgeOfLogs);
 				}
-
-				uint dismask = 0x64;
-				uint modmask = 0xF2;
 
 				System.Diagnostics.Debug.WriteLine(" ");
 				System.Diagnostics.Debug.WriteLine("** INFO ** Config file and arguments read. Printing info.");
@@ -537,6 +538,17 @@ namespace Configuration_Manager
 			{
 				System.Diagnostics.Debug.WriteLine("! Error when parsing the arguments. Out of range?");
 			}
+		}
+
+		public void UpdateInfoLabel(object sender, EventArgs e)
+		{
+			this.InfoLabel.Text = "";
+			this.InfoLabel.Text = (sender as ICustomControl).cd.Hint;
+		}
+
+		public void EraseInfoLabel(object sender, EventArgs e)
+		{
+			this.InfoLabel.Text = "";
 		}
 	}
 }

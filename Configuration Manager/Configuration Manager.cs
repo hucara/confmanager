@@ -208,5 +208,10 @@ namespace Configuration_Manager
                 contextNavMenu.Show(c, me.X, me.Y);
             }
         }
+
+		private void toolStrip_SizeChanged(object sender, EventArgs e)
+		{
+			model.sectionMenuWidth = (sender as ToolStrip).Size.Width;
+		}
     }
 }

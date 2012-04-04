@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Configuration_Manager.CustomControls;
+using Configuration_Manager.Views;
 
 /* 
  * Implementation of the Factory Design Pattern, 
@@ -59,10 +60,11 @@ namespace Configuration_Manager
 
 			c.MouseDown += ch.Control_Click;
 			c.MouseUp += ch.CancelDragDropTimer;
+			c.MouseHover += model.UpdateInfoLabel;
+			c.MouseLeave += model.EraseInfoLabel;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
-
 			c.cd.RealText = c.cd.Text;
 
 			model.logCreator.Append("+ Added: " + c.cd.Name);
@@ -93,7 +95,6 @@ namespace Configuration_Manager
         {
             CTabPage c = new CTabPage();
 			c.MouseDown += ch.Control_Click;
-            //Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
 
 			model.logCreator.Append("+ Added: " + c.cd.Name );
@@ -146,6 +147,9 @@ namespace Configuration_Manager
 
 			c.MouseDown += ch.Control_Click;
 			c.MouseUp += ch.CancelDragDropTimer;
+			c.MouseHover += model.UpdateInfoLabel;
+			c.MouseHover += model.UpdateInfoLabel;
+			c.MouseLeave += model.EraseInfoLabel;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -165,6 +169,8 @@ namespace Configuration_Manager
             c.MouseDown += ch.CTextBox_RightClick;
 			c.MouseDown += ch.Control_Click;
 			c.MouseUp += ch.CancelDragDropTimer;
+			c.MouseHover += model.UpdateInfoLabel;
+			c.MouseLeave += model.EraseInfoLabel;
 			c.TextChanged += ch.TextChanged;
 
             Model.getInstance().AllControls.Add(c);
@@ -184,6 +190,8 @@ namespace Configuration_Manager
 
 			c.MouseDown += ch.Control_Click;
 			c.MouseUp += ch.CancelDragDropTimer;
+			c.MouseHover += model.UpdateInfoLabel;
+			c.MouseLeave += model.EraseInfoLabel;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -202,9 +210,10 @@ namespace Configuration_Manager
 
 			c.MouseDown += ch.Control_Click;
 			c.MouseUp += ch.CancelDragDropTimer;
-
 			c.DragDrop += ch.OnDragDrop;
 			c.DragEnter += ch.OnDragEnter;
+			c.MouseHover += model.UpdateInfoLabel;
+			c.MouseLeave += model.EraseInfoLabel;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -224,6 +233,8 @@ namespace Configuration_Manager
 
 			c.MouseDown += ch.Control_Click;
 			c.MouseUp += ch.CancelDragDropTimer;
+			c.MouseHover += model.UpdateInfoLabel;
+			c.MouseLeave += model.EraseInfoLabel;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();

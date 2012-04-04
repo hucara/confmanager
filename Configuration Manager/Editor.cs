@@ -53,7 +53,6 @@ namespace Configuration_Manager
             visibleCheckBox.Checked = true;
 
             SetOpenFileDialog();
-			SetLocation();
 
             FillOutRelationsComboBox();
             FillOutFileTypeComboBox();
@@ -61,8 +60,9 @@ namespace Configuration_Manager
 
 		private void SetLocation()
 		{
-			this.Top = model.top;
-			this.Left = model.left + model.width;
+			this.Top = MainForm.ActiveForm.Location.Y;
+			this.Height = 610;
+			this.Left = MainForm.ActiveForm.Location.X + MainForm.ActiveForm.Width;
 		}
 
         // //
@@ -83,6 +83,7 @@ namespace Configuration_Manager
             FillOutRelationsComboBox();
 
             ReadFromControl();
+			SetLocation();
             base.Show();
         }
 
@@ -423,7 +424,7 @@ namespace Configuration_Manager
 			control.cd.Text = ttt.TranslateFromTextFile(this.textTextBox.Text);
 			control.cd.RealText = this.textTextBox.Text;
             control.cd.Type = this.type;
-            control.cd.Hint = this.hintTextBox.Text;
+			control.cd.Hint = this.hintTextBox.Text;
             control.cd.CurrentFont = this.controlFont;
             control.cd.BackColor = this.backColor;
             control.cd.ForeColor = this.fontColor;
@@ -437,6 +438,7 @@ namespace Configuration_Manager
             control.cd.MainDestination = this.fileDestinationTextBox.Text;
             control.cd.SubDestination = this.subDestinatonTextBox.Text;
 
+			//SetUpHint();
 			//if (this.type == "CGroupBox")
 			//{
 			//    control.cd.ComboBoxItems = this.comboBoxEditor.Items;

@@ -51,6 +51,7 @@
 			this.delItemButton = new System.Windows.Forms.Button();
 			this.addItemButton = new System.Windows.Forms.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
 			this.subDestinatonTextBox = new System.Windows.Forms.TextBox();
 			this.subDestinationLabel = new System.Windows.Forms.Label();
 			this.fileDestinationButton = new System.Windows.Forms.Button();
@@ -221,7 +222,7 @@
 			// HintLabel
 			// 
 			this.HintLabel.AutoSize = true;
-			this.HintLabel.Location = new System.Drawing.Point(341, 27);
+			this.HintLabel.Location = new System.Drawing.Point(359, 27);
 			this.HintLabel.Name = "HintLabel";
 			this.HintLabel.Size = new System.Drawing.Size(27, 13);
 			this.HintLabel.TabIndex = 2;
@@ -229,10 +230,12 @@
 			// 
 			// hintTextBox
 			// 
-			this.hintTextBox.Location = new System.Drawing.Point(344, 43);
+			this.hintTextBox.Location = new System.Drawing.Point(351, 43);
+			this.hintTextBox.MaxLength = 320;
 			this.hintTextBox.Multiline = true;
 			this.hintTextBox.Name = "hintTextBox";
-			this.hintTextBox.Size = new System.Drawing.Size(138, 131);
+			this.hintTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.hintTextBox.Size = new System.Drawing.Size(131, 131);
 			this.hintTextBox.TabIndex = 2;
 			// 
 			// textLabel
@@ -283,6 +286,7 @@
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.maskedTextBox1);
 			this.groupBox2.Controls.Add(this.subDestinatonTextBox);
 			this.groupBox2.Controls.Add(this.subDestinationLabel);
 			this.groupBox2.Controls.Add(this.fileDestinationButton);
@@ -299,6 +303,14 @@
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "groupBox2";
+			// 
+			// maskedTextBox1
+			// 
+			this.maskedTextBox1.Location = new System.Drawing.Point(106, 263);
+			this.maskedTextBox1.Mask = "0x########";
+			this.maskedTextBox1.Name = "maskedTextBox1";
+			this.maskedTextBox1.Size = new System.Drawing.Size(100, 20);
+			this.maskedTextBox1.TabIndex = 16;
 			// 
 			// subDestinatonTextBox
 			// 
@@ -373,24 +385,24 @@
 			// controlListBox
 			// 
 			this.controlListBox.FormattingEnabled = true;
-			this.controlListBox.Location = new System.Drawing.Point(344, 46);
+			this.controlListBox.Location = new System.Drawing.Point(351, 46);
 			this.controlListBox.Name = "controlListBox";
-			this.controlListBox.Size = new System.Drawing.Size(138, 259);
+			this.controlListBox.Size = new System.Drawing.Size(131, 259);
 			this.controlListBox.TabIndex = 15;
 			this.controlListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.controlListBox_ItemCheck);
 			// 
 			// relationsComboBox
 			// 
 			this.relationsComboBox.FormattingEnabled = true;
-			this.relationsComboBox.Location = new System.Drawing.Point(344, 19);
+			this.relationsComboBox.Location = new System.Drawing.Point(351, 19);
 			this.relationsComboBox.Name = "relationsComboBox";
-			this.relationsComboBox.Size = new System.Drawing.Size(138, 21);
+			this.relationsComboBox.Size = new System.Drawing.Size(131, 21);
 			this.relationsComboBox.TabIndex = 14;
 			this.relationsComboBox.SelectedIndexChanged += new System.EventHandler(this.relationsComboBox_SelectedIndexChanged);
 			// 
 			// okButton
 			// 
-			this.okButton.Location = new System.Drawing.Point(421, 543);
+			this.okButton.Location = new System.Drawing.Point(421, 546);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(79, 27);
 			this.okButton.TabIndex = 16;
@@ -400,7 +412,7 @@
 			// 
 			// cancelButton
 			// 
-			this.cancelButton.Location = new System.Drawing.Point(336, 543);
+			this.cancelButton.Location = new System.Drawing.Point(336, 546);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(79, 27);
 			this.cancelButton.TabIndex = 17;
@@ -413,7 +425,7 @@
 			// 
 			// updateButton
 			// 
-			this.updateButton.Location = new System.Drawing.Point(12, 543);
+			this.updateButton.Location = new System.Drawing.Point(12, 546);
 			this.updateButton.Name = "updateButton";
 			this.updateButton.Size = new System.Drawing.Size(79, 27);
 			this.updateButton.TabIndex = 18;
@@ -425,7 +437,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(509, 572);
+			this.ClientSize = new System.Drawing.Size(509, 582);
 			this.Controls.Add(this.updateButton);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
@@ -492,5 +504,6 @@
 		private System.Windows.Forms.ComboBox comboBoxEditor;
 		private System.Windows.Forms.Button delItemButton;
 		private System.Windows.Forms.Button addItemButton;
+		private System.Windows.Forms.MaskedTextBox maskedTextBox1;
     }
 }

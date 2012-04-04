@@ -14,7 +14,7 @@ namespace Configuration_Manager
         static int count = 0;
 
 		private String name;
-        public String Hint { get; set; }
+		private String hint;
         private String text;
 		public String RealText { get; set; }
         public String Type { get; set; }
@@ -130,6 +130,15 @@ namespace Configuration_Manager
 				if (this.Type == "CTextBox") this.RealText = value;
             }
         }
+
+		public String Hint
+		{
+			get { return this.hint; }
+			set
+			{
+				this.hint = value;
+			}
+		}
 
         public Font CurrentFont
         {

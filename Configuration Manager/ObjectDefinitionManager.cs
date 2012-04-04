@@ -127,7 +127,7 @@ namespace Configuration_Manager
 									new XAttribute("type", item.cd.Type),
 									new XElement("Name", item.cd.Name),
 									new XElement("Text", item.cd.RealText),
-									new XElement("Hint", item.cd.Hint),
+									new XElement("Hint", item.cd.Hint.Replace("\r\n","&#13;&#10;")),
 									new XElement("Parent", item.cd.Parent.Name),
 									new XElement("Section", item.cd.ParentSection.Name),
 									new XElement("Settings",
@@ -378,6 +378,9 @@ namespace Configuration_Manager
 
 			c.cd.RealText = i.Element("Text").Value;
 			c.cd.Text = ttt.TranslateFromTextFile(c.cd.RealText);
+
+			c.cd.Hint = i.Element("Hint").Value;
+			c.cd.Hint = c.cd.Hint.Replace("&#13;&#10;", "\r\n");
 
 			c.cd.ParentSection = Model.getInstance().Sections.Find(se => se.Name == i.Element("Section").Value);
 

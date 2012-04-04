@@ -10,77 +10,80 @@ using Debug = System.Diagnostics.Debug;
 
 namespace Configuration_Manager.Views
 {
-    class ToolStripView : IView
-    {
-        Model model;
-        ControlFactory cf;
-        ToolStrip navigationBar;
-        TabControl configurationTabs;
-        ContextMenuStrip tabContextMenu;
+	class ToolStripView : IView
+	{
+		Model model;
+		ControlFactory cf;
+		ToolStrip sectionMenu;
+		TabControl sectionTabControl;
+		ContextMenuStrip tabContextMenu;
 
-        CToolStripButton SelectedButton;
-        List<CToolStripButton> CToolStripButtons;
+		CToolStripButton SelectedButton;
+		List<CToolStripButton> CToolStripButtons;
 
-        public ToolStripView(ToolStrip ts, TabControl tc, ContextMenuStrip cms, Model model)
-        {
-            CToolStripButtons = new List<CToolStripButton>();
+		public ToolStripView(ToolStrip ts, TabControl tc, ContextMenuStrip cms, Model model)
+		{
+			CToolStripButtons = new List<CToolStripButton>();
 
-            this.model = model;
-            this.navigationBar = ts;
-            this.tabContextMenu = cms;
-            this.configurationTabs = tc;
+			this.model = model;
+			this.sectionMenu = ts;
+			this.tabContextMenu = cms;
+			this.sectionTabControl = tc;
 
-            this.cf = ControlFactory.getInstance();
-        }
+			this.cf = ControlFactory.getInstance();
+		}
 
-        // Takes the info from the UI, gets the changes made by the 
-        // user and stores them inside the model  / views.
-        public void saveToModel()
-        {
-        }
+		// Takes the info from the UI, gets the changes made by the 
+		// user and stores them inside the model  / views.
+		public void saveToModel()
+		{
+		}
 
-        // Reads the info from the model / views and fills-out the
-        // UI with that info, refreshing the components.
-        public void readAndShow()
-        {
-            CleanUpView();
+		// Reads the info from the model / views and fills-out the
+		// UI with that info, refreshing the components.
+		public void readAndShow()
+		{
+			CleanUpView();
 
-            foreach (Section s in model.Sections)
-            {
-                navigationBar.Items.Add(s.Button);
-                configurationTabs.TabPages.Add(s.Tab);
+			//SetUpInfoLabel();
+			foreach (Section s in model.Sections)
+			{
+				sectionMenu.Items.Add(s.Button);
+				sectionTabControl.TabPages.Add(s.Tab);
 
-                // Set the handlers event. Safe in case of duplicated handlers.
-                s.Button.Click -= ToolStripButton_Click;
-                s.Button.Click += ToolStripButton_Click;
 
-                if (s.Selected == true)
-                {
-                    s.Button.PerformClick();
-                }
-            }
+				// Set the handlers event. Safe in case of duplicated handlers.
+				s.Button.Click -= ToolStripButton_Click;
+				s.Button.Click += ToolStripButton_Click;
 
-            navigationBar.Refresh();
-            configurationTabs.Refresh();
-        }
+				if (s.Selected == true)
+				{
+					SetUpInfoLabel();
+					s.Button.PerformClick();
+				}
+			}
 
-        private void CleanUpView()
-        {
-            navigationBar.Items.Clear();
-            configurationTabs.TabPages.Clear();
-        }
+			sectionMenu.Refresh();
+			sectionTabControl.Refresh();
+		}
 
-        public void AddNewSection(String text)
-        {
-            if (!MaxSectionsReached())
-            {
+		private void CleanUpView()
+		{
+			sectionMenu.Items.Clear();
+			sectionTabControl.TabPages.Clear();
+		}
+
+		public void AddNewSection(String text)
+		{
+			if (!MaxSectionsReached())
+			{
 				Section s = cf.BuildSection(text, text, true);
 
-                if (!model.Sections.Contains(s))
-                {
-                    model.Sections.Add(s);
-                    Debug.WriteLine("+ Added: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name+"}");
-                }
+				if (!model.Sections.Contains(s))
+				{
+					model.Sections.Add(s);
+					Debug.WriteLine("+ Added: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
+				}
 
 				model.logCreator.Append("+ Added: " + s.Name);
 
@@ -89,93 +92,160 @@ namespace Configuration_Manager.Views
 
 				UnSelectSections();
 				s.Selected = true;
-            }
-            readAndShow();
-        }        
+			}
+			readAndShow();
+		}
 
-        public void RemoveSection()
-        {
-            if (SelectedButton != null && model.Sections.Count > 0)
-            {
-                Section s = model.Sections.Find(se => se.Button == SelectedButton);
-                Debug.WriteLine("! Removed: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
+		public void RemoveSection()
+		{
+			if (SelectedButton != null && model.Sections.Count > 0)
+			{
+				Section s = model.Sections.Find(se => se.Button == SelectedButton);
+				Debug.WriteLine("! Removed: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
 
 				model.logCreator.Append("- Removed: " + s.Name);
 				model.DeleteControl(s.Tab);
-                model.Sections.Remove(s);
-            }
+				model.Sections.Remove(s);
+			}
 
 			if (model.Sections.Count > 0) model.Sections[0].Selected = true;
-            readAndShow();
+			readAndShow();
 
 			// Delete all the controls that have this section as parent.
-        }
+		}
 
-        private CToolStripButton CreateToolStripButton(String text)
-        {
-            CToolStripButton ctsb = ControlFactory.getInstance().BuildCToolStripButton(text);
-            navigationBar.Items.Add(ctsb);
-            return ctsb;
-        }
+		private CToolStripButton CreateToolStripButton(String text)
+		{
+			CToolStripButton ctsb = ControlFactory.getInstance().BuildCToolStripButton(text);
+			sectionMenu.Items.Add(ctsb);
+			return ctsb;
+		}
 
-        private TabPage CreateTabPage()
-        {
-            TabPage ctp = new TabPage();
-            configurationTabs.TabPages.Add(ctp);
-            return ctp;
-        }
+		private TabPage CreateTabPage()
+		{
+			TabPage ctp = new TabPage();
+			sectionTabControl.TabPages.Add(ctp);
+			return ctp;
+		}
 
-        private void ToolStripButton_Click(object sender, EventArgs e)
-        {
-            if (sender is CToolStripButton)
-            {
-                CToolStripButton b = (CToolStripButton)sender;
-                SelectedButton = b;
+		private void ToolStripButton_Click(object sender, EventArgs e)
+		{
+			if (sender is CToolStripButton)
+			{
+				CToolStripButton b = (CToolStripButton)sender;
+				SelectedButton = b;
 
 				UnCheckButtons();
 				SelectedButton.Checked = true;
-                
-                Section s = model.Sections.Find(se => se.Button == SelectedButton);
-				
+
+				Section s = model.Sections.Find(se => se.Button == SelectedButton);
+
 				UnSelectSections();
 				s.Selected = true;
-                
+
+				int buttonIndex = sectionMenu.Items.IndexOf(SelectedButton);
+				int labelIndex = 0;
+
+				for (int i = 0; i < sectionMenu.Items.Count; i++)
+				{
+					if (sectionMenu.Items[i] is ToolStripTextBox) labelIndex = i;
+				}
+
+				MoveInfoLabel(buttonIndex, labelIndex);
+				sectionMenu.Refresh();
+
 				model.CurrentSection = s;
 
-                Debug.WriteLine("! Clicked: " + b.Name + " \"" + b.Text +"\"");
-                configurationTabs.SelectTab(s.Tab);
-                Debug.WriteLine("! Selected: " + model.CurrentSection.Name + " with Text: "+ s.Text);
-            }
-        }
+				Debug.WriteLine("! Clicked: " + b.Name + " \"" + b.Text + "\"");
+				sectionTabControl.SelectTab(s.Tab);
+				Debug.WriteLine("! Selected: " + model.CurrentSection.Name + " with Text: " + s.Text);
+			}
+		}
 
-        private void UnCheckButtons()
-        {
-            foreach (CToolStripButton bt in navigationBar.Items)
-            {
-                bt.Checked = false;
-            }
-        }
+		private void UnCheckButtons()
+		{
+			foreach (CToolStripButton bt in sectionMenu.Items.OfType<CToolStripButton>())
+			{
+				bt.Checked = false;
+			}
+		}
 
 		private void UnSelectSections()
 		{
-			foreach(Section se in model.Sections)
+			foreach (Section se in model.Sections)
 			{
 				se.Selected = false;
 			}
 		}
 
-        public void SetSelectedButton(CToolStripButton toolStripItem)
-        {
-            if (toolStripItem == null) throw new ArgumentNullException();
+		public void SetSelectedButton(CToolStripButton toolStripItem)
+		{
+			if (toolStripItem != null)
+			{
+				UnCheckButtons();
+				SelectedButton = toolStripItem;
+			}
+		}
 
-			UnCheckButtons();
-            SelectedButton = toolStripItem;
-        }
-
-        private bool MaxSectionsReached()
-        {
+		private bool MaxSectionsReached()
+		{
 			if (model.Sections.Count < Model.getInstance().maxSections) return false;
-            else return true;
-        }
-    }
+			else return true;
+		}
+
+		private void SetUpInfoLabel()
+		{
+			if (sectionMenu.Items.Count > 0)
+			{
+				ToolStripTextBox infoLabel = new ToolStripTextBox();
+
+				// We should add the label
+				//ToolStripLabel infoLabel = new ToolStripLabel();
+				int index = sectionMenu.Items.Add(infoLabel);
+
+				infoLabel.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+				infoLabel.AutoSize = false;
+				infoLabel.MaxLength = 320;
+				infoLabel.BorderStyle = BorderStyle.None;
+
+				infoLabel.TextBox.BackColor = System.Drawing.Color.Lavender;
+
+				infoLabel.TextBox.MinimumSize = new System.Drawing.Size(100, 275);
+				infoLabel.TextBox.Enabled = false;
+				infoLabel.TextBox.Multiline = true;
+				
+				infoLabel.ReadOnly = true;
+
+				int selButtonIndex = sectionMenu.Items.IndexOf(SelectedButton);
+				int lablIndex = sectionMenu.Items.IndexOf(infoLabel);
+
+				MoveInfoLabel(index, lablIndex);
+			}
+		}
+
+		private void MoveInfoLabel(int buttonIndex, int labelIndex)
+		{
+			System.Diagnostics.Debug.WriteLine("Moving Info Label - buttonIndex: " + buttonIndex + " - labelIndex: " + labelIndex);
+			ToolStripTextBox infoLabel = sectionMenu.Items[labelIndex] as ToolStripTextBox;
+
+			infoLabel.Text = "";
+
+			if (buttonIndex +1 >= sectionMenu.Items.Count)
+			{
+				sectionMenu.Items.Add(infoLabel);
+				
+				model.InfoLabel = infoLabel;
+			}
+			else
+			{
+				if (buttonIndex >= labelIndex) buttonIndex++;
+				ToolStripButton fb = sectionMenu.Items[buttonIndex] as ToolStripButton;
+				sectionMenu.Items.Insert(buttonIndex, infoLabel);
+				sectionMenu.Items.Remove(fb);
+				sectionMenu.Items.Insert(buttonIndex, fb);
+
+				model.InfoLabel = infoLabel;
+			}
+		}
+	}
 }

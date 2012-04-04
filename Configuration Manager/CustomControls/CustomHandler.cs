@@ -21,7 +21,7 @@ namespace Configuration_Manager.CustomControls
 		ControlFactory cf;
 		Rectangle previewRect = new Rectangle(0, 0, 0, 0);
 
-		Timer t = new Timer();
+		Timer t = new Timer(); // Drag and drop timer.
 
 		public CustomHandler(ContextMenuStrip cms)
 		{
@@ -220,21 +220,11 @@ namespace Configuration_Manager.CustomControls
 
 			editor = new Editor();
 			editor.Show(tabPage);
-
-			SetEditorPosition(editor);
-		}
-
-		private void SetEditorPosition(Editor editor)
-		{
-			editor.Top = model.top + model.height + 5;
-			editor.Left = model.left + model.width + 5;
 		}
 
 		public void editToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			editor = new Editor();
-
-			SetEditorPosition(editor);
 
 			model.LastClickedX = model.CurrentClickedControl.Location.X;
 			model.LastClickedY = model.CurrentClickedControl.Location.Y;

@@ -16,9 +16,6 @@ namespace Configuration_Manager
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             
-			//Model.getInstance().GetArguments(args);
-			//MainForm mf = new MainForm();
-
 			Application.Run(new MainForm());
         }
     }

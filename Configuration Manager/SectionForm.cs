@@ -20,9 +20,7 @@ namespace Configuration_Manager
 
         private void OkButton_Click(object sender, EventArgs e)
         {
-            if (NameTextBox.Text == "" || NameTextBox.Text == null) 
-                throw new ArgumentNullException();
-            else
+            if (NameTextBox.Text != "" && NameTextBox.Text != null)
             {
                 this.SectionName = NameTextBox.Text;
                 this.Close();
