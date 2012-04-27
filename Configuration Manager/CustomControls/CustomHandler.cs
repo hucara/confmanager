@@ -14,6 +14,7 @@ namespace Configuration_Manager.CustomControls
 	class CustomHandler
 	{
 		const int RGBMAX = 255;
+        const bool DRAGDROP_ACTIVE = false;
 
 		public ContextMenuStrip contextMenu;
 		Model model;
@@ -236,15 +237,24 @@ namespace Configuration_Manager.CustomControls
 
 		public void deleteToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+            // Close editor if oppened
+            Editor closing = null;
+            foreach (Editor ed in Application.OpenForms.OfType<Editor>())
+            {
+                if (ed.control == model.CurrentClickedControl) closing = ed;
+            }
+            if (closing != null) closing.Close();
+
+            // Delete control
 			model.DeleteControl(model.CurrentClickedControl);
-		}
+        }
 
 		public void TextChanged(object sender, EventArgs e)
 		{
 			ICustomControl c = sender as ICustomControl;
 
-			if ((sender as Control).Text == "") c.cd.Text = "0";
-			else c.cd.Text = (sender as Control).Text;
+			c.cd.Text = (sender as Control).Text;
+			c.cd.RealText = (sender as Control).Text;
 		}
 
 		public void Control_Click(object sender, EventArgs e)
@@ -275,7 +285,7 @@ namespace Configuration_Manager.CustomControls
 				SetContextMenuStrip(type);
 				contextMenu.Show(c, me.X, me.Y);
 			}
-			else if (model.progMode && me.Button == MouseButtons.Left)
+            else if (model.progMode && me.Button == MouseButtons.Left && DRAGDROP_ACTIVE)
 			{
 				if (type != "TabControl" && type != "TabPage" && type != "CTabControl" && type != "CTabPage")
 				{

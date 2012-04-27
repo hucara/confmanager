@@ -13,8 +13,10 @@ namespace Configuration_Manager
     {
         static int count = 0;
 
-		private String name;
-		private String hint;
+        public Boolean Changed { get; set; }
+
+        private String name = "";
+        private String hint = "";
         private String text;
 		public String RealText { get; set; }
         public String Type { get; set; }
@@ -28,19 +30,25 @@ namespace Configuration_Manager
         private int width;
         private int height;
 
+        public String DisplayRight { get; set; }
+        public String ModificationRight { get; set; }
+
         private Control control;
         private Control parent;
-        public bool Visible { get; set; }
+
+        private bool currentVisibility;
+        public bool userVisibility;
+
+        public bool userModification;
 
         public int TypeId { get; set; }
         public int Id { get; set; }
 
-        public byte VisibilityRight { get; set; }
-        public byte ModificationRight { get; set; }
-
         public String DestinationType { get; set; }
         public String MainDestination { get; set; }
+
         public String SubDestination { get; set; }
+        public String RealSubDestination { get; set; }
 
         public List<ICustomControl> RelatedWrite { get; set; }
         public List<ICustomControl> RelatedRead { get; set; }
@@ -51,9 +59,11 @@ namespace Configuration_Manager
 		private List<String> comboBoxRealItems;
 
         private Section parentSection;
+        //private Util.TokenTextTranslator ttt = Util.TokenTextTranslator.GetInstance();
 
         public ControlDescription(Control c)
         {
+            this.Changed = false;
             this.control = c;
             this.parent = c.Parent;
             this.Type = c.GetType().Name;
@@ -63,7 +73,7 @@ namespace Configuration_Manager
             this.currentFont = c.Font;
             this.backColor = c.BackColor;
             this.foreColor = c.ForeColor;
-            this.Visible = c.Visible;
+            this.currentVisibility = c.Visible;
 
             this.top = c.Top;
             this.left = c.Left;
@@ -127,7 +137,6 @@ namespace Configuration_Manager
             {
                 this.control.Text = value;
                 this.text = value;
-				if (this.Type == "CTextBox") this.RealText = value;
             }
         }
 
@@ -167,6 +176,16 @@ namespace Configuration_Manager
             {
                 this.control.ForeColor = value;
                 this.foreColor = value;
+            }
+        }
+
+        public Boolean Visible
+        {
+            get { return this.currentVisibility; }
+            set
+            {
+                this.control.Visible = value;
+                this.currentVisibility = value;
             }
         }
 
@@ -237,5 +256,13 @@ namespace Configuration_Manager
 				this.comboBoxRealItems = value;
 			}
 		}
+
+        public bool Enabled {
+            get { return this.control.Enabled; }
+            set
+            {
+                this.control.Enabled = value;
+            }
+        }
     }
 }

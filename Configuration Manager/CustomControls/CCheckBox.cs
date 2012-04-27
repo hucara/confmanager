@@ -9,7 +9,7 @@ namespace Configuration_Manager.CustomControls
     class CCheckBox : CheckBox, ICustomControl
     {
         public ControlDescription cd = null;
-        static int count = 0;
+        public static int count = 0;
         
         public CCheckBox()
         {

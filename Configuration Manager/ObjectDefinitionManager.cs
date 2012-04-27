@@ -15,20 +15,22 @@ namespace Configuration_Manager
 		private ControlFactory cf = ControlFactory.getInstance();
 		private Model model = Model.getInstance();
 
-		private static ObjectDefinitionManager odr;
+		private static ObjectDefinitionManager odm;
 		private XDocument xdoc;
 
 		private TypeConverter fontConverter = TypeDescriptor.GetConverter(typeof(Font));
 		private TypeConverter colorConverter = TypeDescriptor.GetConverter(typeof(Color));
-		private Util.TokenTextTranslator ttt = new Util.TokenTextTranslator("@@", Model.getInstance().CurrentLangPath);
+
+		private Util.TokenTextTranslator ttt = Util.TokenTextTranslator.GetInstance();
+        private Util.TokenControlTranslator tct = Util.TokenControlTranslator.GetInstance();
 
 		public static ObjectDefinitionManager getInstance()
 		{
-			if (odr == null)
+			if (odm == null)
 			{
-				odr = new ObjectDefinitionManager();
+				odm = new ObjectDefinitionManager();
 			}
-			return odr;
+			return odm;
 		}
 
 		public void SetDocument(XDocument xdoc)
@@ -38,7 +40,6 @@ namespace Configuration_Manager
 
 		public void RestoreOldUI()
 		{
-
 			System.Diagnostics.Debug.WriteLine("** Reading Object Definition File **");
 			System.Diagnostics.Debug.WriteLine("** Setting up last UI **");
 
@@ -138,7 +139,9 @@ namespace Configuration_Manager
 										new XElement("Visible", item.cd.Visible),
 										new XElement("Font", fontConverter.ConvertToString(item.cd.CurrentFont)),
 										new XElement("FontColor", colorConverter.ConvertToString(item.cd.ForeColor)),
-										new XElement("BackColor", colorConverter.ConvertToString(item.cd.BackColor))
+										new XElement("BackColor", colorConverter.ConvertToString(item.cd.BackColor)),
+                                        new XElement("DisplayRight", item.cd.DisplayRight),
+                                        new XElement("ModificationRight", item.cd.ModificationRight)
 									),
 
 									item.cd.Type == "CComboBox" ?
@@ -151,7 +154,7 @@ namespace Configuration_Manager
 									new XElement("Paths",
 										new XElement("DestinationType", item.cd.DestinationType),
 										new XElement("DestinationFile", item.cd.MainDestination),
-										new XElement("SubDestination", item.cd.SubDestination)
+										new XElement("SubDestination", item.cd.RealSubDestination)
 									),
 									new XElement("Relations",
 										new XElement("Write",
@@ -209,7 +212,8 @@ namespace Configuration_Manager
 							.Descendants("Control")
 						select item;
 
-			// Create preview controls. Everyone is assigned a section as its parent.
+			// Create a "preview" of the controls. 
+			// Everyone is assigned a section as its parent.
 			foreach (var i in items)
 			{
 				if (i.Attribute("type").Value == "CTabPage") CTabs.Add(i);
@@ -234,7 +238,7 @@ namespace Configuration_Manager
 				}
 			}
 
-			// Now it is time to fill out the controls with the info from ObjectDefinition.xml
+			// Fill out the controls with the info from ObjectDefinition.xml
 			foreach (var i in items)
 			{
 				foreach (ICustomControl c in model.AllControls)
@@ -262,18 +266,28 @@ namespace Configuration_Manager
 		{
 			if (c.cd.Type == "CComboBox")
 			{
+				// Set items of the ComboBox
 				ComboBox cb = c as ComboBox;
 				foreach (XElement e in i.Element("Items").Descendants("Item"))
 				{
-					c.cd.ComboBoxRealItems.Add(e.Value.ToString());
-					cb.Items.Add(ttt.TranslateFromTextFile(e.Value.ToString()));
+                    String value = e.Value.ToString();
+                    
+                    c.cd.ComboBoxRealItems.Add(value);
+
+                    value = ttt.TranslateFromTextFile(value);
+                    value = tct.TranslateFromControl(value);
+            
+					cb.Items.Add(value);
 				}
 
 				try
 				{
 					if (!i.Element("Items").Element("Selected").IsEmpty)
 					{
-						cb.SelectedItem = ttt.TranslateFromTextFile(i.Element("Items").Element("Selected").Value);
+                        String value = ttt.TranslateFromTextFile(i.Element("Items").Element("Selected").Value);
+                        value = tct.TranslateFromControl(value);
+
+						cb.SelectedItem = value;
 					}
 				}
 				catch (NullReferenceException e)
@@ -298,7 +312,7 @@ namespace Configuration_Manager
 		{
 			c.cd.DestinationType = i.Element("Paths").Element("DestinationType").Value;
 			c.cd.MainDestination = i.Element("Paths").Element("DestinationFile").Value;
-			c.cd.SubDestination = i.Element("Paths").Element("SubDestination").Value;
+			c.cd.RealSubDestination = i.Element("Paths").Element("SubDestination").Value;
 		}
 
 		private void CreatePreviewControls(Section s, XElement i)
@@ -377,7 +391,9 @@ namespace Configuration_Manager
 			Color newColor;
 
 			c.cd.RealText = i.Element("Text").Value;
-			c.cd.Text = ttt.TranslateFromTextFile(c.cd.RealText);
+
+            String text = ttt.TranslateFromTextFile(c.cd.RealText);
+            c.cd.Text = tct.TranslateFromControl(text);
 
 			c.cd.Hint = i.Element("Hint").Value;
 			c.cd.Hint = c.cd.Hint.Replace("&#13;&#10;", "\r\n");
@@ -397,6 +413,12 @@ namespace Configuration_Manager
 			c.cd.ForeColor = newColor;
 			newColor = (Color)colorConverter.ConvertFromString(i.Element("Settings").Element("BackColor").Value);
 			c.cd.BackColor = newColor;
+
+            c.cd.DisplayRight = i.Element("Settings").Element("DisplayRight").Value;
+            c.cd.ModificationRight = i.Element("Settings").Element("ModificationRight").Value;
+
+            c.cd.userVisibility = model.ObtainLogicAnd(c.cd.DisplayRight, model.DisplayRights);
+            c.cd.userModification = model.ObtainLogicAnd(c.cd.ModificationRight, model.ModificatioRights);
 		}
 
 		private void SetRelatedReadList(ICustomControl c, XElement i)

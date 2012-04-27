@@ -8,7 +8,7 @@ namespace Configuration_Manager.CustomControls
     class CTabControl : System.Windows.Forms.TabControl, ICustomControl
     {
         public ControlDescription cd;
-        static int count = 0;
+        public static int count = 0;
         
         public CTabControl(CTabPage tp)
         {

@@ -49,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlFactory.cs" />
-    <Compile Include="ControlDescription.cs" />
+    <Compile Include="CustomControls\ControlDescription.cs" />
     <Compile Include="CustomControls\CCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -85,6 +85,8 @@
     <Compile Include="Configuration Manager.Designer.cs">
       <DependentUpon>Configuration Manager.cs</DependentUpon>
     </Compile>
+    <Compile Include="RelationManagers\CoupledControlsManager.cs" />
+    <Compile Include="RelationManagers\VisibilityRelationManager.cs" />
     <Compile Include="Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +94,7 @@
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Model.cs" />
+    <Compile Include="RelationManagers\WriteRelationManager.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="ObjectDefinitionManager.cs" />
     <Compile Include="Program.cs" />
@@ -104,10 +107,11 @@
     </Compile>
     <Compile Include="Util\LogCreation.cs" />
     <Compile Include="Util\LogDeletion.cs" />
+    <Compile Include="Util\TokenControlTranslator.cs" />
     <Compile Include="Util\TokenTextTranslator.cs" />
     <Compile Include="Views\IView.cs" />
-    <Compile Include="Views\TabControlView.cs" />
-    <Compile Include="Views\ToolStripView.cs" />
+    <Compile Include="Views\SectionTabsView.cs" />
+    <Compile Include="Views\SectionMenuView.cs" />
     <EmbeddedResource Include="Configuration Manager.resx">
       <DependentUpon>Configuration Manager.cs</DependentUpon>
     </EmbeddedResource>
@@ -126,7 +130,6 @@
     <EmbeddedResource Include="SectionForm.resx">
       <DependentUpon>SectionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -136,9 +139,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Res\LangEN.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

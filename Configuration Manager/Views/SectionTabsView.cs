@@ -9,7 +9,7 @@ using Debug = System.Diagnostics.Debug;
 
 namespace Configuration_Manager.Views
 {
-    class TabControlView : IView
+    class SectionTabsView : IView
     {
         TabControl tabControl;
         CustomHandler ch;
@@ -17,7 +17,7 @@ namespace Configuration_Manager.Views
         Model model;
         Editor editor = new Editor();
 
-        public TabControlView(TabControl tc, CustomHandler ch)
+        public SectionTabsView(TabControl tc, CustomHandler ch)
         {
             this.tabControl = tc;
             this.ch = ch;

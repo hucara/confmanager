@@ -8,7 +8,7 @@ namespace Configuration_Manager.CustomControls
 {
     class CGroupBox : GroupBox, ICustomControl
     {
-        static int count = 0;
+        public static int count = 0;
         public ControlDescription cd;
 
         public CGroupBox()

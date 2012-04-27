@@ -156,7 +156,7 @@ namespace TokenTextTranslator_Tests
 		public void GetTranslatedValues_EnglishFile_TranslatesOK()
 		{
 			TokenTextTranslator_Accessor target = new TokenTextTranslator_Accessor("@@");
-			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\TextFile_EN.xml";
+			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
 
 			target.valuesToTranslate.Add("0");
 			target.valuesToTranslate.Add("1");
@@ -181,7 +181,7 @@ namespace TokenTextTranslator_Tests
 		public void Translate_StringWithoutValues_ReturnsSameString()
 		{
 			TokenTextTranslator_Accessor target = new TokenTextTranslator_Accessor("@@");
-			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\TextFile_EN.xml";
+			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
 			Assert.AreEqual("Hola?", target.TranslateFromTextFile("Hola?"));
 		}
 
@@ -189,7 +189,7 @@ namespace TokenTextTranslator_Tests
 		public void Translate_NullString_ReturnsEmptyString()
 		{
 			TokenTextTranslator_Accessor target = new TokenTextTranslator_Accessor("@@");
-			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\TextFile_EN.xml";
+			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
 			Assert.AreEqual("", target.TranslateFromTextFile(null));
 		}
 
@@ -197,23 +197,23 @@ namespace TokenTextTranslator_Tests
 		public void Translate_EmptyString_ReturnsEmptyString()
 		{
 			TokenTextTranslator_Accessor target = new TokenTextTranslator_Accessor("@@");
-			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\TextFile_EN.xml";
+			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
 			Assert.AreEqual("", target.TranslateFromTextFile(""));
 		}
 
 		[TestMethod()]
-		public void Translate_UnevenTokenString_ReturnsEmptyString()
+		public void Translate_UnevenTokenString_ReturnsSameString()
 		{
 			TokenTextTranslator_Accessor target = new TokenTextTranslator_Accessor("@@");
-			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\TextFile_EN.xml";
-			Assert.AreEqual("*ERROR*", target.TranslateFromTextFile("@1@@ Hola"));
+			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
+			Assert.AreEqual("@1@@ Hola", target.TranslateFromTextFile("@1@@ Hola"));
 		}
 
 		[TestMethod()]
 		public void Translate_CorrectedString_ReturnsValues()
 		{
 			TokenTextTranslator_Accessor target = new TokenTextTranslator_Accessor("@@");
-			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\TextFile_EN.xml";
+			target.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
 			Assert.AreEqual("Warning: standby, Hardw. error", target.TranslateFromTextFile("@@256@@: @@312@@, @@265@@"));
 		}
 

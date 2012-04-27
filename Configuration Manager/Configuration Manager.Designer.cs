@@ -30,7 +30,7 @@ namespace Configuration_Manager
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			this.toolStrip = new System.Windows.Forms.ToolStrip();
+			this.sectionBar = new System.Windows.Forms.ToolStrip();
 			this.contextNavMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.newSectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.deleteSectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,21 +53,21 @@ namespace Configuration_Manager
 			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// toolStrip
+			// sectionBar
 			// 
-			this.toolStrip.AutoSize = false;
-			this.toolStrip.Dock = System.Windows.Forms.DockStyle.Left;
-			this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			this.toolStrip.Location = new System.Drawing.Point(0, 0);
-			this.toolStrip.MaximumSize = new System.Drawing.Size(131, 572);
-			this.toolStrip.Name = "toolStrip";
-			this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-			this.toolStrip.ShowItemToolTips = false;
-			this.toolStrip.Size = new System.Drawing.Size(131, 572);
-			this.toolStrip.TabIndex = 1;
-			this.toolStrip.Text = "toolStrip1";
-			this.toolStrip.SizeChanged += new System.EventHandler(this.toolStrip_SizeChanged);
-			this.toolStrip.Click += new System.EventHandler(this.toolStrip_RightClick);
+			this.sectionBar.AutoSize = false;
+			this.sectionBar.Dock = System.Windows.Forms.DockStyle.Left;
+			this.sectionBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.sectionBar.Location = new System.Drawing.Point(0, 0);
+			this.sectionBar.MaximumSize = new System.Drawing.Size(131, 572);
+			this.sectionBar.Name = "sectionBar";
+			this.sectionBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+			this.sectionBar.ShowItemToolTips = false;
+			this.sectionBar.Size = new System.Drawing.Size(131, 572);
+			this.sectionBar.TabIndex = 1;
+			this.sectionBar.Text = "toolStrip1";
+			this.sectionBar.SizeChanged += new System.EventHandler(this.toolStrip_SizeChanged);
+			this.sectionBar.Click += new System.EventHandler(this.toolStrip_RightClick);
 			// 
 			// contextNavMenu
 			// 
@@ -204,7 +204,7 @@ namespace Configuration_Manager
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(794, 572);
 			this.Controls.Add(this.tabControl);
-			this.Controls.Add(this.toolStrip);
+			this.Controls.Add(this.sectionBar);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -220,7 +220,7 @@ namespace Configuration_Manager
 
         #endregion
 
-        private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.ToolStrip sectionBar;
         private System.Windows.Forms.ContextMenuStrip contextMenu;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem labelToolStripMenuItem;

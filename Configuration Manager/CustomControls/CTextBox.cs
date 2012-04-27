@@ -8,7 +8,7 @@ namespace Configuration_Manager.CustomControls
 {
     class CTextBox : TextBox, ICustomControl
     {
-        static int count = 0;
+        public static int count = 0;
         public ControlDescription cd;
 
         public CTextBox()

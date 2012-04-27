@@ -10,7 +10,7 @@ using Debug = System.Diagnostics.Debug;
 
 namespace Configuration_Manager.Views
 {
-	class ToolStripView : IView
+	class SectionMenuView : IView
 	{
 		Model model;
 		ControlFactory cf;
@@ -21,11 +21,11 @@ namespace Configuration_Manager.Views
 		CToolStripButton SelectedButton;
 		List<CToolStripButton> CToolStripButtons;
 
-		public ToolStripView(ToolStrip ts, TabControl tc, ContextMenuStrip cms, Model model)
+		public SectionMenuView(ToolStrip ts, TabControl tc, ContextMenuStrip cms)
 		{
 			CToolStripButtons = new List<CToolStripButton>();
 
-			this.model = model;
+			this.model = Model.getInstance();
 			this.sectionMenu = ts;
 			this.tabContextMenu = cms;
 			this.sectionTabControl = tc;
@@ -50,7 +50,6 @@ namespace Configuration_Manager.Views
 			{
 				sectionMenu.Items.Add(s.Button);
 				sectionTabControl.TabPages.Add(s.Tab);
-
 
 				// Set the handlers event. Safe in case of duplicated handlers.
 				s.Button.Click -= ToolStripButton_Click;
@@ -200,7 +199,6 @@ namespace Configuration_Manager.Views
 				ToolStripTextBox infoLabel = new ToolStripTextBox();
 
 				// We should add the label
-				//ToolStripLabel infoLabel = new ToolStripLabel();
 				int index = sectionMenu.Items.Add(infoLabel);
 
 				infoLabel.TextAlign = System.Drawing.ContentAlignment.TopLeft;

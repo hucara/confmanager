@@ -10,59 +10,60 @@ using Configuration_Manager.Views;
 using Configuration_Manager.CustomControls;
 
 using Debug = System.Diagnostics.Debug;
+using System.Xml.Linq;
 
 namespace Configuration_Manager
 {
     public partial class MainForm : Form
     {
-		private Model model = Model.getInstance();
+        private Model model = Model.getInstance();
         private ControlFactory cf = ControlFactory.getInstance();
         private ObjectDefinitionManager odm = ObjectDefinitionManager.getInstance();
 
         private Editor editor;
 
-        TabControlView tabControlView;
-        ToolStripView toolStripView;
+        SectionTabsView sectionTabsView;
+        SectionMenuView sectionMenuView;
         CustomHandler ch;
 
         public MainForm()
         {
-			this.DoubleBuffered = true;
+            this.DoubleBuffered = true;
 
             InitializeComponent();
 
-			model.ReadConfigurationFile();
-			SetUpMainForm();
+            model.ReadConfigurationFile();
+            SetUpMainForm();
 
-			PrintWellcomeLogMessage();
-			
-			InitCustomHandler();
+            PrintWellcomeLogMessage();
+
+            InitCustomHandler();
             InitViews();
             InitHandlers();
-       }
+        }
 
-		private void PrintWellcomeLogMessage()
-		{
-			model.logCreator.Append(" ");
-			model.logCreator.AppendDividingLine();
-			model.logCreator.AppendCenteredWithFrame("");
-			model.logCreator.AppendCenteredWithFrame(" Configuration Manager ");
-			model.logCreator.AppendCenteredWithFrame("");
-			model.logCreator.AppendDividingLine();
-			model.logCreator.Append(" ");
-		}
+        private void PrintWellcomeLogMessage()
+        {
+            model.logCreator.Append(" ");
+            model.logCreator.AppendDividingLine();
+            model.logCreator.AppendCenteredWithFrame("");
+            model.logCreator.AppendCenteredWithFrame(" Configuration Manager ");
+            model.logCreator.AppendCenteredWithFrame("");
+            model.logCreator.AppendDividingLine();
+            model.logCreator.Append(" ");
+        }
 
-		private void SetUpMainForm()
-		{
-			this.TopMost = model.stayOnTop;
-			this.Width = model.width;
-			this.Height = model.height;
+        private void SetUpMainForm()
+        {
+            this.TopMost = model.stayOnTop;
+            this.Width = model.width;
+            this.Height = model.height;
 
-			this.Top = model.top;
-			this.Left = model.left;
+            this.Top = model.top;
+            this.Left = model.left;
 
-			if (model.resizable) this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-		}
+            if (model.resizable) this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+        }
 
         private void InitCustomHandler()
         {
@@ -89,41 +90,35 @@ namespace Configuration_Manager
 
         private void InitViews()
         {
-            tabControlView = new TabControlView(tabControl, ch);
-            toolStripView = new ToolStripView(toolStrip, tabControl, contextMenu, model);
+            sectionTabsView = new SectionTabsView(tabControl, ch);
+            sectionMenuView = new SectionMenuView(sectionBar, tabControl, contextMenu);
 
-			if (model.ObjectDefinitionExists)
-			{
-				odm.SetDocument(model.ConfigObjects);
-				odm.RestoreOldUI();
-				toolStripView.readAndShow();
-				tabControlView.readAndShow();
-			}
-			else
-			{
-				model.logCreator.AppendCenteredWithFrame(" ! Object Definition file not found ! ");
-				model.logCreator.AppendCenteredWithFrame(" Creating new empty UI ");
-				model.logCreator.Append(" ");
-			}
-        }
-
-        private void SetProgMode()
-        {
-            if (model.progMode == false)
+            if (model.ObjectDefinitionExists)
             {
-                model.progMode = true;
-                Debug.WriteLine("** INFO ** Programmer mode ACTIVE.");
-				model.logCreator.Append("");
-				model.logCreator.AppendCenteredWithFrame(" Programmer mode ACTIVE");
+                odm.SetDocument(model.ConfigObjects);
+                odm.RestoreOldUI();
+                sectionMenuView.readAndShow();
+                sectionTabsView.readAndShow();
             }
             else
             {
-                model.progMode = false;
-				Debug.WriteLine("** INFO ** Programmer mode INACTIVE.");
-				this.Refresh();
+                model.logCreator.AppendCenteredWithFrame(" ! Object Definition file not found ! ");
+                model.logCreator.AppendCenteredWithFrame(" Creating new empty UI ");
+                model.logCreator.Append(" ");
+            }
+        }
 
-				model.logCreator.Append("");
-				model.logCreator.AppendCenteredWithFrame(" Programmer mode ACTIVE");
+        private void SwitchProgMode()
+        {
+            model.SwitchProgrammingMode();
+
+            if (model.progMode)
+            {
+                sectionBar.BackColor = System.Drawing.Color.LightPink;
+            }
+            else
+            {
+                sectionBar.BackColor = System.Windows.Forms.ProfessionalColors.ToolStripBorder;
             }
         }
 
@@ -131,7 +126,7 @@ namespace Configuration_Manager
         {
             if (e.Alt && e.Control && e.KeyCode == Keys.P)
             {
-                SetProgMode();
+                SwitchProgMode();
             }
 
             if (e.Alt && e.Control && e.KeyCode == Keys.S)
@@ -141,18 +136,18 @@ namespace Configuration_Manager
 
             if (e.Alt && e.Control && e.KeyCode == Keys.D)
             {
-				System.Diagnostics.Debug.WriteLine("\n###################################");
-				System.Diagnostics.Debug.WriteLine("! Printing Sections:");
-				
-				foreach(Section s in model.Sections)
-				{
-					System.Diagnostics.Debug.WriteLine(s.Name + " " +s.Tab.GetType().Name+ ":" +s.Tab.Name+ " "+s.Button.GetType().Name+ ":"+s.Button.Text);
-				}
+                System.Diagnostics.Debug.WriteLine("\n###################################");
+                System.Diagnostics.Debug.WriteLine("! Printing Sections:");
 
-				System.Diagnostics.Debug.WriteLine("-----------------------------------");
+                foreach (Section s in model.Sections)
+                {
+                    System.Diagnostics.Debug.WriteLine(s.Name + " " + s.Tab.GetType().Name + ":" + s.Tab.Name + " " + s.Button.GetType().Name + ":" + s.Button.Text);
+                }
+
+                System.Diagnostics.Debug.WriteLine("-----------------------------------");
                 System.Diagnostics.Debug.WriteLine("! Printing List of Controls: ");
-				System.Diagnostics.Debug.WriteLine("\tControl        Parent");
-				System.Diagnostics.Debug.WriteLine("___________________________________");
+                System.Diagnostics.Debug.WriteLine("\tControl        Parent");
+                System.Diagnostics.Debug.WriteLine("___________________________________");
                 foreach (ICustomControl c in model.AllControls)
                 {
                     String line = "\t";
@@ -161,21 +156,26 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine(line);
                 }
                 System.Diagnostics.Debug.WriteLine("#####################################");
+
+                WriteRelationManager wrm = new WriteRelationManager();
+                wrm.SaveConfiguration();
             }
         }
 
         private void newSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SectionForm sf = new SectionForm();
-            sf.ShowDialog();
-            toolStripView.AddNewSection(sf.SectionName);
-            tabControlView.readAndShow();
+            if (DialogResult.OK == sf.ShowDialog())
+            {
+                sectionMenuView.AddNewSection(sf.SectionName);
+                sectionTabsView.readAndShow();
+            }
         }
 
         private void deleteSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            toolStripView.RemoveSection();
-            tabControlView.readAndShow();
+            sectionMenuView.RemoveSection();
+            sectionTabsView.readAndShow();
         }
 
         private void toolStrip_RightClick(object sender, EventArgs e)
@@ -185,11 +185,11 @@ namespace Configuration_Manager
 
             if (model.progMode && me.Button == MouseButtons.Right)
             {
-                if (toolStrip.GetItemAt(me.X, me.Y) is CToolStripButton)
+                if (sectionBar.GetItemAt(me.X, me.Y) is CToolStripButton)
                 {
-                    toolStrip.GetItemAt(me.X, me.Y).PerformClick();
+                    sectionBar.GetItemAt(me.X, me.Y).PerformClick();
                     deleteSectionToolStripMenuItem.Enabled = true;
-                    toolStripView.SetSelectedButton(toolStrip.GetItemAt(me.X, me.Y) as CToolStripButton);
+                    sectionMenuView.SetSelectedButton(sectionBar.GetItemAt(me.X, me.Y) as CToolStripButton);
                 }
                 else
                 {
@@ -209,9 +209,25 @@ namespace Configuration_Manager
             }
         }
 
-		private void toolStrip_SizeChanged(object sender, EventArgs e)
-		{
-			model.sectionMenuWidth = (sender as ToolStrip).Size.Width;
-		}
+        private void toolStrip_SizeChanged(object sender, EventArgs e)
+        {
+            model.sectionMenuWidth = (sender as ToolStrip).Size.Width;
+        }
+
+        private void ReplaceLabels()
+        {
+            XDocument xdoc;
+            try
+            {
+                xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
+                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
+
+                this.Text = texts.Single(x => (int?)x.Attribute("id") == 26).Value;
+            }
+            catch
+            {
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an error reading text for main form labels.");
+            }
+        }
     }
 }

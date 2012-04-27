@@ -17,6 +17,7 @@ namespace Configuration_Manager
 
 		public string[] args { get; set; }
 
+		public bool progModeAllowed = false;
 		public bool progMode = false;
 		public bool stayOnTop = false;
 		public bool movable = false;
@@ -32,7 +33,7 @@ namespace Configuration_Manager
 		public int containerMargin = 10;
 
 		public uint ModificatioRights = 0x00000000;
-		public uint DisplayRights = 0xFFFFFFFF;
+		public uint DisplayRights = 0xF0000000;
 
 		public bool createLogs = false;
 		public int maxAgeOfLogs = -1;
@@ -81,6 +82,12 @@ namespace Configuration_Manager
 		public LogDeletion logDeleter { get; private set; }
 
 		public ToolStripTextBox InfoLabel { get; set; }
+
+		private Util.TokenTextTranslator ttt = Util.TokenTextTranslator.GetInstance();
+        private Util.TokenControlTranslator tct = Util.TokenControlTranslator.GetInstance();
+
+		public String textToken { get; set; }
+        public String controlToken { get; set; }
         
         // Private constructor
         private Model()
@@ -98,6 +105,16 @@ namespace Configuration_Manager
             FillDestinationFileTypes();
             FillOutRelationTypes();
 		}
+
+        // Singleton
+        public static Model getInstance()
+        {
+            if (model == null)
+            {
+                model = new Model();
+            }
+            return model;
+        }
 
 		private void LoadFiles()
 		{
@@ -167,16 +184,6 @@ namespace Configuration_Manager
 			return p.Substring(0, p.LastIndexOf("\\"));
 		}
 
-        // Singleton approach
-        public static Model getInstance()
-        {
-            if (model == null)
-            {
-                model = new Model();
-            }
-            return model;
-        }
-
         private void FillDestinationFileTypes()
         {
             DestinationFileTypes.Add(".INI");
@@ -217,8 +224,8 @@ namespace Configuration_Manager
 				ReadRightsSection(xdoc);
 				ReadLogsSection(xdoc);
 
-				string[] a = {"-p", "-r", "-t","0","-l", "1376", "-dr", "64", "-mr", "F2"};
-				this.args = a;
+                //string[] a = {"-p", "-r", "-t","0","-l", "1376", "-dr", "64", "-mr", "F2"};
+                //this.args = a;
 
 				if (this.args != null)
 				{
@@ -229,6 +236,12 @@ namespace Configuration_Manager
 					logCreator = new LogCreation("CM", 70, '#', this.createLogs);
 					logDeleter = new LogDeletion("ConfigurationManager", "CM", this.maxAgeOfLogs);
 				}
+
+				if (this.textToken == "" || this.textToken == null) ttt.SetTokenTextTranslator(null, this.CurrentLangPath);
+				else ttt.SetTokenTextTranslator(textToken, this.CurrentLangPath);
+
+                if (this.controlToken == "" || this.controlToken == null) tct.SetTokenKey("##");
+                else tct.SetTokenKey(controlToken);
 
 				System.Diagnostics.Debug.WriteLine(" ");
 				System.Diagnostics.Debug.WriteLine("** INFO ** Config file and arguments read. Printing info.");
@@ -244,6 +257,7 @@ namespace Configuration_Manager
 				System.Diagnostics.Debug.WriteLine(" - Createlogs: " + this.createLogs);
 				System.Diagnostics.Debug.WriteLine(" - MaxAgeOfLogs: " + this.maxAgeOfLogs);
 
+				System.Diagnostics.Debug.WriteLine(" - ProgModeAllowed: " + this.progModeAllowed);
 				System.Diagnostics.Debug.WriteLine(" - ProgMode: " + this.progMode);
 				System.Diagnostics.Debug.WriteLine(" - Modification: " + this.ModificatioRights);
 				System.Diagnostics.Debug.WriteLine(" - Display: " + this.DisplayRights);
@@ -272,6 +286,9 @@ namespace Configuration_Manager
 
 			Int32.TryParse(settings.Element("ControlMargin").Value.ToString(), out this.controlMarging);
 			Int32.TryParse(settings.Element("ContainerMargin").Value.ToString(), out this.containerMargin);
+
+			this.textToken = settings.Element("TextToken").Value.ToString();
+            this.controlToken = settings.Element("ControlToken").Value.ToString();
 		}
 
 		private void ReadLanguagesSection(XDocument xdoc)
@@ -299,7 +316,7 @@ namespace Configuration_Manager
 		{
 			XElement rights = xdoc.Element("ConfigurationManager").Element("Rights");
 
-			if (rights.Element("ProgrammerMode").Value == "yes") this.progMode = true;
+			if (rights.Element("ProgrammerMode").Value == "yes") this.progModeAllowed = true;
 			uint.TryParse(rights.Element("Modification").Value, out this.ModificatioRights);
 			uint.TryParse(rights.Element("Display").Value, out this.DisplayRights);
 		}
@@ -474,7 +491,7 @@ namespace Configuration_Manager
 
 			if (ag.Contains("-st")) Model.getInstance().stayOnTop = true;
 			if (ag.Contains("-m")) Model.getInstance().movable = true;
-			if (ag.Contains("-p")) Model.getInstance().progMode = true;
+			if (ag.Contains("-p")) Model.getInstance().progModeAllowed = true;
 			if (ag.Contains("-r")) Model.getInstance().resizable = true;
 
 			try
@@ -543,12 +560,72 @@ namespace Configuration_Manager
 		public void UpdateInfoLabel(object sender, EventArgs e)
 		{
 			this.InfoLabel.Text = "";
-			this.InfoLabel.Text = (sender as ICustomControl).cd.Hint;
+			this.InfoLabel.Text = ttt.TranslateFromTextFile((sender as ICustomControl).cd.Hint);
+            this.InfoLabel.Text = tct.TranslateFromControl(this.InfoLabel.Text);
 		}
 
 		public void EraseInfoLabel(object sender, EventArgs e)
 		{
 			this.InfoLabel.Text = "";
 		}
+
+        public bool ObtainLogicAnd(String ControlDisplayRight, uint MainDisplayRight)
+        {
+            uint controlRight;
+            uint.TryParse(ControlDisplayRight, out controlRight);
+
+            if ((controlRight & MainDisplayRight) == controlRight) return true;
+            return false;
+        }
+
+        public void SwitchProgrammingMode()
+        {
+            if (model.progModeAllowed)
+            {
+                progMode = !progMode;
+
+                if (progMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("** INFO ** Programmer mode ACTIVE.");
+                    logCreator.Append("");
+                    logCreator.AppendCenteredWithFrame(" Programmer mode ACTIVE");
+
+                    ApplyRightsToControls();
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("** INFO ** Programmer mode INACTIVE.");
+
+                    logCreator.Append("");
+                    logCreator.AppendCenteredWithFrame(" Programmer mode ACTIVE");
+
+                    ApplyRightsToControls();
+
+                    // Close opened editors
+                    List<Editor> eds = Application.OpenForms.OfType<Editor>().ToList();
+                    for (int i = 0; i < eds.Count; i++)
+                    {
+                        eds[i].Close();
+                    }
+                }
+            }
+        }
+
+        private void ApplyRightsToControls()
+        {
+            foreach (ICustomControl c in AllControls)
+            {
+                if (progMode)
+                {
+                    c.cd.Visible = true;
+                    c.cd.Enabled = true;
+                }
+                else
+                {
+                    c.cd.Visible = c.cd.userVisibility;
+                    c.cd.Enabled = c.cd.userModification;
+                }
+            }
+        }
 	}
 }

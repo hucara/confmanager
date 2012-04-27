@@ -20,11 +20,12 @@ namespace Configuration_Manager
 
         private void OkButton_Click(object sender, EventArgs e)
         {
-            if (NameTextBox.Text != "" && NameTextBox.Text != null)
-            {
-                this.SectionName = NameTextBox.Text;
-                this.Close();
-            }
+			if (NameTextBox.Text != "" && NameTextBox.Text != null)
+			{
+				this.SectionName = NameTextBox.Text;
+				this.DialogResult = System.Windows.Forms.DialogResult.OK;
+				this.Close();
+			}
         }
 
         private void NameTextBox_KeyDown(object sender, KeyEventArgs e)
