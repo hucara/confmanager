@@ -57,6 +57,7 @@ namespace Configuration_Manager
 
 		private ComboBox.ObjectCollection comboBoxItems;
 		private List<String> comboBoxRealItems;
+        private List<string> comboBoxConfigItems;
 
         private Section parentSection;
         //private Util.TokenTextTranslator ttt = Util.TokenTextTranslator.GetInstance();
@@ -91,6 +92,7 @@ namespace Configuration_Manager
 			{
 				this.comboBoxItems = new ComboBox.ObjectCollection(control as ComboBox);
 				this.comboBoxRealItems = new List<string>();
+                this.comboBoxConfigItems = new List<string>();
 			}
 			
             this.parentSection = Model.getInstance().CurrentSection;
@@ -256,6 +258,15 @@ namespace Configuration_Manager
 				this.comboBoxRealItems = value;
 			}
 		}
+
+        public List<String> ComboBoxConfigItems
+        {
+            get { return this.comboBoxConfigItems; }
+            set
+            {
+                this.comboBoxConfigItems = value;
+            }
+        }
 
         public bool Enabled {
             get { return this.control.Enabled; }

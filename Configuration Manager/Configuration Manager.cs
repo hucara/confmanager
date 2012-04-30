@@ -20,6 +20,8 @@ namespace Configuration_Manager
         private ControlFactory cf = ControlFactory.getInstance();
         private ObjectDefinitionManager odm = ObjectDefinitionManager.getInstance();
 
+        private WriteRelationManager wrm = new WriteRelationManager();
+
         private Editor editor;
 
         SectionTabsView sectionTabsView;
@@ -157,8 +159,7 @@ namespace Configuration_Manager
                 }
                 System.Diagnostics.Debug.WriteLine("#####################################");
 
-                WriteRelationManager wrm = new WriteRelationManager();
-                wrm.SaveConfiguration();
+                wrm.TranslateSubDestiantions();
             }
         }
 

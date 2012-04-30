@@ -51,35 +51,37 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
-        public void SaveConfiguration()
+        // For Each control with Write Relations, replaces the tokens in the Subdestination path
+        // and sets the real path according to the value of that token.
+        public void TranslateSubDestiantions()
         {
             List<ICustomControl> ContainRelatedWrite =  Model.getInstance().AllControls.Where(c => c.cd.RelatedWrite.Count > 0).ToList();
             Util.TokenControlTranslator tct = Util.TokenControlTranslator.GetInstance();
 
             foreach (ICustomControl control in ContainRelatedWrite)
             {
-                Dictionary<string, string> dic = tct.GetValueTranslatedPairs(control.cd.RealSubDestination);
+                Dictionary<string, string> dic = tct.GetValueTranslatedPairs(control.cd.SubDestination);
+
+                String destination = "";
+                destination = control.cd.SubDestination;
 
                 foreach (string name in dic.Keys.ToList())
                 {
-                    int startInd = control.cd.RealSubDestination.IndexOf(name) - 2;
-                    int endInd = startInd + 4 + name.Length;
-
-                    String key = Model.getInstance().controlToken + name +Model.getInstance().controlToken;
+                    String key = name;
                     String value = "";
 
-                    dic.TryGetValue(key, out value);
+                    if (dic.TryGetValue(key, out value))
+                    {
+                        key = Model.getInstance().controlToken + key + Model.getInstance().controlToken;
+                        control.cd.RealSubDestination = destination.Replace(key, value);
 
-                    System.Diagnostics.Debug.WriteLine("SubDestination replaced for control: " + control.cd.Name);
-                    System.Diagnostics.Debug.WriteLine("\t - SubDestination = " +control.cd.RealSubDestination);
-
-                    control.cd.RealSubDestination.Replace(key, value);
-
-                    System.Diagnostics.Debug.WriteLine("\t - Replace = " + control.cd.SubDestination);
-
-
-                    //TODO THIS IS THE END
+                        destination = control.cd.RealSubDestination;
+                    }
                 }
+
+                System.Diagnostics.Debug.WriteLine("SubDestination replaced for control: " + control.cd.Name);
+                System.Diagnostics.Debug.WriteLine("\t - SubDestination = " + control.cd.SubDestination);
+                System.Diagnostics.Debug.WriteLine("\t - Replaced = " + control.cd.RealSubDestination);
             }
         }
     }

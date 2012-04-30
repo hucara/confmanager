@@ -99,7 +99,7 @@ namespace Configuration_Manager
         {
             openFileDialog1.Multiselect = false;
             openFileDialog1.FileName = "";
-            openFileDialog1.Filter = "INI File|*.ini | XML File|*.xml | Text File|*.txt";
+            openFileDialog1.Filter = "INI Files(*.ini)|*.ini|XML Files(*.xml)|*.xml|Text Files(*.txt)|*.txt";
         }
 
         private void ShowDefaultSize()
@@ -471,7 +471,7 @@ namespace Configuration_Manager
 
             control.cd.DestinationType = this.destinationTypeComboBox.SelectedItem.ToString();
             control.cd.MainDestination = this.fileDestinationTextBox.Text;
-            control.cd.RealSubDestination = this.subDestinatonTextBox.Text;
+            control.cd.SubDestination = this.subDestinatonTextBox.Text;
 
 			control.cd.ModificationRight = this.modificationRightTextBox.Text.Remove(0,2);
             control.cd.DisplayRight = this.displayRightTextBox.Text.Remove(0, 2);
@@ -505,7 +505,7 @@ namespace Configuration_Manager
 
             this.destinationTypeComboBox.SelectedText = control.cd.DestinationType;
             this.fileDestinationTextBox.Text = control.cd.MainDestination;
-            this.subDestinatonTextBox.Text = control.cd.RealSubDestination;
+            this.subDestinatonTextBox.Text = control.cd.SubDestination;
 
             if (control.cd.DisplayRight != null) this.displayRightTextBox.Text = control.cd.DisplayRight;
             if (control.cd.ModificationRight != null) this.modificationRightTextBox.Text = control.cd.ModificationRight;
@@ -629,61 +629,61 @@ namespace Configuration_Manager
 			textTextBox.Hide();
 			comboBoxEditPanel.Show();
 
-			addItemButton.MouseDown -= addItemToComboBox;
-			addItemButton.MouseDown += addItemToComboBox;
+            //addItemButton.MouseDown -= addItemToComboBox;
+            //addItemButton.MouseDown += addItemToComboBox;
 
-			delItemButton.MouseDown -= delItemFromComboBox;
-			delItemButton.MouseDown += delItemFromComboBox;
+            //delItemButton.MouseDown -= delItemFromComboBox;
+            //delItemButton.MouseDown += delItemFromComboBox;
 
 			// Copy items from real comboBox to the fake comboBox inside Editor form.
-			comboBoxEditor.Items.Clear();
+            //comboBoxEditor.Items.Clear();
 			object[] items = new object[(control as ComboBox).Items.Count];
 
 			foreach (String s in control.cd.ComboBoxRealItems)
 			{
-				comboBoxEditor.Items.Add(s);
+                //comboBoxEditor.Items.Add(s);
 			}
 			//control.cd.ComboBoxRealItems.CopyTo(items, 0);
 			//comboBoxEditor.Items.AddRange(items);
 
-			comboBoxEditor.SelectedIndex = (control as ComboBox).SelectedIndex;
+            //comboBoxEditor.SelectedIndex = (control as ComboBox).SelectedIndex;
 		}
 
 		private void CComboBoxUpdateSetUp()
 		{
-			(control as ComboBox).SelectedIndex = comboBoxEditor.SelectedIndex;
+            //(control as ComboBox).SelectedIndex = comboBoxEditor.SelectedIndex;
 			(control as ComboBox).Update();
 		}
 
 		private void addItemToComboBox(object sender, EventArgs e)
 		{
-			if (!control.cd.ComboBoxRealItems.Contains(comboBoxEditor.Text))
-			{
-				String text = ttt.TranslateFromTextFile(comboBoxEditor.Text);
-                text = tct.TranslateFromControl(text);
+            //if (!control.cd.ComboBoxRealItems.Contains(comboBoxEditor.Text))
+            //{
+            //    //String text = ttt.TranslateFromTextFile(comboBoxEditor.Text);
+            //    text = tct.TranslateFromControl(text);
 
-				int index = comboBoxEditor.Items.Add(comboBoxEditor.Text);
-				control.cd.ComboBoxRealItems.Add(comboBoxEditor.Text);
-				(control as ComboBox).Items.Add(text);
+            //    //int index = comboBoxEditor.Items.Add(comboBoxEditor.Text);
+            //    //control.cd.ComboBoxRealItems.Add(comboBoxEditor.Text);
+            //    (control as ComboBox).Items.Add(text);
 
-				comboBoxEditor.SelectedIndex = index;
-				(control as ComboBox).SelectedIndex = index;
-			}
+            //    //comboBoxEditor.SelectedIndex = index;
+            //    (control as ComboBox).SelectedIndex = index;
+            //}
 		}
 
 		private void delItemFromComboBox(object sender, EventArgs e)
 		{
-			int index = comboBoxEditor.SelectedIndex;
+            //int index = comboBoxEditor.SelectedIndex;
 
-			if (index > -1)
-			{
-				(control as ComboBox).Items.RemoveAt(index);
-				comboBoxEditor.Items.RemoveAt(index);
-				control.cd.ComboBoxRealItems.RemoveAt(index);
+            //if (index > -1)
+            //{
+            //    (control as ComboBox).Items.RemoveAt(index);
+            //    comboBoxEditor.Items.RemoveAt(index);
+            //    control.cd.ComboBoxRealItems.RemoveAt(index);
 
-				comboBoxEditor.SelectedItem = null;
-				(control as ComboBox).SelectedItem = null;
-			}
+            //    comboBoxEditor.SelectedItem = null;
+            //    (control as ComboBox).SelectedItem = null;
+            //}
 		}
 
 		private void Editor_KeyDown(object sender, KeyEventArgs e)
@@ -749,6 +749,12 @@ namespace Configuration_Manager
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** There was a problem reading texts for the Editor Form.");
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ComboBoxEditor cbe = new ComboBoxEditor(this.control);
+            cbe.ShowDialog();
         }
 	}
 }

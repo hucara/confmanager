@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComboBoxEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComboBoxEditor.Designer.cs">
+      <DependentUpon>ComboBoxEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="ControlFactory.cs" />
     <Compile Include="CustomControls\ControlDescription.cs" />
     <Compile Include="CustomControls\CCheckBox.cs">
@@ -105,6 +111,7 @@
     <Compile Include="SectionForm.Designer.cs">
       <DependentUpon>SectionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util\GeneralIniFiles.cs" />
     <Compile Include="Util\LogCreation.cs" />
     <Compile Include="Util\LogDeletion.cs" />
     <Compile Include="Util\TokenControlTranslator.cs" />
@@ -112,6 +119,9 @@
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\SectionTabsView.cs" />
     <Compile Include="Views\SectionMenuView.cs" />
+    <EmbeddedResource Include="ComboBoxEditor.resx">
+      <DependentUpon>ComboBoxEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Configuration Manager.resx">
       <DependentUpon>Configuration Manager.cs</DependentUpon>
     </EmbeddedResource>

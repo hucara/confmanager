@@ -47,9 +47,6 @@
             this.hintTextBox = new System.Windows.Forms.TextBox();
             this.textLabel = new System.Windows.Forms.Label();
             this.comboBoxEditPanel = new System.Windows.Forms.Panel();
-            this.comboBoxEditor = new System.Windows.Forms.ComboBox();
-            this.delItemButton = new System.Windows.Forms.Button();
-            this.addItemButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.modificationRightLabel = new System.Windows.Forms.Label();
             this.displayRightLabel = new System.Windows.Forms.Label();
@@ -70,6 +67,7 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.updateButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.comboBoxEditPanel.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -123,7 +121,7 @@
             // 
             // textTextBox
             // 
-            this.textTextBox.Location = new System.Drawing.Point(92, 18);
+            this.textTextBox.Location = new System.Drawing.Point(92, 24);
             this.textTextBox.Name = "textTextBox";
             this.textTextBox.Size = new System.Drawing.Size(231, 20);
             this.textTextBox.TabIndex = 1;
@@ -251,40 +249,12 @@
             // 
             // comboBoxEditPanel
             // 
-            this.comboBoxEditPanel.Controls.Add(this.comboBoxEditor);
-            this.comboBoxEditPanel.Controls.Add(this.delItemButton);
-            this.comboBoxEditPanel.Controls.Add(this.addItemButton);
+            this.comboBoxEditPanel.Controls.Add(this.button1);
             this.comboBoxEditPanel.Location = new System.Drawing.Point(92, 15);
             this.comboBoxEditPanel.Name = "comboBoxEditPanel";
             this.comboBoxEditPanel.Size = new System.Drawing.Size(234, 25);
             this.comboBoxEditPanel.TabIndex = 19;
             this.comboBoxEditPanel.Visible = false;
-            // 
-            // comboBoxEditor
-            // 
-            this.comboBoxEditor.FormattingEnabled = true;
-            this.comboBoxEditor.Location = new System.Drawing.Point(1, 3);
-            this.comboBoxEditor.Name = "comboBoxEditor";
-            this.comboBoxEditor.Size = new System.Drawing.Size(105, 21);
-            this.comboBoxEditor.TabIndex = 32;
-            // 
-            // delItemButton
-            // 
-            this.delItemButton.Location = new System.Drawing.Point(112, 1);
-            this.delItemButton.Name = "delItemButton";
-            this.delItemButton.Size = new System.Drawing.Size(58, 23);
-            this.delItemButton.TabIndex = 31;
-            this.delItemButton.Text = "del item";
-            this.delItemButton.UseVisualStyleBackColor = true;
-            // 
-            // addItemButton
-            // 
-            this.addItemButton.Location = new System.Drawing.Point(172, 1);
-            this.addItemButton.Name = "addItemButton";
-            this.addItemButton.Size = new System.Drawing.Size(58, 23);
-            this.addItemButton.TabIndex = 30;
-            this.addItemButton.Text = "add item";
-            this.addItemButton.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -464,6 +434,16 @@
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(50, 1);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(142, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "edit items";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -532,13 +512,11 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button updateButton;
 		private System.Windows.Forms.ComboBox relationsComboBox;
-		private System.Windows.Forms.Panel comboBoxEditPanel;
-		private System.Windows.Forms.ComboBox comboBoxEditor;
-		private System.Windows.Forms.Button delItemButton;
-		private System.Windows.Forms.Button addItemButton;
+        private System.Windows.Forms.Panel comboBoxEditPanel;
 		private System.Windows.Forms.MaskedTextBox modificationRightTextBox;
 		private System.Windows.Forms.Label displayRightLabel;
 		private System.Windows.Forms.MaskedTextBox displayRightTextBox;
 		private System.Windows.Forms.Label modificationRightLabel;
+        private System.Windows.Forms.Button button1;
     }
 }

@@ -154,7 +154,7 @@ namespace Configuration_Manager
 									new XElement("Paths",
 										new XElement("DestinationType", item.cd.DestinationType),
 										new XElement("DestinationFile", item.cd.MainDestination),
-										new XElement("SubDestination", item.cd.RealSubDestination)
+										new XElement("SubDestination", item.cd.SubDestination)
 									),
 									new XElement("Relations",
 										new XElement("Write",
@@ -256,6 +256,8 @@ namespace Configuration_Manager
 						SetRelatedVisibility(c, i);
 						SetCoupledControls(c, i);
 
+                        ReadValuesFromDestination(c);
+
 						System.Diagnostics.Debug.WriteLine("+ Added : " + c.cd.Name + " with parent: " + c.cd.Parent.Name + " in Section: " + c.cd.ParentSection.Name);
 					}
 				}
@@ -264,7 +266,7 @@ namespace Configuration_Manager
 
 		private void SetControlSpecificProperties(ICustomControl c, XElement i)
 		{
-			if (c.cd.Type == "CComboBox")
+			if (c.cd.Type == "CComboBox" && c.cd.SubDestination == "")
 			{
 				// Set items of the ComboBox
 				ComboBox cb = c as ComboBox;
@@ -313,6 +315,7 @@ namespace Configuration_Manager
 			c.cd.DestinationType = i.Element("Paths").Element("DestinationType").Value;
 			c.cd.MainDestination = i.Element("Paths").Element("DestinationFile").Value;
 			c.cd.RealSubDestination = i.Element("Paths").Element("SubDestination").Value;
+            c.cd.SubDestination = i.Element("Paths").Element("SubDestination").Value;
 		}
 
 		private void CreatePreviewControls(Section s, XElement i)
@@ -472,5 +475,44 @@ namespace Configuration_Manager
 				c.cd.RelatedWrite.Add(model.AllControls.Find(p => p.cd.Name == r));
 			}
 		}
+
+        private void ReadValuesFromDestination(ICustomControl c)
+        {
+            String type = GetFileType(c.cd.MainDestination);
+
+            String path = ttt.TranslateFromTextFile(c.cd.SubDestination);
+            path = tct.TranslateFromControl(path);
+
+            List<String> nodes = path.Split('\\').ToList();
+
+            if (type == "ini")
+            {
+                Util.IniFile file = new Util.IniFile(c.cd.MainDestination);
+
+                if (c.cd.Type == "CComboBox")
+                {
+                    String item = file.IniReadValue(nodes[0], nodes[1]);
+                    (c as ComboBox).Items.Add(item);
+
+                    if (c.cd.ComboBoxRealItems.Count != 0) (c as ComboBox).SelectedItem = c.cd.ComboBoxRealItems[0];
+                    else (c as ComboBox).SelectedIndex = 0;
+                }
+                else
+                {
+                    c.cd.Text = file.IniReadValue(nodes[0], nodes[1]);
+                }
+            }
+        }
+
+        private void FillComboBoxFromFile(CComboBox c)
+        {
+            
+        }
+
+        private String GetFileType(string p)
+        {
+            if (p != "" && p != null) return p.Remove(0, p.Length - 3);
+            else return "";
+        }
 	}
 }
