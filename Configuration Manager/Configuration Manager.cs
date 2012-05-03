@@ -20,10 +20,6 @@ namespace Configuration_Manager
         private ControlFactory cf = ControlFactory.getInstance();
         private ObjectDefinitionManager odm = ObjectDefinitionManager.getInstance();
 
-        private WriteRelationManager wrm = new WriteRelationManager();
-
-        private Editor editor;
-
         SectionTabsView sectionTabsView;
         SectionMenuView sectionMenuView;
         CustomHandler ch;
@@ -133,6 +129,10 @@ namespace Configuration_Manager
 
             if (e.Alt && e.Control && e.KeyCode == Keys.S)
             {
+                foreach (ICustomControl c in model.AllControls.Where(p => p.cd.Type == "CComboBox"))
+                {
+                    odm.SaveChangesToFile(c);
+                }
                 odm.SerializeObjectDefinition();
             }
 
@@ -158,8 +158,6 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine(line);
                 }
                 System.Diagnostics.Debug.WriteLine("#####################################");
-
-                wrm.TranslateSubDestiantions();
             }
         }
 

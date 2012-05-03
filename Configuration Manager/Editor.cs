@@ -171,7 +171,6 @@ namespace Configuration_Manager
             if (type == "CComboBox" || type == "CCheckBox")
             {
                 relationsComboBox.Items.Add("Related Read");
-                relationsComboBox.Items.Add("Related Write");
                 relationsComboBox.Items.Add("Related Visibility");
                 relationsComboBox.Items.Add("Coupled Controls");
 
@@ -180,7 +179,6 @@ namespace Configuration_Manager
             else if (type == "CTextBox")
             {
                 relationsComboBox.Items.Add("Related Read");
-                relationsComboBox.Items.Add("Related Write");
 
                 relationsComboBox.SelectedItem = "Related Read";
             }
@@ -314,8 +312,6 @@ namespace Configuration_Manager
 
         private void updateButton_Click(object sender, EventArgs e)
         {
-			if (type == "CComboBox") CComboBoxUpdateSetUp();
-
             CheckLabelInfo();
             SaveToControl();
             parent.Refresh();
@@ -335,7 +331,7 @@ namespace Configuration_Manager
             ParseWidth();
             ParseHeight();
 
-            if (!CheckText()) ErrorMsg += "\n- Text is empty.";
+            if (!CheckText() && control.cd.Type != "CComboBox") ErrorMsg += "\n- Text is empty.";
             //if (!CheckHint()) ErrorMsg += "\n- Hint is empty.";
             if (!CheckTop()) ErrorMsg += "\n- Top value is too low or too high.";
             if (!CheckLeft()) ErrorMsg += "\n- Left value is too low or too high.";
@@ -471,7 +467,7 @@ namespace Configuration_Manager
 
             control.cd.DestinationType = this.destinationTypeComboBox.SelectedItem.ToString();
             control.cd.MainDestination = this.fileDestinationTextBox.Text;
-            control.cd.SubDestination = this.subDestinatonTextBox.Text;
+            control.cd.RealSubDestination = this.subDestinatonTextBox.Text;
 
 			control.cd.ModificationRight = this.modificationRightTextBox.Text.Remove(0,2);
             control.cd.DisplayRight = this.displayRightTextBox.Text.Remove(0, 2);
@@ -505,7 +501,7 @@ namespace Configuration_Manager
 
             this.destinationTypeComboBox.SelectedText = control.cd.DestinationType;
             this.fileDestinationTextBox.Text = control.cd.MainDestination;
-            this.subDestinatonTextBox.Text = control.cd.SubDestination;
+            this.subDestinatonTextBox.Text = control.cd.RealSubDestination;
 
             if (control.cd.DisplayRight != null) this.displayRightTextBox.Text = control.cd.DisplayRight;
             if (control.cd.ModificationRight != null) this.modificationRightTextBox.Text = control.cd.ModificationRight;
@@ -549,7 +545,7 @@ namespace Configuration_Manager
 
         private Boolean validCoupleComboBox(ICustomControl checkedControl)
         {
-            if (checkedControl.cd.ComboBoxRealItems.Count != control.cd.ComboBoxRealItems.Count)
+            if (checkedControl.cd.comboBoxRealItems.Count != control.cd.comboBoxRealItems.Count)
             {
                 //They can't be coupled!
                 String msg = checkedControl.cd.Name + " must contain the same number of items than " + control.cd.Name;
@@ -627,63 +623,8 @@ namespace Configuration_Manager
 			EnableControls();
 
 			textTextBox.Hide();
+            textTextBox.Text = control.cd.Name;
 			comboBoxEditPanel.Show();
-
-            //addItemButton.MouseDown -= addItemToComboBox;
-            //addItemButton.MouseDown += addItemToComboBox;
-
-            //delItemButton.MouseDown -= delItemFromComboBox;
-            //delItemButton.MouseDown += delItemFromComboBox;
-
-			// Copy items from real comboBox to the fake comboBox inside Editor form.
-            //comboBoxEditor.Items.Clear();
-			object[] items = new object[(control as ComboBox).Items.Count];
-
-			foreach (String s in control.cd.ComboBoxRealItems)
-			{
-                //comboBoxEditor.Items.Add(s);
-			}
-			//control.cd.ComboBoxRealItems.CopyTo(items, 0);
-			//comboBoxEditor.Items.AddRange(items);
-
-            //comboBoxEditor.SelectedIndex = (control as ComboBox).SelectedIndex;
-		}
-
-		private void CComboBoxUpdateSetUp()
-		{
-            //(control as ComboBox).SelectedIndex = comboBoxEditor.SelectedIndex;
-			(control as ComboBox).Update();
-		}
-
-		private void addItemToComboBox(object sender, EventArgs e)
-		{
-            //if (!control.cd.ComboBoxRealItems.Contains(comboBoxEditor.Text))
-            //{
-            //    //String text = ttt.TranslateFromTextFile(comboBoxEditor.Text);
-            //    text = tct.TranslateFromControl(text);
-
-            //    //int index = comboBoxEditor.Items.Add(comboBoxEditor.Text);
-            //    //control.cd.ComboBoxRealItems.Add(comboBoxEditor.Text);
-            //    (control as ComboBox).Items.Add(text);
-
-            //    //comboBoxEditor.SelectedIndex = index;
-            //    (control as ComboBox).SelectedIndex = index;
-            //}
-		}
-
-		private void delItemFromComboBox(object sender, EventArgs e)
-		{
-            //int index = comboBoxEditor.SelectedIndex;
-
-            //if (index > -1)
-            //{
-            //    (control as ComboBox).Items.RemoveAt(index);
-            //    comboBoxEditor.Items.RemoveAt(index);
-            //    control.cd.ComboBoxRealItems.RemoveAt(index);
-
-            //    comboBoxEditor.SelectedItem = null;
-            //    (control as ComboBox).SelectedItem = null;
-            //}
 		}
 
 		private void Editor_KeyDown(object sender, KeyEventArgs e)

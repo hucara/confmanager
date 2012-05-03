@@ -125,7 +125,7 @@ namespace Configuration_Manager.Util
 		{
 			this.translatedText = textToTranslate;
 
-			if (active)
+			if (active && textToTranslate.Contains(Model.getInstance().textToken))
 			{
 				this.valuesToTranslate.Clear();
 				this.translatedValues.Clear();

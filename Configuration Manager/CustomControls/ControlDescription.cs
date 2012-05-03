@@ -47,20 +47,21 @@ namespace Configuration_Manager
         public String DestinationType { get; set; }
         public String MainDestination { get; set; }
 
-        public String SubDestination { get; set; }
-        public String RealSubDestination { get; set; }
+        public String SubDestination { get; set; }          // SubDestination path already translated
+        public String RealSubDestination { get; set; }      // SubDestination path without being translated
+
+        private List<String> SubDestinationNodes;
 
         public List<ICustomControl> RelatedWrite { get; set; }
         public List<ICustomControl> RelatedRead { get; set; }
         public List<ICustomControl> RelatedVisibility { get; set; }
         public List<ICustomControl> CoupledControls { get; set; }
 
-		private ComboBox.ObjectCollection comboBoxItems;
-		private List<String> comboBoxRealItems;
-        private List<string> comboBoxConfigItems;
+        public List<String> comboBoxItems;                 // Items containing the showing and translated values
+        public List<String> comboBoxRealItems;             // Items containing the - still to translate - values
+        public List<String> comboBoxConfigItems;           // Items containing the alias inside config files
 
         private Section parentSection;
-        //private Util.TokenTextTranslator ttt = Util.TokenTextTranslator.GetInstance();
 
         public ControlDescription(Control c)
         {
@@ -88,11 +89,13 @@ namespace Configuration_Manager
             this.RelatedVisibility = new List<ICustomControl>();
             this.CoupledControls = new List<ICustomControl>();
 
+            this.SubDestinationNodes = new List<String>();
+
 			if (this.Type == "CComboBox")
 			{
-				this.comboBoxItems = new ComboBox.ObjectCollection(control as ComboBox);
-				this.comboBoxRealItems = new List<string>();
-                this.comboBoxConfigItems = new List<string>();
+                this.comboBoxItems = new List<String>();
+                this.comboBoxRealItems = new List<String>();
+                this.comboBoxConfigItems = new List<String>();
 			}
 			
             this.parentSection = Model.getInstance().CurrentSection;
@@ -234,38 +237,6 @@ namespace Configuration_Manager
         {
             get { return this.parentSection;}
             set { this.parentSection = value; }
-        }
-
-		public ComboBox.ObjectCollection ComboBoxItems
-		{
-			get { return this.comboBoxItems; }
-			set
-			{
-				this.comboBoxItems = value;
-				(this.control as ComboBox).Items.Clear();
-				foreach (ComboBox.ObjectCollection i in comboBoxItems)
-				{
-					(this.control as ComboBox).Items.Add(i);
-				}
-			}
-		}
-
-		public List<String> ComboBoxRealItems
-		{
-			get { return this.comboBoxRealItems; }
-			set
-			{
-				this.comboBoxRealItems = value;
-			}
-		}
-
-        public List<String> ComboBoxConfigItems
-        {
-            get { return this.comboBoxConfigItems; }
-            set
-            {
-                this.comboBoxConfigItems = value;
-            }
         }
 
         public bool Enabled {

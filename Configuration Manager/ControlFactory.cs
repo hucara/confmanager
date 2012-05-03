@@ -22,6 +22,7 @@ namespace Configuration_Manager
 
         private CoupledControlsManager cm = new CoupledControlsManager();
         private VisibilityRelationManager vm = new VisibilityRelationManager();
+        private ReadRelationManager rm = new ReadRelationManager();
 
         Model model = Model.getInstance();
 
@@ -152,6 +153,7 @@ namespace Configuration_Manager
 
             c.SelectedIndexChanged += cm.ComboBoxCoupled;
             c.SelectedIndexChanged += vm.ComboBoxVisibility;
+            c.SelectedIndexChanged += rm.ReadRelationUpdate;
 
             SetCommonHandlers(c);
 

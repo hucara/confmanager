@@ -92,6 +92,7 @@
       <DependentUpon>Configuration Manager.cs</DependentUpon>
     </Compile>
     <Compile Include="RelationManagers\CoupledControlsManager.cs" />
+    <Compile Include="RelationManagers\ReadRelationManager.cs" />
     <Compile Include="RelationManagers\VisibilityRelationManager.cs" />
     <Compile Include="Editor.cs">
       <SubType>Form</SubType>
@@ -100,7 +101,6 @@
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Model.cs" />
-    <Compile Include="RelationManagers\WriteRelationManager.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="ObjectDefinitionManager.cs" />
     <Compile Include="Program.cs" />
