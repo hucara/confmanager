@@ -30,23 +30,32 @@ namespace Configuration_Manager
         private int width;
         private int height;
 
-        public String DisplayRight { get; set; }
-        public String ModificationRight { get; set; }
+        private int selectedTab;
+
+        public String DisplayRight = "00000000";
+        public String ModificationRight = "00000000";
+
+        public byte[] DisplayBytes = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
+        public byte[] ModificationBytes = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
 
         private Control control;
         private Control parent;
 
         private bool currentVisibility;
-        public bool userVisibility;
-
-        public bool userModification;
+        
+        public bool operatorVisibility;
+        public bool operatorModification;
+        public bool inRelatedVisibility;
 
         public int TypeId { get; set; }
         public int Id { get; set; }
 
+        public String checkBoxValues;
+        public String checkBoxCheckedValue { get; private set; }
+        public String checkBoxUncheckedValue { get; private set; }
+
         public String DestinationType { get; set; }
         public String MainDestination { get; set; }
-
         public String SubDestination { get; set; }          // SubDestination path already translated
         public String RealSubDestination { get; set; }      // SubDestination path without being translated
 
@@ -65,6 +74,7 @@ namespace Configuration_Manager
 
         public ControlDescription(Control c)
         {
+            this.inRelatedVisibility = false;
             this.Changed = false;
             this.control = c;
             this.parent = c.Parent;
@@ -244,6 +254,42 @@ namespace Configuration_Manager
             set
             {
                 this.control.Enabled = value;
+            }
+        }
+
+        public int SelectedTab
+        {
+            get
+            {
+                if (this.control is CTabControl)
+                    return (this.control as CTabControl).SelectedIndex;
+                else return -1;
+            }
+            set
+            {
+                if (this.control is CTabControl)
+                {
+                    (this.control as CTabControl).SelectedIndex = value;
+                    this.selectedTab = value;
+                }
+            }
+        }
+
+        public String CheckBoxValues
+        {
+            get
+            {
+                return checkBoxValues;
+            }
+            set
+            {
+                this.checkBoxValues = value;
+                if (this.checkBoxValues != null && this.checkBoxValues != "")
+                {
+                    List<String> val = this.checkBoxValues.Split('/').ToList();
+                    this.checkBoxCheckedValue = val[0].Trim();
+                    this.checkBoxUncheckedValue = val[1].Trim();
+                }
             }
         }
     }

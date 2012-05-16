@@ -32,8 +32,8 @@ namespace Configuration_Manager
 		public int controlMarging = 10;
 		public int containerMargin = 10;
 
-		public uint ModificatioRights = 0x00000000;
-		public uint DisplayRights = 0xF0000000;
+		public byte[] MainModificationRights = new byte [4] {0x00, 0x00,0x00, 0x00};
+        public byte[] MainDisplayRights = new byte [4] {0x00, 0x00,0x00, 0x00};
 
 		public bool createLogs = false;
 		public int maxAgeOfLogs = -1;
@@ -188,7 +188,7 @@ namespace Configuration_Manager
         {
             DestinationFileTypes.Add(".INI");
             DestinationFileTypes.Add(".XML");
-            DestinationFileTypes.Add(".TXT");
+            DestinationFileTypes.Add("REG");
         }
 
         private void FillOutRelationTypes()
@@ -224,8 +224,8 @@ namespace Configuration_Manager
 				ReadRightsSection(xdoc);
 				ReadLogsSection(xdoc);
 
-                //string[] a = {"-p", "-r", "-t","0","-l", "1376", "-dr", "64", "-mr", "F2"};
-                //this.args = a;
+                string[] a = { "-p", "-r", "-t", "0", "-l", "1376", "-dr", "0xFF", "-mr", "0xFF" };
+                this.args = a;
 
 				if (this.args != null)
 				{
@@ -259,8 +259,8 @@ namespace Configuration_Manager
 
 				System.Diagnostics.Debug.WriteLine(" - ProgModeAllowed: " + this.progModeAllowed);
 				System.Diagnostics.Debug.WriteLine(" - ProgMode: " + this.progMode);
-				System.Diagnostics.Debug.WriteLine(" - Modification: " + this.ModificatioRights);
-				System.Diagnostics.Debug.WriteLine(" - Display: " + this.DisplayRights);
+				System.Diagnostics.Debug.WriteLine(" - Modification: " + this.MainModificationRights);
+				System.Diagnostics.Debug.WriteLine(" - Display: " + this.MainDisplayRights);
 				System.Diagnostics.Debug.WriteLine("** INFO ** Config file end.");
 				System.Diagnostics.Debug.WriteLine(" ");
 			}
@@ -317,8 +317,8 @@ namespace Configuration_Manager
 			XElement rights = xdoc.Element("ConfigurationManager").Element("Rights");
 
 			if (rights.Element("ProgrammerMode").Value == "yes") this.progModeAllowed = true;
-			uint.TryParse(rights.Element("Modification").Value, out this.ModificatioRights);
-			uint.TryParse(rights.Element("Display").Value, out this.DisplayRights);
+			this.MainModificationRights = HexToData(rights.Element("Modification").Value);
+            this.MainDisplayRights = HexToData(rights.Element("Display").Value);
 		}
 
 		private void ReadLogsSection(XDocument xdoc)
@@ -332,7 +332,7 @@ namespace Configuration_Manager
 			}
 		}
 
-		public void DeleteControl(Control c)
+		public void DeleteControl(Control c, bool deletingSection)
 		{
 			DialogResult delChildren = DialogResult.OK;
 			DialogResult delRelations = DialogResult.OK;
@@ -341,31 +341,44 @@ namespace Configuration_Manager
 
 			if(c == null) throw new ArgumentNullException();
 
-			if (c.Controls.Count > 0)
-			{
-				String msg = "This will remove the control and all its children.";
-				delChildren = MessageBox.Show(msg, "Remove control", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-			}
+            if (!deletingSection)
+            {
+                if (c.Controls.Count > 0)
+                {
+                    String msg = "This will remove the control and all its children.";
+                    delChildren = MessageBox.Show(msg, "Remove control", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                }
+                
+                if (c.GetType().Name != "TabPage") hasRelations = HasRelations(c, out relMessage);
+               
+                if (hasRelations)
+                    delRelations = MessageBox.Show(relMessage, "Remove control", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                
+                if (delChildren == DialogResult.OK && delRelations == DialogResult.OK)
+                {
+                    DeleteChildren(c);
+                    logCreator.Append("- Deleted: " + c.Name);
 
-			if(c.GetType().Name != "TabPage") hasRelations = HasRelations(c, out relMessage);
+                    AllControls.Remove(c as ICustomControl);
+                    DeleteControlReferences(c);
 
-			if (hasRelations)
-			{
-				delRelations = MessageBox.Show(relMessage, "Remove control", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-			}
+                    Control p = c.Parent;
+                    c.Parent.Controls.Remove(c);
+                    p.Refresh();
+                }
+            }
+            else
+            {
+                DeleteChildren(c);
+                logCreator.Append("- Deleted: " + c.Name);
 
-			if (delChildren == DialogResult.OK && delRelations == DialogResult.OK)
-			{
-				DeleteChildren(c);
-				logCreator.Append("- Deleted: " + c.Name);
+                AllControls.Remove(c as ICustomControl);
+                DeleteControlReferences(c);
 
-				AllControls.Remove(c as ICustomControl);
-				DeleteControlReferences(c);
-
-				Control p = c.Parent;
-				c.Parent.Controls.Remove(c);
-				p.Refresh();
-			}
+                Control p = c.Parent;
+                c.Parent.Controls.Remove(c);
+                p.Refresh();
+            }
 		}
 
 		private void DeleteChildren(Control c)
@@ -496,21 +509,28 @@ namespace Configuration_Manager
 
 			try
 			{
-
 				if (ag.Contains("-mr"))
 				{
 					int i = ag.IndexOf("-mr");
-					uint modRight;
-					if (uint.TryParse(ag[i + 1], System.Globalization.NumberStyles.HexNumber, null, out modRight))
-						this.ModificatioRights = modRight;
+                    String r = ag[i + 1].TrimStart("0x".ToArray());
+                    if (r.Length <= 8)
+                    {
+                        while (r.Length < 8) r = "0" + r;
+                        this.MainModificationRights = Model.HexToData(r);
+                    }
+                    else throw new ArgumentOutOfRangeException();
 				}
 
 				if (ag.Contains("-dr"))
 				{
 					int i = ag.IndexOf("-dr");
-					uint disRight;
-					if (uint.TryParse(ag[i + 1], System.Globalization.NumberStyles.HexNumber, null, out disRight))
-						this.DisplayRights = disRight;
+                    String r = ag[i + 1].TrimStart("0x".ToArray());
+                    if (r.Length <= 8)
+                    {
+                        while (r.Length < 8) r = "0" + r;
+                        this.MainDisplayRights = Model.HexToData(r);
+                    }
+                    else throw new ArgumentOutOfRangeException();
 				}
 
 				if (ag.Contains("-l"))
@@ -553,7 +573,13 @@ namespace Configuration_Manager
 			}
 			catch (ArgumentOutOfRangeException e)
 			{
+                string msg = "There was an error while parsing the arguments.\nPlease, check them and try again.";
+                string caption = "Error while parsing arguments";
+
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				System.Diagnostics.Debug.WriteLine("! Error when parsing the arguments. Out of range?");
+
+                System.Environment.Exit(0);
 			}
 		}
 
@@ -569,13 +595,33 @@ namespace Configuration_Manager
 			this.InfoLabel.Text = "";
 		}
 
-        public bool ObtainLogicAnd(String ControlDisplayRight, uint MainDisplayRight)
+        public static byte[] HexToData(string hexString)
         {
-            uint controlRight;
-            uint.TryParse(ControlDisplayRight, out controlRight);
+            if (hexString == null)
+                return null;
 
-            if ((controlRight & MainDisplayRight) == controlRight) return true;
-            return false;
+            hexString = hexString.Substring(2);
+
+            if (hexString.Length % 2 == 1)
+                hexString = '0' + hexString;
+
+            byte[] data = new byte[hexString.Length / 2];
+
+            for (int i = 0; i < data.Length; i++)
+                data[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+
+            return data;
+        }
+
+        public bool ObtainRights(byte[] ControlRight, byte[] MainRight)
+        {
+            bool res = true;
+            for (int i = 0; i < ControlRight.Length; i++)
+            {
+                if ((ControlRight[i] & MainRight[i]) != ControlRight[i]) res = false;
+            }
+
+            return res;            
         }
 
         public void SwitchProgrammingMode()
@@ -589,8 +635,6 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine("** INFO ** Programmer mode ACTIVE.");
                     logCreator.Append("");
                     logCreator.AppendCenteredWithFrame(" Programmer mode ACTIVE");
-
-                    ApplyRightsToControls();
                 }
                 else
                 {
@@ -598,8 +642,6 @@ namespace Configuration_Manager
 
                     logCreator.Append("");
                     logCreator.AppendCenteredWithFrame(" Programmer mode ACTIVE");
-
-                    ApplyRightsToControls();
 
                     // Close opened editors
                     List<Editor> eds = Application.OpenForms.OfType<Editor>().ToList();
@@ -609,21 +651,32 @@ namespace Configuration_Manager
                     }
                 }
             }
+
+            ApplyRightsToControls();
         }
 
         private void ApplyRightsToControls()
         {
-            foreach (ICustomControl c in AllControls)
+            if (progModeAllowed)
             {
-                if (progMode)
+                foreach (ICustomControl c in AllControls)
                 {
-                    c.cd.Visible = true;
-                    c.cd.Enabled = true;
-                }
-                else
-                {
-                    c.cd.Visible = c.cd.userVisibility;
-                    c.cd.Enabled = c.cd.userModification;
+                    if (progMode)
+                    {
+                        if (c.cd.Type != "CTabPage")
+                        {
+                            if(!c.cd.inRelatedVisibility) c.cd.Visible = true;
+                            c.cd.Enabled = true;
+                        }
+                    }
+                    else
+                    {
+                        if (c.cd.Type != "CTabPage")
+                        {
+                            if (!c.cd.inRelatedVisibility) c.cd.Visible = c.cd.operatorVisibility;
+                        }
+                        c.cd.Enabled = c.cd.operatorModification;
+                    }
                 }
             }
         }

@@ -20,11 +20,6 @@ namespace Configuration_Manager.CustomControls
             count++;
         }
 
-        internal void SetNavBarDescription(Section s)
-        {
-            throw new NotImplementedException();
-        }
-
         ControlDescription ICustomControl.cd
         {
             get

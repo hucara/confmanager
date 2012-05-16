@@ -60,7 +60,7 @@ namespace Configuration_Manager
             this.Top = model.top;
             this.Left = model.left;
 
-            if (model.resizable) this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            //if (model.resizable) this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
         }
 
         private void InitCustomHandler()
@@ -125,15 +125,18 @@ namespace Configuration_Manager
             if (e.Alt && e.Control && e.KeyCode == Keys.P)
             {
                 SwitchProgMode();
+                this.Refresh();
             }
 
             if (e.Alt && e.Control && e.KeyCode == Keys.S)
             {
-                foreach (ICustomControl c in model.AllControls.Where(p => p.cd.Type == "CComboBox"))
-                {
-                    odm.SaveChangesToFile(c);
-                }
                 odm.SerializeObjectDefinition();
+            }
+
+            if (e.Alt && e.Control && e.KeyCode == Keys.G)
+            {
+                Configuration_Manager.RelationManagers.WriteConfigurationManager wc = new Configuration_Manager.RelationManagers.WriteConfigurationManager();
+                wc.SaveChanges();
             }
 
             if (e.Alt && e.Control && e.KeyCode == Keys.D)
@@ -159,6 +162,17 @@ namespace Configuration_Manager
                 }
                 System.Diagnostics.Debug.WriteLine("#####################################");
             }
+
+            if (e.Alt && e.Control && e.KeyCode == Keys.R)
+            {
+                System.Diagnostics.Debug.WriteLine("\n###################################");
+                foreach (ICustomControl c in model.AllControls)
+                {
+                    string line = "\t";
+                    line += "- "+ c.cd.Name + "\t\t Display: " + c.cd.operatorVisibility + "\t Modify: " + c.cd.operatorModification;
+                    System.Diagnostics.Debug.WriteLine(line);
+                }
+            }
         }
 
         private void newSectionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -173,8 +187,14 @@ namespace Configuration_Manager
 
         private void deleteSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            sectionMenuView.RemoveSection();
-            sectionTabsView.readAndShow();
+            String msg = "This will delete the section and all of its children.";
+            DialogResult dr = MessageBox.Show(msg, " Deleting Section", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
+            if (dr == System.Windows.Forms.DialogResult.OK)
+            {
+                sectionMenuView.RemoveSection();
+                sectionTabsView.readAndShow();
+            }
         }
 
         private void toolStrip_RightClick(object sender, EventArgs e)
@@ -191,18 +211,12 @@ namespace Configuration_Manager
                     sectionMenuView.SetSelectedButton(sectionBar.GetItemAt(me.X, me.Y) as CToolStripButton);
                 }
                 else
-                {
                     deleteSectionToolStripMenuItem.Enabled = false;
-                }
 
                 if (model.Sections.Count >= Model.getInstance().maxSections)
-                {
                     newSectionToolStripMenuItem.Enabled = false;
-                }
                 else
-                {
                     newSectionToolStripMenuItem.Enabled = true;
-                }
 
                 contextNavMenu.Show(c, me.X, me.Y);
             }

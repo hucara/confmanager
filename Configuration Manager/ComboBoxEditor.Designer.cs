@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ComboBoxEditor));
             this.shownValues = new System.Windows.Forms.ListBox();
             this.moveUpButton = new System.Windows.Forms.Button();
             this.moveDownButton = new System.Windows.Forms.Button();
@@ -57,7 +58,7 @@
             this.moveUpButton.TabIndex = 6;
             this.moveUpButton.Text = "move up";
             this.moveUpButton.UseVisualStyleBackColor = true;
-            this.moveUpButton.Click += new System.EventHandler(this.button1_Click);
+            this.moveUpButton.Click += new System.EventHandler(this.MoveUpButton_Click);
             // 
             // moveDownButton
             // 
@@ -67,7 +68,7 @@
             this.moveDownButton.TabIndex = 7;
             this.moveDownButton.Text = "move down";
             this.moveDownButton.UseVisualStyleBackColor = true;
-            this.moveDownButton.Click += new System.EventHandler(this.button2_Click);
+            this.moveDownButton.Click += new System.EventHandler(this.MoveDownButton_Click);
             // 
             // addButton
             // 
@@ -77,7 +78,7 @@
             this.addButton.TabIndex = 5;
             this.addButton.Text = "add";
             this.addButton.UseVisualStyleBackColor = true;
-            this.addButton.Click += new System.EventHandler(this.button3_Click);
+            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
             // deleteButton
             // 
@@ -87,7 +88,7 @@
             this.deleteButton.TabIndex = 8;
             this.deleteButton.Text = "delete";
             this.deleteButton.UseVisualStyleBackColor = true;
-            this.deleteButton.Click += new System.EventHandler(this.button4_Click);
+            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // configTextBox
             // 
@@ -146,6 +147,7 @@
             this.Controls.Add(this.moveUpButton);
             this.Controls.Add(this.shownValues);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ComboBoxEditor";

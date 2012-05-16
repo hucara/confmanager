@@ -8,14 +8,11 @@ namespace Configuration_Manager.Util
 {
     class TokenControlTranslator
     {
+        private const String DEFAULT_TOKEN = "##";
         private static TokenControlTranslator tokenControlTranslator;
 
-        private static String DEFAULT_TOKEN = "##";
-
         private Boolean active = true;
-
         private String defaultLang;
-        private String currentLang;
 
         private String tokenKey;
         private String textToTranslate;
@@ -23,7 +20,6 @@ namespace Configuration_Manager.Util
 
         private List<String> valuesToTranslate = new List<String>();
         private List<String> translatedValues = new List<String>();
-        //private List<String> subPathElements = new List<String>();
 
         private TokenControlTranslator() 
         {
@@ -156,14 +152,12 @@ namespace Configuration_Manager.Util
                 if (translatedValues.Count > i)
                 {
                     String with = translatedValues[i];
-                    //String with = translatedValues[i].ToString();
                     translated = translated.Replace(replace, with);
                 }
             }
             return translated;
         }
 
-        // TODO Create a function that splits up the tokens, translates them, and then returns the list of tokens and a list with its translation in the same order.
         public Dictionary<string, string> GetValueTranslatedPairs(String textToTranslate)
         {
             Dictionary<string, string> valueTranslatedPairs = new Dictionary<string, string>();

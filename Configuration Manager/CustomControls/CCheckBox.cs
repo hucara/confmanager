@@ -17,6 +17,7 @@ namespace Configuration_Manager.CustomControls
 
             cd.TypeId = count;
             this.Name = "CCheckBox" + count;
+            this.Text = this.Name;
             this.Size = this.DefaultSize;
 
             count++;

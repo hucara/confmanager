@@ -49,6 +49,7 @@ namespace Configuration_Manager.CustomControls
 				model.LastClickedY = me.Y;
 
 				SetContextMenuStrip(type);
+                SetContextMenuModificationRights(c);
 
 				contextMenu.Show(c, me.X, me.Y);
 			}
@@ -61,12 +62,29 @@ namespace Configuration_Manager.CustomControls
 				model.LastClickedY = me.Y;
 
 				SetContextMenuStrip(type);
+                SetContextMenuModificationRights(c);
 			}
 			else if (model.progMode && me.Button == MouseButtons.Left)
 			{
 
 			}
 		}
+
+        private void SetContextMenuModificationRights(Control c)
+        {
+            ICustomControl co = c as ICustomControl;
+
+            if (!co.cd.operatorModification)
+            {
+                //c.Enabled = true;
+                //contextMenu.Items[1].Enabled = true;
+            }
+            else
+            {
+                //c.Enabled = false;
+                //contextMenu.Items[1].Enabled = false;  // Disable the Edit option
+            }
+        }
 
 		private void SetContextMenuStrip(string type)
 		{
@@ -75,7 +93,7 @@ namespace Configuration_Manager.CustomControls
 			if (type == "CGroupBox" || type == "CPanel")
 			{
 				// Editable Containers
-				contextMenu.Items[0].Enabled = true;  // Disable the New> option
+				contextMenu.Items[0].Enabled = true;
 				contextMenu.Items[1].Enabled = true;
 				contextMenu.Items[2].Enabled = true;
 			}
@@ -203,12 +221,9 @@ namespace Configuration_Manager.CustomControls
 		public void tabControlToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			CTabControl tabControl = cf.BuildCTabControl(model.CurrentClickedControl);
-
-			CTabPage tab = tabControl.TabPages[0] as CTabPage;
-			tab.cd.Parent = tabControl;
+            CTabPage ctab = cf.BuildCTabPage(tabControl);
 
 			tabControl.MouseDown += Control_Click;
-			tabControl.TabPages[0].Click += Control_Click;
 
 			editor = new Editor();
 			editor.Show(tabControl);
@@ -246,7 +261,7 @@ namespace Configuration_Manager.CustomControls
             if (closing != null) closing.Close();
 
             // Delete control
-			model.DeleteControl(model.CurrentClickedControl);
+			model.DeleteControl(model.CurrentClickedControl, false);
         }
 
 		public void TextChanged(object sender, EventArgs e)
@@ -354,5 +369,10 @@ namespace Configuration_Manager.CustomControls
 				Debug.WriteLine("! Timer Stopped");
 			}
 		}
+
+        public void Changed(object sender, EventArgs e)
+        {
+            (sender as ICustomControl).cd.Changed = true;
+        }
 	}
 }

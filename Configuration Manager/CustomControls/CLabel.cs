@@ -13,7 +13,8 @@ namespace Configuration_Manager.CustomControls
 
         public CLabel()
         {
-            SetName();
+            this.Name = "CLabel" + count;
+            this.Text = this.Name;
 			this.DoubleBuffered = true;
             count++;
         }
@@ -34,13 +35,5 @@ namespace Configuration_Manager.CustomControls
                 cd = value;
             }
         }
-
-        private void SetName()
-        {
-            this.Name = "CLabel" + count;
-            this.Text = this.Name;
-        }
-
-
     }
 }

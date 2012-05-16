@@ -103,7 +103,7 @@ namespace Configuration_Manager.Views
 				Debug.WriteLine("! Removed: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
 
 				model.logCreator.Append("- Removed: " + s.Name);
-				model.DeleteControl(s.Tab);
+				model.DeleteControl(s.Tab, true);
 				model.Sections.Remove(s);
 			}
 

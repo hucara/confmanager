@@ -21,11 +21,11 @@ namespace Configuration_Manager.CustomControls
         {
             this.Name = "CTabControl" + count;
 
-            CTabPage ctp = ControlFactory.getInstance().BuildCTabPage(this);
-            ctp.SetControlDescription();
-            ctp.cd.Parent = this;
+            //CTabPage ctp = ControlFactory.getInstance().BuildCTabPage(this);
+            //ctp.SetControlDescription();
+            //ctp.cd.Parent = this;
 
-            this.TabPages.Add(ctp);
+            //this.TabPages.Add(ctp);
             count++;
         }
 

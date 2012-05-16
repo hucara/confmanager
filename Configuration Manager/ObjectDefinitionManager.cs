@@ -140,8 +140,14 @@ namespace Configuration_Manager
                                         new XElement("Font", fontConverter.ConvertToString(item.cd.CurrentFont)),
                                         new XElement("FontColor", colorConverter.ConvertToString(item.cd.ForeColor)),
                                         new XElement("BackColor", colorConverter.ConvertToString(item.cd.BackColor)),
-                                        new XElement("DisplayRight", item.cd.DisplayRight),
-                                        new XElement("ModificationRight", item.cd.ModificationRight)
+                                        new XElement("DisplayRight", "0x" + item.cd.DisplayRight),
+                                        new XElement("ModificationRight", "0x" + item.cd.ModificationRight),
+
+                                        item.cd.Type == "CTabControl"?
+                                        new XElement("ActiveTab", item.cd.SelectedTab) : null,
+
+                                        item.cd.Type == "CCheckBox"?
+                                        new XElement("CheckBoxValues", item.cd.CheckBoxValues) : null
                                     ),
 
                                     item.cd.Type == "CComboBox" ?
@@ -273,11 +279,22 @@ namespace Configuration_Manager
                         SetCoupledControls(c, i);
 
                         ReadMachineConfiguration(c);
+                        ApplyRights(c);
+                        ApplyRelations(c);
+
+                        if (c.cd.Type == "CTabControl") SetSelectedTab(c, i);
+
+                        c.cd.Changed = false;
 
                         System.Diagnostics.Debug.WriteLine("+ Added : " + c.cd.Name + " with parent: " + c.cd.Parent.Name + " in Section: " + c.cd.ParentSection.Name);
                     }
                 }
             }
+        }
+
+        private void SetSelectedTab(ICustomControl c, XElement i)
+        {
+            if (c is CTabControl) c.cd.SelectedTab = Convert.ToInt32(i.Element("Settings").Element("ActiveTab").Value);
         }
 
         private void SetControlSpecificProperties(ICustomControl c, XElement i)
@@ -289,26 +306,20 @@ namespace Configuration_Manager
                 foreach (XElement e in i.Element("Items").Descendants("Item"))
                 {
                     String value = e.Value.ToString();
-
                     c.cd.comboBoxRealItems.Add(value);
 
                     value = ttt.TranslateFromTextFile(value);
                     value = tct.TranslateFromControl(value);
 
                     c.cd.comboBoxItems.Add(value);
-                    //cb.Items.Add(value);
                 }
 
                 foreach (XElement e in i.Element("ConfigItems").Descendants("Item"))
-                {
                     c.cd.comboBoxConfigItems.Add(e.Value.ToString());
-                }
 
                 // Fill out the comboBox
                 foreach (String s in c.cd.comboBoxItems)
-                {
                     cb.Items.Add(s);
-                }
 
                 try
                 {
@@ -322,6 +333,7 @@ namespace Configuration_Manager
                 }
                 catch (NullReferenceException e)
                 {
+                    System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading ComboBox Attributes");
                 }
             }
             else if (c.cd.Type == "CCheckBox")
@@ -331,9 +343,13 @@ namespace Configuration_Manager
                 {
                     if (i.Element("Checked").Value == "True") cb.Checked = true;
                     else cb.Checked = false;
+                    
+                    c.cd.CheckBoxValues = i.Element("Settings").Element("CheckBoxValues").Value;
+                    if (c.cd.CheckBoxValues == "" || c.cd.CheckBoxValues == null) c.cd.CheckBoxValues = "True / False";
                 }
                 catch (NullReferenceException e)
                 {
+                    System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading CheckBox Attributes");
                 }
             }
         }
@@ -348,6 +364,9 @@ namespace Configuration_Manager
 
         private void CreatePreviewControls(Section s, XElement i)
         {
+            if (s == null) return;
+            if (i == null) return; 
+
             switch (i.Attribute("type").Value)
             {
                 case "CLabel":
@@ -383,7 +402,6 @@ namespace Configuration_Manager
                 case "CTabControl":
                     CTabControl ctc = cf.BuildCTabControl(s.Tab);
                     ctc.cd.Name = i.Element("Name").Value;
-                    ctc.TabPages.Clear();
                     break;
 
                 case "CTabPage":
@@ -394,23 +412,24 @@ namespace Configuration_Manager
 
         private void SetRealParent(ICustomControl c, XContainer i)
         {
-            if (c == null) throw new ArgumentNullException();
-
-            if (i.Element("Parent").Value.Contains("Section"))
+            if (c != null && i != null)
             {
-                c.cd.Parent = model.Sections.Find(s => s.Name == i.Element("Parent").Value).Tab;
-            }
-            else
-            {
-                String definedParent = i.Element("Parent").Value;
-                String definedName = i.Element("Name").Value;
-
-                foreach (ICustomControl p in Model.getInstance().AllControls)
+                if (i.Element("Parent").Value.Contains("Section"))
                 {
-                    if (p.cd.Name == definedParent)
+                    c.cd.Parent = model.Sections.Find(s => s.Name == i.Element("Parent").Value).Tab;
+                }
+                else
+                {
+                    String definedParent = i.Element("Parent").Value;
+                    String definedName = i.Element("Name").Value;
+
+                    foreach (ICustomControl p in Model.getInstance().AllControls)
                     {
-                        c.cd.Parent = p as Control;
-                        System.Diagnostics.Debug.WriteLine("\n! Building: " + c.cd.Name + " with Parent: " + p.cd.Name);
+                        if (p.cd.Name == definedParent)
+                        {
+                            c.cd.Parent = p as Control;
+                            System.Diagnostics.Debug.WriteLine("\n! Building: " + c.cd.Name + " with Parent: " + p.cd.Name);
+                        }
                     }
                 }
             }
@@ -445,11 +464,16 @@ namespace Configuration_Manager
             newColor = (Color)colorConverter.ConvertFromString(i.Element("Settings").Element("BackColor").Value);
             c.cd.BackColor = newColor;
 
-            c.cd.DisplayRight = i.Element("Settings").Element("DisplayRight").Value;
-            c.cd.ModificationRight = i.Element("Settings").Element("ModificationRight").Value;
+            // Get Display and Modification rights
+            c.cd.DisplayRight = i.Element("Settings").Element("DisplayRight").Value.Substring(2);
+            c.cd.ModificationRight = i.Element("Settings").Element("ModificationRight").Value.Substring(2);
 
-            c.cd.userVisibility = model.ObtainLogicAnd(c.cd.DisplayRight, model.DisplayRights);
-            c.cd.userModification = model.ObtainLogicAnd(c.cd.ModificationRight, model.ModificatioRights);
+            c.cd.DisplayBytes = Model.HexToData(c.cd.DisplayRight);
+            c.cd.ModificationBytes = Model.HexToData(c.cd.ModificationRight);
+
+            // Calculate Visibility
+            c.cd.operatorVisibility = model.ObtainRights(c.cd.DisplayBytes, model.MainDisplayRights);
+            c.cd.operatorModification = model.ObtainRights(c.cd.ModificationBytes, model.MainModificationRights);
         }
 
         private void SetRelatedReadList(ICustomControl c, XElement i)
@@ -487,7 +511,9 @@ namespace Configuration_Manager
 
             foreach (String r in rel)
             {
-                c.cd.RelatedVisibility.Add(model.AllControls.Find(p => p.cd.Name == r));
+                ICustomControl p = model.AllControls.Find(x => x.cd.Name == r);
+                p.cd.inRelatedVisibility = true;
+                c.cd.RelatedVisibility.Add(p);
             }
         }
 
@@ -506,69 +532,46 @@ namespace Configuration_Manager
 
         private void ReadMachineConfiguration(ICustomControl c)
         {
-            String type = GetFileType(c.cd.MainDestination);
-
-            if (type == "ini") ReadConfigFromIniFile(c);
+            ReadRelationManager rm = new ReadRelationManager();
+            rm.ReadConfigOnStartup(c);
         }
 
-        private void ReadConfigFromIniFile(ICustomControl c)
+        private void ApplyRights(ICustomControl c)
         {
-            String path = ttt.TranslateFromTextFile(c.cd.SubDestination);
-            path = tct.TranslateFromControl(path);
-            path = path.TrimStart('\\');
+            if(!c.cd.inRelatedVisibility)
+                (c as Control).Visible = c.cd.operatorVisibility;
 
-            List<String> nodes = path.Split('\\').ToList();
-
-            Util.IniFile file = new Util.IniFile(c.cd.MainDestination);
-
-            if (c.cd.Type == "CComboBox")
-            {
-                String item = file.IniReadValue(nodes[0], nodes[1]);
-                if (c.cd.comboBoxConfigItems.Contains(item))
-                {
-                    int index = c.cd.comboBoxConfigItems.IndexOf(item);
-                    (c as ComboBox).SelectedIndex = index;
-                }
-            }
-            else
-            {
-                c.cd.Text = file.IniReadValue(nodes[0], nodes[1]);
-            }
-        }
-
-        public void SaveChangesToFile(ICustomControl c)
-        {
-            try
-            {
-                Util.IniFile file = new Util.IniFile(c.cd.MainDestination);
-
-                String path = ttt.TranslateFromTextFile(c.cd.RealSubDestination);
-                path = tct.TranslateFromControl(path).TrimStart('\\');
-
-                List<String> nodes = path.Split('\\').ToList();
-
-                if (c.cd.Type == "CComboBox")
-                {
-                    //TODO Should we check first if the comboBoxes are empty or what?
-                    String value = c.cd.comboBoxConfigItems[(c as ComboBox).SelectedIndex];
-                    file.IniWriteValue(nodes[0], nodes[1], value);
-
-                    System.Diagnostics.Debug.WriteLine("Saved value for combobox");
-                }
-            }
-            catch (Exception e)
-            { }
-        }
-
-        private void FillComboBoxFromFile(CComboBox c)
-        {
-
+            (c as Control).Enabled = c.cd.operatorModification;
         }
 
         private String GetFileType(string p)
         {
             if (p != "" && p != null) return p.Remove(0, p.Length - 3);
             else return "";
+        }
+
+        // This function sets again the state of the control with visibility or coupled relations.
+        // This way, those relations are applied when loading.
+        private void ApplyRelations(ICustomControl c)
+        {
+            if (c.cd.CoupledControls.Count > 0 || c.cd.RelatedVisibility.Count > 0)
+            {
+                if (c.cd.Type == "CCheckBox")
+                {
+                    CheckState state = (c as CheckBox).CheckState;
+                    if (state == CheckState.Checked) (c as CheckBox).CheckState = CheckState.Unchecked;
+                    else (c as CheckBox).CheckState = CheckState.Checked;
+
+                    (c as CheckBox).CheckState = state;
+                }
+
+                if (c.cd.Type == "CComboBox")
+                {
+                    int index = (c as ComboBox).SelectedIndex;
+                    (c as ComboBox).SelectedIndex = -1;
+                    (c as ComboBox).SelectedIndex = index;
+                }
+            }
         }
     }
 }

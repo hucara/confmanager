@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
             this.controlNameLabel = new System.Windows.Forms.Label();
             this.parentNameLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -47,7 +48,11 @@
             this.hintTextBox = new System.Windows.Forms.TextBox();
             this.textLabel = new System.Windows.Forms.Label();
             this.comboBoxEditPanel = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBoxValuePanel = new System.Windows.Forms.Panel();
+            this.checkBoxValueComboBox = new System.Windows.Forms.ComboBox();
+            this.checkBoxValueLabel = new System.Windows.Forms.Label();
             this.modificationRightLabel = new System.Windows.Forms.Label();
             this.displayRightLabel = new System.Windows.Forms.Label();
             this.displayRightTextBox = new System.Windows.Forms.MaskedTextBox();
@@ -67,10 +72,10 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.updateButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.comboBoxEditPanel.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.checkBoxValuePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // controlNameLabel
@@ -121,7 +126,7 @@
             // 
             // textTextBox
             // 
-            this.textTextBox.Location = new System.Drawing.Point(92, 24);
+            this.textTextBox.Location = new System.Drawing.Point(92, 20);
             this.textTextBox.Name = "textTextBox";
             this.textTextBox.Size = new System.Drawing.Size(231, 20);
             this.textTextBox.TabIndex = 1;
@@ -256,8 +261,19 @@
             this.comboBoxEditPanel.TabIndex = 19;
             this.comboBoxEditPanel.Visible = false;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(50, 1);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(142, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "edit items";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.checkBoxValuePanel);
             this.groupBox2.Controls.Add(this.modificationRightLabel);
             this.groupBox2.Controls.Add(this.displayRightLabel);
             this.groupBox2.Controls.Add(this.displayRightTextBox);
@@ -273,15 +289,47 @@
             this.groupBox2.Controls.Add(this.relationsComboBox);
             this.groupBox2.Location = new System.Drawing.Point(12, 221);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(488, 316);
+            this.groupBox2.Size = new System.Drawing.Size(488, 306);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
             // 
+            // checkBoxValuePanel
+            // 
+            this.checkBoxValuePanel.Controls.Add(this.checkBoxValueComboBox);
+            this.checkBoxValuePanel.Controls.Add(this.checkBoxValueLabel);
+            this.checkBoxValuePanel.Location = new System.Drawing.Point(16, 101);
+            this.checkBoxValuePanel.Name = "checkBoxValuePanel";
+            this.checkBoxValuePanel.Size = new System.Drawing.Size(278, 37);
+            this.checkBoxValuePanel.TabIndex = 20;
+            // 
+            // checkBoxValueComboBox
+            // 
+            this.checkBoxValueComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.checkBoxValueComboBox.FormattingEnabled = true;
+            this.checkBoxValueComboBox.Items.AddRange(new object[] {
+            "True / False",
+            "Yes / No",
+            "On / Off",
+            "0 / 1"});
+            this.checkBoxValueComboBox.Location = new System.Drawing.Point(147, 9);
+            this.checkBoxValueComboBox.Name = "checkBoxValueComboBox";
+            this.checkBoxValueComboBox.Size = new System.Drawing.Size(121, 21);
+            this.checkBoxValueComboBox.TabIndex = 22;
+            // 
+            // checkBoxValueLabel
+            // 
+            this.checkBoxValueLabel.AutoSize = true;
+            this.checkBoxValueLabel.Location = new System.Drawing.Point(1, 12);
+            this.checkBoxValueLabel.Name = "checkBoxValueLabel";
+            this.checkBoxValueLabel.Size = new System.Drawing.Size(70, 13);
+            this.checkBoxValueLabel.TabIndex = 21;
+            this.checkBoxValueLabel.Text = "config values";
+            // 
             // modificationRightLabel
             // 
             this.modificationRightLabel.AutoSize = true;
-            this.modificationRightLabel.Location = new System.Drawing.Point(17, 288);
+            this.modificationRightLabel.Location = new System.Drawing.Point(16, 273);
             this.modificationRightLabel.Name = "modificationRightLabel";
             this.modificationRightLabel.Size = new System.Drawing.Size(86, 13);
             this.modificationRightLabel.TabIndex = 19;
@@ -290,7 +338,7 @@
             // displayRightLabel
             // 
             this.displayRightLabel.AutoSize = true;
-            this.displayRightLabel.Location = new System.Drawing.Point(15, 262);
+            this.displayRightLabel.Location = new System.Drawing.Point(15, 247);
             this.displayRightLabel.Name = "displayRightLabel";
             this.displayRightLabel.Size = new System.Drawing.Size(62, 13);
             this.displayRightLabel.TabIndex = 18;
@@ -300,7 +348,7 @@
             // 
             this.displayRightTextBox.AsciiOnly = true;
             this.displayRightTextBox.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.displayRightTextBox.Location = new System.Drawing.Point(184, 259);
+            this.displayRightTextBox.Location = new System.Drawing.Point(184, 244);
             this.displayRightTextBox.Mask = "\\0\\x>AAAAAAAA<";
             this.displayRightTextBox.Name = "displayRightTextBox";
             this.displayRightTextBox.PromptChar = '0';
@@ -314,7 +362,7 @@
             // 
             this.modificationRightTextBox.AsciiOnly = true;
             this.modificationRightTextBox.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.modificationRightTextBox.Location = new System.Drawing.Point(184, 285);
+            this.modificationRightTextBox.Location = new System.Drawing.Point(184, 270);
             this.modificationRightTextBox.Mask = "\\0\\x>AAAAAAAA<";
             this.modificationRightTextBox.Name = "modificationRightTextBox";
             this.modificationRightTextBox.PromptChar = '0';
@@ -388,7 +436,7 @@
             this.controlListBox.FormattingEnabled = true;
             this.controlListBox.Location = new System.Drawing.Point(351, 46);
             this.controlListBox.Name = "controlListBox";
-            this.controlListBox.Size = new System.Drawing.Size(131, 259);
+            this.controlListBox.Size = new System.Drawing.Size(131, 244);
             this.controlListBox.TabIndex = 15;
             this.controlListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.controlListBox_ItemCheck);
             // 
@@ -403,7 +451,7 @@
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(421, 546);
+            this.okButton.Location = new System.Drawing.Point(421, 533);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(79, 27);
             this.okButton.TabIndex = 16;
@@ -413,7 +461,7 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(336, 546);
+            this.cancelButton.Location = new System.Drawing.Point(336, 533);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(79, 27);
             this.cancelButton.TabIndex = 17;
@@ -426,7 +474,7 @@
             // 
             // updateButton
             // 
-            this.updateButton.Location = new System.Drawing.Point(12, 546);
+            this.updateButton.Location = new System.Drawing.Point(12, 533);
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(79, 27);
             this.updateButton.TabIndex = 18;
@@ -434,21 +482,11 @@
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(50, 1);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(142, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "edit items";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(509, 582);
+            this.ClientSize = new System.Drawing.Size(509, 572);
             this.Controls.Add(this.updateButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
@@ -458,6 +496,7 @@
             this.Controls.Add(this.controlNameLabel);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -471,6 +510,8 @@
             this.comboBoxEditPanel.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.checkBoxValuePanel.ResumeLayout(false);
+            this.checkBoxValuePanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -518,5 +559,8 @@
 		private System.Windows.Forms.MaskedTextBox displayRightTextBox;
 		private System.Windows.Forms.Label modificationRightLabel;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel checkBoxValuePanel;
+        private System.Windows.Forms.ComboBox checkBoxValueComboBox;
+        private System.Windows.Forms.Label checkBoxValueLabel;
     }
 }

@@ -12,6 +12,8 @@ namespace Configuration_Manager
     public partial class SectionForm : Form
     {
         public String SectionName { get; set; }
+        Util.TokenTextTranslator ttt = Util.TokenTextTranslator.GetInstance();
+
 
         public SectionForm()
         {
@@ -20,7 +22,10 @@ namespace Configuration_Manager
 
         private void OkButton_Click(object sender, EventArgs e)
         {
-			if (NameTextBox.Text != "" && NameTextBox.Text != null)
+            String text = ttt.TranslateFromTextFile(NameTextBox.Text);
+            text.Trim();
+
+			if (text != "" && text != null)
 			{
 				this.SectionName = NameTextBox.Text;
 				this.DialogResult = System.Windows.Forms.DialogResult.OK;

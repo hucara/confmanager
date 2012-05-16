@@ -15,16 +15,11 @@ namespace Configuration_Manager
 {
     class ControlFactory
     {
-        String skipped = "";
-
         private static ControlFactory cf;
         private CustomHandler ch;
-
-        private CoupledControlsManager cm = new CoupledControlsManager();
-        private VisibilityRelationManager vm = new VisibilityRelationManager();
         private ReadRelationManager rm = new ReadRelationManager();
 
-        Model model = Model.getInstance();
+        private Model model = Model.getInstance();
 
         public static ControlFactory getInstance()
         {
@@ -92,25 +87,13 @@ namespace Configuration_Manager
             return c;
         }
 
-        // This builder is rubish. It is needed, but do not use it!
-        // It is a "fake" tab page for the creation of a TabControl.
-        // This tabpage is not referenced inside the Allcontrols.
-        public CTabPage BuildCTabPage()
-        {
-            CTabPage c = new CTabPage();
-            c.MouseDown += ch.Control_Click;
-            c.SetControlDescription();
-
-            model.logCreator.Append("+ Added: " + c.cd.Name);
-
-            return c;
-        }
-
         public CTabPage BuildCTabPage(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CTabPage" + CTabPage.count)) CTabPage.count++;
             CTabPage c = new CTabPage();
             parent.Controls.Add(c);
+
+            (parent as CTabControl).SelectedTab = c;
 
             SetCommonHandlers(c);
             c.DragDrop += ch.OnDragDrop;
@@ -130,13 +113,15 @@ namespace Configuration_Manager
         public CTabControl BuildCTabControl(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CTabControl" + CTabControl.count)) CTabControl.count++;
-            CTabControl c = new CTabControl(BuildCTabPage());
+            CTabControl c = new CTabControl();
             parent.Controls.Add(c);
 
             SetCommonHandlers(c);
 
             c.SetControlDescription();
             c.cd.RealText = c.cd.Text;
+
+            c.SelectedIndexChanged += IndexChanged;
 
             Model.getInstance().AllControls.Add(c);
 
@@ -151,11 +136,12 @@ namespace Configuration_Manager
             CComboBox c = new CComboBox();
             parent.Controls.Add(c);
 
-            c.SelectedIndexChanged += cm.ComboBoxCoupled;
-            c.SelectedIndexChanged += vm.ComboBoxVisibility;
+            c.SelectedIndexChanged += CoupledControlsManager.ComboBoxCoupled;
+            c.SelectedIndexChanged += VisibilityRelationManager.ComboBoxVisibility;
             c.SelectedIndexChanged += rm.ReadRelationUpdate;
 
             SetCommonHandlers(c);
+            SetChangesHandler(c);
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -174,9 +160,11 @@ namespace Configuration_Manager
             parent.Controls.Add(c);
 
             SetCommonHandlers(c);
+            SetChangesHandler(c);
 
             c.MouseDown += ch.CTextBox_RightClick;
             c.TextChanged += ch.TextChanged;
+            c.TextChanged += rm.ReadRelationUpdate;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -194,10 +182,12 @@ namespace Configuration_Manager
             CCheckBox c = new CCheckBox();
             parent.Controls.Add(c);
 
-            c.CheckStateChanged += cm.CheckBoxCoupled;
-            c.CheckStateChanged += vm.CheckBoxVisibility;
+            c.CheckStateChanged += CoupledControlsManager.CheckBoxCoupled;
+            c.CheckStateChanged += VisibilityRelationManager.CheckBoxVisibility;
+            c.CheckStateChanged += rm.ReadRelationUpdate;
 
             SetCommonHandlers(c);
+            SetChangesHandler(c);
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -259,6 +249,18 @@ namespace Configuration_Manager
 
         private void SetDragDropHandlers(Control c)
         {
+        }
+
+        private void SetChangesHandler(Control c)
+        {
+            if (c is CComboBox) (c as CComboBox).SelectedIndexChanged += ch.Changed;
+            else if (c is CTextBox) (c as CTextBox).TextChanged += ch.Changed;
+            else if (c is CCheckBox) (c as CCheckBox).CheckStateChanged += ch.Changed;
+        }
+
+        public void IndexChanged(object sender, EventArgs e)
+        {
+            (sender as ICustomControl).cd.SelectedTab = (sender as TabControl).TabIndex;
         }
     }
 }
