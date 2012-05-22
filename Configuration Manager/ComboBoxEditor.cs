@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Configuration_Manager
 {
@@ -30,11 +31,45 @@ namespace Configuration_Manager
             SetAddDeleteButtons();
             SetMoveButtons();
             RefreshActualComboBox();
+            ReplaceLabels();
 
             if ((cb as ComboBox).Items.Count > 0)
             {
                 (cb as ComboBox).SelectedIndex = index;
             }
+        }
+
+        private void ReplaceLabels()
+        {
+            XDocument xdoc;
+
+            try
+            {
+                xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
+                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
+
+                // Title of the form
+                this.Text = texts.Single(x => (int?)x.Attribute("id") == 59).Value;
+
+                // Labels of the form
+                this.valuesLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 54).Value;
+                this.configValuesLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 55).Value;
+
+                //this.moveUpButton.Text = texts.Single(x => (int?)x.Attribute("id") == 56).Value;
+                //this.moveDownButton.Text = texts.Single(x => (int?)x.Attribute("id") == 57).Value;
+
+                this.moveUpButton.Text = "";
+                this.moveDownButton.Text = "";
+
+                this.addButton.Text = texts.Single(x => (int?)x.Attribute("id") == 58).Value;
+                this.deleteButton.Text = texts.Single(x => (int?)x.Attribute("id") == 29).Value;
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was a problem reading texts for the Editor Form.");
+                Model.getInstance().logCreator.Append("[ERROR] There was a problem reading texts for the ComboBox Editor form.");
+            }
+            
         }
 
         private void configValues_SelectedIndexChanged_1(object sender, EventArgs e)
@@ -141,6 +176,11 @@ namespace Configuration_Manager
 
         private void MoveUpButton_Click(object sender, EventArgs e)
         {
+            MoveUpItem();
+        }
+
+        private void MoveUpItem()
+        {
             if (shownValues.SelectedItems.Count > 0)
             {
                 int count = shownValues.Items.Count;
@@ -184,7 +224,7 @@ namespace Configuration_Manager
                 shownValues.SetSelected(aux, true);
                 configValues.SetSelected(aux, true);
 
-                if (shownValues.SelectedIndex > -1) 
+                if (shownValues.SelectedIndex > -1)
                     (cb as ComboBox).SelectedIndex = shownValues.SelectedIndex;
             }
         }
@@ -198,6 +238,11 @@ namespace Configuration_Manager
         }
 
         private void MoveDownButton_Click(object sender, EventArgs e)
+        {
+            MoveDownItem();
+        }
+
+        private void MoveDownItem()
         {
             if (shownValues.SelectedItems.Count > 0)
             {
@@ -242,7 +287,7 @@ namespace Configuration_Manager
                 shownValues.SetSelected(aux, true);
                 configValues.SetSelected(aux, true);
 
-                if (shownValues.SelectedIndex > -1) 
+                if (shownValues.SelectedIndex > -1)
                     (cb as ComboBox).SelectedIndex = shownValues.SelectedIndex;
             }
         }

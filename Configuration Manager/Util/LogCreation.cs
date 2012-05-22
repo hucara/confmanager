@@ -7,14 +7,14 @@ namespace Util
 {
     public class LogCreation
     {
-        private bool        bCreateLogFiles             = false;
-        private String      LogFileName                 = "";
-        private int         iStaticLineLength           = 0;
-        private char        FrameCharacter              = ' ';
-        private String      MyExecutable                = Process.GetCurrentProcess().MainModule.FileName;
-        private String      LogFilePath                 = "";
+        private bool bCreateLogFiles = false;
+        private String LogFileName = "";
+        private int iStaticLineLength = 0;
+        private char FrameCharacter = ' ';
+        private String MyExecutable = Process.GetCurrentProcess().MainModule.FileName;
+        private String LogFilePath = "";
 
-        
+
         // ###################################################################################################################
         // ###################################################################################################################
         //
@@ -36,24 +36,24 @@ namespace Util
         //
         // ###################################################################################################################
         // ###################################################################################################################
-	    public LogCreation( String LogFileBaseName, int iLineLength, char FrameChar, bool bCreate )
-	    {
-            bCreateLogFiles         = bCreate;
-            LogFileName             = LogFileBaseName;
-            iStaticLineLength       = iLineLength;
-            FrameCharacter          = FrameChar;
+        public LogCreation(String LogFileBaseName, int iLineLength, char FrameChar, bool bCreate)
+        {
+            bCreateLogFiles = bCreate;
+            LogFileName = LogFileBaseName;
+            iStaticLineLength = iLineLength;
+            FrameCharacter = FrameChar;
 
-            LogFilePath   = MyExecutable.Substring( 0, MyExecutable.LastIndexOf( '\\' ) );
-            LogFilePath   = MyExecutable.Substring( 0, LogFilePath.LastIndexOf( '\\' ) );
-            LogFilePath  += "\\log";
+            LogFilePath = MyExecutable.Substring(0, MyExecutable.LastIndexOf('\\'));
+            LogFilePath = MyExecutable.Substring(0, LogFilePath.LastIndexOf('\\'));
+            LogFilePath += "\\log";
 
             // Check whether a 'log' directory exists and ...
-            if( System.IO.Directory.Exists( LogFilePath ) == false )
+            if (System.IO.Directory.Exists(LogFilePath) == false)
             {
                 // ...create it if not
-                System.IO.Directory.CreateDirectory( LogFilePath );
+                System.IO.Directory.CreateDirectory(LogFilePath);
             }
-	    }
+        }
 
 
         // ###################################################################################################################
@@ -72,9 +72,9 @@ namespace Util
         //
         // ###################################################################################################################
         // ###################################################################################################################
-        public void AppendWithFrame( String Message )
+        public void AppendWithFrame(String Message)
         {
-            AppendWithFrame( FrameCharacter, iStaticLineLength, Message );
+            AppendWithFrame(FrameCharacter, iStaticLineLength, Message);
         }
 
         // ###################################################################################################################
@@ -84,9 +84,9 @@ namespace Util
         //
         // ###################################################################################################################
         // ###################################################################################################################
-        public void AppendWithFrame( char FrameCharacter, String Message )
+        public void AppendWithFrame(char FrameCharacter, String Message)
         {
-            AppendWithFrame( FrameCharacter, iStaticLineLength, Message );
+            AppendWithFrame(FrameCharacter, iStaticLineLength, Message);
         }
 
         // ###################################################################################################################
@@ -97,19 +97,19 @@ namespace Util
         //
         // ###################################################################################################################
         // ###################################################################################################################
-        public void AppendWithFrame( char FrameCharacter, int iStaticLineLength, String Message )
+        public void AppendWithFrame(char FrameCharacter, int iStaticLineLength, String Message)
         {
-            String      CompleteMessage     = "";
-            
-            if( bCreateLogFiles )
-            {
-                CompleteMessage                 = FrameCharacter.ToString();
-                CompleteMessage                += " ";
-                CompleteMessage                += Message;
-                CompleteMessage                 = CompleteMessage.PadRight( iStaticLineLength, ' ' );
-                CompleteMessage                += FrameCharacter.ToString();
+            String CompleteMessage = "";
 
-                Write( CompleteMessage );
+            if (bCreateLogFiles)
+            {
+                CompleteMessage = FrameCharacter.ToString();
+                CompleteMessage += " ";
+                CompleteMessage += Message;
+                CompleteMessage = CompleteMessage.PadRight(iStaticLineLength, ' ');
+                CompleteMessage += FrameCharacter.ToString();
+
+                Write(CompleteMessage);
             }
 
         }
@@ -122,9 +122,9 @@ namespace Util
         //
         // ###################################################################################################################
         // ###################################################################################################################
-        public void AppendCenteredWithFrame( String Message )
+        public void AppendCenteredWithFrame(String Message)
         {
-            AppendCenteredWithFrame( FrameCharacter, iStaticLineLength, Message );
+            AppendCenteredWithFrame(FrameCharacter, iStaticLineLength, Message);
         }
 
         // ###################################################################################################################
@@ -134,9 +134,9 @@ namespace Util
         //
         // ###################################################################################################################
         // ###################################################################################################################
-        public void AppendCenteredWithFrame( char FrameCharacter, String Message )
+        public void AppendCenteredWithFrame(char FrameCharacter, String Message)
         {
-            AppendCenteredWithFrame( FrameCharacter, iStaticLineLength, Message );
+            AppendCenteredWithFrame(FrameCharacter, iStaticLineLength, Message);
         }
 
 
@@ -148,32 +148,32 @@ namespace Util
         //
         // ###################################################################################################################
         // ###################################################################################################################
-        public void AppendCenteredWithFrame( char FrameCharacter, int iStaticLineLength, String Message )
+        public void AppendCenteredWithFrame(char FrameCharacter, int iStaticLineLength, String Message)
         {
-            String      CompleteMessage         = "";
-            int         iNumberOfSpacesLeft     = 0;
-            int         iNumberOfSpacesRight    = 0;
-            
-            if( bCreateLogFiles )
+            String CompleteMessage = "";
+            int iNumberOfSpacesLeft = 0;
+            int iNumberOfSpacesRight = 0;
+
+            if (bCreateLogFiles)
             {
-                iNumberOfSpacesLeft             = ( iStaticLineLength - 2 - Message.Length ) / 2;
-                iNumberOfSpacesRight            = iNumberOfSpacesLeft;
+                iNumberOfSpacesLeft = (iStaticLineLength - 2 - Message.Length) / 2;
+                iNumberOfSpacesRight = iNumberOfSpacesLeft;
 
-                if( ( ( iStaticLineLength - Message.Length ) % 2 ) > 0 )
+                if (((iStaticLineLength - Message.Length) % 2) > 0)
                     iNumberOfSpacesRight++;
 
 
-                CompleteMessage                 = FrameCharacter.ToString();
-                CompleteMessage                += " ";
-                CompleteMessage                += "".PadRight( iNumberOfSpacesLeft, ' ' );
-                CompleteMessage                += Message;
+                CompleteMessage = FrameCharacter.ToString();
+                CompleteMessage += " ";
+                CompleteMessage += "".PadRight(iNumberOfSpacesLeft, ' ');
+                CompleteMessage += Message;
 
-                CompleteMessage                += "".PadRight( iNumberOfSpacesRight, ' ' );
+                CompleteMessage += "".PadRight(iNumberOfSpacesRight, ' ');
 
                 //CompleteMessage                 = CompleteMessage.PadRight( iNumberOfSpacesRight, ' ' );
-                CompleteMessage                += FrameCharacter.ToString();
+                CompleteMessage += FrameCharacter.ToString();
 
-                Write( CompleteMessage );
+                Write(CompleteMessage);
             }
 
         }
@@ -190,7 +190,7 @@ namespace Util
         // ###################################################################################################################
         public void AppendDividingLine()
         {
-            AppendDividingLine( FrameCharacter, iStaticLineLength );
+            AppendDividingLine(FrameCharacter, iStaticLineLength);
         }
 
 
@@ -204,9 +204,9 @@ namespace Util
         // 
         // ###################################################################################################################
         // ###################################################################################################################
-        public void AppendDividingLine( char FrameCharacter )
+        public void AppendDividingLine(char FrameCharacter)
         {
-            AppendDividingLine( FrameCharacter, iStaticLineLength );   
+            AppendDividingLine(FrameCharacter, iStaticLineLength);
         }
 
 
@@ -220,15 +220,15 @@ namespace Util
         // 
         // ###################################################################################################################
         // ###################################################################################################################
-        public void AppendDividingLine( char FrameCharacter, int iStaticLineLength )
+        public void AppendDividingLine(char FrameCharacter, int iStaticLineLength)
         {
-            String      DividingLine     = "";
-            
-            if( bCreateLogFiles )
+            String DividingLine = "";
+
+            if (bCreateLogFiles)
             {
-                DividingLine    = DividingLine.PadRight( iStaticLineLength + 1, FrameCharacter ); 
-                
-                Write( DividingLine );
+                DividingLine = DividingLine.PadRight(iStaticLineLength + 1, FrameCharacter);
+
+                Write(DividingLine);
             }
 
         }
@@ -242,11 +242,11 @@ namespace Util
         // 
         // ###################################################################################################################
         // ###################################################################################################################
-        public void Append( String Message )
+        public void Append(String Message)
         {
-            if( bCreateLogFiles )
+            if (bCreateLogFiles)
             {
-                Write( Message );
+                Write(Message);
             }
         }
 
@@ -260,26 +260,26 @@ namespace Util
         // 
         // ###################################################################################################################
         // ###################################################################################################################
-        private void Write( String Message )
+        private void Write(String Message)
         {
-            if( bCreateLogFiles )
+            if (bCreateLogFiles)
             {
-                DateTime    Today               = DateTime.Now;
-                String      TodayLogFileName    = GetLogFileName();
-                String      CompleteMessage     = "";
+                DateTime Today = DateTime.Now;
+                String TodayLogFileName = GetLogFileName();
+                String CompleteMessage = "";
 
-                CompleteMessage                 = GetTimeStamp();
-                CompleteMessage                += Message;
-                CompleteMessage                += "\r\n";
+                CompleteMessage = GetTimeStamp();
+                CompleteMessage += Message;
+                CompleteMessage += "\r\n";
 
-                StreamWriter myFile = new StreamWriter( TodayLogFileName,true );
-                myFile.Write( CompleteMessage );
+                StreamWriter myFile = new StreamWriter(TodayLogFileName, true);
+                myFile.Write(CompleteMessage);
                 myFile.Close();
             }
         }
 
 
-        
+
         // ###################################################################################################################
         // ###################################################################################################################
         //
@@ -299,14 +299,14 @@ namespace Util
         // ###################################################################################################################
         private String GetTimeStamp()
         {
-            String      TimeStampString;
-            
-            DateTime    Today               = DateTime.Now;
+            String TimeStampString;
 
-            TimeStampString                 = Today.Hour.ToString().PadLeft( 2, '0' )           + ":";
-            TimeStampString                += Today.Minute.ToString().PadLeft( 2, '0' )         + ":"; 
-            TimeStampString                += Today.Second.ToString().PadLeft( 2, '0' )         + ".";
-            TimeStampString                += Today.Millisecond.ToString().PadLeft( 3, '0' )    + " : ";
+            DateTime Today = DateTime.Now;
+
+            TimeStampString = Today.Hour.ToString().PadLeft(2, '0') + ":";
+            TimeStampString += Today.Minute.ToString().PadLeft(2, '0') + ":";
+            TimeStampString += Today.Second.ToString().PadLeft(2, '0') + ".";
+            TimeStampString += Today.Millisecond.ToString().PadLeft(3, '0') + " : ";
 
             return TimeStampString;
         }
@@ -333,12 +333,12 @@ namespace Util
         // ###################################################################################################################
         private String GetLogFileName()
         {
-            String      TodayLogFileName    = LogFilePath + "\\" + LogFileName;
-            DateTime    Today               = DateTime.Now;
-            
-            TodayLogFileName               += "_Log_" + Today.Year + "_";
-            TodayLogFileName               += Today.Month.ToString().PadLeft( 2, '0' )          + "_";
-            TodayLogFileName               += Today.Day.ToString().PadLeft( 2, '0' )            + ".txt";
+            String TodayLogFileName = LogFilePath + "\\" + LogFileName;
+            DateTime Today = DateTime.Now;
+
+            TodayLogFileName += "_Log_" + Today.Year + "_";
+            TodayLogFileName += Today.Month.ToString().PadLeft(2, '0') + "_";
+            TodayLogFileName += Today.Day.ToString().PadLeft(2, '0') + ".txt";
 
             return TodayLogFileName;
         }

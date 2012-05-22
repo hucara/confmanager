@@ -13,7 +13,7 @@ namespace Configuration_Manager.Views
 	class SectionMenuView : IView
 	{
 		Model model;
-		ControlFactory cf;
+        //ControlFactory cf;
 		ToolStrip sectionMenu;
 		TabControl sectionTabControl;
 		ContextMenuStrip tabContextMenu;
@@ -30,7 +30,7 @@ namespace Configuration_Manager.Views
 			this.tabContextMenu = cms;
 			this.sectionTabControl = tc;
 
-			this.cf = ControlFactory.getInstance();
+            //this.cf = ControlFactory.getInstance();
 		}
 
 		// Takes the info from the UI, gets the changes made by the 
@@ -76,7 +76,7 @@ namespace Configuration_Manager.Views
 		{
 			if (!MaxSectionsReached())
 			{
-				Section s = cf.BuildSection(text, text, true);
+				Section s = ControlFactory.BuildSection(text, text, true);
 
 				if (!model.Sections.Contains(s))
 				{
@@ -115,7 +115,7 @@ namespace Configuration_Manager.Views
 
 		private CToolStripButton CreateToolStripButton(String text)
 		{
-			CToolStripButton ctsb = ControlFactory.getInstance().BuildCToolStripButton(text);
+			CToolStripButton ctsb = ControlFactory.BuildCToolStripButton(text);
 			sectionMenu.Items.Add(ctsb);
 			return ctsb;
 		}

@@ -12,7 +12,7 @@ namespace Configuration_Manager
 {
     class ObjectDefinitionManager
     {
-        private ControlFactory cf = ControlFactory.getInstance();
+        //private ControlFactory cf = ControlFactory.getInstance();
         private Model model = Model.getInstance();
 
         private static ObjectDefinitionManager odm;
@@ -100,7 +100,7 @@ namespace Configuration_Manager
                 selected = true;
             }
 
-            return cf.BuildSection(name, text, selected);
+            return ControlFactory.BuildSection(name, text, selected);
         }
 
         public void SerializeObjectDefinition()
@@ -254,7 +254,7 @@ namespace Configuration_Manager
                 {
                     CTabControl parentControl = model.AllControls.Find(p => p.cd.Name == e.Element("Parent").Value) as CTabControl;
 
-                    CTabPage ctp = cf.BuildCTabPage(parentControl);
+                    CTabPage ctp = ControlFactory.BuildCTabPage(parentControl);
                     ctp.cd.Name = e.Element("Name").Value;
                     ctp.cd.RealText = e.Element("Text").Value;
                 }
@@ -370,37 +370,37 @@ namespace Configuration_Manager
             switch (i.Attribute("type").Value)
             {
                 case "CLabel":
-                    CLabel lbl = cf.BuildCLabel(s.Tab);
+                    CLabel lbl = ControlFactory.BuildCLabel(s.Tab);
                     lbl.cd.Name = i.Element("Name").Value;
                     break;
 
                 case "CComboBox":
-                    CComboBox cb = cf.BuildCComboBox(s.Tab);
+                    CComboBox cb = ControlFactory.BuildCComboBox(s.Tab);
                     cb.cd.Name = i.Element("Name").Value;
                     break;
 
                 case "CGroupBox":
-                    CGroupBox gb = cf.BuildCGroupBox(s.Tab);
+                    CGroupBox gb = ControlFactory.BuildCGroupBox(s.Tab);
                     gb.cd.Name = i.Element("Name").Value;
                     break;
 
                 case "CPanel":
-                    CPanel pl = cf.BuildCPanel(s.Tab);
+                    CPanel pl = ControlFactory.BuildCPanel(s.Tab);
                     pl.cd.Name = i.Element("Name").Value;
                     break;
 
                 case "CTextBox":
-                    CTextBox tb = cf.BuildCTextBox(s.Tab);
+                    CTextBox tb = ControlFactory.BuildCTextBox(s.Tab);
                     tb.cd.Name = i.Element("Name").Value;
                     break;
 
                 case "CCheckBox":
-                    CCheckBox ccb = cf.BuildCCheckBox(s.Tab);
+                    CCheckBox ccb = ControlFactory.BuildCCheckBox(s.Tab);
                     ccb.cd.Name = i.Element("Name").Value;
                     break;
 
                 case "CTabControl":
-                    CTabControl ctc = cf.BuildCTabControl(s.Tab);
+                    CTabControl ctc = ControlFactory.BuildCTabControl(s.Tab);
                     ctc.cd.Name = i.Element("Name").Value;
                     break;
 
@@ -532,8 +532,8 @@ namespace Configuration_Manager
 
         private void ReadMachineConfiguration(ICustomControl c)
         {
-            ReadRelationManager rm = new ReadRelationManager();
-            rm.ReadConfigOnStartup(c);
+            //ReadRelationManager rm = new ReadRelationManager();
+            ReadRelationManager.ReadConfigOnStartup(c);
         }
 
         private void ApplyRights(ICustomControl c)

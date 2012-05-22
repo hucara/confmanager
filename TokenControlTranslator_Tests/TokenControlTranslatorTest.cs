@@ -68,22 +68,22 @@ namespace TokenControlTranslator_Tests
         /// <summary>
         ///A test for GetValueTranslatedPairs
         ///</summary>
-        [TestMethod()]
-        public void GetValueTranslatedPairsTest()
-        {
-            TokenControlTranslator_Accessor target = new TokenControlTranslator_Accessor(); // TODO: Initialize to an appropriate value
-            target.SetTokenKey("##");
-            string textToTranslate = "This is just a test for ##CLabel1##, ##CLabel2##, ##CComboBox0##.";
+        //[TestMethod()]
+        //public void GetValueTranslatedPairsTest()
+        //{
+        //    TokenControlTranslator_Accessor target = new TokenControlTranslator_Accessor(); // TODO: Initialize to an appropriate value
+        //    target.SetTokenKey("##");
+        //    string textToTranslate = "This is just a test for ##CLabel1##, ##CLabel2##, ##CComboBox0##.";
 
-            Dictionary<string, string> expected = new Dictionary<string, string>();
-            expected.Add("##CLabel1##", "Sintonize with:");
-            expected.Add("##CLabel2##", "Frequency:");
-            expected.Add("##CComboBox0##", "##CLabel4##");
+        //    Dictionary<string, string> expected = new Dictionary<string, string>();
+        //    expected.Add("##CLabel1##", "Sintonize with:");
+        //    expected.Add("##CLabel2##", "Frequency:");
+        //    expected.Add("##CComboBox0##", "##CLabel4##");
 
-            Dictionary<string, string> actual;
-            actual = target.GetValueTranslatedPairs(textToTranslate);
-            Assert.AreEqual(expected, actual);
-        }
+        //    Dictionary<string, string> actual;
+        //    actual = target.GetValueTranslatedPairs(textToTranslate);
+        //    Assert.AreEqual(expected, actual);
+        //}
 
         /// <summary>
         ///A test for TranslateFromControl

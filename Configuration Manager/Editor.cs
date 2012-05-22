@@ -39,7 +39,7 @@ namespace Configuration_Manager
 
         Control parent;
         List<ICustomControl> currentVisibleList;
-        ControlFactory cf;
+        //ControlFactory cf;
         Model model;
 
 
@@ -53,7 +53,7 @@ namespace Configuration_Manager
             updateButton.Visible = false;
 #endif
 
-            this.cf = ControlFactory.getInstance();
+            //this.cf = ControlFactory.getInstance();
             this.model = Model.getInstance();
 			this.ttt = Util.TokenTextTranslator.GetInstance();
             this.tct = Util.TokenControlTranslator.GetInstance();
@@ -281,6 +281,10 @@ namespace Configuration_Manager
                     displayRightLabel.Enabled = false;
                     displayRightTextBox.Enabled = false;
                     //visibleCheckBox.Enabled = false;
+                    break;
+
+                case "CTabControl":
+                    textTextBox.Enabled = false;
                     break;
             }
         }
@@ -742,10 +746,16 @@ namespace Configuration_Manager
                 this.updateButton.Text = texts.Single(x => (int?)x.Attribute("id") == 19).Value;
                 this.cancelButton.Text = texts.Single(x => (int?)x.Attribute("id") == 20).Value;
                 this.okButton.Text = texts.Single(x => (int?)x.Attribute("id") == 21).Value;
+
+                this.editComboBoxButton.Text = texts.Single(x => (int?)x.Attribute("id") == 60).Value;
+                this.fileDestinationButton.Text = "";
+
+                this.checkBoxValueLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 55).Value;
             }
-            catch(ArgumentNullException)
+            catch(Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** There was a problem reading texts for the Editor Form.");
+                Model.getInstance().logCreator.Append("[ERROR] There was a problem reading texts for the Editor form.");
             }
         }
 

@@ -634,14 +634,15 @@ namespace Configuration_Manager
                 {
                     System.Diagnostics.Debug.WriteLine("** INFO ** Programmer mode ACTIVE.");
                     logCreator.Append("");
-                    logCreator.AppendCenteredWithFrame(" Programmer mode ACTIVE");
+                    logCreator.Append("[INFO] Programmer mode ACTIVE");
+                    logCreator.Append("");
                 }
                 else
                 {
                     System.Diagnostics.Debug.WriteLine("** INFO ** Programmer mode INACTIVE.");
-
                     logCreator.Append("");
-                    logCreator.AppendCenteredWithFrame(" Programmer mode ACTIVE");
+                    logCreator.Append("[INFO] Programmer mode INACTIVE");
+                    logCreator.Append("");
 
                     // Close opened editors
                     List<Editor> eds = Application.OpenForms.OfType<Editor>().ToList();

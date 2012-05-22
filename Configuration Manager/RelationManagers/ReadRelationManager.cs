@@ -15,14 +15,14 @@ namespace Configuration_Manager.CustomControls
      * from the first one, should be updated or should re-read the source.
      * 
      */
-    class ReadRelationManager
+    static class ReadRelationManager
     {
-        TokenControlTranslator tct = TokenControlTranslator.GetInstance();
-        TokenTextTranslator ttt = TokenTextTranslator.GetInstance();
+        static TokenControlTranslator tct = TokenControlTranslator.GetInstance();
+        static TokenTextTranslator ttt = TokenTextTranslator.GetInstance();
 
         // Handler that updates all the control fields that should be updated
         // for the read related controls.
-        public void ReadRelationUpdate(object sender, EventArgs e)
+        public static void ReadRelationUpdate(object sender, EventArgs e)
         {
             ICustomControl c = sender as ICustomControl;
 
@@ -34,6 +34,7 @@ namespace Configuration_Manager.CustomControls
 
                 // Updates the Text field or Items from the ComboBox
                 if (r.cd.Type == "CComboBox") TranslateComboBoxItems(r);
+                //if (sender is CCheckBox) TranslateCheckBoxState(sender as CCheckBox, r);
                 else TranslateText(r);
 
                 // Re-reads the value from the source file
@@ -47,13 +48,24 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
-        public void ReadConfigOnStartup(ICustomControl r)
+        private static void TranslateCheckBoxState(CCheckBox cb, ICustomControl r)
+        {
+            Boolean s = cb.Checked;
+
+            if (s)
+                r.cd.Text = cb.cd.checkBoxCheckedValue;
+            else
+                r.cd.Text = cb.cd.checkBoxUncheckedValue;
+        }
+
+        public static void ReadConfigOnStartup(ICustomControl r)
         {
             if (r.cd.RealSubDestination != "" && r.cd.RealSubDestination != null)
                 TranslateSubDestination(r);
 
             // Updates the Text field or Items from the ComboBox
             if (r.cd.Type == "CComboBox") TranslateComboBoxItems(r);
+            //if (sender is CCheckBox) TranslateCheckBoxState(sender as CCheckBox, r);
             else TranslateText(r);
 
             // Re-reads the value from the source file
@@ -66,7 +78,7 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
-        private void TranslateSubDestination(ICustomControl r)
+        private static void TranslateSubDestination(ICustomControl r)
         {
             String text = tct.TranslateFromControl(r.cd.RealSubDestination);
             text = ttt.TranslateFromTextFile(text);
@@ -74,7 +86,7 @@ namespace Configuration_Manager.CustomControls
             r.cd.SubDestination = text;        
         }
 
-        private void TranslateText(ICustomControl r)
+        private static void TranslateText(ICustomControl r)
         {
             String text = tct.TranslateFromControl(r.cd.RealText);
             text = ttt.TranslateFromTextFile(text);
@@ -82,7 +94,7 @@ namespace Configuration_Manager.CustomControls
             r.cd.Text = text;
         }
 
-        private void TranslateComboBoxItems(ICustomControl r)
+        private static void TranslateComboBoxItems(ICustomControl r)
         {
             int index = (r as ComboBox).SelectedIndex;
 
@@ -101,7 +113,7 @@ namespace Configuration_Manager.CustomControls
             (r as ComboBox).SelectedIndex = index;
         }
 
-        private void ReReadINIFile(ICustomControl r)
+        private static void ReReadINIFile(ICustomControl r)
         {
             try
             {
@@ -114,10 +126,11 @@ namespace Configuration_Manager.CustomControls
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading INI file for: " +r.cd.Name);
+                Model.getInstance().logCreator.Append("[ERROR] Re-Reading INI file for " + r.cd.Name);
             }
         }
 
-        private void ReReadXMLFile(ICustomControl r)
+        private static void ReReadXMLFile(ICustomControl r)
         {
             try
             {
@@ -130,10 +143,11 @@ namespace Configuration_Manager.CustomControls
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading XML file for: " +r.cd.Name);
+                Model.getInstance().logCreator.Append("[ERROR] Re-Reading XML file for " + r.cd.Name);
             }
         }
 
-        private void ReReadRegistry(ICustomControl r)
+        private static void ReReadRegistry(ICustomControl r)
         {
             try
             {
@@ -145,10 +159,11 @@ namespace Configuration_Manager.CustomControls
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading REGISTRY for: " + r.cd.Name);
+                Model.getInstance().logCreator.Append("[ERROR] Re-Reading registry for " + r.cd.Name);
             }
         }
 
-        private void SetReadValue(ICustomControl r, String value)
+        private static void SetReadValue(ICustomControl r, String value)
         {
             if (r.cd.Type == "CComboBox")
             {

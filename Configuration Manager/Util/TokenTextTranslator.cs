@@ -123,6 +123,8 @@ namespace Configuration_Manager.Util
 
 		public String TranslateFromTextFile(String textToTranslate)
 		{
+            if (textToTranslate == null) return textToTranslate;
+
 			this.translatedText = textToTranslate;
 
 			if (active && textToTranslate.Contains(Model.getInstance().textToken))

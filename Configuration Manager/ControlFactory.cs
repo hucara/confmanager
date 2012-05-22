@@ -13,29 +13,29 @@ using Configuration_Manager.Views;
 
 namespace Configuration_Manager
 {
-    class ControlFactory
+    static class ControlFactory
     {
-        private static ControlFactory cf;
-        private CustomHandler ch;
-        private ReadRelationManager rm = new ReadRelationManager();
+        //static private ControlFactory cf;
+        static private CustomHandler ch;
+        //static private ReadRelationManager rm = new ReadRelationManager();
 
-        private Model model = Model.getInstance();
+        static private Model model = Model.getInstance();
 
-        public static ControlFactory getInstance()
+        //public static ControlFactory getInstance()
+        //{
+        //    if (cf == null)
+        //    {
+        //        cf = new ControlFactory();
+        //    }
+        //    return cf;
+        //}
+
+        static public void SetCustomHandler(CustomHandler custom)
         {
-            if (cf == null)
-            {
-                cf = new ControlFactory();
-            }
-            return cf;
+            ch = custom;
         }
 
-        public void SetCustomHandler(CustomHandler ch)
-        {
-            this.ch = ch;
-        }
-
-        public Section BuildSection(String name, String text, bool selected)
+        static public Section BuildSection(String name, String text, bool selected)
         {
             CToolStripButton ctsb = BuildCToolStripButton(text);
             TabPage tp = BuildTabPage(name);
@@ -48,13 +48,13 @@ namespace Configuration_Manager
             return s;
         }
 
-        public TabPage BuildTabPage(String name)
+        static public TabPage BuildTabPage(String name)
         {
             TabPage tp = new TabPage(name);
             return tp;
         }
 
-        public CLabel BuildCLabel(Control parent)
+        static public CLabel BuildCLabel(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CLabel" + CLabel.count)) CLabel.count++;
 
@@ -71,7 +71,7 @@ namespace Configuration_Manager
             return c;
         }
 
-        public CToolStripButton BuildCToolStripButton(Section s)
+        static public CToolStripButton BuildCToolStripButton(Section s)
         {
             CToolStripButton c = new CToolStripButton(s);
             c.SetSectionDescription(s);
@@ -79,7 +79,7 @@ namespace Configuration_Manager
             return c;
         }
 
-        public CToolStripButton BuildCToolStripButton(String s)
+        static public CToolStripButton BuildCToolStripButton(String s)
         {
             CToolStripButton c = new CToolStripButton();
             c.SetSectionName(s);
@@ -87,7 +87,7 @@ namespace Configuration_Manager
             return c;
         }
 
-        public CTabPage BuildCTabPage(Control parent)
+        static public CTabPage BuildCTabPage(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CTabPage" + CTabPage.count)) CTabPage.count++;
             CTabPage c = new CTabPage();
@@ -110,7 +110,7 @@ namespace Configuration_Manager
             return c;
         }
 
-        public CTabControl BuildCTabControl(Control parent)
+        static public CTabControl BuildCTabControl(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CTabControl" + CTabControl.count)) CTabControl.count++;
             CTabControl c = new CTabControl();
@@ -130,7 +130,7 @@ namespace Configuration_Manager
             return c;
         }
 
-        public CComboBox BuildCComboBox(Control parent)
+        static public CComboBox BuildCComboBox(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CComboBox" + CComboBox.count)) CComboBox.count++;
             CComboBox c = new CComboBox();
@@ -138,7 +138,7 @@ namespace Configuration_Manager
 
             c.SelectedIndexChanged += CoupledControlsManager.ComboBoxCoupled;
             c.SelectedIndexChanged += VisibilityRelationManager.ComboBoxVisibility;
-            c.SelectedIndexChanged += rm.ReadRelationUpdate;
+            c.SelectedIndexChanged += ReadRelationManager.ReadRelationUpdate;
 
             SetCommonHandlers(c);
             SetChangesHandler(c);
@@ -153,7 +153,7 @@ namespace Configuration_Manager
             return c;
         }
 
-        public CTextBox BuildCTextBox(Control parent)
+        static public CTextBox BuildCTextBox(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CTextBox" + CTextBox.count)) CTextBox.count++;
             CTextBox c = new CTextBox();
@@ -164,7 +164,7 @@ namespace Configuration_Manager
 
             c.MouseDown += ch.CTextBox_RightClick;
             c.TextChanged += ch.TextChanged;
-            c.TextChanged += rm.ReadRelationUpdate;
+            c.TextChanged += ReadRelationManager.ReadRelationUpdate;
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -176,7 +176,7 @@ namespace Configuration_Manager
             return c;
         }
 
-        public CCheckBox BuildCCheckBox(Control parent)
+        static public CCheckBox BuildCCheckBox(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CCheckBox" + CCheckBox.count)) CCheckBox.count++;
             CCheckBox c = new CCheckBox();
@@ -184,7 +184,7 @@ namespace Configuration_Manager
 
             c.CheckStateChanged += CoupledControlsManager.CheckBoxCoupled;
             c.CheckStateChanged += VisibilityRelationManager.CheckBoxVisibility;
-            c.CheckStateChanged += rm.ReadRelationUpdate;
+            c.CheckStateChanged += ReadRelationManager.ReadRelationUpdate;
 
             SetCommonHandlers(c);
             SetChangesHandler(c);
@@ -199,7 +199,7 @@ namespace Configuration_Manager
             return c;
         }
 
-        public CGroupBox BuildCGroupBox(Control parent)
+        static public CGroupBox BuildCGroupBox(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CGroupBox" + CGroupBox.count)) CGroupBox.count++;
             CGroupBox c = new CGroupBox();
@@ -220,7 +220,7 @@ namespace Configuration_Manager
             return c;
         }
 
-        public CPanel BuildCPanel(Control parent)
+        static public CPanel BuildCPanel(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CPanel" + CPanel.count)) CPanel.count++;
             CPanel c = new CPanel();
@@ -239,7 +239,7 @@ namespace Configuration_Manager
             return c;
         }
 
-        private void SetCommonHandlers(Control c)
+        static private void SetCommonHandlers(Control c)
         {
             c.MouseDown += ch.Control_Click;
             c.MouseUp += ch.CancelDragDropTimer;
@@ -247,18 +247,18 @@ namespace Configuration_Manager
             c.MouseLeave += model.EraseInfoLabel;
         }
 
-        private void SetDragDropHandlers(Control c)
+        static private void SetDragDropHandlers(Control c)
         {
         }
 
-        private void SetChangesHandler(Control c)
+        static private void SetChangesHandler(Control c)
         {
             if (c is CComboBox) (c as CComboBox).SelectedIndexChanged += ch.Changed;
             else if (c is CTextBox) (c as CTextBox).TextChanged += ch.Changed;
             else if (c is CCheckBox) (c as CCheckBox).CheckStateChanged += ch.Changed;
         }
 
-        public void IndexChanged(object sender, EventArgs e)
+        static public void IndexChanged(object sender, EventArgs e)
         {
             (sender as ICustomControl).cd.SelectedTab = (sender as TabControl).TabIndex;
         }

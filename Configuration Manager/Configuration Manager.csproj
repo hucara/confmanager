@@ -72,7 +72,7 @@
     <Compile Include="CustomControls\CTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CustomControls\CTabPage.cs">
+    <Compile Include="CTabPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CustomControls\CPanel.cs">

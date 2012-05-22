@@ -48,7 +48,7 @@
             this.hintTextBox = new System.Windows.Forms.TextBox();
             this.textLabel = new System.Windows.Forms.Label();
             this.comboBoxEditPanel = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.editComboBoxButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.checkBoxValuePanel = new System.Windows.Forms.Panel();
             this.checkBoxValueComboBox = new System.Windows.Forms.ComboBox();
@@ -92,12 +92,12 @@
             // 
             this.parentNameLabel.AutoSize = true;
             this.parentNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.parentNameLabel.Location = new System.Drawing.Point(287, 9);
+            this.parentNameLabel.Location = new System.Drawing.Point(333, 9);
             this.parentNameLabel.Name = "parentNameLabel";
             this.parentNameLabel.Size = new System.Drawing.Size(47, 16);
             this.parentNameLabel.TabIndex = 1;
             this.parentNameLabel.Text = "Parent";
-            this.parentNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.parentNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // groupBox1
             // 
@@ -254,22 +254,22 @@
             // 
             // comboBoxEditPanel
             // 
-            this.comboBoxEditPanel.Controls.Add(this.button1);
+            this.comboBoxEditPanel.Controls.Add(this.editComboBoxButton);
             this.comboBoxEditPanel.Location = new System.Drawing.Point(92, 15);
             this.comboBoxEditPanel.Name = "comboBoxEditPanel";
             this.comboBoxEditPanel.Size = new System.Drawing.Size(234, 25);
             this.comboBoxEditPanel.TabIndex = 19;
             this.comboBoxEditPanel.Visible = false;
             // 
-            // button1
+            // editComboBoxButton
             // 
-            this.button1.Location = new System.Drawing.Point(50, 1);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(142, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "edit items";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.editComboBoxButton.Location = new System.Drawing.Point(50, 1);
+            this.editComboBoxButton.Name = "editComboBoxButton";
+            this.editComboBoxButton.Size = new System.Drawing.Size(142, 23);
+            this.editComboBoxButton.TabIndex = 0;
+            this.editComboBoxButton.Text = "edit items";
+            this.editComboBoxButton.UseVisualStyleBackColor = true;
+            this.editComboBoxButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // groupBox2
             // 
@@ -389,7 +389,8 @@
             // 
             // fileDestinationButton
             // 
-            this.fileDestinationButton.Location = new System.Drawing.Point(290, 49);
+            this.fileDestinationButton.Image = ((System.Drawing.Image)(resources.GetObject("fileDestinationButton.Image")));
+            this.fileDestinationButton.Location = new System.Drawing.Point(290, 46);
             this.fileDestinationButton.Name = "fileDestinationButton";
             this.fileDestinationButton.Size = new System.Drawing.Size(36, 23);
             this.fileDestinationButton.TabIndex = 12;
@@ -558,7 +559,7 @@
 		private System.Windows.Forms.Label displayRightLabel;
 		private System.Windows.Forms.MaskedTextBox displayRightTextBox;
 		private System.Windows.Forms.Label modificationRightLabel;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button editComboBoxButton;
         private System.Windows.Forms.Panel checkBoxValuePanel;
         private System.Windows.Forms.ComboBox checkBoxValueComboBox;
         private System.Windows.Forms.Label checkBoxValueLabel;

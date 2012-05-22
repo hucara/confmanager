@@ -36,8 +36,8 @@
             this.deleteButton = new System.Windows.Forms.Button();
             this.configTextBox = new System.Windows.Forms.TextBox();
             this.shownTextBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.valuesLabel = new System.Windows.Forms.Label();
+            this.configValuesLabel = new System.Windows.Forms.Label();
             this.configValues = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
@@ -52,6 +52,7 @@
             // 
             // moveUpButton
             // 
+            this.moveUpButton.Image = ((System.Drawing.Image)(resources.GetObject("moveUpButton.Image")));
             this.moveUpButton.Location = new System.Drawing.Point(376, 47);
             this.moveUpButton.Name = "moveUpButton";
             this.moveUpButton.Size = new System.Drawing.Size(44, 36);
@@ -62,6 +63,7 @@
             // 
             // moveDownButton
             // 
+            this.moveDownButton.Image = ((System.Drawing.Image)(resources.GetObject("moveDownButton.Image")));
             this.moveDownButton.Location = new System.Drawing.Point(376, 98);
             this.moveDownButton.Name = "moveDownButton";
             this.moveDownButton.Size = new System.Drawing.Size(44, 36);
@@ -104,23 +106,23 @@
             this.shownTextBox.Size = new System.Drawing.Size(164, 20);
             this.shownTextBox.TabIndex = 3;
             // 
-            // label1
+            // valuesLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "values";
+            this.valuesLabel.AutoSize = true;
+            this.valuesLabel.Location = new System.Drawing.Point(12, 9);
+            this.valuesLabel.Name = "valuesLabel";
+            this.valuesLabel.Size = new System.Drawing.Size(38, 13);
+            this.valuesLabel.TabIndex = 8;
+            this.valuesLabel.Text = "values";
             // 
-            // label2
+            // configValuesLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(179, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(70, 13);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "config values";
+            this.configValuesLabel.AutoSize = true;
+            this.configValuesLabel.Location = new System.Drawing.Point(179, 9);
+            this.configValuesLabel.Name = "configValuesLabel";
+            this.configValuesLabel.Size = new System.Drawing.Size(70, 13);
+            this.configValuesLabel.TabIndex = 9;
+            this.configValuesLabel.Text = "config values";
             // 
             // configValues
             // 
@@ -137,8 +139,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(446, 215);
             this.Controls.Add(this.configValues);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.configValuesLabel);
+            this.Controls.Add(this.valuesLabel);
             this.Controls.Add(this.shownTextBox);
             this.Controls.Add(this.configTextBox);
             this.Controls.Add(this.deleteButton);
@@ -169,8 +171,8 @@
         private System.Windows.Forms.Button deleteButton;
         private System.Windows.Forms.TextBox configTextBox;
         private System.Windows.Forms.TextBox shownTextBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label valuesLabel;
+        private System.Windows.Forms.Label configValuesLabel;
         private System.Windows.Forms.ListBox configValues;
     }
 }

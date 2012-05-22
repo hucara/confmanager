@@ -7,17 +7,17 @@ namespace Util
 {
     public class LogDeletion
     {
-        private const int    STATIC_LINE_LENGTH  = 100;
-        
-        private System.Timers.Timer MyTimer             = null;
-        private String              ApplicationMainName = "";
-        private String              LogFileName         = "";
-        private int                 iMaxAgeOfLogFiles   = 0;
-        private bool                bCreateLogFiles     = false;
-        private LogCreation			Log                 = null; 
-        private String              MyExecutable        = Process.GetCurrentProcess().MainModule.FileName;
-        private String              BasePath            = "";
-    
+        private const int STATIC_LINE_LENGTH = 100;
+
+        private System.Timers.Timer MyTimer = null;
+        private String ApplicationMainName = "";
+        private String LogFileName = "";
+        private int iMaxAgeOfLogFiles = 0;
+        private bool bCreateLogFiles = false;
+        private LogCreation Log = null;
+        private String MyExecutable = Process.GetCurrentProcess().MainModule.FileName;
+        private String BasePath = "";
+
         // ###################################################################################################################
         // ###################################################################################################################
         //
@@ -34,21 +34,21 @@ namespace Util
         //
         // ###################################################################################################################
         // ###################################################################################################################
-        public LogDeletion( String ApplicatioName, String ApplicationLogFileName, int MaxAgeOfLogs)
-	    {
-            ApplicationMainName     = ApplicatioName;
-			LogFileName = ApplicationLogFileName;
+        public LogDeletion(String ApplicatioName, String ApplicationLogFileName, int MaxAgeOfLogs)
+        {
+            ApplicationMainName = ApplicatioName;
+            LogFileName = ApplicationLogFileName;
 
-            BasePath                = MyExecutable.Substring( 0, MyExecutable.LastIndexOf( '\\' ) );
-            BasePath                = MyExecutable.Substring( 0, BasePath.LastIndexOf( '\\' ) );
-            BasePath               += "\\";
+            BasePath = MyExecutable.Substring(0, MyExecutable.LastIndexOf('\\'));
+            BasePath = MyExecutable.Substring(0, BasePath.LastIndexOf('\\'));
+            BasePath += "\\";
 
-			iMaxAgeOfLogFiles = MaxAgeOfLogs;
+            iMaxAgeOfLogFiles = MaxAgeOfLogs;
 
             SetupTimer();
             ReadConfiguration();
 
-            Log                     = new LogCreation( LogFileName, STATIC_LINE_LENGTH, '#', bCreateLogFiles ); 
+            Log = new LogCreation(LogFileName, STATIC_LINE_LENGTH, '#', bCreateLogFiles);
 
             CheckForLogFilesToDelete();
         }
@@ -66,14 +66,14 @@ namespace Util
         // ###################################################################################################################
         private void SetupTimer()
         {
-            MyTimer                             = new System.Timers.Timer();
-         
+            MyTimer = new System.Timers.Timer();
+
             // Add an event handler
-            MyTimer.Elapsed                    += new ElapsedEventHandler( TimeToDeleteLogFilesReached );
+            MyTimer.Elapsed += new ElapsedEventHandler(TimeToDeleteLogFilesReached);
             // Set the Interval to 'once a day'
-            MyTimer.Interval                   = 1000 * 60 * 60 * 24;
+            MyTimer.Interval = 1000 * 60 * 60 * 24;
             // Start the timer
-            MyTimer.Enabled                     = true;
+            MyTimer.Enabled = true;
         }
 
 
@@ -91,22 +91,22 @@ namespace Util
         // ###################################################################################################################
         private void ReadConfiguration()
         {
-			//IniFile ConfigurationFile       = new IniFile("");
+            //IniFile ConfigurationFile       = new IniFile("");
 
-			//String MaxAgeOfLogFiles         = ConfigurationFile.GetIniFileValue( ApplicationMainName + ".conf", 1, "config", "Debug", "MaxAgeOfLogFiles" );
-			//String CreateLogFiles           = ConfigurationFile.GetIniFileValue( ApplicationMainName + ".conf", 1, "config", "Debug", "CreateLogFiles"   );
+            //String MaxAgeOfLogFiles         = ConfigurationFile.GetIniFileValue( ApplicationMainName + ".conf", 1, "config", "Debug", "MaxAgeOfLogFiles" );
+            //String CreateLogFiles           = ConfigurationFile.GetIniFileValue( ApplicationMainName + ".conf", 1, "config", "Debug", "CreateLogFiles"   );
 
-			//String MaxAgeOfLogFiles = "";
-			//String CreateLogFiles = "";
+            //String MaxAgeOfLogFiles = "";
+            //String CreateLogFiles = "";
 
-			//int.TryParse( MaxAgeOfLogFiles, out iMaxAgeOfLogFiles );
+            //int.TryParse( MaxAgeOfLogFiles, out iMaxAgeOfLogFiles );
 
-			//if( String.Equals( CreateLogFiles, "yes", System.StringComparison.CurrentCultureIgnoreCase ) ) 
-			//    bCreateLogFiles = true;
-			//else
-			//    bCreateLogFiles = false;
+            //if( String.Equals( CreateLogFiles, "yes", System.StringComparison.CurrentCultureIgnoreCase ) ) 
+            //    bCreateLogFiles = true;
+            //else
+            //    bCreateLogFiles = false;
 
-			bCreateLogFiles = Configuration_Manager.Model.getInstance().createLogs;
+            bCreateLogFiles = Configuration_Manager.Model.getInstance().createLogs;
         }
 
         // ###################################################################################################################
@@ -140,52 +140,52 @@ namespace Util
         // ###################################################################################################################
         private void CheckForLogFilesToDelete()
         {
-            String FileTemplate = LogFileName + "*.txt";     
-            DirectoryInfo di    = new DirectoryInfo( BasePath + "log" );   
-            FileInfo[] rgFiles  = di.GetFiles( FileTemplate );
-            String LogMessage   = "";
+            String FileTemplate = LogFileName + "*.txt";
+            DirectoryInfo di = new DirectoryInfo(BasePath + "log");
+            FileInfo[] rgFiles = di.GetFiles(FileTemplate);
+            String LogMessage = "";
 
-            Log.Append( " " );
+            Log.Append(" ");
             Log.AppendDividingLine();
-            Log.AppendWithFrame( " " );
-            Log.AppendWithFrame( "Time reached for automatic log deletion..." ); 
-            LogMessage  = String.Format( "Max age of log files is configured to {0} days", iMaxAgeOfLogFiles );
-            Log.AppendWithFrame( LogMessage );
+            Log.AppendWithFrame(" ");
+            Log.AppendWithFrame("Time reached for automatic log deletion...");
+            LogMessage = String.Format("Max age of log files is configured to {0} days", iMaxAgeOfLogFiles);
+            Log.AppendWithFrame(LogMessage);
 
-            int iIterator       = 0;
+            int iIterator = 0;
 
-            foreach( FileInfo fi in rgFiles )
+            foreach (FileInfo fi in rgFiles)
             {
-                String      ThisFileName        = rgFiles[iIterator].ToString();
-                String      FileNameLocation    = rgFiles[iIterator].DirectoryName + "\\" + ThisFileName;
-                DateTime    Today               = DateTime.Now;
-                DateTime    DDay                = Today.AddDays( -iMaxAgeOfLogFiles );
+                String ThisFileName = rgFiles[iIterator].ToString();
+                String FileNameLocation = rgFiles[iIterator].DirectoryName + "\\" + ThisFileName;
+                DateTime Today = DateTime.Now;
+                DateTime DDay = Today.AddDays(-iMaxAgeOfLogFiles);
 
-                if( ThisFileName.Length > 0 )
+                if (ThisFileName.Length > 0)
                 {
-                    DateTime LastWiteTime = rgFiles[iIterator].LastWriteTime;         
+                    DateTime LastWiteTime = rgFiles[iIterator].LastWriteTime;
 
-                    if( LastWiteTime.CompareTo( DDay ) < 0 )
+                    if (LastWiteTime.CompareTo(DDay) < 0)
                     {
                         // We have to delete the file
 
                         try
                         {
-                            System.IO.File.Delete( FileNameLocation );
+                            System.IO.File.Delete(FileNameLocation);
 
-                            LogMessage          = "File deleted: ";
-                            LogMessage         += ThisFileName;
+                            LogMessage = "File deleted: ";
+                            LogMessage += ThisFileName;
 
-                            TimeSpan DiffTime   = Today.Subtract( LastWiteTime );
-                            LogMessage         += "   [" + DiffTime.Days + " days] old";
-                            Log.AppendWithFrame( LogMessage );
+                            TimeSpan DiffTime = Today.Subtract(LastWiteTime);
+                            LogMessage += "   [" + DiffTime.Days + " days] old";
+                            Log.AppendWithFrame(LogMessage);
                         }
                         catch
                         {
-                            LogMessage          = "Unable to delete file: ";
-                            LogMessage         += FileNameLocation;
+                            LogMessage = "Unable to delete file: ";
+                            LogMessage += FileNameLocation;
 
-                            Log.AppendWithFrame( LogMessage ); 
+                            Log.AppendWithFrame(LogMessage);
                         }
                     }
                 }
@@ -193,10 +193,10 @@ namespace Util
                 iIterator++;
             }
 
-            Log.AppendWithFrame( "Ready with log file deletion process..." );
-            Log.AppendWithFrame( " " );
+            Log.AppendWithFrame("Ready with log file deletion process...");
+            Log.AppendWithFrame(" ");
             Log.AppendDividingLine();
-            Log.Append( " " );
-        }   
+            Log.Append(" ");
+        }
     }
 }

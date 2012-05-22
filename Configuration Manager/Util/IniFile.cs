@@ -10,8 +10,8 @@ namespace Configuration_Manager.Util
 {
     public class IniFile
     {
-        private String              ThisExecutable      = Process.GetCurrentProcess().MainModule.FileName;
-        private String              BasePath            = "";
+        private String ThisExecutable = Process.GetCurrentProcess().MainModule.FileName;
+        private String BasePath = "";
 
         public string path;
 
@@ -25,18 +25,18 @@ namespace Configuration_Manager.Util
           int size, string filePath);
 
 
-
         public IniFile(string INIPath)
         {
-            BasePath        = ThisExecutable.Substring( 0, ThisExecutable.LastIndexOf( '\\' ) );
-            
-            path            = INIPath;
+            BasePath = ThisExecutable.Substring(0, ThisExecutable.LastIndexOf('\\'));
+            path = INIPath;
+
+            if (!System.IO.File.Exists(path))
+                throw new System.IO.FileNotFoundException();
         }
 
         public void IniWriteValue(string Section, string Key, string Value)
         {
             WritePrivateProfileString(Section, Key, Value, this.path);
-
         }
 
 
@@ -46,7 +46,7 @@ namespace Configuration_Manager.Util
             int i = GetPrivateProfileString(Section, Key, "", temp, 255, this.path);
             return temp.ToString();
         }
-    
+
 
         // ###################################################################################################################
         // ###################################################################################################################
@@ -66,52 +66,54 @@ namespace Configuration_Manager.Util
         //
         // ###################################################################################################################
         // ###################################################################################################################
-        public String GetIniFileValue( String FileName, int DirectoryLocation, String SubFolder, String Section, String Key )
+        public String GetIniFileValue(String FileName, int DirectoryLocation, String SubFolder, String Section, String Key)
         {
-            String IniFileValue     = "";
-            String File             = BasePath;
+            String IniFileValue = "";
+            String File = BasePath;
 
-            
+
             // Check the preconditions
-            if( ( FileName.Length > 0 ) && ( DirectoryLocation > -1 ) && ( Section.Length > 0 ) && ( Key.Length > 0 ) )
+            if ((FileName.Length > 0) && (DirectoryLocation > -1) && (Section.Length > 0) && (Key.Length > 0))
             {
                 // Now check, if a backslash was added at the beginning of the subfolder name
-                if( SubFolder.Length > 0 )
+                if (SubFolder.Length > 0)
                 {
-                    if( SubFolder[0] == '\\' )
-                        SubFolder.Remove( 1, 1 );
+                    if (SubFolder[0] == '\\')
+                        SubFolder.Remove(1, 1);
                 }
 
                 // Now check, if a backslash was added at the end of the subfolder name
-                if( SubFolder.Length > 0 )
+                if (SubFolder.Length > 0)
                 {
-                    if( SubFolder[SubFolder.Length - 1] == '\\' )
-                        SubFolder.Remove( SubFolder.Length - 1, 1 );
+                    if (SubFolder[SubFolder.Length - 1] == '\\')
+                        SubFolder.Remove(SubFolder.Length - 1, 1);
                 }
-            
+
                 // Now look for the right location of the file
-                while( ( DirectoryLocation > 0 ) && File.Contains( "\\" ) )
+                while ((DirectoryLocation > 0) && File.Contains("\\"))
                 {
-                    File    = File.Substring( 0, File.LastIndexOf( '\\' ) );
+                    File = File.Substring(0, File.LastIndexOf('\\'));
                     DirectoryLocation--;
                 }
 
                 // If "DirectoryLocation" is zero, the base location of the file was found
-                if( DirectoryLocation == 0 )
+                if (DirectoryLocation == 0)
                 {
                     // Now we are adding the subfolder(s) and the file name
-                    File   += "\\";
-                    File   += SubFolder;
-                    File   += "\\"; 
-                    File   += FileName;
+                    File += "\\";
+                    File += SubFolder;
+                    File += "\\";
+                    File += FileName;
 
                     // Check whether this file exists
-                    if( System.IO.File.Exists( File ) == true )
+                    if (System.IO.File.Exists(File) == true)
                     {
-                        path    = File;
+                        path = File;
 
-                        IniFileValue    = IniReadValue( Section, Key );
+                        IniFileValue = IniReadValue(Section, Key);
                     }
+                    else
+                        throw new ArgumentException();
                 }
             }
 

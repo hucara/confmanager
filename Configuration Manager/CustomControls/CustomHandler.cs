@@ -19,7 +19,7 @@ namespace Configuration_Manager.CustomControls
 		public ContextMenuStrip contextMenu;
 		Model model;
 		Editor editor;
-		ControlFactory cf;
+        //ControlFactory cf;
 		Rectangle previewRect = new Rectangle(0, 0, 0, 0);
 
 		Timer t = new Timer(); // Drag and drop timer.
@@ -28,7 +28,7 @@ namespace Configuration_Manager.CustomControls
 		{
 			this.contextMenu = cms;
 			this.model = Model.getInstance();
-			this.cf = ControlFactory.getInstance();
+            //this.cf = ControlFactory.getInstance();
 
 			this.t.Interval = 200;
 			this.t.Tick += TimerTick;
@@ -172,7 +172,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void labelToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CLabel label = cf.BuildCLabel(model.CurrentClickedControl);
+			CLabel label = ControlFactory.BuildCLabel(model.CurrentClickedControl);
 
 			editor = new Editor();
 			editor.Show(label);
@@ -180,7 +180,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void textBoxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CTextBox textBox = cf.BuildCTextBox(model.CurrentClickedControl);
+            CTextBox textBox = ControlFactory.BuildCTextBox(model.CurrentClickedControl);
 
 			editor = new Editor();
 			editor.Show(textBox);
@@ -188,7 +188,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void comboBoxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CComboBox comboBox = cf.BuildCComboBox(model.CurrentClickedControl);
+            CComboBox comboBox = ControlFactory.BuildCComboBox(model.CurrentClickedControl);
 
 			editor = new Editor();
 			editor.Show(comboBox);
@@ -196,7 +196,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void checkBoxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CCheckBox checkBox = cf.BuildCCheckBox(model.CurrentClickedControl);
+            CCheckBox checkBox = ControlFactory.BuildCCheckBox(model.CurrentClickedControl);
 
 			editor = new Editor();
 			editor.Show(checkBox);
@@ -204,7 +204,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void groupBoxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CGroupBox groupBox = cf.BuildCGroupBox(model.CurrentClickedControl);
+            CGroupBox groupBox = ControlFactory.BuildCGroupBox(model.CurrentClickedControl);
 
 			editor = new Editor();
 			editor.Show(groupBox);
@@ -212,7 +212,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void shapeToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CPanel panel = cf.BuildCPanel(model.CurrentClickedControl);
+            CPanel panel = ControlFactory.BuildCPanel(model.CurrentClickedControl);
 
 			editor = new Editor();
 			editor.Show(panel);
@@ -220,8 +220,8 @@ namespace Configuration_Manager.CustomControls
 
 		public void tabControlToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CTabControl tabControl = cf.BuildCTabControl(model.CurrentClickedControl);
-            CTabPage ctab = cf.BuildCTabPage(tabControl);
+            CTabControl tabControl = ControlFactory.BuildCTabControl(model.CurrentClickedControl);
+            CTabPage ctab = ControlFactory.BuildCTabPage(tabControl);
 
 			tabControl.MouseDown += Control_Click;
 
@@ -231,7 +231,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void tabPageToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CTabPage tabPage = cf.BuildCTabPage(model.CurrentClickedControl);
+            CTabPage tabPage = ControlFactory.BuildCTabPage(model.CurrentClickedControl);
 			tabPage.MouseDown += Control_Click;
 
 			editor = new Editor();
@@ -373,6 +373,8 @@ namespace Configuration_Manager.CustomControls
         public void Changed(object sender, EventArgs e)
         {
             (sender as ICustomControl).cd.Changed = true;
+            if((sender as ICustomControl).cd.MainDestination != "")
+                System.Diagnostics.Debug.WriteLine("! " +(sender as ICustomControl).cd.Name + " content has changed its value.");
         }
 	}
 }

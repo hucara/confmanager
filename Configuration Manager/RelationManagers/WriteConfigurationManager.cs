@@ -19,23 +19,15 @@ namespace Configuration_Manager.RelationManagers
      * store it in a convenient way.
      * 
      */
-    class WriteConfigurationManager
+    static class WriteConfigurationManager
     {
-        public static Char[] XML_FORBIDEN_CHARS = {'!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', '/', ';',
-                                               '<', '=', '>', '?', '@', '[', ']', '\\', ']', '^', '`', '{', '|',
-                                               '}', '~', ':'};
-
-        public static Char[] XML_STARTING_CHARS = { '-', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-
-
-
-        TokenControlTranslator tct = TokenControlTranslator.GetInstance();
-        TokenTextTranslator ttt = TokenTextTranslator.GetInstance();
+        static TokenControlTranslator tct = TokenControlTranslator.GetInstance();
+        static TokenTextTranslator ttt = TokenTextTranslator.GetInstance();
 
         // Only interested on controls that:
         // - Have configured a destination file and,
         // - Have the "Changed" property as true.
-        public void SaveChanges()
+        public static void SaveChanges()
         {
             foreach (ICustomControl c in Model.getInstance().AllControls.Where(p => p.cd.Changed))
             {
@@ -47,7 +39,7 @@ namespace Configuration_Manager.RelationManagers
             }
         }
 
-        private void SaveControlChanges(ICustomControl c)
+        private static void SaveControlChanges(ICustomControl c)
         {
             String fileType = c.cd.MainDestination.Substring(c.cd.MainDestination.Length - 4, 4);
 
@@ -59,9 +51,14 @@ namespace Configuration_Manager.RelationManagers
             if (fileType == ".ini" && c.cd.DestinationType == ".INI") SaveINIFile(c, path, value);
             else if (fileType == ".xml" && c.cd.DestinationType == ".XML") SaveXMLFile(c, path, value);
             else if (c.cd.DestinationType == "REG") SaveRegistryKey(c, path, value);
+            else
+            {
+                Model.getInstance().logCreator.Append("[ERROR] Destination file and type not matching for " + c.cd.Name);
+                System.Diagnostics.Debug.WriteLine("!ERROR : Destination file and type not matching for " + c.cd.Name);
+            }
         }
 
-        private string GetValueToSave(ICustomControl c)
+        private static string GetValueToSave(ICustomControl c)
         {
             String value = "";
             if (c.cd.Type == "CComboBox")
@@ -86,7 +83,7 @@ namespace Configuration_Manager.RelationManagers
             return value;
         }
 
-        private void SaveXMLFile(ICustomControl c, String path, String value)
+        private static void SaveXMLFile(ICustomControl c, String path, String value)
         {
             try
             {
@@ -102,21 +99,22 @@ namespace Configuration_Manager.RelationManagers
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an exception while applying changes in: " + c.cd.Name);
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an exception while saving changes in file for: " + c.cd.Name);
                 System.Diagnostics.Debug.WriteLine(e.Message);
+                Model.getInstance().logCreator.Append("[ERROR] Writing file for " + c.cd.Name);
             }      
         }
 
-        private void ReReadControl(ICustomControl c)
+        private static void ReReadControl(ICustomControl c)
         {
             foreach (ICustomControl r in c.cd.RelatedRead)
             {
-                ReadRelationManager rm = new ReadRelationManager();
-                rm.ReadConfigOnStartup(r);
+                //ReadRelationManager rm = new ReadRelationManager();
+                ReadRelationManager.ReadConfigOnStartup(r);
             }
         }
 
-        private void SaveINIFile(ICustomControl c, String path, String value)
+        private static void SaveINIFile(ICustomControl c, String path, String value)
         {
             try
             {
@@ -130,12 +128,13 @@ namespace Configuration_Manager.RelationManagers
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an exception while applying changes in: " + c.cd.Name);
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an exception while saving changes in file for: " + c.cd.Name);
                 System.Diagnostics.Debug.WriteLine(e.Message);
+                Model.getInstance().logCreator.Append("[ERROR] Writing file for " + c.cd.Name);
             }
         }
 
-        private void SaveRegistryKey(ICustomControl c, String path, String value)
+        private static void SaveRegistryKey(ICustomControl c, String path, String value)
         {
             try
             {
@@ -147,8 +146,9 @@ namespace Configuration_Manager.RelationManagers
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an exception while applying changes in: " + c.cd.Name);
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an exception while saving changes in file for: " + c.cd.Name);
                 System.Diagnostics.Debug.WriteLine(e.Message);
+                Model.getInstance().logCreator.Append("[ERROR] Writing file for " + c.cd.Name);
             }
         }
     }

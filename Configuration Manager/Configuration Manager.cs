@@ -11,13 +11,14 @@ using Configuration_Manager.CustomControls;
 
 using Debug = System.Diagnostics.Debug;
 using System.Xml.Linq;
+using Configuration_Manager.RelationManagers;
 
 namespace Configuration_Manager
 {
     public partial class MainForm : Form
     {
         private Model model = Model.getInstance();
-        private ControlFactory cf = ControlFactory.getInstance();
+        //private ControlFactory cf = ControlFactory.getInstance();
         private ObjectDefinitionManager odm = ObjectDefinitionManager.getInstance();
 
         SectionTabsView sectionTabsView;
@@ -66,7 +67,7 @@ namespace Configuration_Manager
         private void InitCustomHandler()
         {
             ch = new CustomHandler(contextMenu);
-            cf.SetCustomHandler(ch);
+            ControlFactory.SetCustomHandler(ch);
         }
 
         private void InitHandlers()
@@ -135,8 +136,7 @@ namespace Configuration_Manager
 
             if (e.Alt && e.Control && e.KeyCode == Keys.G)
             {
-                Configuration_Manager.RelationManagers.WriteConfigurationManager wc = new Configuration_Manager.RelationManagers.WriteConfigurationManager();
-                wc.SaveChanges();
+                WriteConfigurationManager.SaveChanges();
             }
 
             if (e.Alt && e.Control && e.KeyCode == Keys.D)

@@ -52,6 +52,8 @@ namespace Configuration_Manager.Util
 
         public String TranslateFromControl(String textToTranslate)
         {
+            if (textToTranslate == null) return textToTranslate;
+
             this.translatedText = textToTranslate;
 
             if (active && textToTranslate.Contains(Model.getInstance().controlToken))
@@ -158,38 +160,38 @@ namespace Configuration_Manager.Util
             return translated;
         }
 
-        public Dictionary<string, string> GetValueTranslatedPairs(String textToTranslate)
-        {
-            Dictionary<string, string> valueTranslatedPairs = new Dictionary<string, string>();
+        //public Dictionary<string, string> GetValueTranslatedPairs(String textToTranslate)
+        //{
+        //    Dictionary<string, string> valueTranslatedPairs = new Dictionary<string, string>();
 
-            this.translatedText = textToTranslate;
+        //    this.translatedText = textToTranslate;
 
-            if (active)
-            {
-                this.valuesToTranslate.Clear();
-                this.translatedValues.Clear();
+        //    if (active)
+        //    {
+        //        this.valuesToTranslate.Clear();
+        //        this.translatedValues.Clear();
 
-                this.textToTranslate = textToTranslate;
+        //        this.textToTranslate = textToTranslate;
 
-                if (this.textToTranslate != null && this.textToTranslate != "")
-                {
-                    if (TextHasEvenTokens())
-                    {
-                        GetValuesToTranslate();
-                        GetTranslatedValues();
-                    }
-                }
+        //        if (this.textToTranslate != null && this.textToTranslate != "")
+        //        {
+        //            if (TextHasEvenTokens())
+        //            {
+        //                GetValuesToTranslate();
+        //                GetTranslatedValues();
+        //            }
+        //        }
 
-                for (int i = 0; i < valuesToTranslate.Count; i++)
-                {
-                    if(valuesToTranslate[i] != null && translatedValues[i] != null)
-                    {
-                        valueTranslatedPairs.Add(valuesToTranslate[i], translatedValues[i]);
-                    }
-                }
-            }
+        //        for (int i = 0; i < valuesToTranslate.Count; i++)
+        //        {
+        //            if(valuesToTranslate[i] != null && translatedValues[i] != null)
+        //            {
+        //                valueTranslatedPairs.Add(valuesToTranslate[i], translatedValues[i]);
+        //            }
+        //        }
+        //    }
 
-            return valueTranslatedPairs;
-        }
+        //    return valueTranslatedPairs;
+        //}
     }
 }
