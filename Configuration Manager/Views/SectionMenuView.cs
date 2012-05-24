@@ -109,8 +109,6 @@ namespace Configuration_Manager.Views
 
 			if (model.Sections.Count > 0) model.Sections[0].Selected = true;
 			readAndShow();
-
-			// Delete all the controls that have this section as parent.
 		}
 
 		private CToolStripButton CreateToolStripButton(String text)
@@ -221,6 +219,9 @@ namespace Configuration_Manager.Views
 			}
 		}
 
+        //
+        // Relocates the info label depending on the selected section.
+        //
 		private void MoveInfoLabel(int buttonIndex, int labelIndex)
 		{
 			System.Diagnostics.Debug.WriteLine("Moving Info Label - buttonIndex: " + buttonIndex + " - labelIndex: " + labelIndex);

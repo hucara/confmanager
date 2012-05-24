@@ -15,20 +15,8 @@ namespace Configuration_Manager
 {
     static class ControlFactory
     {
-        //static private ControlFactory cf;
         static private CustomHandler ch;
-        //static private ReadRelationManager rm = new ReadRelationManager();
-
         static private Model model = Model.getInstance();
-
-        //public static ControlFactory getInstance()
-        //{
-        //    if (cf == null)
-        //    {
-        //        cf = new ControlFactory();
-        //    }
-        //    return cf;
-        //}
 
         static public void SetCustomHandler(CustomHandler custom)
         {

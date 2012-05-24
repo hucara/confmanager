@@ -23,7 +23,6 @@ namespace Configuration_Manager.Views
             this.ch = ch;
 
             this.model = Model.getInstance();
-            //this.cf = ControlFactory.getInstance();
         }
 
         // Takes the info from the UI, gets the changes made by the 

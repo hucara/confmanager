@@ -285,6 +285,8 @@ namespace Configuration_Manager
 
                 case "CTabControl":
                     textTextBox.Enabled = false;
+                    relationsComboBox.Enabled = false;
+                    controlListBox.Enabled = false;
                     break;
             }
         }
@@ -696,7 +698,6 @@ namespace Configuration_Manager
 					SaveToControl();
 					this.Close();
 				}
-
 				ErrorMsg = "";
 			}
 		}

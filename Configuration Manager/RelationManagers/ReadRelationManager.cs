@@ -34,7 +34,6 @@ namespace Configuration_Manager.CustomControls
 
                 // Updates the Text field or Items from the ComboBox
                 if (r.cd.Type == "CComboBox") TranslateComboBoxItems(r);
-                //if (sender is CCheckBox) TranslateCheckBoxState(sender as CCheckBox, r);
                 else TranslateText(r);
 
                 // Re-reads the value from the source file
@@ -48,16 +47,6 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
-        private static void TranslateCheckBoxState(CCheckBox cb, ICustomControl r)
-        {
-            Boolean s = cb.Checked;
-
-            if (s)
-                r.cd.Text = cb.cd.checkBoxCheckedValue;
-            else
-                r.cd.Text = cb.cd.checkBoxUncheckedValue;
-        }
-
         public static void ReadConfigOnStartup(ICustomControl r)
         {
             if (r.cd.RealSubDestination != "" && r.cd.RealSubDestination != null)
@@ -65,7 +54,6 @@ namespace Configuration_Manager.CustomControls
 
             // Updates the Text field or Items from the ComboBox
             if (r.cd.Type == "CComboBox") TranslateComboBoxItems(r);
-            //if (sender is CCheckBox) TranslateCheckBoxState(sender as CCheckBox, r);
             else TranslateText(r);
 
             // Re-reads the value from the source file

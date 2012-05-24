@@ -167,9 +167,9 @@ namespace Configuration_Manager
                                         new XElement("SubDestination", item.cd.RealSubDestination)
                                     ),
                                     new XElement("Relations",
-                                        new XElement("Write",
-                                            item.cd.RelatedWrite.Select(write => write.cd.Name + ", ")
-                                        ),
+                                        //new XElement("Write",
+                                        //    item.cd.RelatedWrite.Select(write => write.cd.Name + ", ")
+                                        //),
                                         new XElement("Read",
                                             item.cd.RelatedRead.Select(read => read.cd.Name + ", ")
                                         ),
@@ -274,7 +274,7 @@ namespace Configuration_Manager
                         SetControlSpecificProperties(c, i);
 
                         SetRelatedReadList(c, i);
-                        SetRelatedWriteList(c, i);
+                        //SetRelatedWriteList(c, i);
                         SetRelatedVisibility(c, i);
                         SetCoupledControls(c, i);
 
@@ -532,7 +532,6 @@ namespace Configuration_Manager
 
         private void ReadMachineConfiguration(ICustomControl c)
         {
-            //ReadRelationManager rm = new ReadRelationManager();
             ReadRelationManager.ReadConfigOnStartup(c);
         }
 

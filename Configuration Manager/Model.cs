@@ -317,8 +317,8 @@ namespace Configuration_Manager
 			XElement rights = xdoc.Element("ConfigurationManager").Element("Rights");
 
 			if (rights.Element("ProgrammerMode").Value == "yes") this.progModeAllowed = true;
-			this.MainModificationRights = HexToData(rights.Element("Modification").Value);
-            this.MainDisplayRights = HexToData(rights.Element("Display").Value);
+			this.MainModificationRights = HexToData(rights.Element("Modification").Value.Substring(2));
+            this.MainDisplayRights = HexToData(rights.Element("Display").Value.Substring(2));
 		}
 
 		private void ReadLogsSection(XDocument xdoc)
@@ -595,20 +595,29 @@ namespace Configuration_Manager
 			this.InfoLabel.Text = "";
 		}
 
+        // Converts the string of characters to array of bytes.
+        // The format needs to be "00000000"
         public static byte[] HexToData(string hexString)
         {
             if (hexString == null)
                 return null;
-
-            hexString = hexString.Substring(2);
+            //hexString = hexString.Substring(2);
 
             if (hexString.Length % 2 == 1)
                 hexString = '0' + hexString;
 
             byte[] data = new byte[hexString.Length / 2];
 
-            for (int i = 0; i < data.Length; i++)
-                data[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+            try
+            {
+                for (int i = 0; i < data.Length; i++)
+                    data[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+                //byte.TryParse(hexString.Substring(i * 2, 2), System.Globalization.NumberStyles.AllowHexSpecifier, out data[i]);
+            }
+            catch (Exception e)
+            {
+                model.logCreator.Append("[ERROR] Problem converting rights to the correct format: " + hexString);
+            }
 
             return data;
         }

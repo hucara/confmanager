@@ -137,6 +137,13 @@ namespace Configuration_Manager.Util
                             text = (control as CComboBox).SelectedItem.ToString();
                         }
                     }
+                    else if (control is CCheckBox)
+                    {
+                        if ((control as CCheckBox).Checked)
+                            text = control.cd.checkBoxCheckedValue;
+                        else
+                            text = control.cd.checkBoxUncheckedValue;
+                    }
                     else text = control.cd.Text;
                 }
                 else text = tokenKey + s + tokenKey;
@@ -159,39 +166,5 @@ namespace Configuration_Manager.Util
             }
             return translated;
         }
-
-        //public Dictionary<string, string> GetValueTranslatedPairs(String textToTranslate)
-        //{
-        //    Dictionary<string, string> valueTranslatedPairs = new Dictionary<string, string>();
-
-        //    this.translatedText = textToTranslate;
-
-        //    if (active)
-        //    {
-        //        this.valuesToTranslate.Clear();
-        //        this.translatedValues.Clear();
-
-        //        this.textToTranslate = textToTranslate;
-
-        //        if (this.textToTranslate != null && this.textToTranslate != "")
-        //        {
-        //            if (TextHasEvenTokens())
-        //            {
-        //                GetValuesToTranslate();
-        //                GetTranslatedValues();
-        //            }
-        //        }
-
-        //        for (int i = 0; i < valuesToTranslate.Count; i++)
-        //        {
-        //            if(valuesToTranslate[i] != null && translatedValues[i] != null)
-        //            {
-        //                valueTranslatedPairs.Add(valuesToTranslate[i], translatedValues[i]);
-        //            }
-        //        }
-        //    }
-
-        //    return valueTranslatedPairs;
-        //}
     }
 }
