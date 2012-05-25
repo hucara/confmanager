@@ -553,7 +553,7 @@ namespace Configuration_Manager
         // This way, those relations are applied when loading.
         private void ApplyRelations(ICustomControl c)
         {
-            if (c.cd.CoupledControls.Count > 0 || c.cd.RelatedVisibility.Count > 0)
+            if (c.cd.CoupledControls.Count > 0 || c.cd.RelatedVisibility.Count > 0 || c.cd.RelatedRead.Count > 0)
             {
                 if (c.cd.Type == "CCheckBox")
                 {

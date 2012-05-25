@@ -462,12 +462,13 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(336, 533);
+            this.cancelButton.Location = new System.Drawing.Point(12, 533);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(79, 27);
             this.cancelButton.TabIndex = 17;
             this.cancelButton.Text = "cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // openFileDialog1
             // 
@@ -475,7 +476,7 @@
             // 
             // updateButton
             // 
-            this.updateButton.Location = new System.Drawing.Point(12, 533);
+            this.updateButton.Location = new System.Drawing.Point(336, 533);
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(79, 27);
             this.updateButton.TabIndex = 18;

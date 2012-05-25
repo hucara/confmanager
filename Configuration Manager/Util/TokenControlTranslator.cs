@@ -12,7 +12,6 @@ namespace Configuration_Manager.Util
         private static TokenControlTranslator tokenControlTranslator;
 
         private Boolean active = true;
-        private String defaultLang;
 
         private String tokenKey;
         private String textToTranslate;
@@ -21,9 +20,17 @@ namespace Configuration_Manager.Util
         private List<String> valuesToTranslate = new List<String>();
         private List<String> translatedValues = new List<String>();
 
-        private TokenControlTranslator() 
+        public static TokenControlTranslator GetInstance()
         {
-            this.defaultLang = "";
+            if (tokenControlTranslator == null)
+            {
+                tokenControlTranslator = new TokenControlTranslator();
+            }
+            return tokenControlTranslator;
+        }
+
+        private TokenControlTranslator()
+        {
             this.active = true;
 
             this.valuesToTranslate = new List<String>();
@@ -33,15 +40,6 @@ namespace Configuration_Manager.Util
         private TokenControlTranslator(String tokenKey)
         {
             SetTokenKey(tokenKey);
-        }
-
-        public static TokenControlTranslator GetInstance()
-        {
-            if (tokenControlTranslator == null)
-            {
-                tokenControlTranslator = new TokenControlTranslator();
-            }
-            return tokenControlTranslator;
         }
 
         public void SetTokenKey(String tokenKey)

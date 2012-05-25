@@ -342,6 +342,7 @@ namespace Configuration_Manager
             else
             {
                 SaveToControl();
+                this.Close();
             }
 
             ErrorMsg = "";
@@ -349,9 +350,15 @@ namespace Configuration_Manager
 
         private void updateButton_Click(object sender, EventArgs e)
         {
-            CheckLabelInfo();
-            SaveToControl();
-            parent.Refresh();
+            CheckCommonAttributes();
+            if (ErrorMsg != "")
+            {
+                ErrorMsg = "Some problems were found: \n" + ErrorMsg;
+                MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+                SaveToControl();
+
             ErrorMsg = "";
         }
 
@@ -764,6 +771,12 @@ namespace Configuration_Manager
         {
             ComboBoxEditor cbe = new ComboBoxEditor(this.control);
             cbe.ShowDialog();
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            //DialogResult dr = MessageBox.Show("", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+            this.Close();
         }
 	}
 }

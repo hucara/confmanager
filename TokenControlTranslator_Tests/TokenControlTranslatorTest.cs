@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using Configuration_Manager;
 
 namespace TokenControlTranslator_Tests
 {
@@ -14,9 +15,8 @@ namespace TokenControlTranslator_Tests
     [TestClass()]
     public class TokenControlTranslatorTest
     {
-
-
         private TestContext testContextInstance;
+        private Model m;
 
         /// <summary>
         ///Gets or sets the test context which provides
@@ -92,13 +92,28 @@ namespace TokenControlTranslator_Tests
         public void TranslateFromControlTest()
         {
             TokenControlTranslator_Accessor target = new TokenControlTranslator_Accessor(); // TODO: Initialize to an appropriate value
+            m = Model.getInstance();
 
-            target.SetTokenKey("##");
+            target.tokenKey = "##";
+            m.controlToken = "##";
+
             string textToTranslate = "This is just a test for ##CLabel1##, ##CLabel2##, ##CComboBox0##.";
             string expected = "This is just a test for Sintonize with:, Frequency:, ##CLabel4##.";
             string actual;
             actual = target.TranslateFromControl(textToTranslate);
             Assert.AreEqual(expected, actual);
+        }
+
+        public void BuildModel()
+        {
+            System.Windows.Forms.Form f = new System.Windows.Forms.Form();
+
+            m.AllControls.Add(ControlFactory.BuildCLabel(f));
+            m.AllControls.Add(ControlFactory.BuildCComboBox(f));
+            m.AllControls.Add(ControlFactory.BuildCLabel(f));
+            m.AllControls.Add(ControlFactory.BuildCComboBox(f));
+            m.AllControls.Add(ControlFactory.BuildCLabel(f));
+            m.AllControls.Add(ControlFactory.BuildCComboBox(f));
         }
     }
 }

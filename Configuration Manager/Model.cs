@@ -133,7 +133,7 @@ namespace Configuration_Manager
 				ConfigFileExists = true;
 				System.Diagnostics.Debug.WriteLine("** OK ** " + ConfigFilePath + " - File found");
 			}
-			catch (FileNotFoundException e)
+			catch (FileNotFoundException)
 			{
 				ConfigFileExists = false;
 				System.Diagnostics.Debug.WriteLine("** ERROR ** " + ConfigFilePath + " - File not found");

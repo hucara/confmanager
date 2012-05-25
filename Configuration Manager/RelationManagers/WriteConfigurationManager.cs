@@ -33,28 +33,33 @@ namespace Configuration_Manager.RelationManagers
             {
                 if (c.cd.MainDestination != null && c.cd.MainDestination != "")
                 {
-                    SaveControlChanges(c);
-                    c.cd.Changed = false;
+                        SaveControlChanges(c);
+                        c.cd.Changed = false;
                 }
+
+                ReReadControl(c);
             }
         }
 
         private static void SaveControlChanges(ICustomControl c)
         {
-            String fileType = c.cd.MainDestination.Substring(c.cd.MainDestination.Length - 4, 4);
-
-            String path = ttt.TranslateFromTextFile(c.cd.RealSubDestination);
-            path = tct.TranslateFromControl(path).TrimStart('\\');
-
-            String value = GetValueToSave(c);
-
-            if (fileType == ".ini" && c.cd.DestinationType == ".INI") SaveINIFile(c, path, value);
-            else if (fileType == ".xml" && c.cd.DestinationType == ".XML") SaveXMLFile(c, path, value);
-            else if (c.cd.DestinationType == "REG") SaveRegistryKey(c, path, value);
-            else
+            if (c.cd.Type == "CComboBox" || c.cd.Type == "CTextBox" || c.cd.Type == "CCheckBox")
             {
-                Model.getInstance().logCreator.Append("[ERROR] Destination file and type not matching for " + c.cd.Name);
-                System.Diagnostics.Debug.WriteLine("!ERROR : Destination file and type not matching for " + c.cd.Name);
+                String fileType = c.cd.MainDestination.Substring(c.cd.MainDestination.Length - 4, 4);
+
+                String path = ttt.TranslateFromTextFile(c.cd.RealSubDestination);
+                path = tct.TranslateFromControl(path).TrimStart('\\');
+
+                String value = GetValueToSave(c);
+
+                if (fileType == ".ini" && c.cd.DestinationType == ".INI") SaveINIFile(c, path, value);
+                else if (fileType == ".xml" && c.cd.DestinationType == ".XML") SaveXMLFile(c, path, value);
+                else if (c.cd.DestinationType == "REG") SaveRegistryKey(c, path, value);
+                else
+                {
+                    Model.getInstance().logCreator.Append("[ERROR] Destination file and type not matching for " + c.cd.Name);
+                    System.Diagnostics.Debug.WriteLine("!ERROR : Destination file and type not matching for " + c.cd.Name);
+                }
             }
         }
 

@@ -111,7 +111,7 @@ namespace Configuration_Manager.CustomControls
 
                 SetReadValue(r, value);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading INI file for: " +r.cd.Name);
                 Model.getInstance().logCreator.Append("[ERROR] Re-Reading INI file for " + r.cd.Name);
@@ -128,7 +128,7 @@ namespace Configuration_Manager.CustomControls
                 String value = xdoc.SelectSingleNode(r.cd.SubDestination).InnerText;
                 SetReadValue(r, value);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading XML file for: " +r.cd.Name);
                 Model.getInstance().logCreator.Append("[ERROR] Re-Reading XML file for " + r.cd.Name);
@@ -144,7 +144,7 @@ namespace Configuration_Manager.CustomControls
                 String value = regMan.GetValue(r.cd.SubDestination);
                 SetReadValue(r, value);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading REGISTRY for: " + r.cd.Name);
                 Model.getInstance().logCreator.Append("[ERROR] Re-Reading registry for " + r.cd.Name);
