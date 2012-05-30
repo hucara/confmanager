@@ -19,7 +19,10 @@ namespace Configuration_Manager
 
         const bool OK = true;
         const bool ERROR = false;
-        const int MR = 12;
+        const int MR = -1;
+
+        uint topMargin = 10;
+        uint leftMargin = 10;
 
         public ICustomControl control;
 
@@ -31,6 +34,8 @@ namespace Configuration_Manager
 
         String type;
         String ErrorMsg;
+        String RootKeyText = "root key";
+        String MainDestinationText = "main destination";
 
         Font controlFont;
         Color fontColor, backColor;
@@ -98,8 +103,11 @@ namespace Configuration_Manager
             ReadFromControl();
 			SetLocation();
             SetCheckBoxValuesOptions();
+            SetLocationMargins();
 
             base.Show();
+
+            SaveToControl();
         }
 
         private void SetOpenFileDialog()
@@ -239,7 +247,6 @@ namespace Configuration_Manager
                 case "CLabel":
                     relationsComboBox.Enabled = false;
                     controlListBox.Enabled = false;
-                    //visibleCheckBox.Enabled = false;
                     break;
 
                 case "CPanel":
@@ -249,7 +256,6 @@ namespace Configuration_Manager
 
                     relationsComboBox.Enabled = false;
                     controlListBox.Enabled = false;
-                    //visibleCheckBox.Enabled = false;
 
                     destinationTypeLabel.Enabled = false;
                     destinationTypeComboBox.Enabled = false;
@@ -263,7 +269,6 @@ namespace Configuration_Manager
                 case "CTextBox":
 					CTextBoxEditorSetup();
                     textTextBox.Enabled = false;
-                    //visibleCheckBox.Enabled = false;
                     break;
 
                 case "CCheckBox":
@@ -280,7 +285,10 @@ namespace Configuration_Manager
                     controlListBox.Enabled = false;
                     displayRightLabel.Enabled = false;
                     displayRightTextBox.Enabled = false;
-                    //visibleCheckBox.Enabled = false;
+                    topTextBox.Enabled = false;
+                    leftTextBox.Enabled = false;
+                    widthTextBox.Enabled = false;
+                    heightTextBox.Enabled = false;
                     break;
 
                 case "CTabControl":
@@ -315,9 +323,7 @@ namespace Configuration_Manager
         {
             DialogResult dr = openFileDialog1.ShowDialog();
             if (dr == DialogResult.OK && openFileDialog1.CheckFileExists)
-            {
                 fileDestinationTextBox.Text = openFileDialog1.FileName;
-            }
 
             String fileType = openFileDialog1.FileName.Substring(openFileDialog1.FileName.Length - 4, 4);
             switch (fileType)
@@ -334,7 +340,7 @@ namespace Configuration_Manager
         private void okButton_Click(object sender, EventArgs e)
         {
             CheckCommonAttributes();
-            if (ErrorMsg != "")
+            if (ErrorMsg != "" && type != "CTabPage")
             {
                 ErrorMsg = "Some problems were found: \n" + ErrorMsg;
                 MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -351,7 +357,7 @@ namespace Configuration_Manager
         private void updateButton_Click(object sender, EventArgs e)
         {
             CheckCommonAttributes();
-            if (ErrorMsg != "")
+            if (ErrorMsg != "" && type != "CTabPage")
             {
                 ErrorMsg = "Some problems were found: \n" + ErrorMsg;
                 MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -379,8 +385,8 @@ namespace Configuration_Manager
             //if (!CheckHint()) ErrorMsg += "\n- Hint is empty.";
             if (!CheckTop()) ErrorMsg += "\n- Top value is too low or too high.";
             if (!CheckLeft()) ErrorMsg += "\n- Left value is too low or too high.";
-            //if (!CheckWidth()) ErrorMsg += "\n- Width value is too low or too high.";
-            //if (!CheckHeight()) ErrorMsg += "\n- Height value is too low or too high.";
+            if (!CheckWidth()) ErrorMsg += "\n- Width value is too low or too high.";
+            if (!CheckHeight()) ErrorMsg += "\n- Height value is too low or too high.";
             //if (!CheckFileDestination()) ErrorMsg += "\n- File Destination value is empty.";
             //if (!CheckSubDestination()) ErrorMsg += "\n- Sub Destination value is empty.";
 
@@ -413,33 +419,25 @@ namespace Configuration_Manager
         private void ParseTop()
         {
             if (topTextBox.Enabled && !Int32.TryParse(topTextBox.Text, out top))
-            {
                 ErrorMsg += "\n- Top is not a valid value.";
-            }
         }
 
         private void ParseLeft()
         {
             if (leftTextBox.Enabled && !Int32.TryParse(leftTextBox.Text, out left))
-            {
                 ErrorMsg += "\n- Left is not a valid value.";
-            }
         }
 
         private void ParseWidth()
         {
             if (widthTextBox.Enabled && !Int32.TryParse(widthTextBox.Text, out width))
-            {
                 ErrorMsg += "\n- Width is not a valid value.";
-            }
         }
 
         private void ParseHeight()
         {
             if (heightTextBox.Enabled && !Int32.TryParse(heightTextBox.Text, out height))
-            {
                 ErrorMsg += "\n- Height is not a valid value.";
-            }
         }
 
         private bool CheckText()
@@ -457,25 +455,25 @@ namespace Configuration_Manager
 
         private bool CheckTop()
         {
-            if (top < MR || top + height > parent.Height - MR) return ERROR;
+            if (top < topMargin || top + height > parent.Height - topMargin) return ERROR;
             return OK;
         }
 
         private bool CheckLeft()
         {
-            if (left < MR || left + width > parent.Width - MR) return ERROR;
+            if (left < leftMargin || left + width > parent.Width - leftMargin) return ERROR;
             return OK;
         }
 
         private bool CheckHeight()
         {
-            if (height < MR || height + top > parent.Height - MR) return ERROR;
+            if (height < MR || height + top > parent.Height - topMargin) return ERROR;
             return OK;
         }
 
         private bool CheckWidth()
         {
-            if (width < MR || width + left > parent.Width - MR) return ERROR;
+            if (width < 0 || width + left > parent.Width - leftMargin) return ERROR;
             return OK;
         }
 
@@ -750,6 +748,10 @@ namespace Configuration_Manager
                 this.displayRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 17).Value;
                 this.modificationRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 18).Value;
 
+                // Saving labels to avoid reading from file again
+                MainDestinationText = this.fileDestinationLabel.Text;
+                RootKeyText = texts.Single(x => (int?)x.Attribute("id") == 61).Value;
+
                 // Bottom Buttons
                 this.updateButton.Text = texts.Single(x => (int?)x.Attribute("id") == 19).Value;
                 this.cancelButton.Text = texts.Single(x => (int?)x.Attribute("id") == 20).Value;
@@ -759,6 +761,8 @@ namespace Configuration_Manager
                 this.fileDestinationButton.Text = "";
 
                 this.checkBoxValueLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 55).Value;
+
+                System.Diagnostics.Debug.WriteLine(" :::::::::::::::::::::::::::::::::::::: ");
             }
             catch(Exception)
             {
@@ -777,6 +781,39 @@ namespace Configuration_Manager
         {
             //DialogResult dr = MessageBox.Show("", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
             this.Close();
+        }
+
+        private void SetLocationMargins()
+        {
+            String parentType = control.cd.Parent.GetType().Name;
+            if (parentType == "CTabControl" || parentType == "TabControl")
+            {
+                topMargin = 10;
+                leftMargin = 10;
+            }
+            else if (parentType == "CGroupBox" || parentType == "GroupBox")
+            {
+                topMargin = 20;
+                leftMargin = 10;
+            }
+            else if (parentType == "CPanel" || parentType == "Panel")
+            {
+                topMargin = 10;
+                leftMargin = 10;
+            }
+        }
+
+        private void destinationTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ReplaceRegSelectedLabels();
+        }
+
+        private void ReplaceRegSelectedLabels()
+        {
+            if (destinationTypeComboBox.SelectedItem == "REG")
+                fileDestinationLabel.Text = RootKeyText;
+            else
+                fileDestinationLabel.Text = MainDestinationText;
         }
 	}
 }

@@ -17,6 +17,8 @@ namespace Configuration_Manager.CustomControls
             this.Text = this.Name;
 			this.AllowDrop = true;
 
+            this.DoubleBuffered = true;
+
             count++;
         }
 

@@ -19,8 +19,6 @@ namespace Configuration_Manager.CustomControls
 			this.AllowDrop = true;
 
             CGroupBox.count++;
-
-            System.Diagnostics.Debug.WriteLine("+ Created: "+this.Name);
         }
 
         public void SetControlDescription()

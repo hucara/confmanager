@@ -14,18 +14,13 @@ namespace Configuration_Manager.CustomControls
         {
             this.Name = "CTabControl" + count;
             this.TabPages.Add(tp);
+
             count++;
         }
 
         public CTabControl()
         {
             this.Name = "CTabControl" + count;
-
-            //CTabPage ctp = ControlFactory.getInstance().BuildCTabPage(this);
-            //ctp.SetControlDescription();
-            //ctp.cd.Parent = this;
-
-            //this.TabPages.Add(ctp);
             count++;
         }
 

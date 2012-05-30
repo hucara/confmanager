@@ -25,14 +25,15 @@ namespace Configuration_Manager
 
         static public Section BuildSection(String name, String text, bool selected)
         {
+            while (model.Sections.Exists(e => e.Name == "Section" + Section.count)) Section.count++;
             CToolStripButton ctsb = BuildCToolStripButton(text);
             TabPage tp = BuildTabPage(name);
 
             Section s = new Section(ctsb, tp, text, selected);
             Model.getInstance().CurrentSection = s;
+            Model.getInstance().Sections.Add(s);
 
             model.logCreator.Append("+ Added: " + s.Name);
-
             return s;
         }
 
@@ -55,7 +56,6 @@ namespace Configuration_Manager
             c.cd.RealText = c.cd.Text;
 
             model.logCreator.Append("+ Added: " + c.cd.Name);
-
             return c;
         }
 
@@ -109,7 +109,7 @@ namespace Configuration_Manager
             c.SetControlDescription();
             c.cd.RealText = c.cd.Text;
 
-            c.SelectedIndexChanged += IndexChanged;
+            //c.SelectedIndexChanged += IndexChanged;
 
             Model.getInstance().AllControls.Add(c);
 

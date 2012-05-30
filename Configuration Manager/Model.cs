@@ -103,7 +103,6 @@ namespace Configuration_Manager
 			LoadFiles();
 
             FillDestinationFileTypes();
-            FillOutRelationTypes();
 		}
 
         // Singleton
@@ -121,11 +120,11 @@ namespace Configuration_Manager
 			System.Diagnostics.Debug.WriteLine(" ");
 			System.Diagnostics.Debug.WriteLine("*** - Starting Configuration Manager - ***");
 			
-			LoadConfigFile();
+			LoadConfigurationFile();
 			LoadObjectDefinitionFile();
 		}
 
-		private void LoadConfigFile()
+		private void LoadConfigurationFile()
 		{
 			try
 			{
@@ -189,14 +188,6 @@ namespace Configuration_Manager
             DestinationFileTypes.Add(".INI");
             DestinationFileTypes.Add(".XML");
             DestinationFileTypes.Add("REG");
-        }
-
-        private void FillOutRelationTypes()
-        {
-            //RelationTypes.Add("Write related");
-            //RelationTypes.Add("Read related");
-            //RelationTypes.Add("Visibility related");
-            //RelationTypes.Add("Coupled controls");
         }
 
         public String DeleteControlReferences(Control c)
@@ -596,12 +587,11 @@ namespace Configuration_Manager
 		}
 
         // Converts the string of characters to array of bytes.
-        // The format needs to be "00000000"
+        // The format correct is "00000000"
         public static byte[] HexToData(string hexString)
         {
             if (hexString == null)
                 return null;
-            //hexString = hexString.Substring(2);
 
             if (hexString.Length % 2 == 1)
                 hexString = '0' + hexString;

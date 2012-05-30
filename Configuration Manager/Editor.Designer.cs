@@ -422,6 +422,7 @@
             this.destinationTypeComboBox.Name = "destinationTypeComboBox";
             this.destinationTypeComboBox.Size = new System.Drawing.Size(61, 21);
             this.destinationTypeComboBox.TabIndex = 10;
+            this.destinationTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.destinationTypeComboBox_SelectedIndexChanged);
             // 
             // destinationTypeLabel
             // 

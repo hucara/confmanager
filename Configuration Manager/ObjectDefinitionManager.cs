@@ -74,7 +74,6 @@ namespace Configuration_Manager
                     if (model.Sections.Count < Model.getInstance().maxSections)
                     {
                         Section s = CreateDefinedSection(i);
-                        model.Sections.Add(s);
 
                         if (s.Selected) model.CurrentSection = s;
 
@@ -91,7 +90,8 @@ namespace Configuration_Manager
 
         private Section CreateDefinedSection(XElement i)
         {
-            String name = i.Name.ToString() + i.FirstAttribute.Value.ToString();
+            //while (model.Sections.Exists(e => e.Name == "Section" + Section.count)) Section.count++;
+            String name = i.Element("Name").Value.ToString();
             String text = i.Element("Text").Value.ToString();
             bool selected = false;
 
@@ -100,7 +100,15 @@ namespace Configuration_Manager
                 selected = true;
             }
 
-            return ControlFactory.BuildSection(name, text, selected);
+            CToolStripButton ctsb = ControlFactory.BuildCToolStripButton(text);
+            TabPage tp = ControlFactory.BuildTabPage(name);
+
+            Section s = new Section(ctsb, tp, name, text, selected);
+            Model.getInstance().CurrentSection = s;
+            Model.getInstance().Sections.Add(s);
+
+            //Section s =  ControlFactory.BuildSection(name, text, selected);
+            return s;
         }
 
         public void SerializeObjectDefinition()
@@ -274,7 +282,6 @@ namespace Configuration_Manager
                         SetControlSpecificProperties(c, i);
 
                         SetRelatedReadList(c, i);
-                        //SetRelatedWriteList(c, i);
                         SetRelatedVisibility(c, i);
                         SetCoupledControls(c, i);
 
