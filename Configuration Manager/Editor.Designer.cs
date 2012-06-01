@@ -72,6 +72,8 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.updateButton = new System.Windows.Forms.Button();
+            this.formattingLabel = new System.Windows.Forms.Label();
+            this.formattingTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.comboBoxEditPanel.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -273,6 +275,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.formattingTextBox);
+            this.groupBox2.Controls.Add(this.formattingLabel);
             this.groupBox2.Controls.Add(this.checkBoxValuePanel);
             this.groupBox2.Controls.Add(this.modificationRightLabel);
             this.groupBox2.Controls.Add(this.displayRightLabel);
@@ -298,7 +302,7 @@
             // 
             this.checkBoxValuePanel.Controls.Add(this.checkBoxValueComboBox);
             this.checkBoxValuePanel.Controls.Add(this.checkBoxValueLabel);
-            this.checkBoxValuePanel.Location = new System.Drawing.Point(16, 101);
+            this.checkBoxValuePanel.Location = new System.Drawing.Point(16, 130);
             this.checkBoxValuePanel.Name = "checkBoxValuePanel";
             this.checkBoxValuePanel.Size = new System.Drawing.Size(278, 37);
             this.checkBoxValuePanel.TabIndex = 20;
@@ -485,6 +489,22 @@
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
+            // formattingLabel
+            // 
+            this.formattingLabel.AutoSize = true;
+            this.formattingLabel.Location = new System.Drawing.Point(17, 107);
+            this.formattingLabel.Name = "formattingLabel";
+            this.formattingLabel.Size = new System.Drawing.Size(53, 13);
+            this.formattingLabel.TabIndex = 21;
+            this.formattingLabel.Text = "formatting";
+            // 
+            // formattingTextBox
+            // 
+            this.formattingTextBox.Location = new System.Drawing.Point(106, 104);
+            this.formattingTextBox.Name = "formattingTextBox";
+            this.formattingTextBox.Size = new System.Drawing.Size(178, 20);
+            this.formattingTextBox.TabIndex = 22;
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -565,5 +585,7 @@
         private System.Windows.Forms.Panel checkBoxValuePanel;
         private System.Windows.Forms.ComboBox checkBoxValueComboBox;
         private System.Windows.Forms.Label checkBoxValueLabel;
+        private System.Windows.Forms.TextBox formattingTextBox;
+        private System.Windows.Forms.Label formattingLabel;
     }
 }

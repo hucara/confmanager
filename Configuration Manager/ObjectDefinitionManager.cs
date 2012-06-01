@@ -194,6 +194,7 @@ namespace Configuration_Manager
                             )
                         );
                 doc.Save(Model.getInstance().ObjectDefinitionsPath);
+                model.uiChanged = false;
                 System.Diagnostics.Debug.WriteLine("*** Object Definition File created ***");
                 model.logCreator.AppendCenteredWithFrame(" Object Definition File saved ");
             }
@@ -446,8 +447,9 @@ namespace Configuration_Manager
         {
             Font newFont;
             Color newColor;
-
-            c.cd.RealText = i.Element("Text").Value;
+            
+            if(c.cd.Type != "CTextBox")
+                c.cd.RealText = i.Element("Text").Value;
 
             String text = ttt.TranslateFromTextFile(c.cd.RealText);
             c.cd.Text = tct.TranslateFromControl(text);
@@ -539,7 +541,7 @@ namespace Configuration_Manager
 
         private void ReadMachineConfiguration(ICustomControl c)
         {
-            ReadRelationManager.ReadConfigOnStartup(c);
+            ReadRelationManager.ReadConfiguration(c);
         }
 
         private void ApplyRights(ICustomControl c)

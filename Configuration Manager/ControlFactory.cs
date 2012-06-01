@@ -241,9 +241,9 @@ namespace Configuration_Manager
 
         static private void SetChangesHandler(Control c)
         {
-            if (c is CComboBox) (c as CComboBox).SelectedIndexChanged += ch.Changed;
-            else if (c is CTextBox) (c as CTextBox).TextChanged += ch.Changed;
-            else if (c is CCheckBox) (c as CCheckBox).CheckStateChanged += ch.Changed;
+            if (c is CComboBox) (c as CComboBox).SelectedIndexChanged += ch.ValueChanged;
+            else if (c is CTextBox) (c as CTextBox).TextChanged += ch.ValueChanged;
+            else if (c is CCheckBox) (c as CCheckBox).CheckStateChanged += ch.ValueChanged;
         }
 
         static public void IndexChanged(object sender, EventArgs e)

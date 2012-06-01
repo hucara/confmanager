@@ -60,8 +60,6 @@ namespace Configuration_Manager
 
             this.Top = model.top;
             this.Left = model.left;
-
-            //if (model.resizable) this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
         }
 
         private void InitCustomHandler()
@@ -208,10 +206,14 @@ namespace Configuration_Manager
                 {
                     sectionBar.GetItemAt(me.X, me.Y).PerformClick();
                     deleteSectionToolStripMenuItem.Enabled = true;
+                    editSectionNameToolStripMenuItem.Enabled = true;
                     sectionMenuView.SetSelectedButton(sectionBar.GetItemAt(me.X, me.Y) as CToolStripButton);
                 }
                 else
+                {
                     deleteSectionToolStripMenuItem.Enabled = false;
+                    editSectionNameToolStripMenuItem.Enabled = false;
+                }
 
                 if (model.Sections.Count >= Model.getInstance().maxSections)
                     newSectionToolStripMenuItem.Enabled = false;
@@ -240,6 +242,95 @@ namespace Configuration_Manager
             catch
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an error reading text for main form labels.");
+            }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Model.getInstance().uiChanged)
+            {
+                String msg = "Some changes were made to the User Interface. Do you want to save before closing?";
+                DialogResult dr = MessageBox.Show(msg, "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+
+                if (dr == System.Windows.Forms.DialogResult.Yes)
+                {
+                    odm.SerializeObjectDefinition();
+                    e.Cancel = false;
+                }
+                else if (dr == System.Windows.Forms.DialogResult.No)
+                    e.Cancel = false;
+                else if (dr == System.Windows.Forms.DialogResult.Cancel)
+                    e.Cancel = true;
+            }
+
+            foreach (ICustomControl c in Model.getInstance().AllControls)
+            {
+                if (c.cd.Changed && c.cd.MainDestination != "")
+                {
+                    String msg = "Some changes were made to the configuration. Do you want to save before closing?";
+                    DialogResult dr = MessageBox.Show(msg, "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+
+                    if (dr == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        WriteConfigurationManager.SaveChanges();
+                        e.Cancel = false;
+                    }
+                    else if (dr == System.Windows.Forms.DialogResult.No)
+                        e.Cancel = false;
+                    else if (dr == System.Windows.Forms.DialogResult.Cancel)
+                        e.Cancel = true;
+
+                    break;
+                }
+            }
+
+            SaveCurrentLocation();
+        }
+
+        private void SaveCurrentLocation()
+        {
+            XDocument xdoc;
+            try
+            {
+                xdoc = XDocument.Load(model.ConfigFilePath);
+                XElement settings = xdoc.Element("ConfigurationManager").Element("Settings");
+
+                settings.Element("Top").Value = this.Top.ToString();
+                settings.Element("Left").Value = this.Left.ToString();
+
+                xdoc.Save(model.ConfigFilePath);
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an error writing location in config file.");
+            }
+        }
+
+        private void editSectionNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs me = e as MouseEventArgs;
+            CToolStripButton tb = null;
+
+
+            foreach (Section s in model.Sections)
+            {
+                if (s.Selected) tb = s.Button;
+            }
+
+            if (tb != null)
+            {
+                SectionForm sf = new SectionForm(tb.Text);
+
+                if (DialogResult.OK == sf.ShowDialog())
+                {
+                    sectionMenuView.RenameSection(tb.Text, sf.Controls.Find("NameTextBox", false)[0].Text);
+                    sectionTabsView.readAndShow();
+                }
             }
         }
     }

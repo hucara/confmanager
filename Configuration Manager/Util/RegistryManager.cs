@@ -54,14 +54,23 @@ namespace Configuration_Manager.Util
             if(path == "" || path == null) return "";
            
             RegistryKey k = root;
-            List<string> subKeys = path.Trim().Split('/').ToList();
+            List<string> subKeys = path.Trim().Split(new char[] {'\\'}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            for(int i = 1; i < subKeys.Count -1; i++)
+            System.Diagnostics.Debug.WriteLine("## Path: ##");
+            foreach(string s in subKeys)
+                System.Diagnostics.Debug.WriteLine(s);
+            System.Diagnostics.Debug.WriteLine("## ----- ##");
+            for(int i = 0; i < subKeys.Count - 1; i++)
             {
-                k = k.OpenSubKey(subKeys[i]);
+                k = k.OpenSubKey(@subKeys[i]);
+
+                foreach (string s in k.GetSubKeyNames())
+                    System.Diagnostics.Debug.WriteLine(s);
+
+                System.Diagnostics.Debug.WriteLine("####");
             }
 
-            return k.GetValue(subKeys[subKeys.Count -1]).ToString();
+            return k.GetValue(subKeys[subKeys.Count - 1]).ToString();
         }
 
         public void SetValue(string path, string value)
@@ -69,9 +78,9 @@ namespace Configuration_Manager.Util
             if (path != "" && path != null)
             {
                 RegistryKey k = root;
-                List<string> subKeys = path.Trim().Split('/').ToList();
+                List<string> subKeys = path.Trim().Split(new char []{'\\'}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                for (int i = 1; i < subKeys.Count - 1; i++)
+                for (int i = 0; i < subKeys.Count - 1; i++)
                 {
                     k = k.OpenSubKey(subKeys[i], true);
                 }

@@ -52,7 +52,7 @@ namespace Configuration_Manager.RelationManagers
 
                 String value = GetValueToSave(c);
 
-                if (fileType == ".ini" && c.cd.DestinationType == ".INI") SaveINIFile(c, path, value);
+                if (c.cd.DestinationType == ".INI") SaveINIFile(c, path, value);
                 else if (fileType == ".xml" && c.cd.DestinationType == ".XML") SaveXMLFile(c, path, value);
                 else if (c.cd.DestinationType == "REG") SaveRegistryKey(c, path, value);
                 else
@@ -115,7 +115,7 @@ namespace Configuration_Manager.RelationManagers
             foreach (ICustomControl r in c.cd.RelatedRead)
             {
                 //ReadRelationManager rm = new ReadRelationManager();
-                ReadRelationManager.ReadConfigOnStartup(r);
+                ReadRelationManager.ReadConfiguration(r);
             }
         }
 

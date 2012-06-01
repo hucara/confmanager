@@ -21,7 +21,7 @@ namespace Configuration_Manager
         public System.Windows.Forms.TabPage Tab {get; set;}
 
         public String Name { get; set; }
-        public String Text { get; private set; }
+        public String Text { get; set; }
 
         public Section(CToolStripButton b, System.Windows.Forms.TabPage t, String text, bool Selected)
         {

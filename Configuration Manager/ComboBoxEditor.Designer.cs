@@ -39,6 +39,7 @@
             this.valuesLabel = new System.Windows.Forms.Label();
             this.configValuesLabel = new System.Windows.Forms.Label();
             this.configValues = new System.Windows.Forms.ListBox();
+            this.okButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // shownValues
@@ -74,7 +75,7 @@
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(359, 150);
+            this.addButton.Location = new System.Drawing.Point(182, 181);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 23);
             this.addButton.TabIndex = 5;
@@ -84,7 +85,7 @@
             // 
             // deleteButton
             // 
-            this.deleteButton.Location = new System.Drawing.Point(359, 181);
+            this.deleteButton.Location = new System.Drawing.Point(263, 181);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(75, 23);
             this.deleteButton.TabIndex = 8;
@@ -105,6 +106,7 @@
             this.shownTextBox.Name = "shownTextBox";
             this.shownTextBox.Size = new System.Drawing.Size(164, 20);
             this.shownTextBox.TabIndex = 3;
+            this.shownTextBox.TextChanged += new System.EventHandler(this.shownTextBox_TextChanged);
             // 
             // valuesLabel
             // 
@@ -133,11 +135,22 @@
             this.configValues.TabIndex = 2;
             this.configValues.SelectedIndexChanged += new System.EventHandler(this.configValues_SelectedIndexChanged_1);
             // 
+            // okButton
+            // 
+            this.okButton.Location = new System.Drawing.Point(359, 180);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.TabIndex = 10;
+            this.okButton.Text = "ok";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            // 
             // ComboBoxEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(446, 215);
+            this.Controls.Add(this.okButton);
             this.Controls.Add(this.configValues);
             this.Controls.Add(this.configValuesLabel);
             this.Controls.Add(this.valuesLabel);
@@ -174,5 +187,6 @@
         private System.Windows.Forms.Label valuesLabel;
         private System.Windows.Forms.Label configValuesLabel;
         private System.Windows.Forms.ListBox configValues;
+        private System.Windows.Forms.Button okButton;
     }
 }

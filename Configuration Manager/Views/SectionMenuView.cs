@@ -91,9 +91,23 @@ namespace Configuration_Manager.Views
 
 				UnSelectSections();
 				s.Selected = true;
+
+                Model.getInstance().uiChanged = true;
 			}
 			readAndShow();
 		}
+
+        public void RenameSection(String oldName, String newName)
+        {
+            foreach (Section s in model.Sections)
+            {
+                if (s.Button.Text == oldName)
+                {
+                    s.Button.Text = newName;
+                    s.Text = newName;
+                }
+            }
+        }
 
 		public void RemoveSection()
 		{
@@ -105,6 +119,8 @@ namespace Configuration_Manager.Views
 				model.logCreator.Append("- Removed: " + s.Name);
 				model.DeleteControl(s.Tab, true);
 				model.Sections.Remove(s);
+
+                Model.getInstance().uiChanged = true;
 			}
 
 			if (model.Sections.Count > 0) model.Sections[0].Selected = true;

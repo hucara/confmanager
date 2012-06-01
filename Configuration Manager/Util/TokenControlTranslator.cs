@@ -123,6 +123,8 @@ namespace Configuration_Manager.Util
                 text = "";
                 if (control != null)
                 {
+                    //TODO THE GREAT DILEMMA D:
+
                     if (control is CComboBox && (control as CComboBox).SelectedItem != null)
                     {
                         int index = (control as CComboBox).SelectedIndex;

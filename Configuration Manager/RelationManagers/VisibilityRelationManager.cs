@@ -18,11 +18,18 @@ namespace Configuration_Manager.CustomControls
         public static void ComboBoxVisibility(object sender, EventArgs e)
         {
             CComboBox control = sender as CComboBox;
+            //SetComboboxVisibility(control);
 
             foreach (ICustomControl related in control.cd.RelatedVisibility)
             {
-                if (control.SelectedIndex <= 0) related.cd.Visible = false;
-                else if (control.SelectedIndex > 0) related.cd.Visible = true;
+                if (control.SelectedIndex > 0)
+                    related.cd.Visible = true;
+                else if (control.SelectedIndex <= 0)
+                {
+                    if (related is CCheckBox || related is CComboBox)
+                        SetDependentVisibility(related);
+                    related.cd.Visible = false;
+                }
             }
         }
 
@@ -35,10 +42,28 @@ namespace Configuration_Manager.CustomControls
 
             foreach (ICustomControl related in control.cd.RelatedVisibility)
             {
-                if (control.Checked) related.cd.Visible = true;
-                else related.cd.Visible = false;
+                if (control.Checked)
+                    related.cd.Visible = true;
+                else
+                {
+                    if (related is CCheckBox || related is CComboBox)
+                        SetDependentVisibility(related);
+                    related.cd.Visible = false;
+                }
             }
         }
 
+        private static void SetDependentVisibility(ICustomControl r)
+        {
+                if (r is CCheckBox)
+                    (r as CCheckBox).CheckState = System.Windows.Forms.CheckState.Unchecked;
+                if (r is CComboBox)
+                    (r as CComboBox).SelectedIndex = 0;
+                else
+                    r.cd.Visible = false;
+
+                foreach (ICustomControl c in r.cd.RelatedVisibility)
+                    SetDependentVisibility(c);
+        }
     }
 }

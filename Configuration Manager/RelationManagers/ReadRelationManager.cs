@@ -40,14 +40,14 @@ namespace Configuration_Manager.CustomControls
                 if (r.cd.MainDestination != null && r.cd.MainDestination != "")
                 {
                     String fileType = r.cd.MainDestination.Substring(r.cd.MainDestination.Length - 4, 4);
-                    if (fileType == ".ini" && r.cd.DestinationType == ".INI") ReReadINIFile(r);
+                    if(r.cd.DestinationType == ".INI") ReReadINIFile(r);
                     else if (fileType == ".xml" && r.cd.DestinationType == ".XML") ReReadXMLFile(r);
                     else if (r.cd.DestinationType == "REG") ReReadRegistry(r);
                 }
             }
         }
 
-        public static void ReadConfigOnStartup(ICustomControl r)
+        public static void ReadConfiguration(ICustomControl r)
         {
             if (r.cd.RealSubDestination != "" && r.cd.RealSubDestination != null)
                 TranslateSubDestination(r);
@@ -61,6 +61,7 @@ namespace Configuration_Manager.CustomControls
             {
                 String fileType = r.cd.MainDestination.Substring(r.cd.MainDestination.Length - 4, 4);
                 if (fileType == ".ini" && r.cd.DestinationType == ".INI") ReReadINIFile(r);
+                else if (fileType == "conf" && r.cd.DestinationType == ".INI") ReReadINIFile(r);
                 else if (fileType == ".xml" && r.cd.DestinationType == ".XML") ReReadXMLFile(r);
                 else if (r.cd.DestinationType == "REG") ReReadRegistry(r);
             }

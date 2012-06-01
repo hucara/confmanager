@@ -247,6 +247,15 @@ namespace Configuration_Manager.CustomControls
 
 			model.logCreator.Append("! Editing: " + model.CurrentClickedControl.Name);
 
+            foreach (Editor ed in Application.OpenForms.OfType<Editor>())
+            {
+                if (ed.control == model.CurrentClickedControl)
+                {
+                    ed.Focus();
+                    return;
+                }
+            }
+
 			editor.Show(model.CurrentClickedControl);
 		}
 
@@ -262,6 +271,8 @@ namespace Configuration_Manager.CustomControls
 
             // Delete control
 			model.DeleteControl(model.CurrentClickedControl, false);
+
+            Model.getInstance().uiChanged = true;
         }
 
 		public void TextChanged(object sender, EventArgs e)
@@ -370,7 +381,7 @@ namespace Configuration_Manager.CustomControls
 			}
 		}
 
-        public void Changed(object sender, EventArgs e)
+        public void ValueChanged(object sender, EventArgs e)
         {
             (sender as ICustomControl).cd.Changed = true;
             if((sender as ICustomControl).cd.MainDestination != "")

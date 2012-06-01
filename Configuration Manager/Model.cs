@@ -23,11 +23,13 @@ namespace Configuration_Manager
 		public bool movable = false;
 		public bool resizable = false;
 
+        public bool uiChanged { get; set; }
+
 		public int top = 0;
 		public int left = 0;
 		public int width = 800;
 		public int height = 600;
-        public int maxSections = 6;
+        public int maxSections = 9;
         public int maxControls = 30;
 		public int controlMarging = 10;
 		public int containerMargin = 10;
@@ -93,6 +95,7 @@ namespace Configuration_Manager
         private Model()
         {
 			ObjectDefinitionExists = false;
+            uiChanged = false;
 
 			AllControls = new List<ICustomControl>();
             Sections = new List<Section>();
@@ -215,7 +218,7 @@ namespace Configuration_Manager
 				ReadRightsSection(xdoc);
 				ReadLogsSection(xdoc);
 
-                string[] a = { "-p", "-r", "-t", "0", "-l", "1376", "-dr", "0xFF", "-mr", "0xFF" };
+                string[] a = { "-p", "-r", "-dr", "0xFF", "-mr", "0xFF" };
                 this.args = a;
 
 				if (this.args != null)
@@ -677,6 +680,28 @@ namespace Configuration_Manager
                         }
                         c.cd.Enabled = c.cd.operatorModification;
                     }
+                }
+            }
+        }
+
+        public void ApplyRelations(ICustomControl c)
+        {
+            if (c.cd.CoupledControls.Count > 0 || c.cd.RelatedVisibility.Count > 0 || c.cd.RelatedRead.Count > 0)
+            {
+                if (c.cd.Type == "CCheckBox")
+                {
+                    CheckState state = (c as CheckBox).CheckState;
+                    if (state == CheckState.Checked) (c as CheckBox).CheckState = CheckState.Unchecked;
+                    else (c as CheckBox).CheckState = CheckState.Checked;
+
+                    (c as CheckBox).CheckState = state;
+                }
+
+                if (c.cd.Type == "CComboBox")
+                {
+                    int index = (c as ComboBox).SelectedIndex;
+                    (c as ComboBox).SelectedIndex = -1;
+                    (c as ComboBox).SelectedIndex = index;
                 }
             }
         }

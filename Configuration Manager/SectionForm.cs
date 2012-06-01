@@ -20,6 +20,12 @@ namespace Configuration_Manager
             InitializeComponent();
         }
 
+        public SectionForm(String oldName)
+        {
+            InitializeComponent();
+            this.NameTextBox.Text = oldName;
+        }
+
         private void OkButton_Click(object sender, EventArgs e)
         {
             String text = ttt.TranslateFromTextFile(NameTextBox.Text);

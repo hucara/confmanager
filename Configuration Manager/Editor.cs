@@ -92,6 +92,7 @@ namespace Configuration_Manager
             this.parent = control.cd.Parent;
             this.type = c.GetType().Name;
             this.control.cd.Changed = true;
+            Model.getInstance().uiChanged = true;
 
             ShowMousePosition();
             ShowHeadLine();
@@ -114,7 +115,7 @@ namespace Configuration_Manager
         {
             openFileDialog1.Multiselect = false;
             openFileDialog1.FileName = "";
-            openFileDialog1.Filter = "INI Files(*.ini)|*.ini|XML Files(*.xml)|*.xml|Text Files(*.txt)|*.txt";
+            openFileDialog1.Filter = "INI Files(*.ini)|*.ini|Text Files(*.text)|*.text|XML Files(*.xml)|*.xml|All Files (*.*)|*.*";
         }
 
         private void ShowDefaultSize()
@@ -147,6 +148,8 @@ namespace Configuration_Manager
 
         private void fontButton_Click(object sender, EventArgs e)
         {
+            fontDialog1.Font = control.cd.CurrentFont;
+
             DialogResult dr = fontDialog1.ShowDialog();
             if (dr == DialogResult.OK)
             {
@@ -160,11 +163,11 @@ namespace Configuration_Manager
         private void SetExampleTextLabel()
         {
             fontLabel.Font = controlFont;
-            fontLabel.Font = new Font(controlFont.FontFamily, 12, controlFont.Style);
+            fontLabel.Font = new Font(controlFont.Name, 12, controlFont.Style);
             fontLabel.ForeColor = fontColor;
             fontLabel.BackColor = backColor;
 
-            fontLabel.Text = controlFont.Name + " " + fontDialog1.Font.Size;
+            fontLabel.Text = controlFont.Name + " " + Math.Round(controlFont.Size);
         }
 
         private void FillOutCheckedListBox()
@@ -245,25 +248,25 @@ namespace Configuration_Manager
                     break;
 
                 case "CLabel":
-                    relationsComboBox.Enabled = false;
-                    controlListBox.Enabled = false;
+                    relationsComboBox.Visible = false;
+                    controlListBox.Visible = false;
                     break;
 
                 case "CPanel":
-                    textTextBox.Enabled = false;
-                    fontButton.Enabled = false;
-                    fontLabel.Enabled = false;
+                    textTextBox.Visible = false;
+                    fontButton.Visible = false;
+                    fontLabel.Visible = false;
 
-                    relationsComboBox.Enabled = false;
-                    controlListBox.Enabled = false;
+                    relationsComboBox.Visible = false;
+                    controlListBox.Visible = false;
 
-                    destinationTypeLabel.Enabled = false;
-                    destinationTypeComboBox.Enabled = false;
-                    fileDestinationLabel.Enabled = false;
-                    fileDestinationTextBox.Enabled = false;
-                    fileDestinationButton.Enabled = false;
-                    subDestinationLabel.Enabled = false;
-                    subDestinatonTextBox.Enabled = false;
+                    destinationTypeLabel.Visible = false;
+                    destinationTypeComboBox.Visible = false;
+                    fileDestinationLabel.Visible = false;
+                    fileDestinationTextBox.Visible = false;
+                    fileDestinationButton.Visible = false;
+                    subDestinationLabel.Visible = false;
+                    subDestinatonTextBox.Visible = false;
                     break;
 
                 case "CTextBox":
@@ -276,25 +279,29 @@ namespace Configuration_Manager
                     break;
 
                 case "CGroupBox":
-                    relationsComboBox.Enabled = false;
-                    controlListBox.Enabled = false;
+                    relationsComboBox.Visible = false;
+                    controlListBox.Visible = false;
                     break;
 
                 case "CTabPage":
-                    relationsComboBox.Enabled = false;
-                    controlListBox.Enabled = false;
-                    displayRightLabel.Enabled = false;
-                    displayRightTextBox.Enabled = false;
-                    topTextBox.Enabled = false;
-                    leftTextBox.Enabled = false;
-                    widthTextBox.Enabled = false;
-                    heightTextBox.Enabled = false;
+                    relationsComboBox.Visible = false;
+                    controlListBox.Visible = false;
+                    displayRightLabel.Visible = false;
+                    displayRightTextBox.Visible = false;
+                    topTextBox.Visible = false;
+                    leftTextBox.Visible = false;
+                    widthTextBox.Visible = false;
+                    heightTextBox.Visible = false;
+                    topLabel.Visible = false;
+                    leftLabel.Visible = false;
+                    widthLabel.Visible = false;
+                    heightLabel.Visible = false;
                     break;
 
                 case "CTabControl":
-                    textTextBox.Enabled = false;
-                    relationsComboBox.Enabled = false;
-                    controlListBox.Enabled = false;
+                    textTextBox.Visible = false;
+                    relationsComboBox.Visible = false;
+                    controlListBox.Visible = false;
                     break;
             }
         }
@@ -323,17 +330,22 @@ namespace Configuration_Manager
         {
             DialogResult dr = openFileDialog1.ShowDialog();
             if (dr == DialogResult.OK && openFileDialog1.CheckFileExists)
+            {
                 fileDestinationTextBox.Text = openFileDialog1.FileName;
 
-            String fileType = openFileDialog1.FileName.Substring(openFileDialog1.FileName.Length - 4, 4);
-            switch (fileType)
-            {
-                case ".xml":
-                    destinationTypeComboBox.Text = ".XML";
-                    break;
-                case ".ini":
-                    destinationTypeComboBox.Text = ".INI";
-                    break;
+                String fileType = openFileDialog1.FileName.Substring(openFileDialog1.FileName.Length - 4, 4);
+                switch (fileType)
+                {
+                    case ".xml":
+                        destinationTypeComboBox.Text = ".XML";
+                        break;
+                    case ".ini":
+                        destinationTypeComboBox.Text = ".INI";
+                        break;
+                    case "conf":
+                        destinationTypeComboBox.Text = ".INI";
+                        break;
+                }
             }
         }
 
@@ -348,6 +360,8 @@ namespace Configuration_Manager
             else
             {
                 SaveToControl();
+                model.ApplyRelations(control);
+                ReadRelationManager.ReadConfiguration(control as ICustomControl);
                 this.Close();
             }
 
@@ -363,8 +377,11 @@ namespace Configuration_Manager
                 MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
+            {
                 SaveToControl();
-
+                model.ApplyRelations(control);
+                ReadRelationManager.ReadConfiguration(control as ICustomControl);
+            }
             ErrorMsg = "";
         }
 
@@ -381,7 +398,7 @@ namespace Configuration_Manager
             ParseWidth();
             ParseHeight();
 
-            if (!CheckText() && control.cd.Type != "CComboBox") ErrorMsg += "\n- Text is empty.";
+            if (!CheckText() && (control.cd.Type != "CComboBox" && control.cd.Type != "CTabControl")) ErrorMsg += "\n- Text is empty.";
             //if (!CheckHint()) ErrorMsg += "\n- Hint is empty.";
             if (!CheckTop()) ErrorMsg += "\n- Top value is too low or too high.";
             if (!CheckLeft()) ErrorMsg += "\n- Left value is too low or too high.";
@@ -455,7 +472,7 @@ namespace Configuration_Manager
 
         private bool CheckTop()
         {
-            if (top < topMargin || top + height > parent.Height - topMargin) return ERROR;
+            if (top < topMargin || top + height > parent.Height - leftMargin) return ERROR;
             return OK;
         }
 
@@ -467,13 +484,13 @@ namespace Configuration_Manager
 
         private bool CheckHeight()
         {
-            if (height < MR || height + top > parent.Height - topMargin) return ERROR;
+            if (height < MR || height + top > parent.Height) return ERROR;
             return OK;
         }
 
         private bool CheckWidth()
         {
-            if (width < 0 || width + left > parent.Width - leftMargin) return ERROR;
+            if (width < 0 || width + left > parent.Width) return ERROR;
             return OK;
         }
 
@@ -761,8 +778,6 @@ namespace Configuration_Manager
                 this.fileDestinationButton.Text = "";
 
                 this.checkBoxValueLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 55).Value;
-
-                System.Diagnostics.Debug.WriteLine(" :::::::::::::::::::::::::::::::::::::: ");
             }
             catch(Exception)
             {
@@ -811,9 +826,15 @@ namespace Configuration_Manager
         private void ReplaceRegSelectedLabels()
         {
             if (destinationTypeComboBox.SelectedItem == "REG")
+            {
                 fileDestinationLabel.Text = RootKeyText;
+                fileDestinationButton.Visible = false;
+            }
             else
+            {
                 fileDestinationLabel.Text = MainDestinationText;
+                fileDestinationButton.Visible = true;
+            }
         }
 	}
 }

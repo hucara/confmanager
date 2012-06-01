@@ -75,12 +75,14 @@ namespace Configuration_Manager
         private void configValues_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             this.shownValues.SelectedIndex = this.configValues.SelectedIndex;
+            SetAddDeleteButtons();
             SetMoveButtons();
         }
 
         private void shownValues_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.configValues.SelectedIndex = this.shownValues.SelectedIndex;
+            SetAddDeleteButtons();
             SetMoveButtons();
         }
 
@@ -233,8 +235,11 @@ namespace Configuration_Manager
         {
             int n = shownValues.Items.Count;
 
-            if (n > 0) deleteButton.Enabled = true;
+            if (n > 0 && shownValues.SelectedIndex != -1) deleteButton.Enabled = true;
             else deleteButton.Enabled = false;
+
+            if (shownTextBox.Text != "" && shownTextBox != null) addButton.Enabled = true;
+            else addButton.Enabled = false;
         }
 
         private void MoveDownButton_Click(object sender, EventArgs e)
@@ -323,6 +328,16 @@ namespace Configuration_Manager
                 shownValues.Items.Add(cb.cd.comboBoxItems[i]);
                 configValues.Items.Add(cb.cd.comboBoxConfigItems[i]);
             }
+        }
+
+        private void shownTextBox_TextChanged(object sender, EventArgs e)
+        {
+            SetAddDeleteButtons();
+        }
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
