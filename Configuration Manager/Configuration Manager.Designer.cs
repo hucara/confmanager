@@ -34,6 +34,7 @@ namespace Configuration_Manager
             this.sectionBar = new System.Windows.Forms.ToolStrip();
             this.contextNavMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newSectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editSectionNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteSectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +51,6 @@ namespace Configuration_Manager
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.editSectionNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextNavMenu.SuspendLayout();
             this.contextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -78,7 +78,7 @@ namespace Configuration_Manager
             this.editSectionNameToolStripMenuItem,
             this.deleteSectionToolStripMenuItem});
             this.contextNavMenu.Name = "contextMenuStrip1";
-            this.contextNavMenu.Size = new System.Drawing.Size(153, 92);
+            this.contextNavMenu.Size = new System.Drawing.Size(150, 70);
             // 
             // newSectionToolStripMenuItem
             // 
@@ -86,6 +86,13 @@ namespace Configuration_Manager
             this.newSectionToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.newSectionToolStripMenuItem.Text = "New Section";
             this.newSectionToolStripMenuItem.Click += new System.EventHandler(this.newSectionToolStripMenuItem_Click);
+            // 
+            // editSectionNameToolStripMenuItem
+            // 
+            this.editSectionNameToolStripMenuItem.Name = "editSectionNameToolStripMenuItem";
+            this.editSectionNameToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.editSectionNameToolStripMenuItem.Text = "Edit Name";
+            this.editSectionNameToolStripMenuItem.Click += new System.EventHandler(this.editSectionNameToolStripMenuItem_Click);
             // 
             // deleteSectionToolStripMenuItem
             // 
@@ -200,13 +207,6 @@ namespace Configuration_Manager
             this.tabControl.Size = new System.Drawing.Size(661, 596);
             this.tabControl.TabIndex = 0;
             this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
-            // 
-            // editSectionNameToolStripMenuItem
-            // 
-            this.editSectionNameToolStripMenuItem.Name = "editSectionNameToolStripMenuItem";
-            this.editSectionNameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.editSectionNameToolStripMenuItem.Text = "Edit Name";
-            this.editSectionNameToolStripMenuItem.Click += new System.EventHandler(this.editSectionNameToolStripMenuItem_Click);
             // 
             // MainForm
             // 

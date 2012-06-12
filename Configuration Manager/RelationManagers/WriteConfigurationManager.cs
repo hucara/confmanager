@@ -68,10 +68,19 @@ namespace Configuration_Manager.RelationManagers
             String value = "";
             if (c.cd.Type == "CComboBox")
             {
-                if (c.cd.comboBoxConfigItems.Count != 0)
-                    value = c.cd.comboBoxConfigItems[(c as CComboBox).SelectedIndex];
+                if (c.cd.Format != "")
+                {
+                    value = c.cd.Format.Replace("##This##", c.cd.comboBoxConfigItems[(c as CComboBox).SelectedIndex]);
+                    value = TokenControlTranslator.GetInstance().TranslateFromControl(value);
+                    value = TokenTextTranslator.GetInstance().TranslateFromTextFile(value);
+                }
                 else
-                    value = c.cd.comboBoxItems[(c as CComboBox).SelectedIndex];
+                {
+                    if (c.cd.comboBoxConfigItems.Count > 0 && (c as CComboBox).SelectedIndex != -1)
+                        value = c.cd.comboBoxConfigItems[(c as CComboBox).SelectedIndex];
+                    else
+                        value = c.cd.comboBoxItems[(c as CComboBox).SelectedIndex];
+                }
             }
             else if (c.cd.Type == "CTextBox")
             {

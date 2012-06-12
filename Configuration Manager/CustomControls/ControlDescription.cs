@@ -20,6 +20,7 @@ namespace Configuration_Manager
         private String text;
 		public String RealText { get; set; }
         public String Type { get; set; }
+        public String Format { get; set; }
 
         private Font currentFont;
         private Color backColor;
@@ -51,8 +52,8 @@ namespace Configuration_Manager
         public int Id { get; set; }
 
         public String checkBoxValues;
-        public String checkBoxCheckedValue { get; private set; }
-        public String checkBoxUncheckedValue { get; private set; }
+        public String checkBoxCheckedValue { get; set; }
+        public String checkBoxUncheckedValue { get; set; }
 
         public String DestinationType { get; set; }
         public String MainDestination { get; set; }

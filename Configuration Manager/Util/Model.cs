@@ -218,9 +218,6 @@ namespace Configuration_Manager
 				ReadRightsSection(xdoc);
 				ReadLogsSection(xdoc);
 
-                string[] a = { "-p", "-r", "-dr", "0xFF", "-mr", "0xFF" };
-                this.args = a;
-
 				if (this.args != null)
 				{
 					SetArguments();
@@ -276,7 +273,7 @@ namespace Configuration_Manager
 			Int32.TryParse(settings.Element("Height").Value.ToString(), out this.height);
 
 			Int32.TryParse(settings.Element("MaxSections").Value.ToString(), out this.maxSections);
-			Int32.TryParse(settings.Element("MaxControls").Value.ToString(), out this.maxControls);
+            //Int32.TryParse(settings.Element("MaxControls").Value.ToString(), out this.maxControls);
 
 			Int32.TryParse(settings.Element("ControlMargin").Value.ToString(), out this.controlMarging);
 			Int32.TryParse(settings.Element("ContainerMargin").Value.ToString(), out this.containerMargin);

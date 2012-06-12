@@ -55,15 +55,18 @@ namespace Configuration_Manager.CustomControls
 
         private static void SetDependentVisibility(ICustomControl r)
         {
-                if (r is CCheckBox)
-                    (r as CCheckBox).CheckState = System.Windows.Forms.CheckState.Unchecked;
-                if (r is CComboBox)
-                    (r as CComboBox).SelectedIndex = 0;
-                else
-                    r.cd.Visible = false;
+            if (r is CCheckBox)
+            {
+                (r as CCheckBox).CheckState = System.Windows.Forms.CheckState.Unchecked;
+                ReadRelationManager.ReadConfiguration(r);
+            }
+            if (r is CComboBox)
+                (r as CComboBox).SelectedIndex = 0;
+            else
+                r.cd.Visible = false;
 
-                foreach (ICustomControl c in r.cd.RelatedVisibility)
-                    SetDependentVisibility(c);
+            foreach (ICustomControl c in r.cd.RelatedVisibility)
+                SetDependentVisibility(c);
         }
     }
 }

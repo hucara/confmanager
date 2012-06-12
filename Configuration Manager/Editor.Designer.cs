@@ -50,9 +50,13 @@
             this.comboBoxEditPanel = new System.Windows.Forms.Panel();
             this.editComboBoxButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.formattingTextBox = new System.Windows.Forms.TextBox();
+            this.formattingLabel = new System.Windows.Forms.Label();
             this.checkBoxValuePanel = new System.Windows.Forms.Panel();
-            this.checkBoxValueComboBox = new System.Windows.Forms.ComboBox();
-            this.checkBoxValueLabel = new System.Windows.Forms.Label();
+            this.uncheckedTextBox = new System.Windows.Forms.TextBox();
+            this.checkedTextBox = new System.Windows.Forms.TextBox();
+            this.uncheckedLabel = new System.Windows.Forms.Label();
+            this.checkedLabel = new System.Windows.Forms.Label();
             this.modificationRightLabel = new System.Windows.Forms.Label();
             this.displayRightLabel = new System.Windows.Forms.Label();
             this.displayRightTextBox = new System.Windows.Forms.MaskedTextBox();
@@ -72,8 +76,6 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.updateButton = new System.Windows.Forms.Button();
-            this.formattingLabel = new System.Windows.Forms.Label();
-            this.formattingTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.comboBoxEditPanel.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -298,37 +300,66 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
             // 
+            // formattingTextBox
+            // 
+            this.formattingTextBox.Location = new System.Drawing.Point(106, 104);
+            this.formattingTextBox.Name = "formattingTextBox";
+            this.formattingTextBox.Size = new System.Drawing.Size(178, 20);
+            this.formattingTextBox.TabIndex = 22;
+            // 
+            // formattingLabel
+            // 
+            this.formattingLabel.AutoSize = true;
+            this.formattingLabel.Location = new System.Drawing.Point(17, 107);
+            this.formattingLabel.Name = "formattingLabel";
+            this.formattingLabel.Size = new System.Drawing.Size(53, 13);
+            this.formattingLabel.TabIndex = 21;
+            this.formattingLabel.Text = "formatting";
+            // 
             // checkBoxValuePanel
             // 
-            this.checkBoxValuePanel.Controls.Add(this.checkBoxValueComboBox);
-            this.checkBoxValuePanel.Controls.Add(this.checkBoxValueLabel);
+            this.checkBoxValuePanel.Controls.Add(this.uncheckedTextBox);
+            this.checkBoxValuePanel.Controls.Add(this.checkedTextBox);
+            this.checkBoxValuePanel.Controls.Add(this.uncheckedLabel);
+            this.checkBoxValuePanel.Controls.Add(this.checkedLabel);
             this.checkBoxValuePanel.Location = new System.Drawing.Point(16, 130);
             this.checkBoxValuePanel.Name = "checkBoxValuePanel";
-            this.checkBoxValuePanel.Size = new System.Drawing.Size(278, 37);
+            this.checkBoxValuePanel.Size = new System.Drawing.Size(278, 54);
             this.checkBoxValuePanel.TabIndex = 20;
             // 
-            // checkBoxValueComboBox
+            // uncheckedTextBox
             // 
-            this.checkBoxValueComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.checkBoxValueComboBox.FormattingEnabled = true;
-            this.checkBoxValueComboBox.Items.AddRange(new object[] {
-            "True / False",
-            "Yes / No",
-            "On / Off",
-            "0 / 1"});
-            this.checkBoxValueComboBox.Location = new System.Drawing.Point(147, 9);
-            this.checkBoxValueComboBox.Name = "checkBoxValueComboBox";
-            this.checkBoxValueComboBox.Size = new System.Drawing.Size(121, 21);
-            this.checkBoxValueComboBox.TabIndex = 22;
+            this.uncheckedTextBox.Location = new System.Drawing.Point(168, 29);
+            this.uncheckedTextBox.Name = "uncheckedTextBox";
+            this.uncheckedTextBox.Size = new System.Drawing.Size(100, 20);
+            this.uncheckedTextBox.TabIndex = 26;
+            this.uncheckedTextBox.Text = "False";
             // 
-            // checkBoxValueLabel
+            // checkedTextBox
             // 
-            this.checkBoxValueLabel.AutoSize = true;
-            this.checkBoxValueLabel.Location = new System.Drawing.Point(1, 12);
-            this.checkBoxValueLabel.Name = "checkBoxValueLabel";
-            this.checkBoxValueLabel.Size = new System.Drawing.Size(70, 13);
-            this.checkBoxValueLabel.TabIndex = 21;
-            this.checkBoxValueLabel.Text = "config values";
+            this.checkedTextBox.Location = new System.Drawing.Point(168, 3);
+            this.checkedTextBox.Name = "checkedTextBox";
+            this.checkedTextBox.Size = new System.Drawing.Size(100, 20);
+            this.checkedTextBox.TabIndex = 25;
+            this.checkedTextBox.Text = "True";
+            // 
+            // uncheckedLabel
+            // 
+            this.uncheckedLabel.AutoSize = true;
+            this.uncheckedLabel.Location = new System.Drawing.Point(3, 32);
+            this.uncheckedLabel.Name = "uncheckedLabel";
+            this.uncheckedLabel.Size = new System.Drawing.Size(88, 13);
+            this.uncheckedLabel.TabIndex = 24;
+            this.uncheckedLabel.Text = "uncheckedValue";
+            // 
+            // checkedLabel
+            // 
+            this.checkedLabel.AutoSize = true;
+            this.checkedLabel.Location = new System.Drawing.Point(3, 6);
+            this.checkedLabel.Name = "checkedLabel";
+            this.checkedLabel.Size = new System.Drawing.Size(76, 13);
+            this.checkedLabel.TabIndex = 23;
+            this.checkedLabel.Text = "checkedValue";
             // 
             // modificationRightLabel
             // 
@@ -448,6 +479,7 @@
             // 
             // relationsComboBox
             // 
+            this.relationsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.relationsComboBox.FormattingEnabled = true;
             this.relationsComboBox.Location = new System.Drawing.Point(351, 19);
             this.relationsComboBox.Name = "relationsComboBox";
@@ -488,22 +520,6 @@
             this.updateButton.Text = "update";
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
-            // 
-            // formattingLabel
-            // 
-            this.formattingLabel.AutoSize = true;
-            this.formattingLabel.Location = new System.Drawing.Point(17, 107);
-            this.formattingLabel.Name = "formattingLabel";
-            this.formattingLabel.Size = new System.Drawing.Size(53, 13);
-            this.formattingLabel.TabIndex = 21;
-            this.formattingLabel.Text = "formatting";
-            // 
-            // formattingTextBox
-            // 
-            this.formattingTextBox.Location = new System.Drawing.Point(106, 104);
-            this.formattingTextBox.Name = "formattingTextBox";
-            this.formattingTextBox.Size = new System.Drawing.Size(178, 20);
-            this.formattingTextBox.TabIndex = 22;
             // 
             // Editor
             // 
@@ -583,9 +599,11 @@
 		private System.Windows.Forms.Label modificationRightLabel;
         private System.Windows.Forms.Button editComboBoxButton;
         private System.Windows.Forms.Panel checkBoxValuePanel;
-        private System.Windows.Forms.ComboBox checkBoxValueComboBox;
-        private System.Windows.Forms.Label checkBoxValueLabel;
         private System.Windows.Forms.TextBox formattingTextBox;
         private System.Windows.Forms.Label formattingLabel;
+        private System.Windows.Forms.TextBox uncheckedTextBox;
+        private System.Windows.Forms.TextBox checkedTextBox;
+        private System.Windows.Forms.Label uncheckedLabel;
+        private System.Windows.Forms.Label checkedLabel;
     }
 }

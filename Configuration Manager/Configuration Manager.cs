@@ -57,9 +57,17 @@ namespace Configuration_Manager
             this.TopMost = model.stayOnTop;
             this.Width = model.width;
             this.Height = model.height;
-
             this.Top = model.top;
             this.Left = model.left;
+
+            if (model.resizable)
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            else
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+
+            if (!model.movable)
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+
         }
 
         private void InitCustomHandler()

@@ -147,6 +147,7 @@ namespace Configuration_Manager
                                         new XElement("Visible", item.cd.Visible),
                                         new XElement("Font", fontConverter.ConvertToString(item.cd.CurrentFont)),
                                         new XElement("FontColor", colorConverter.ConvertToString(item.cd.ForeColor)),
+                                        new XElement("Format", item.cd.Format),
                                         new XElement("BackColor", colorConverter.ConvertToString(item.cd.BackColor)),
                                         new XElement("DisplayRight", "0x" + item.cd.DisplayRight),
                                         new XElement("ModificationRight", "0x" + item.cd.ModificationRight),
@@ -155,6 +156,12 @@ namespace Configuration_Manager
                                         new XElement("ActiveTab", item.cd.SelectedTab) : null,
 
                                         item.cd.Type == "CCheckBox"?
+                                        new XElement("CheckedValue", item.cd.checkBoxCheckedValue) : null,
+
+                                        item.cd.Type == "CCheckBox"?
+                                        new XElement("UncheckedValue", item.cd.checkBoxUncheckedValue) : null,
+
+                                         item.cd.Type == "CCheckBox"?
                                         new XElement("CheckBoxValues", item.cd.CheckBoxValues) : null
                                     ),
 
@@ -276,21 +283,44 @@ namespace Configuration_Manager
                 {
                     if (c.cd.Name == i.Element("Name").Value)
                     {
-                        SetRealParent(c, i as XContainer);
+                        try
+                        {
+                            SetRealParent(c, i as XContainer);
 
-                        SetRealProperties(c, i);
-                        SetPaths(c, i);
-                        SetControlSpecificProperties(c, i);
+                            SetRealProperties(c, i);
+                            SetPaths(c, i);
+                            SetControlSpecificProperties(c, i);
 
-                        SetRelatedReadList(c, i);
-                        SetRelatedVisibility(c, i);
-                        SetCoupledControls(c, i);
+                            SetRelatedReadList(c, i);
+                            SetRelatedVisibility(c, i);
+                            SetCoupledControls(c, i);
+                        }
+                        catch (Exception)
+                        {
+                            String msg = "There is a problem with the ObjectDefinition.xml file.\n Please check it and try again.";
+                            MessageBox.Show(msg, " Error while reading Object Definition", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            System.Environment.Exit(0);
+                        }
 
                         ReadMachineConfiguration(c);
                         ApplyRights(c);
                         ApplyRelations(c);
+                        
+                        if(c.cd.Format != "") ApplyFormats(c);
 
-                        if (c.cd.Type == "CTabControl") SetSelectedTab(c, i);
+                        if (c.cd.Type == "CTabControl")
+                        {
+                            try
+                            {
+                                SetSelectedTab(c, i);
+                            }
+                            catch (Exception)
+                            {
+                                String msg = "There is a problem with the ObjectDefinition.xml file.\n Please check it and try again.";
+                                MessageBox.Show(msg, " Error while reading Object Definition", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                System.Environment.Exit(0);
+                            }
+                        }
 
                         c.cd.Changed = false;
 
@@ -298,6 +328,11 @@ namespace Configuration_Manager
                     }
                 }
             }
+        }
+
+        private void ApplyFormats(ICustomControl c)
+        {
+            c.cd.Text = Util.StringFormatter.FormatText(c.cd.Text, c.cd.Format);
         }
 
         private void SetSelectedTab(ICustomControl c, XElement i)
@@ -341,7 +376,7 @@ namespace Configuration_Manager
                 }
                 catch (NullReferenceException e)
                 {
-                    System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading ComboBox Attributes");
+                    System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading "+c.cd.Name+" Attributes. No items defined?");
                 }
             }
             else if (c.cd.Type == "CCheckBox")
@@ -349,11 +384,14 @@ namespace Configuration_Manager
                 CheckBox cb = c as CheckBox;
                 try
                 {
-                    if (i.Element("Checked").Value == "True") cb.Checked = true;
-                    else cb.Checked = false;
-                    
-                    c.cd.CheckBoxValues = i.Element("Settings").Element("CheckBoxValues").Value;
-                    if (c.cd.CheckBoxValues == "" || c.cd.CheckBoxValues == null) c.cd.CheckBoxValues = "True / False";
+                    //if (i.Element("Checked").Value == "True") cb.Checked = true;
+                    //else cb.Checked = false;
+
+                    c.cd.checkBoxCheckedValue = i.Element("Settings").Element("CheckedValue").Value;
+                    c.cd.checkBoxUncheckedValue = i.Element("Settings").Element("UncheckedValue").Value;
+
+                    //c.cd.CheckBoxValues = i.Element("Settings").Element("CheckBoxValues").Value;
+                    //if (c.cd.CheckBoxValues == "" || c.cd.CheckBoxValues == null) c.cd.CheckBoxValues = "True / False";
                 }
                 catch (NullReferenceException e)
                 {
@@ -472,6 +510,8 @@ namespace Configuration_Manager
             c.cd.ForeColor = newColor;
             newColor = (Color)colorConverter.ConvertFromString(i.Element("Settings").Element("BackColor").Value);
             c.cd.BackColor = newColor;
+
+            c.cd.Format = i.Element("Settings").Element("Format").Value;
 
             // Get Display and Modification rights
             c.cd.DisplayRight = i.Element("Settings").Element("DisplayRight").Value.Substring(2);

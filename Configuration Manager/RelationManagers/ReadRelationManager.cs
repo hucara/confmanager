@@ -28,22 +28,7 @@ namespace Configuration_Manager.CustomControls
 
             foreach (ICustomControl r in c.cd.RelatedRead)
             {
-                // Updates the new SubDestination
-                if (r.cd.RealSubDestination != "" && r.cd.RealSubDestination != null)
-                    TranslateSubDestination(r);
-
-                // Updates the Text field or Items from the ComboBox
-                if (r.cd.Type == "CComboBox") TranslateComboBoxItems(r);
-                else TranslateText(r);
-
-                // Re-reads the value from the source file
-                if (r.cd.MainDestination != null && r.cd.MainDestination != "")
-                {
-                    String fileType = r.cd.MainDestination.Substring(r.cd.MainDestination.Length - 4, 4);
-                    if(r.cd.DestinationType == ".INI") ReReadINIFile(r);
-                    else if (fileType == ".xml" && r.cd.DestinationType == ".XML") ReReadXMLFile(r);
-                    else if (r.cd.DestinationType == "REG") ReReadRegistry(r);
-                }
+                ReadConfiguration(r);
             }
         }
 
@@ -59,6 +44,7 @@ namespace Configuration_Manager.CustomControls
             // Re-reads the value from the source file
             if (r.cd.MainDestination != null && r.cd.MainDestination != "")
             {
+                System.Diagnostics.Debug.WriteLine("<< Reading key: " + r.cd.SubDestination);
                 String fileType = r.cd.MainDestination.Substring(r.cd.MainDestination.Length - 4, 4);
                 if (fileType == ".ini" && r.cd.DestinationType == ".INI") ReReadINIFile(r);
                 else if (fileType == "conf" && r.cd.DestinationType == ".INI") ReReadINIFile(r);
@@ -72,7 +58,7 @@ namespace Configuration_Manager.CustomControls
             String text = tct.TranslateFromControl(r.cd.RealSubDestination);
             text = ttt.TranslateFromTextFile(text);
 
-            r.cd.SubDestination = text;        
+            r.cd.SubDestination = text;
         }
 
         private static void TranslateText(ICustomControl r)
@@ -86,7 +72,6 @@ namespace Configuration_Manager.CustomControls
         private static void TranslateComboBoxItems(ICustomControl r)
         {
             int index = (r as ComboBox).SelectedIndex;
-
             r.cd.comboBoxItems.Clear();
             (r as ComboBox).Items.Clear();
 
@@ -114,7 +99,7 @@ namespace Configuration_Manager.CustomControls
             }
             catch (Exception)
             {
-                System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading INI file for: " +r.cd.Name);
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading INI file for: " + r.cd.Name);
                 Model.getInstance().logCreator.Append("[ERROR] Re-Reading INI file for " + r.cd.Name);
             }
         }
@@ -131,7 +116,7 @@ namespace Configuration_Manager.CustomControls
             }
             catch (Exception)
             {
-                System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading XML file for: " +r.cd.Name);
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading XML file for: " + r.cd.Name);
                 Model.getInstance().logCreator.Append("[ERROR] Re-Reading XML file for " + r.cd.Name);
             }
         }
@@ -156,10 +141,22 @@ namespace Configuration_Manager.CustomControls
         {
             if (r.cd.Type == "CComboBox")
             {
-                int index = r.cd.comboBoxConfigItems.IndexOf(value);
+                if (r.cd.Format != "")
+                {
+                    string formattedValue = StringFormatter.FormatText(value, r.cd.Format);
+                    formattedValue = TokenControlTranslator.GetInstance().TranslateFromControl(formattedValue);
+                    formattedValue = TokenTextTranslator.GetInstance().TranslateFromTextFile(formattedValue);
 
-                if ((r as ComboBox).Items.Count >= index)
-                    (r as ComboBox).SelectedIndex = index;
+                    int index = r.cd.comboBoxConfigItems.IndexOf(formattedValue);
+                    if ((r as ComboBox).Items.Count >= index)
+                        (r as ComboBox).SelectedIndex = index;
+                }
+                else
+                {
+                    int index = r.cd.comboBoxConfigItems.IndexOf(value);
+                    if ((r as ComboBox).Items.Count >= index)
+                        (r as ComboBox).SelectedIndex = index;
+                }
             }
             else if (r.cd.Type == "CCheckBox")
             {

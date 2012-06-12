@@ -106,9 +106,7 @@ namespace Configuration_Manager.Util
             if (t != null)
             {
                 if (t.StartsWith(tokenKey) && t.EndsWith(tokenKey) && t.Length > tokenKey.Length * 2)
-                {
                     return true;
-                }
             }
             return false;
         }
@@ -118,24 +116,26 @@ namespace Configuration_Manager.Util
             String text = "";
             foreach (String s in valuesToTranslate)
             {
-                ICustomControl control = Model.getInstance().AllControls.Find(c => c.cd.Name == s);
+                String name = s;
+                if (name.Contains("_CONF"))
+                    name = name.Remove(name.IndexOf("_CONF"));
+                ICustomControl control = Model.getInstance().AllControls.Find(c => c.cd.Name == name);
 
                 text = "";
                 if (control != null)
                 {
                     //TODO THE GREAT DILEMMA D:
-
-                    if (control is CComboBox && (control as CComboBox).SelectedItem != null)
+                    //if (control is CComboBox && (control as CComboBox).SelectedItem != null)
+                    //{
+                    //    int index = (control as CComboBox).SelectedIndex;
+                    //    if(control.cd.comboBoxConfigItems[index] != String.Empty)
+                    //        text = control.cd.comboBoxConfigItems[index];
+                    //    else
+                    //        text = (control as CComboBox).SelectedItem.ToString();
+                    //}
+                    if (control is CComboBox)
                     {
-                        int index = (control as CComboBox).SelectedIndex;
-                        if(control.cd.comboBoxConfigItems[index] != String.Empty)
-                        {
-                            text = control.cd.comboBoxConfigItems[index];
-                        }
-                        else
-                        {
-                            text = (control as CComboBox).SelectedItem.ToString();
-                        }
+                        text = GetComboBoxValue(s, control);
                     }
                     else if (control is CCheckBox)
                     {
@@ -149,6 +149,22 @@ namespace Configuration_Manager.Util
                 else text = tokenKey + s + tokenKey;
                 translatedValues.Add(text);
             }
+        }
+
+        private String GetComboBoxValue(String key, ICustomControl control)
+        {
+            String text = "";
+            int index = (control as CComboBox).SelectedIndex;
+            if ((key.Contains("_CONF") && control.cd.comboBoxConfigItems.Count > 0))
+            {
+                if (index != -1)
+                    text = control.cd.comboBoxConfigItems[index];
+            }
+            else
+                if (index != -1)
+                    text = (control as CComboBox).SelectedItem.ToString();
+
+            return text;
         }
 
         private String ReplaceValueToTranslation(String textToTranslate)

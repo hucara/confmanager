@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenControlTranslator_Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComboBoxEditor_Tests", "ComboBoxEditor_Tests\ComboBoxEditor_Tests.csproj", "{C8BFF101-C5E4-4C81-9F81-D37F9184160C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringFormatter_Tests", "StringFormatter_Tests\StringFormatter_Tests.csproj", "{C0BAD834-8D77-4116-B302-E73AD7A5452A}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Configuration Manager.vsmdi
@@ -69,6 +71,16 @@ Global
 		{C8BFF101-C5E4-4C81-9F81-D37F9184160C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C8BFF101-C5E4-4C81-9F81-D37F9184160C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C8BFF101-C5E4-4C81-9F81-D37F9184160C}.Release|x86.ActiveCfg = Release|Any CPU
+		{C0BAD834-8D77-4116-B302-E73AD7A5452A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0BAD834-8D77-4116-B302-E73AD7A5452A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0BAD834-8D77-4116-B302-E73AD7A5452A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C0BAD834-8D77-4116-B302-E73AD7A5452A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C0BAD834-8D77-4116-B302-E73AD7A5452A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C0BAD834-8D77-4116-B302-E73AD7A5452A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0BAD834-8D77-4116-B302-E73AD7A5452A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0BAD834-8D77-4116-B302-E73AD7A5452A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C0BAD834-8D77-4116-B302-E73AD7A5452A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C0BAD834-8D77-4116-B302-E73AD7A5452A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

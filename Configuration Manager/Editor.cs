@@ -21,8 +21,8 @@ namespace Configuration_Manager
         const bool ERROR = false;
         const int MR = -1;
 
-        uint topMargin = 10;
-        uint leftMargin = 10;
+        uint topMargin = 0;
+        uint leftMargin = 0;
 
         public ICustomControl control;
 
@@ -33,11 +33,14 @@ namespace Configuration_Manager
         String coupled = DEFAULT_COUPLED;
 
         String type;
+        String formatting;
         String ErrorMsg;
         String RootKeyText = "root key";
         String MainDestinationText = "main destination";
 
+        Font lastSelectedFont;
         Font controlFont;
+
         Color fontColor, backColor;
 		Util.TokenTextTranslator ttt;
         Util.TokenControlTranslator tct;
@@ -99,8 +102,8 @@ namespace Configuration_Manager
             ShowDefaultSize();
             DisableControls(type);
 
-            FillOutCheckedListBox();
             SetRelationComboBox();
+            //FillOutCheckedListBox();
             ReadFromControl();
 			SetLocation();
             SetCheckBoxValuesOptions();
@@ -115,7 +118,7 @@ namespace Configuration_Manager
         {
             openFileDialog1.Multiselect = false;
             openFileDialog1.FileName = "";
-            openFileDialog1.Filter = "INI Files(*.ini)|*.ini|Text Files(*.text)|*.text|XML Files(*.xml)|*.xml|All Files (*.*)|*.*";
+            openFileDialog1.Filter = "INI Files(*.ini)|*.ini|XML Files(*.xml)|*.xml|All Files (*.*)|*.*";
         }
 
         private void ShowDefaultSize()
@@ -148,13 +151,15 @@ namespace Configuration_Manager
 
         private void fontButton_Click(object sender, EventArgs e)
         {
-            fontDialog1.Font = control.cd.CurrentFont;
+            fontDialog1.Font = lastSelectedFont;
 
             DialogResult dr = fontDialog1.ShowDialog();
             if (dr == DialogResult.OK)
             {
                 controlFont = fontDialog1.Font;
                 fontColor = fontDialog1.Color;
+
+                lastSelectedFont = controlFont;
 
                 SetExampleTextLabel();
             }
@@ -172,10 +177,21 @@ namespace Configuration_Manager
 
         private void FillOutCheckedListBox()
         {
-            foreach (ICustomControl c in model.AllControls)
-                controlListBox.Items.Add(c.cd.Name);
-
-            controlListBox.Items.Remove(control.cd.Name);
+            controlListBox.Items.Clear();
+            if (relationsComboBox.SelectedIndex > -1)
+            {
+                if (relationsComboBox.SelectedItem.ToString() == this.coupled)
+                {
+                    foreach (ICustomControl c in model.AllControls.Where(p => p.cd.Type == "CComboBox"))
+                        controlListBox.Items.Add(c.cd.Name);
+                }
+                else
+                {
+                    foreach (ICustomControl c in model.AllControls)
+                        controlListBox.Items.Add(c.cd.Name);
+                }
+                controlListBox.Items.Remove(control.cd.Name);
+            }
         }
 
         private void SetRelationComboBox()
@@ -285,6 +301,7 @@ namespace Configuration_Manager
 
                 case "CTabPage":
                     relationsComboBox.Visible = false;
+                    fontButton.Visible = false;
                     controlListBox.Visible = false;
                     displayRightLabel.Visible = false;
                     displayRightTextBox.Visible = false;
@@ -360,8 +377,6 @@ namespace Configuration_Manager
             else
             {
                 SaveToControl();
-                model.ApplyRelations(control);
-                ReadRelationManager.ReadConfiguration(control as ICustomControl);
                 this.Close();
             }
 
@@ -379,7 +394,7 @@ namespace Configuration_Manager
             else
             {
                 SaveToControl();
-                model.ApplyRelations(control);
+                //model.ApplyRelations(control);
                 ReadRelationManager.ReadConfiguration(control as ICustomControl);
             }
             ErrorMsg = "";
@@ -398,7 +413,7 @@ namespace Configuration_Manager
             ParseWidth();
             ParseHeight();
 
-            if (!CheckText() && (control.cd.Type != "CComboBox" && control.cd.Type != "CTabControl")) ErrorMsg += "\n- Text is empty.";
+            if ((control.cd.Type != "CComboBox" && control.cd.Type != "CTabControl") && !CheckText()) ErrorMsg += "\n- Text is empty.";
             //if (!CheckHint()) ErrorMsg += "\n- Hint is empty.";
             if (!CheckTop()) ErrorMsg += "\n- Top value is too low or too high.";
             if (!CheckLeft()) ErrorMsg += "\n- Left value is too low or too high.";
@@ -409,7 +424,17 @@ namespace Configuration_Manager
 
 			if (!CheckDisplayRight()) ErrorMsg += "\n - Display Right value has non valid characters.";
 			if (!CheckModificationRight()) ErrorMsg += "\n - Modification Right value has non valid characters.";
+
+            if (control.cd.Type == "CCheckBox" && !CheckCheckBoxAttributes()) ErrorMsg += "\n - There is a problem with the Check Box values";
 		}
+
+        private bool CheckCheckBoxAttributes()
+        {
+            if (checkedTextBox.Text == uncheckedTextBox.Text) return false;
+            if (checkedTextBox.Text == "" || checkedTextBox.Text == null) return false;
+            if (uncheckedTextBox.Text == "" || uncheckedTextBox.Text == null) return false;
+            return true;
+        }
 
 		private bool CheckDisplayRight()
 		{
@@ -526,6 +551,7 @@ namespace Configuration_Manager
             control.cd.DestinationType = this.destinationTypeComboBox.Text;
             control.cd.MainDestination = this.fileDestinationTextBox.Text;
             control.cd.RealSubDestination = this.subDestinatonTextBox.Text;
+            control.cd.Format = this.formattingTextBox.Text;
 
             control.cd.ModificationRight = this.modificationRightTextBox.Text.Substring(2);
             control.cd.DisplayRight = this.displayRightTextBox.Text.Substring(2);
@@ -536,11 +562,34 @@ namespace Configuration_Manager
             control.cd.operatorModification = model.ObtainRights(control.cd.ModificationBytes, model.MainModificationRights);
             control.cd.operatorVisibility = model.ObtainRights(control.cd.DisplayBytes, model.MainDisplayRights);
 
-            if(control is CCheckBox) control.cd.CheckBoxValues = this.checkBoxValueComboBox.Text;
+            if (control is CCheckBox)
+            {
+                control.cd.checkBoxCheckedValue = this.checkedTextBox.Text;
+                control.cd.checkBoxUncheckedValue = this.uncheckedTextBox.Text;
+            }
+ 
+            model.ApplyRelations(control);
+                ReadRelationManager.ReadConfiguration(control as ICustomControl);
+
+            if (control.cd.Format != null && control.cd.Format != "") 
+                FormatValue(control);
+        }
+
+        private void FormatValue(ICustomControl control)
+        {
+            if (control.cd.Type == "CComboBox")
+            {
+                int selectedIndex = (control as CComboBox).SelectedIndex;
+                (control as CComboBox).SelectedText = control.cd.comboBoxConfigItems[selectedIndex];
+            }
+            else
+                (control as Control).Text = Util.StringFormatter.FormatText((control as Control).Text, control.cd.Format);
         }
 
         private void ReadFromControl()
         {
+            model.ApplyRelations(control);
+
             this.textTextBox.Text = control.cd.RealText;
             this.type = control.cd.Type;
             this.hintTextBox.Text = control.cd.Hint;
@@ -562,13 +611,18 @@ namespace Configuration_Manager
 
             this.fileDestinationTextBox.Text = control.cd.MainDestination;
             this.subDestinatonTextBox.Text = control.cd.RealSubDestination;
+            this.formattingTextBox.Text = control.cd.Format;
 
             if (control.cd.DisplayRight != null) this.displayRightTextBox.Text = control.cd.DisplayRight.ToString();
             if (control.cd.ModificationRight != null) this.modificationRightTextBox.Text = control.cd.ModificationRight.ToString();
 
-            if (control.cd.CheckBoxValues != null && control.cd.CheckBoxValues != "") 
-                this.checkBoxValueComboBox.Text = control.cd.CheckBoxValues;
-            else this.checkBoxValueComboBox.SelectedIndex = 0;
+            if (control.cd.checkBoxCheckedValue != null && control.cd.checkBoxCheckedValue != "")
+                this.checkedTextBox.Text = control.cd.checkBoxCheckedValue;
+
+            if (control.cd.checkBoxUncheckedValue != null && control.cd.checkBoxUncheckedValue != "")
+                this.uncheckedTextBox.Text = control.cd.checkBoxUncheckedValue;
+
+            //else this.checkBoxValueComboBox.SelectedIndex = 0;
 
             if (control.cd.DestinationType != null && control.cd.DestinationType != "") 
                 this.destinationTypeComboBox.Text = control.cd.DestinationType;
@@ -650,13 +704,28 @@ namespace Configuration_Manager
         private void relationsComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             currentVisibleList = GetCurrentVisibleList();
+            
+            FillOutCheckedListBox();
 
-            for (int i = 0; i < controlListBox.Items.Count; i++)
+            if (relationsComboBox.SelectedItem.ToString() != this.coupled)
             {
-                if (currentVisibleList.Exists(c => c.cd.Name == controlListBox.Items[i].ToString()))
-                    controlListBox.SetItemChecked(i, true);
-                else
-                    controlListBox.SetItemChecked(i, false);
+                for (int i = 0; i < controlListBox.Items.Count; i++)
+                {
+                    if (currentVisibleList.Exists(c => c.cd.Name == controlListBox.Items[i].ToString()))
+                        controlListBox.SetItemChecked(i, true);
+                    else
+                        controlListBox.SetItemChecked(i, false);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < controlListBox.Items.Count; i++)
+                {
+                    if (currentVisibleList.Exists(c => c.cd.Name == controlListBox.Items[i].ToString()))
+                        controlListBox.SetItemChecked(i, true);
+                    else
+                        controlListBox.SetItemChecked(i, false);
+                }
             }
         }
 
@@ -776,8 +845,6 @@ namespace Configuration_Manager
 
                 this.editComboBoxButton.Text = texts.Single(x => (int?)x.Attribute("id") == 60).Value;
                 this.fileDestinationButton.Text = "";
-
-                this.checkBoxValueLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 55).Value;
             }
             catch(Exception)
             {
@@ -803,18 +870,18 @@ namespace Configuration_Manager
             String parentType = control.cd.Parent.GetType().Name;
             if (parentType == "CTabControl" || parentType == "TabControl")
             {
-                topMargin = 10;
-                leftMargin = 10;
+                //topMargin = 10;
+                //leftMargin = 10;
             }
             else if (parentType == "CGroupBox" || parentType == "GroupBox")
             {
-                topMargin = 20;
-                leftMargin = 10;
+                //topMargin = 20;
+                //leftMargin = 10;
             }
             else if (parentType == "CPanel" || parentType == "Panel")
             {
-                topMargin = 10;
-                leftMargin = 10;
+                //topMargin = 10;
+                //leftMargin = 10;
             }
         }
 
