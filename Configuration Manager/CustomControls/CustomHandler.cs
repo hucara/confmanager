@@ -18,7 +18,7 @@ namespace Configuration_Manager.CustomControls
 
 		public ContextMenuStrip contextMenu;
 		Model model;
-		Editor editor;
+		ControlEditor editor;
         //ControlFactory cf;
 		Rectangle previewRect = new Rectangle(0, 0, 0, 0);
 
@@ -174,7 +174,7 @@ namespace Configuration_Manager.CustomControls
 		{
 			CLabel label = ControlFactory.BuildCLabel(model.CurrentClickedControl);
 
-			editor = new Editor();
+			editor = new ControlEditor();
 			editor.Show(label);
 		}
 
@@ -182,7 +182,7 @@ namespace Configuration_Manager.CustomControls
 		{
             CTextBox textBox = ControlFactory.BuildCTextBox(model.CurrentClickedControl);
 
-			editor = new Editor();
+			editor = new ControlEditor();
 			editor.Show(textBox);
 		}
 
@@ -190,7 +190,7 @@ namespace Configuration_Manager.CustomControls
 		{
             CComboBox comboBox = ControlFactory.BuildCComboBox(model.CurrentClickedControl);
 
-			editor = new Editor();
+			editor = new ControlEditor();
 			editor.Show(comboBox);
 		}
 
@@ -198,7 +198,7 @@ namespace Configuration_Manager.CustomControls
 		{
             CCheckBox checkBox = ControlFactory.BuildCCheckBox(model.CurrentClickedControl);
 
-			editor = new Editor();
+			editor = new ControlEditor();
 			editor.Show(checkBox);
 		}
 
@@ -206,7 +206,7 @@ namespace Configuration_Manager.CustomControls
 		{
             CGroupBox groupBox = ControlFactory.BuildCGroupBox(model.CurrentClickedControl);
 
-			editor = new Editor();
+			editor = new ControlEditor();
 			editor.Show(groupBox);
 		}
 
@@ -214,7 +214,7 @@ namespace Configuration_Manager.CustomControls
 		{
             CPanel panel = ControlFactory.BuildCPanel(model.CurrentClickedControl);
 
-			editor = new Editor();
+			editor = new ControlEditor();
 			editor.Show(panel);
 		}
 
@@ -225,7 +225,7 @@ namespace Configuration_Manager.CustomControls
 
 			tabControl.MouseDown += Control_Click;
 
-			editor = new Editor();
+			editor = new ControlEditor();
 			editor.Show(tabControl);
 		}
 
@@ -234,20 +234,20 @@ namespace Configuration_Manager.CustomControls
             CTabPage tabPage = ControlFactory.BuildCTabPage(model.CurrentClickedControl);
 			tabPage.MouseDown += Control_Click;
 
-			editor = new Editor();
+			editor = new ControlEditor();
 			editor.Show(tabPage);
 		}
 
 		public void editToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			editor = new Editor();
+			editor = new ControlEditor();
 
 			model.LastClickedX = model.CurrentClickedControl.Location.X;
 			model.LastClickedY = model.CurrentClickedControl.Location.Y;
 
 			model.logCreator.Append("! Editing: " + model.CurrentClickedControl.Name);
 
-            foreach (Editor ed in Application.OpenForms.OfType<Editor>())
+            foreach (ControlEditor ed in Application.OpenForms.OfType<ControlEditor>())
             {
                 if (ed.control == model.CurrentClickedControl)
                 {
@@ -262,8 +262,8 @@ namespace Configuration_Manager.CustomControls
 		public void deleteToolStripMenuItem_Click(object sender, EventArgs e)
 		{
             // Close editor if oppened
-            Editor closing = null;
-            foreach (Editor ed in Application.OpenForms.OfType<Editor>())
+            ControlEditor closing = null;
+            foreach (ControlEditor ed in Application.OpenForms.OfType<ControlEditor>())
             {
                 if (ed.control == model.CurrentClickedControl) closing = ed;
             }

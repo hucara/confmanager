@@ -7,15 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Configuration_Manager.Util;
 
 namespace Configuration_Manager
 {
     public partial class ComboBoxEditor : Form
     {
         Configuration_Manager.CustomControls.ICustomControl cb;
-
-        Util.TokenTextTranslator ttt = Util.TokenTextTranslator.GetInstance();
-        Util.TokenControlTranslator tct = Util.TokenControlTranslator.GetInstance();
 
         public ComboBoxEditor(Configuration_Manager.CustomControls.ICustomControl cb)
         {
@@ -34,9 +32,7 @@ namespace Configuration_Manager
             ReplaceLabels();
 
             if ((cb as ComboBox).Items.Count > 0)
-            {
                 (cb as ComboBox).SelectedIndex = index;
-            }
         }
 
         private void ReplaceLabels()
@@ -54,9 +50,7 @@ namespace Configuration_Manager
                 // Labels of the form
                 this.valuesLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 54).Value;
                 this.configValuesLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 55).Value;
-
-                //this.moveUpButton.Text = texts.Single(x => (int?)x.Attribute("id") == 56).Value;
-                //this.moveDownButton.Text = texts.Single(x => (int?)x.Attribute("id") == 57).Value;
+                this.okButton.Text = texts.Single(x => (int?)x.Attribute("id") == 21).Value;
 
                 this.moveUpButton.Text = "";
                 this.moveDownButton.Text = "";
@@ -98,8 +92,8 @@ namespace Configuration_Manager
                 if(!shownValues.Items.Contains(shownTextBox.Text) &&
                     !configValues.Items.Contains(configTextBox.Text))
                 {
-                    String translated = ttt.TranslateFromTextFile(shownTextBox.Text);
-                    translated = tct.TranslateFromControl(translated);
+                    String translated = TokenTextTranslator.TranslateFromTextFile(shownTextBox.Text);
+                    translated = TokenControlTranslator.TranslateFromControl(translated);
 
                     cb.cd.comboBoxItems.Add(translated);
                     cb.cd.comboBoxRealItems.Add(shownTextBox.Text);
@@ -112,8 +106,8 @@ namespace Configuration_Manager
             {
                 if (!shownValues.Items.Contains(shownTextBox.Text))
                 {
-                    String translated = ttt.TranslateFromTextFile(shownTextBox.Text);
-                    translated = tct.TranslateFromControl(translated);
+                    String translated = TokenTextTranslator.TranslateFromTextFile(shownTextBox.Text);
+                    translated = TokenControlTranslator.TranslateFromControl(translated);
 
                     cb.cd.comboBoxItems.Add(translated);
                     cb.cd.comboBoxRealItems.Add(shownTextBox.Text);
@@ -138,11 +132,8 @@ namespace Configuration_Manager
         private void RefreshActualComboBox()
         {
             (cb as ComboBox).Items.Clear();
-
             foreach (String s in cb.cd.comboBoxItems)
-            {
                 (cb as ComboBox).Items.Add(s);
-            }
         }
 
         // Deleting the item
@@ -166,7 +157,6 @@ namespace Configuration_Manager
                 SetMoveButtons();
                 SetAddDeleteButtons();
                 RefreshActualComboBox();
-
 
                 int count = (cb as ComboBox).Items.Count;
 
@@ -338,6 +328,21 @@ namespace Configuration_Manager
         private void okButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void shownTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+                this.configTextBox.Focus();
+        }
+
+        private void configTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+            {
+                this.addButton.PerformClick();
+                this.shownTextBox.Focus();
+            }
         }
     }
 }

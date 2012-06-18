@@ -6,109 +6,46 @@ using System.Xml.Linq;
 
 namespace Configuration_Manager.Util
 {
-	class TokenTextTranslator
+	static class TokenTextTranslator
 	{
-		private static TokenTextTranslator tokenTextTranslator;
-
 		private static String DEFAULT_TOKEN = "@@";
 
-		private Boolean active = true;
-		private Boolean defaultMode = false;		// Shall we use a sidekick language file for not found tokens? 
-		
-		private String defaultLang;					// In case the token is not found in the current language, search it here
-		private String defaultSubPath;				// Search 
+        private static Boolean active = true;
+        private static Boolean defaultMode = false;		// Shall we use a sidekick language file for not found tokens? 
 
-		private String currentLang;					// Language file from where we take the values out
-		private String currentSubPath;
+        private static String defaultLang = "";				// In case the token is not found in the current language, search it here
+        private static String defaultSubPath;				// Search 
 
-		private String tokenKey;					// The defining characters that delimite a token
+        private static String currentLang;					// Language file from where we take the values out
+        private static String currentSubPath;
 
-		private String textToTranslate;				// Text with the values to translate
-		private String translatedText;				// Text with all the tokens translated
+        private static String tokenKey;					// The defining characters that delimite a token
 
-		private List<String> valuesToTranslate = new List<String>();		// List of values to translate inside the textToTranslate
-		private List<String> translatedValues = new List<String>();		// List of the values translated in the same order as the valuesToTranslate
-		private List<String> subPathElements = new List<String>();		// List representing the node tree to find the desired value to translate
+        private static String textToTranslate;				// Text with the values to translate
+        private static String translatedText;				// Text with all the tokens translated
 
-        private TokenTextTranslator()
-        {
-            this.defaultMode = false;
-            this.defaultLang = "";
-            this.active = true;
+        private static List<String> valuesToTranslate = new List<String>();		// List of values to translate inside the textToTranslate
+        private static List<String> translatedValues = new List<String>();		// List of the values translated in the same order as the valuesToTranslate
+        private static List<String> subPathElements = new List<String>();		// List representing the node tree to find the desired value to translate
 
-            this.valuesToTranslate = new List<String>();
-            this.translatedValues = new List<String>();
-            this.subPathElements = new List<String>();
-        }
-
-		private TokenTextTranslator(String tokenKey)
-		{
-			SetTokenKey(tokenKey);
-
-			this.defaultMode = false;
-			this.defaultLang = "";
-			this.active = true;
-
-			this.valuesToTranslate = new List<String>();
-			this.translatedValues = new List<String>();
-			this.subPathElements = new List<String>();
-		}
-
-		private TokenTextTranslator(String tokenKey, String language)
-		{
-			SetTokenKey(tokenKey);
-
-			this.currentLang = language;
-			this.defaultMode = false;
-
-			if (System.IO.File.Exists(language)) this.active = true;
-
-			this.valuesToTranslate = new List<String>();
-			this.translatedValues = new List<String>();
-			this.subPathElements = new List<String>();
-		}
-
-		private TokenTextTranslator(String tokenKey, String defaultLang, String subPath)
-		{
-			SetTokenKey(tokenKey);
-
-			this.defaultMode = true;
-			this.defaultLang = defaultLang;
-
-			this.valuesToTranslate = new List<String>();
-			this.translatedValues = new List<String>();
-			this.subPathElements = new List<String>();
-
-			SetSubPath(subPath);
-		}
-
-		public static TokenTextTranslator GetInstance()
-		{
-			if (tokenTextTranslator == null)
-			{
-				tokenTextTranslator = new TokenTextTranslator();
-			}
-			return tokenTextTranslator;
-		}
-
-		public void SetTokenTextTranslator(String tokenKey)
+		public static void SetTokenTextTranslator(String tokenKey)
 		{
 			SetTokenKey(tokenKey);
 		}
 
-		public void SetTokenTextTranslator(String tokenKey, String language)
+		public static void SetTokenTextTranslator(String tokenKey, String language)
 		{
 			SetTokenKey(tokenKey);
-			this.currentLang = language;
+			currentLang = language;
 		}
 
-		private void SetTokenKey(String tokenKey)
+		private static void SetTokenKey(String k)
 		{
-			if (tokenKey == "" || tokenKey == null) tokenKey = DEFAULT_TOKEN;
-			else this.tokenKey = tokenKey;
+			if (k == "" || k == null) tokenKey = k;
+			else tokenKey = k;
 		}
 
-		public Boolean SetSubPath(String defaultSubPath)
+		public static Boolean SetSubPath(String defaultSubPath)
 		{
 			if (defaultSubPath != "" && defaultSubPath != null)
 			{
@@ -121,27 +58,27 @@ namespace Configuration_Manager.Util
 			return false;
 		}
 
-		public String TranslateFromTextFile(String textToTranslate)
+		public static String TranslateFromTextFile(String text)
 		{
-            if (textToTranslate == null) return textToTranslate;
+            if (text == null) return text;
 
-			this.translatedText = textToTranslate;
+			translatedText = text;
 
-			if (active && textToTranslate.Contains(Model.getInstance().textToken))
+			if (active && text.Contains(DEFAULT_TOKEN))
 			{
-				this.valuesToTranslate.Clear();
-				this.translatedValues.Clear();
-				this.subPathElements.Clear();
+				valuesToTranslate.Clear();
+				translatedValues.Clear();
+				subPathElements.Clear();
 
-				this.textToTranslate = textToTranslate;
+				textToTranslate = text;
 
-				if (this.textToTranslate != null && this.textToTranslate != "")
+				if (textToTranslate != null && textToTranslate != "")
 				{
 					if (TextHasEvenTokens())
 					{
 						GetValuesToTranslate();
 						GetTranslatedValues();
-						this.translatedText = ReplaceValueToTranslation(this.textToTranslate);
+						translatedText = ReplaceValueToTranslation(textToTranslate);
 					}
 				}
 			}
@@ -149,17 +86,17 @@ namespace Configuration_Manager.Util
 			return translatedText;
 		}
 
-		public String Translate(String textToTranslate, String subPath)
+		public static String Translate(String text, String subPath)
 		{
-			this.textToTranslate = textToTranslate;
-			this.translatedText = "";
+			textToTranslate = text;
+			translatedText = "";
 
-			if (this.textToTranslate != null && this.textToTranslate != "")
+			if (textToTranslate != null && textToTranslate != "")
 			{
 				if (TextHasEvenTokens())
 				{
 					GetValuesToTranslate();
-					ReplaceValueToTranslation(this.textToTranslate);
+					ReplaceValueToTranslation(textToTranslate);
 				}
 				else
 				{
@@ -169,9 +106,9 @@ namespace Configuration_Manager.Util
 			return "";
 		}
 
-		private bool TextHasEvenTokens()
+		private static bool TextHasEvenTokens()
 		{
-			if (this.textToTranslate != null && this.textToTranslate != "" && this.tokenKey != null)
+			if (textToTranslate != null && textToTranslate != "" && tokenKey != null)
 			{
 				int count = System.Text.RegularExpressions.Regex.Matches(textToTranslate, tokenKey).Count;
 				if (count % 2 == 0) return true;
@@ -179,14 +116,14 @@ namespace Configuration_Manager.Util
 			return false;
 		}
 
-		private bool ValidateText(System.Text.RegularExpressions.MatchCollection mc)
+		private static bool ValidateText(System.Text.RegularExpressions.MatchCollection mc)
 		{
 			System.Diagnostics.Debug.WriteLine("! Count: " + mc.Count);
 			if (mc.Count > 0) return true;
 			return false;
 		}
 
-		private void GetValuesToTranslate()
+		private static void GetValuesToTranslate()
 		{
 			System.Text.RegularExpressions.MatchCollection mc = System.Text.RegularExpressions.Regex.Matches(textToTranslate, tokenKey + "\\w*" + tokenKey);
 
@@ -202,19 +139,17 @@ namespace Configuration_Manager.Util
 			}
 		}
 
-		private bool ValidateToken(string t)
+		private static bool ValidateToken(string t)
 		{
 			if (t != null)
 			{
 				if (t.StartsWith(tokenKey) && t.EndsWith(tokenKey) && t.Length > tokenKey.Length * 2)
-				{
 					return true;
-				}
 			}
 			return false;
 		}
 
-		private String ReplaceValueToTranslation(String textToTranslate)
+		private static String ReplaceValueToTranslation(String textToTranslate)
 		{
 			String translated = textToTranslate;
 			for (int i = 0; i < valuesToTranslate.Count; i++)
@@ -265,7 +200,7 @@ namespace Configuration_Manager.Util
 		//}
 
 
-		private void GetTranslatedValues()
+		private static void GetTranslatedValues()
 		{
 			try
 			{
@@ -284,6 +219,7 @@ namespace Configuration_Manager.Util
 			}
 			catch (System.IO.FileNotFoundException e)
 			{
+                System.Diagnostics.Debug.WriteLine("! Problem found while translating text to value.");
 			}
 		}
 	}

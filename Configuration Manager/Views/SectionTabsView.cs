@@ -15,7 +15,7 @@ namespace Configuration_Manager.Views
         CustomHandler ch;
         //ControlFactory cf;
         Model model;
-        Editor editor = new Editor();
+        ControlEditor editor = new ControlEditor();
 
         public SectionTabsView(TabControl tc, CustomHandler ch)
         {

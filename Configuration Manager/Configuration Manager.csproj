@@ -34,8 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>1337169278_advancedsettings.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -98,11 +97,11 @@
     <Compile Include="RelationManagers\CoupledControlsManager.cs" />
     <Compile Include="RelationManagers\ReadRelationManager.cs" />
     <Compile Include="RelationManagers\VisibilityRelationManager.cs" />
-    <Compile Include="Editor.cs">
+    <Compile Include="ControlEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Editor.Designer.cs">
-      <DependentUpon>Editor.cs</DependentUpon>
+    <Compile Include="ControlEditor.Designer.cs">
+      <DependentUpon>ControlEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Util\Model.cs" />
     <Compile Include="RelationManagers\WriteConfigurationManager.cs" />
@@ -110,11 +109,11 @@
     <Compile Include="ObjectDefinitionManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SectionForm.cs">
+    <Compile Include="SectionEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SectionForm.Designer.cs">
-      <DependentUpon>SectionForm.cs</DependentUpon>
+    <Compile Include="SectionEditor.Designer.cs">
+      <DependentUpon>SectionEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Util\IniFile.cs" />
     <Compile Include="Util\LogCreation.cs" />
@@ -132,8 +131,8 @@
     <EmbeddedResource Include="Configuration Manager.resx">
       <DependentUpon>Configuration Manager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor.resx">
-      <DependentUpon>Editor.cs</DependentUpon>
+    <EmbeddedResource Include="ControlEditor.resx">
+      <DependentUpon>ControlEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -144,8 +143,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="SectionForm.resx">
-      <DependentUpon>SectionForm.cs</DependentUpon>
+    <EmbeddedResource Include="SectionEditor.resx">
+      <DependentUpon>SectionEditor.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -156,6 +155,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="1337169278_advancedsettings.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -8,17 +8,23 @@ using System.Text;
 using System.Windows.Forms;
 using Configuration_Manager.CustomControls;
 using System.Xml.Linq;
+using Configuration_Manager.Util;
 
 namespace Configuration_Manager
 {
-    public partial class Editor : Form
+    public partial class ControlEditor : Form
     {
         const String DEFAULT_READ = "Related Read";
         const String DEFAULT_VISIBILITY = "Related Visibility";
         const String DEFAULT_COUPLED = "Coupled Controls";
 
-        const bool OK = true;
         const bool ERROR = false;
+        const bool OK = true;
+
+        const int TOO_HIGH = 1;
+        const int TOO_LOW = -1;
+        const int VALUE_OK = 0;
+
         const int MR = -1;
 
         uint topMargin = 0;
@@ -33,7 +39,6 @@ namespace Configuration_Manager
         String coupled = DEFAULT_COUPLED;
 
         String type;
-        String formatting;
         String ErrorMsg;
         String RootKeyText = "root key";
         String MainDestinationText = "main destination";
@@ -42,16 +47,13 @@ namespace Configuration_Manager
         Font controlFont;
 
         Color fontColor, backColor;
-		Util.TokenTextTranslator ttt;
-        Util.TokenControlTranslator tct;
-
         Control parent;
         List<ICustomControl> currentVisibleList;
         //ControlFactory cf;
         Model model;
 
 
-        public Editor()
+        public ControlEditor()
         {
             InitializeComponent();
 
@@ -61,10 +63,7 @@ namespace Configuration_Manager
             updateButton.Visible = false;
 #endif
 
-            //this.cf = ControlFactory.getInstance();
             this.model = Model.getInstance();
-			this.ttt = Util.TokenTextTranslator.GetInstance();
-            this.tct = Util.TokenControlTranslator.GetInstance();
 
             this.ErrorMsg = "";
 
@@ -94,8 +93,6 @@ namespace Configuration_Manager
             this.control = (ICustomControl)c;
             this.parent = control.cd.Parent;
             this.type = c.GetType().Name;
-            this.control.cd.Changed = true;
-            Model.getInstance().uiChanged = true;
 
             ShowMousePosition();
             ShowHeadLine();
@@ -269,6 +266,7 @@ namespace Configuration_Manager
                     break;
 
                 case "CPanel":
+                    textLabel.Visible = false;
                     textTextBox.Visible = false;
                     fontButton.Visible = false;
                     fontLabel.Visible = false;
@@ -283,6 +281,9 @@ namespace Configuration_Manager
                     fileDestinationButton.Visible = false;
                     subDestinationLabel.Visible = false;
                     subDestinatonTextBox.Visible = false;
+
+                    formattingLabel.Visible = false;
+                    formattingTextBox.Visible = false;
                     break;
 
                 case "CTextBox":
@@ -313,6 +314,17 @@ namespace Configuration_Manager
                     leftLabel.Visible = false;
                     widthLabel.Visible = false;
                     heightLabel.Visible = false;
+
+                    destinationTypeLabel.Visible = false;
+                    destinationTypeComboBox.Visible = false;
+                    fileDestinationLabel.Visible = false;
+                    fileDestinationTextBox.Visible = false;
+                    fileDestinationButton.Visible = false;
+                    subDestinationLabel.Visible = false;
+                    subDestinatonTextBox.Visible = false;
+
+                    formattingLabel.Visible = false;
+                    formattingTextBox.Visible = false;
                     break;
 
                 case "CTabControl":
@@ -376,6 +388,8 @@ namespace Configuration_Manager
             }
             else
             {
+                this.control.cd.Changed = true;
+                Model.getInstance().uiChanged = true;
                 SaveToControl();
                 this.Close();
             }
@@ -414,13 +428,16 @@ namespace Configuration_Manager
             ParseHeight();
 
             if ((control.cd.Type != "CComboBox" && control.cd.Type != "CTabControl") && !CheckText()) ErrorMsg += "\n- Text is empty.";
-            //if (!CheckHint()) ErrorMsg += "\n- Hint is empty.";
-            if (!CheckTop()) ErrorMsg += "\n- Top value is too low or too high.";
-            if (!CheckLeft()) ErrorMsg += "\n- Left value is too low or too high.";
-            if (!CheckWidth()) ErrorMsg += "\n- Width value is too low or too high.";
-            if (!CheckHeight()) ErrorMsg += "\n- Height value is too low or too high.";
-            //if (!CheckFileDestination()) ErrorMsg += "\n- File Destination value is empty.";
-            //if (!CheckSubDestination()) ErrorMsg += "\n- Sub Destination value is empty.";
+            
+            if (CheckTop() > 0) ErrorMsg += "\n- Top value is too high.";
+            if (CheckLeft() > 0) ErrorMsg += "\n- Left value is too high.";
+            if (CheckWidth() > 0) ErrorMsg += "\n- Width value is too high.";
+            if (CheckHeight() > 0) ErrorMsg += "\n- Height value is too high.";
+
+            if (CheckTop() < 0) ErrorMsg += "\n- Top value is too low.";
+            if (CheckLeft() < 0) ErrorMsg += "\n- Left value is too low.";
+            if (CheckWidth() < 0) ErrorMsg += "\n- Width value is too low.";
+            if (CheckHeight() < 0) ErrorMsg += "\n- Height value is too low.";
 
 			if (!CheckDisplayRight()) ErrorMsg += "\n - Display Right value has non valid characters.";
 			if (!CheckModificationRight()) ErrorMsg += "\n - Modification Right value has non valid characters.";
@@ -439,22 +456,16 @@ namespace Configuration_Manager
 		private bool CheckDisplayRight()
 		{
 			char []text = displayRightTextBox.Text.ToArray();
-
 			for (int i = 2; i < text.Length; i++)
-			{
 				if (text[i] > 'F') return false;
-			}
 			return true;
 		}
 
 		private bool CheckModificationRight()
 		{
 			char [] text = modificationRightTextBox.Text.ToArray();
-
 			for (int i = 2; i < text.Length; i++)
-			{
 				if (text[i] > 'F') return false;
-			}
 			return true;
 		}
 
@@ -495,28 +506,32 @@ namespace Configuration_Manager
             return ERROR;
         }
 
-        private bool CheckTop()
+        private int CheckTop()
         {
-            if (top < topMargin || top + height > parent.Height - leftMargin) return ERROR;
-            return OK;
+            if (top < topMargin) return TOO_LOW;
+            if (top + height > parent.Height - leftMargin) return TOO_HIGH;
+            return VALUE_OK;
         }
 
-        private bool CheckLeft()
+        private int CheckLeft()
         {
-            if (left < leftMargin || left + width > parent.Width - leftMargin) return ERROR;
-            return OK;
+            if (left < leftMargin) return TOO_LOW;
+            if (left + width > parent.Width - leftMargin) return TOO_HIGH;
+            return VALUE_OK;
         }
 
-        private bool CheckHeight()
+        private int CheckHeight()
         {
-            if (height < MR || height + top > parent.Height) return ERROR;
-            return OK;
+            if (height < MR) return TOO_LOW;
+            if (height + top > parent.Height) return TOO_HIGH;
+            return VALUE_OK;
         }
 
-        private bool CheckWidth()
+        private int CheckWidth()
         {
-            if (width < 0 || width + left > parent.Width) return ERROR;
-            return OK;
+            if (width < 0) return TOO_LOW;
+            if (width + left > parent.Width) return TOO_HIGH;
+            return VALUE_OK;
         }
 
         private bool CheckFileDestination()
@@ -535,8 +550,8 @@ namespace Configuration_Manager
 
         private void SaveToControl()
         {
-            String text = ttt.TranslateFromTextFile(this.textTextBox.Text);
-            control.cd.Text = tct.TranslateFromControl(text);
+            String text = TokenTextTranslator.TranslateFromTextFile(this.textTextBox.Text);
+            control.cd.Text = TokenControlTranslator.TranslateFromControl(text);
             control.cd.RealText = this.textTextBox.Text;
             control.cd.Type = this.type;
 			control.cd.Hint = this.hintTextBox.Text;
@@ -643,10 +658,8 @@ namespace Configuration_Manager
             if (!controlListBox.GetItemChecked(e.Index))
             {
                 if (relationsComboBox.SelectedItem.ToString() == coupled)
-                {
                     // Manage the coupled relation
                     CoupledRelationsListChanged(checkedControl, e);
-                }
                 else if (relationsComboBox.SelectedItem.ToString() == visibility)
                 {
                     // Manage the visibility relation
@@ -664,8 +677,8 @@ namespace Configuration_Manager
             else
             {
                 currentVisibleList.Remove(checkedControl);
-                if (relationsComboBox.Text == visibility) checkedControl.cd.inRelatedVisibility = false;
-
+                if (relationsComboBox.Text == visibility) 
+                    checkedControl.cd.inRelatedVisibility = false;
                 System.Diagnostics.Debug.WriteLine("- [" + relationsComboBox.SelectedItem + "] Unchecked: " + checkedControl.cd.Name);
             }
 
@@ -690,7 +703,7 @@ namespace Configuration_Manager
             else if (!(checkedControl is CComboBox))
             {
                 e.NewValue = CheckState.Unchecked;
-                String msg = "Coupled relations are only allowed between ComboBox and ComboBox controls";
+                String msg = "Coupled relations are only allowed between ComboBox controls";
                 MessageBox.Show(msg, " Error coupling controls.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
@@ -704,7 +717,6 @@ namespace Configuration_Manager
         private void relationsComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             currentVisibleList = GetCurrentVisibleList();
-            
             FillOutCheckedListBox();
 
             if (relationsComboBox.SelectedItem.ToString() != this.coupled)
@@ -833,18 +845,21 @@ namespace Configuration_Manager
                 this.subDestinationLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 16).Value;
                 this.displayRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 17).Value;
                 this.modificationRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 18).Value;
+                this.editComboBoxButton.Text = texts.Single(x => (int?)x.Attribute("id") == 60).Value;
+                this.checkedLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 86).Value;
+                this.uncheckedLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 87).Value;
+                this.formattingLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 88).Value;
 
                 // Saving labels to avoid reading from file again
                 MainDestinationText = this.fileDestinationLabel.Text;
                 RootKeyText = texts.Single(x => (int?)x.Attribute("id") == 61).Value;
 
+                this.fileDestinationButton.Text = "";
+
                 // Bottom Buttons
                 this.updateButton.Text = texts.Single(x => (int?)x.Attribute("id") == 19).Value;
                 this.cancelButton.Text = texts.Single(x => (int?)x.Attribute("id") == 20).Value;
                 this.okButton.Text = texts.Single(x => (int?)x.Attribute("id") == 21).Value;
-
-                this.editComboBoxButton.Text = texts.Single(x => (int?)x.Attribute("id") == 60).Value;
-                this.fileDestinationButton.Text = "";
             }
             catch(Exception)
             {
@@ -862,6 +877,7 @@ namespace Configuration_Manager
         private void cancelButton_Click(object sender, EventArgs e)
         {
             //DialogResult dr = MessageBox.Show("", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+            this.control.cd.Changed = false;
             this.Close();
         }
 
@@ -900,8 +916,12 @@ namespace Configuration_Manager
             else
             {
                 fileDestinationLabel.Text = MainDestinationText;
-                fileDestinationButton.Visible = true;
             }
+        }
+
+        private void Editor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.control.cd.Changed = false;
         }
 	}
 }

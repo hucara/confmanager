@@ -7,6 +7,7 @@ using Configuration_Manager.CustomControls;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Drawing;
+using Configuration_Manager.Util;
 
 namespace Configuration_Manager
 {
@@ -20,9 +21,6 @@ namespace Configuration_Manager
 
         private TypeConverter fontConverter = TypeDescriptor.GetConverter(typeof(Font));
         private TypeConverter colorConverter = TypeDescriptor.GetConverter(typeof(Color));
-
-        private Util.TokenTextTranslator ttt = Util.TokenTextTranslator.GetInstance();
-        private Util.TokenControlTranslator tct = Util.TokenControlTranslator.GetInstance();
 
         public static ObjectDefinitionManager getInstance()
         {
@@ -86,24 +84,32 @@ namespace Configuration_Manager
                 System.Diagnostics.Debug.WriteLine("! [ERROR] Something went wrong while reading Sections in Object Definition File.");
                 model.logCreator.Append("! ERROR: Something went wrong while reading Sections in Object Definition File");
             }
+
+            model.ApplyRightsToSections();
         }
 
         private Section CreateDefinedSection(XElement i)
         {
             //while (model.Sections.Exists(e => e.Name == "Section" + Section.count)) Section.count++;
             String name = i.Element("Name").Value.ToString();
-            String text = i.Element("Text").Value.ToString();
+            String realText = i.Element("Text").Value.ToString();
+            String display = i.Element("DisplayRight").Value.ToString().Substring(2);
+            String modify = i.Element("ModificationRight").Value.ToString().Substring(2);
             bool selected = false;
 
             if (i.Element("Selected").Value.ToString() == "true")
-            {
                 selected = true;
-            }
 
-            CToolStripButton ctsb = ControlFactory.BuildCToolStripButton(text);
+            String text = TokenTextTranslator.TranslateFromTextFile(realText);
+
+            CToolStripButton ctsb = ControlFactory.BuildCToolStripButton(realText);
             TabPage tp = ControlFactory.BuildTabPage(name);
 
             Section s = new Section(ctsb, tp, name, text, selected);
+            s.RealText = realText;
+            s.DisplayRight = display;
+            s.ModificationRight = modify;
+
             Model.getInstance().CurrentSection = s;
             Model.getInstance().Sections.Add(s);
 
@@ -125,7 +131,10 @@ namespace Configuration_Manager
                                     new XAttribute("id", item.Id),
                                     new XElement("Name", item.Name),
                                     new XElement("Selected", item.Selected),
-                                    new XElement("Text", item.Text)
+                                    new XElement("Text", item.RealText),
+                                    new XElement("DisplayRight", "0x" + item.DisplayRight),
+                                    new XElement("ModificationRight", "0x" + item.ModificationRight),
+                                    new XElement("Hint", item.Hint)
                                 )   //end Section
                                 )
                         ),       //end Sections
@@ -159,10 +168,7 @@ namespace Configuration_Manager
                                         new XElement("CheckedValue", item.cd.checkBoxCheckedValue) : null,
 
                                         item.cd.Type == "CCheckBox"?
-                                        new XElement("UncheckedValue", item.cd.checkBoxUncheckedValue) : null,
-
-                                         item.cd.Type == "CCheckBox"?
-                                        new XElement("CheckBoxValues", item.cd.CheckBoxValues) : null
+                                        new XElement("UncheckedValue", item.cd.checkBoxUncheckedValue) : null
                                     ),
 
                                     item.cd.Type == "CComboBox" ?
@@ -219,25 +225,19 @@ namespace Configuration_Manager
         private IEnumerable<XElement> WriteComboBoxItems(CComboBox cb)
         {
             if (cb.SelectedIndex > -1)
-            {
                 yield return new XElement("Selected", cb.cd.comboBoxRealItems[cb.SelectedIndex]);
-            }
+
             foreach (String s in cb.cd.comboBoxRealItems)
-            {
                 yield return new XElement("Item", s);
-            }
         }
 
         private IEnumerable<XElement> WriteComboBoxConfigItems(CComboBox cb)
         {
             if (cb.SelectedIndex > -1)
-            {
                 yield return new XElement("Selected", cb.cd.comboBoxConfigItems[cb.SelectedIndex]);
-            }
+
             foreach (String s in cb.cd.comboBoxConfigItems)
-            {
                 yield return new XElement("Item", s);
-            }
         }
 
         private void CreateDefinedControls(XDocument xdoc)
@@ -269,10 +269,10 @@ namespace Configuration_Manager
                 foreach (XElement e in CTabs)
                 {
                     CTabControl parentControl = model.AllControls.Find(p => p.cd.Name == e.Element("Parent").Value) as CTabControl;
+                        CTabPage ctp = ControlFactory.BuildCTabPage(parentControl);
+                        ctp.cd.Name = e.Element("Name").Value;
+                        ctp.cd.RealText = e.Element("Text").Value;
 
-                    CTabPage ctp = ControlFactory.BuildCTabPage(parentControl);
-                    ctp.cd.Name = e.Element("Name").Value;
-                    ctp.cd.RealText = e.Element("Text").Value;
                 }
             }
 
@@ -304,7 +304,7 @@ namespace Configuration_Manager
 
                         ReadMachineConfiguration(c);
                         ApplyRights(c);
-                        ApplyRelations(c);
+                        model.ApplyRelations(c);
                         
                         if(c.cd.Format != "") ApplyFormats(c);
 
@@ -351,8 +351,8 @@ namespace Configuration_Manager
                     String value = e.Value.ToString();
                     c.cd.comboBoxRealItems.Add(value);
 
-                    value = ttt.TranslateFromTextFile(value);
-                    value = tct.TranslateFromControl(value);
+                    value = TokenTextTranslator.TranslateFromTextFile(value);
+                    value = TokenControlTranslator.TranslateFromControl(value);
 
                     c.cd.comboBoxItems.Add(value);
                 }
@@ -368,8 +368,8 @@ namespace Configuration_Manager
                 {
                     if (!i.Element("Items").Element("Selected").IsEmpty)
                     {
-                        String value = ttt.TranslateFromTextFile(i.Element("Items").Element("Selected").Value);
-                        value = tct.TranslateFromControl(value);
+                        String value = TokenTextTranslator.TranslateFromTextFile(i.Element("Items").Element("Selected").Value);
+                        value = TokenControlTranslator.TranslateFromControl(value);
 
                         cb.SelectedItem = value;
                     }
@@ -384,14 +384,8 @@ namespace Configuration_Manager
                 CheckBox cb = c as CheckBox;
                 try
                 {
-                    //if (i.Element("Checked").Value == "True") cb.Checked = true;
-                    //else cb.Checked = false;
-
                     c.cd.checkBoxCheckedValue = i.Element("Settings").Element("CheckedValue").Value;
                     c.cd.checkBoxUncheckedValue = i.Element("Settings").Element("UncheckedValue").Value;
-
-                    //c.cd.CheckBoxValues = i.Element("Settings").Element("CheckBoxValues").Value;
-                    //if (c.cd.CheckBoxValues == "" || c.cd.CheckBoxValues == null) c.cd.CheckBoxValues = "True / False";
                 }
                 catch (NullReferenceException e)
                 {
@@ -461,9 +455,7 @@ namespace Configuration_Manager
             if (c != null && i != null)
             {
                 if (i.Element("Parent").Value.Contains("Section"))
-                {
                     c.cd.Parent = model.Sections.Find(s => s.Name == i.Element("Parent").Value).Tab;
-                }
                 else
                 {
                     String definedParent = i.Element("Parent").Value;
@@ -489,8 +481,8 @@ namespace Configuration_Manager
             if(c.cd.Type != "CTextBox")
                 c.cd.RealText = i.Element("Text").Value;
 
-            String text = ttt.TranslateFromTextFile(c.cd.RealText);
-            c.cd.Text = tct.TranslateFromControl(text);
+            String text = TokenTextTranslator.TranslateFromTextFile(c.cd.RealText);
+            c.cd.Text = TokenControlTranslator.TranslateFromControl(text);
 
             c.cd.Hint = i.Element("Hint").Value;
             c.cd.Hint = c.cd.Hint.Replace("&#13;&#10;", "\r\n");
@@ -533,9 +525,7 @@ namespace Configuration_Manager
             List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             foreach (String r in rel)
-            {
                 c.cd.RelatedRead.Add(model.AllControls.Find(p => p.cd.Name == r));
-            }
         }
 
         private void SetCoupledControls(ICustomControl c, XElement i)
@@ -546,9 +536,7 @@ namespace Configuration_Manager
             List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             foreach (String r in rel)
-            {
                 c.cd.CoupledControls.Add(model.AllControls.Find(p => p.cd.Name == r));
-            }
         }
 
         private void SetRelatedVisibility(ICustomControl c, XElement i)
@@ -574,9 +562,7 @@ namespace Configuration_Manager
             List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             foreach (String r in rel)
-            {
                 c.cd.RelatedWrite.Add(model.AllControls.Find(p => p.cd.Name == r));
-            }
         }
 
         private void ReadMachineConfiguration(ICustomControl c)
@@ -600,26 +586,26 @@ namespace Configuration_Manager
 
         // This function sets again the state of the control with visibility or coupled relations.
         // This way, those relations are applied when loading.
-        private void ApplyRelations(ICustomControl c)
-        {
-            if (c.cd.CoupledControls.Count > 0 || c.cd.RelatedVisibility.Count > 0 || c.cd.RelatedRead.Count > 0)
-            {
-                if (c.cd.Type == "CCheckBox")
-                {
-                    CheckState state = (c as CheckBox).CheckState;
-                    if (state == CheckState.Checked) (c as CheckBox).CheckState = CheckState.Unchecked;
-                    else (c as CheckBox).CheckState = CheckState.Checked;
+        //private void ApplyRelations(ICustomControl c)
+        //{
+        //    if (c.cd.CoupledControls.Count > 0 || c.cd.RelatedVisibility.Count > 0 || c.cd.RelatedRead.Count > 0)
+        //    {
+        //        if (c.cd.Type == "CCheckBox")
+        //        {
+        //            CheckState state = (c as CheckBox).CheckState;
+        //            if (state == CheckState.Checked) (c as CheckBox).CheckState = CheckState.Unchecked;
+        //            else (c as CheckBox).CheckState = CheckState.Checked;
 
-                    (c as CheckBox).CheckState = state;
-                }
+        //            (c as CheckBox).CheckState = state;
+        //        }
 
-                if (c.cd.Type == "CComboBox")
-                {
-                    int index = (c as ComboBox).SelectedIndex;
-                    (c as ComboBox).SelectedIndex = -1;
-                    (c as ComboBox).SelectedIndex = index;
-                }
-            }
-        }
+        //        if (c.cd.Type == "CComboBox")
+        //        {
+        //            int index = (c as ComboBox).SelectedIndex;
+        //            (c as ComboBox).SelectedIndex = -1;
+        //            (c as ComboBox).SelectedIndex = index;
+        //        }
+        //    }
+        //}
     }
 }

@@ -51,7 +51,6 @@ namespace Configuration_Manager
         public int TypeId { get; set; }
         public int Id { get; set; }
 
-        public String checkBoxValues;
         public String checkBoxCheckedValue { get; set; }
         public String checkBoxUncheckedValue { get; set; }
 
@@ -272,24 +271,6 @@ namespace Configuration_Manager
                 {
                     (this.control as CTabControl).SelectedIndex = value;
                     this.selectedTab = value;
-                }
-            }
-        }
-
-        public String CheckBoxValues
-        {
-            get
-            {
-                return checkBoxValues;
-            }
-            set
-            {
-                this.checkBoxValues = value;
-                if (this.checkBoxValues != null && this.checkBoxValues != "")
-                {
-                    List<String> val = this.checkBoxValues.Split('/').ToList();
-                    this.checkBoxCheckedValue = val[0].Trim();
-                    this.checkBoxUncheckedValue = val[1].Trim();
                 }
             }
         }

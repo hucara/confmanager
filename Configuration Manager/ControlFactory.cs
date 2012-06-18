@@ -40,6 +40,9 @@ namespace Configuration_Manager
         static public TabPage BuildTabPage(String name)
         {
             TabPage tp = new TabPage(name);
+
+            //tp.MouseHover += model.UpdateInfoLabel;
+
             return tp;
         }
 

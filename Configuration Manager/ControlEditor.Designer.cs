@@ -1,6 +1,6 @@
 ﻿namespace Configuration_Manager
 {
-    partial class Editor
+    partial class ControlEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ControlEditor));
             this.controlNameLabel = new System.Windows.Forms.Label();
             this.parentNameLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -302,7 +302,7 @@
             // 
             // formattingTextBox
             // 
-            this.formattingTextBox.Location = new System.Drawing.Point(106, 104);
+            this.formattingTextBox.Location = new System.Drawing.Point(106, 101);
             this.formattingTextBox.Name = "formattingTextBox";
             this.formattingTextBox.Size = new System.Drawing.Size(178, 20);
             this.formattingTextBox.TabIndex = 22;
@@ -310,7 +310,7 @@
             // formattingLabel
             // 
             this.formattingLabel.AutoSize = true;
-            this.formattingLabel.Location = new System.Drawing.Point(17, 107);
+            this.formattingLabel.Location = new System.Drawing.Point(16, 104);
             this.formattingLabel.Name = "formattingLabel";
             this.formattingLabel.Size = new System.Drawing.Size(53, 13);
             this.formattingLabel.TabIndex = 21;
@@ -322,14 +322,14 @@
             this.checkBoxValuePanel.Controls.Add(this.checkedTextBox);
             this.checkBoxValuePanel.Controls.Add(this.uncheckedLabel);
             this.checkBoxValuePanel.Controls.Add(this.checkedLabel);
-            this.checkBoxValuePanel.Location = new System.Drawing.Point(16, 130);
+            this.checkBoxValuePanel.Location = new System.Drawing.Point(6, 125);
             this.checkBoxValuePanel.Name = "checkBoxValuePanel";
-            this.checkBoxValuePanel.Size = new System.Drawing.Size(278, 54);
+            this.checkBoxValuePanel.Size = new System.Drawing.Size(288, 54);
             this.checkBoxValuePanel.TabIndex = 20;
             // 
             // uncheckedTextBox
             // 
-            this.uncheckedTextBox.Location = new System.Drawing.Point(168, 29);
+            this.uncheckedTextBox.Location = new System.Drawing.Point(178, 29);
             this.uncheckedTextBox.Name = "uncheckedTextBox";
             this.uncheckedTextBox.Size = new System.Drawing.Size(100, 20);
             this.uncheckedTextBox.TabIndex = 26;
@@ -337,7 +337,7 @@
             // 
             // checkedTextBox
             // 
-            this.checkedTextBox.Location = new System.Drawing.Point(168, 3);
+            this.checkedTextBox.Location = new System.Drawing.Point(178, 3);
             this.checkedTextBox.Name = "checkedTextBox";
             this.checkedTextBox.Size = new System.Drawing.Size(100, 20);
             this.checkedTextBox.TabIndex = 25;
@@ -346,7 +346,7 @@
             // uncheckedLabel
             // 
             this.uncheckedLabel.AutoSize = true;
-            this.uncheckedLabel.Location = new System.Drawing.Point(3, 32);
+            this.uncheckedLabel.Location = new System.Drawing.Point(10, 32);
             this.uncheckedLabel.Name = "uncheckedLabel";
             this.uncheckedLabel.Size = new System.Drawing.Size(88, 13);
             this.uncheckedLabel.TabIndex = 24;
@@ -355,7 +355,7 @@
             // checkedLabel
             // 
             this.checkedLabel.AutoSize = true;
-            this.checkedLabel.Location = new System.Drawing.Point(3, 6);
+            this.checkedLabel.Location = new System.Drawing.Point(10, 6);
             this.checkedLabel.Name = "checkedLabel";
             this.checkedLabel.Size = new System.Drawing.Size(76, 13);
             this.checkedLabel.TabIndex = 23;
@@ -416,7 +416,7 @@
             // subDestinationLabel
             // 
             this.subDestinationLabel.AutoSize = true;
-            this.subDestinationLabel.Location = new System.Drawing.Point(16, 78);
+            this.subDestinationLabel.Location = new System.Drawing.Point(15, 78);
             this.subDestinationLabel.Name = "subDestinationLabel";
             this.subDestinationLabel.Size = new System.Drawing.Size(82, 13);
             this.subDestinationLabel.TabIndex = 10;
@@ -443,7 +443,7 @@
             // fileDestinationLabel
             // 
             this.fileDestinationLabel.AutoSize = true;
-            this.fileDestinationLabel.Location = new System.Drawing.Point(16, 52);
+            this.fileDestinationLabel.Location = new System.Drawing.Point(15, 52);
             this.fileDestinationLabel.Name = "fileDestinationLabel";
             this.fileDestinationLabel.Size = new System.Drawing.Size(79, 13);
             this.fileDestinationLabel.TabIndex = 7;
@@ -521,7 +521,7 @@
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
-            // Editor
+            // ControlEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -539,10 +539,11 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Editor";
+            this.Name = "ControlEditor";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Editor";
+            this.Text = "Control Editor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Editor_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Editor_KeyDown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

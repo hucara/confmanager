@@ -99,6 +99,7 @@
             this.configTextBox.Name = "configTextBox";
             this.configTextBox.Size = new System.Drawing.Size(164, 20);
             this.configTextBox.TabIndex = 4;
+            this.configTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.configTextBox_KeyDown);
             // 
             // shownTextBox
             // 
@@ -107,6 +108,7 @@
             this.shownTextBox.Size = new System.Drawing.Size(164, 20);
             this.shownTextBox.TabIndex = 3;
             this.shownTextBox.TextChanged += new System.EventHandler(this.shownTextBox_TextChanged);
+            this.shownTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.shownTextBox_KeyDown);
             // 
             // valuesLabel
             // 
@@ -137,7 +139,7 @@
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(359, 180);
+            this.okButton.Location = new System.Drawing.Point(359, 181);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 10;

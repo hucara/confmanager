@@ -6,68 +6,67 @@ using Configuration_Manager.CustomControls;
 
 namespace Configuration_Manager.Util
 {
-    class TokenControlTranslator
+    static class TokenControlTranslator
     {
         private const String DEFAULT_TOKEN = "##";
-        private static TokenControlTranslator tokenControlTranslator;
 
-        private Boolean active = true;
+        private static Boolean active = true;
 
-        private String tokenKey;
-        private String textToTranslate;
-        private String translatedText;
+        private static String tokenKey;
+        private static String textToTranslate;
+        private static String translatedText;
 
-        private List<String> valuesToTranslate = new List<String>();
-        private List<String> translatedValues = new List<String>();
+        private static List<String> valuesToTranslate = new List<String>();
+        private static List<String> translatedValues = new List<String>();
 
-        public static TokenControlTranslator GetInstance()
+        //public static TokenControlTranslator GetInstance()
+        //{
+        //    if (tokenControlTranslator == null)
+        //    {
+        //        tokenControlTranslator = new TokenControlTranslator();
+        //    }
+        //    return tokenControlTranslator;
+        //}
+
+        //private TokenControlTranslator()
+        //{
+        //    this.active = true;
+
+        //    this.valuesToTranslate = new List<String>();
+        //    this.translatedValues = new List<String>();
+        //}
+
+        //private static TokenControlTranslator(String tokenKey)
+        //{
+        //    SetTokenKey(tokenKey);
+        //}
+
+        public static void SetTokenKey(String k)
         {
-            if (tokenControlTranslator == null)
+            if (k == "" || k == null) tokenKey = DEFAULT_TOKEN;
+            else tokenKey = k;
+        }
+
+        public static String TranslateFromControl(String text)
+        {
+            if (text == null) return text;
+
+            translatedText = text;
+
+            if (active && text.Contains(Model.getInstance().controlToken))
             {
-                tokenControlTranslator = new TokenControlTranslator();
-            }
-            return tokenControlTranslator;
-        }
+                valuesToTranslate.Clear();
+                translatedValues.Clear();
 
-        private TokenControlTranslator()
-        {
-            this.active = true;
+                textToTranslate = text;
 
-            this.valuesToTranslate = new List<String>();
-            this.translatedValues = new List<String>();
-        }
-
-        private TokenControlTranslator(String tokenKey)
-        {
-            SetTokenKey(tokenKey);
-        }
-
-        public void SetTokenKey(String tokenKey)
-        {
-            if (tokenKey == "" || tokenKey == null) this.tokenKey = DEFAULT_TOKEN;
-            else this.tokenKey = tokenKey;
-        }
-
-        public String TranslateFromControl(String textToTranslate)
-        {
-            if (textToTranslate == null) return textToTranslate;
-
-            this.translatedText = textToTranslate;
-
-            if (active && textToTranslate.Contains(Model.getInstance().controlToken))
-            {
-                this.valuesToTranslate.Clear();
-                this.translatedValues.Clear();
-
-                this.textToTranslate = textToTranslate;
-
-                if (this.textToTranslate != null && this.textToTranslate != "")
+                if (textToTranslate != null && textToTranslate != "")
                 {
                     if (TextHasEvenTokens())
                     {
                         GetValuesToTranslate();
                         GetTranslatedValues();
-                        this.translatedText = ReplaceValueToTranslation(this.textToTranslate);
+                        translatedText = ReplaceValueToTranslation(textToTranslate);
                     }
                 }
             }
@@ -75,9 +74,9 @@ namespace Configuration_Manager.Util
             return translatedText;
         }
 
-        private bool TextHasEvenTokens()
+        private static bool TextHasEvenTokens()
         {
-            if (this.textToTranslate != null && this.textToTranslate != "" && this.tokenKey != null)
+            if (textToTranslate != null && textToTranslate != "" && tokenKey != null)
             {
                 int count = System.Text.RegularExpressions.Regex.Matches(textToTranslate, tokenKey).Count;
                 if (count % 2 == 0) return true;
@@ -85,7 +84,7 @@ namespace Configuration_Manager.Util
             return false;
         }
 
-        private void GetValuesToTranslate()
+        private static void GetValuesToTranslate()
         {
             System.Text.RegularExpressions.MatchCollection mc = System.Text.RegularExpressions.Regex.Matches(textToTranslate, tokenKey + "\\w*" + tokenKey);
 
@@ -101,7 +100,7 @@ namespace Configuration_Manager.Util
             }
         }
 
-        private bool ValidateToken(string t)
+        private static bool ValidateToken(string t)
         {
             if (t != null)
             {
@@ -111,7 +110,7 @@ namespace Configuration_Manager.Util
             return false;
         }
 
-        private void GetTranslatedValues()
+        private static void GetTranslatedValues()
         {
             String text = "";
             foreach (String s in valuesToTranslate)
@@ -124,7 +123,6 @@ namespace Configuration_Manager.Util
                 text = "";
                 if (control != null)
                 {
-                    //TODO THE GREAT DILEMMA D:
                     //if (control is CComboBox && (control as CComboBox).SelectedItem != null)
                     //{
                     //    int index = (control as CComboBox).SelectedIndex;
@@ -151,7 +149,7 @@ namespace Configuration_Manager.Util
             }
         }
 
-        private String GetComboBoxValue(String key, ICustomControl control)
+        private static String GetComboBoxValue(String key, ICustomControl control)
         {
             String text = "";
             int index = (control as CComboBox).SelectedIndex;
@@ -167,7 +165,7 @@ namespace Configuration_Manager.Util
             return text;
         }
 
-        private String ReplaceValueToTranslation(String textToTranslate)
+        private static String ReplaceValueToTranslation(String textToTranslate)
         {
             String translated = textToTranslate;
             for (int i = 0; i < valuesToTranslate.Count; i++)

@@ -45,7 +45,8 @@ namespace Configuration_Manager.Util
                         break;
                     }
                 }
-                value = t.Substring(startToken, endValue - startToken);
+                if(endValue - startToken > startToken)
+                    value = t.Substring(startToken, endValue - startToken);
             }
             else
                 value = t.Substring(startToken);

@@ -17,9 +17,6 @@ namespace Configuration_Manager.CustomControls
      */
     static class ReadRelationManager
     {
-        static TokenControlTranslator tct = TokenControlTranslator.GetInstance();
-        static TokenTextTranslator ttt = TokenTextTranslator.GetInstance();
-
         // Handler that updates all the control fields that should be updated
         // for the read related controls.
         public static void ReadRelationUpdate(object sender, EventArgs e)
@@ -55,16 +52,16 @@ namespace Configuration_Manager.CustomControls
 
         private static void TranslateSubDestination(ICustomControl r)
         {
-            String text = tct.TranslateFromControl(r.cd.RealSubDestination);
-            text = ttt.TranslateFromTextFile(text);
+            String text = TokenControlTranslator.TranslateFromControl(r.cd.RealSubDestination);
+            text = TokenTextTranslator.TranslateFromTextFile(text);
 
             r.cd.SubDestination = text;
         }
 
         private static void TranslateText(ICustomControl r)
         {
-            String text = tct.TranslateFromControl(r.cd.RealText);
-            text = ttt.TranslateFromTextFile(text);
+            String text = TokenControlTranslator.TranslateFromControl(r.cd.RealText);
+            text = TokenTextTranslator.TranslateFromTextFile(text);
 
             r.cd.Text = text;
         }
@@ -77,8 +74,8 @@ namespace Configuration_Manager.CustomControls
 
             for (int i = 0; i < r.cd.comboBoxRealItems.Count; i++)
             {
-                String text = tct.TranslateFromControl(r.cd.comboBoxRealItems[i]);
-                text = ttt.TranslateFromTextFile(text);
+                String text = TokenControlTranslator.TranslateFromControl(r.cd.comboBoxRealItems[i]);
+                text = TokenTextTranslator.TranslateFromTextFile(text);
 
                 (r as ComboBox).Items.Add(text);
                 r.cd.comboBoxItems.Add(text);
@@ -144,8 +141,8 @@ namespace Configuration_Manager.CustomControls
                 if (r.cd.Format != "")
                 {
                     string formattedValue = StringFormatter.FormatText(value, r.cd.Format);
-                    formattedValue = TokenControlTranslator.GetInstance().TranslateFromControl(formattedValue);
-                    formattedValue = TokenTextTranslator.GetInstance().TranslateFromTextFile(formattedValue);
+                    formattedValue = TokenControlTranslator.TranslateFromControl(formattedValue);
+                    formattedValue = TokenTextTranslator.TranslateFromTextFile(formattedValue);
 
                     int index = r.cd.comboBoxConfigItems.IndexOf(formattedValue);
                     if ((r as ComboBox).Items.Count >= index)

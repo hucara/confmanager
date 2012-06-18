@@ -18,7 +18,6 @@ namespace Configuration_Manager
     public partial class MainForm : Form
     {
         private Model model = Model.getInstance();
-        //private ControlFactory cf = ControlFactory.getInstance();
         private ObjectDefinitionManager odm = ObjectDefinitionManager.getInstance();
 
         SectionTabsView sectionTabsView;
@@ -116,15 +115,10 @@ namespace Configuration_Manager
         private void SwitchProgMode()
         {
             model.SwitchProgrammingMode();
-
             if (model.progMode)
-            {
                 sectionBar.BackColor = System.Drawing.Color.LightPink;
-            }
             else
-            {
                 sectionBar.BackColor = System.Windows.Forms.ProfessionalColors.ToolStripBorder;
-            }
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
@@ -136,14 +130,10 @@ namespace Configuration_Manager
             }
 
             if (e.Alt && e.Control && e.KeyCode == Keys.S)
-            {
                 odm.SerializeObjectDefinition();
-            }
 
             if (e.Alt && e.Control && e.KeyCode == Keys.G)
-            {
                 WriteConfigurationManager.SaveChanges();
-            }
 
             if (e.Alt && e.Control && e.KeyCode == Keys.D)
             {
@@ -183,10 +173,15 @@ namespace Configuration_Manager
 
         private void newSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SectionForm sf = new SectionForm();
-            if (DialogResult.OK == sf.ShowDialog())
+            SectionEditor se = new SectionEditor();
+            if (DialogResult.OK == se.ShowDialog())
             {
-                sectionMenuView.AddNewSection(sf.SectionName);
+                sectionMenuView.AddNewSection(se.section);
+                sectionTabsView.readAndShow();
+            }
+            else
+            {
+                model.Sections.Remove(se.section);
                 sectionTabsView.readAndShow();
             }
         }
@@ -195,7 +190,6 @@ namespace Configuration_Manager
         {
             String msg = "This will delete the section and all of its children.";
             DialogResult dr = MessageBox.Show(msg, " Deleting Section", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
                 sectionMenuView.RemoveSection();
@@ -244,7 +238,6 @@ namespace Configuration_Manager
             {
                 xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
                 IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
-
                 this.Text = texts.Single(x => (int?)x.Attribute("id") == 26).Value;
             }
             catch
@@ -264,7 +257,7 @@ namespace Configuration_Manager
             {
                 String msg = "Some changes were made to the User Interface. Do you want to save before closing?";
                 DialogResult dr = MessageBox.Show(msg, "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-
+                
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
                     odm.SerializeObjectDefinition();
@@ -296,7 +289,6 @@ namespace Configuration_Manager
                     break;
                 }
             }
-
             SaveCurrentLocation();
         }
 
@@ -324,21 +316,14 @@ namespace Configuration_Manager
             MouseEventArgs me = e as MouseEventArgs;
             CToolStripButton tb = null;
 
-
             foreach (Section s in model.Sections)
-            {
                 if (s.Selected) tb = s.Button;
-            }
 
             if (tb != null)
             {
-                SectionForm sf = new SectionForm(tb.Text);
-
-                if (DialogResult.OK == sf.ShowDialog())
-                {
-                    sectionMenuView.RenameSection(tb.Text, sf.Controls.Find("NameTextBox", false)[0].Text);
-                    sectionTabsView.readAndShow();
-                }
+                SectionEditor se = new SectionEditor(model.CurrentSection);
+                se.ShowDialog();
+                //sectionMenuView.readAndShow();
             }
         }
     }

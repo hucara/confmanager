@@ -21,9 +21,6 @@ namespace Configuration_Manager.RelationManagers
      */
     static class WriteConfigurationManager
     {
-        static TokenControlTranslator tct = TokenControlTranslator.GetInstance();
-        static TokenTextTranslator ttt = TokenTextTranslator.GetInstance();
-
         // Only interested on controls that:
         // - Have configured a destination file and,
         // - Have the "Changed" property as true.
@@ -36,9 +33,10 @@ namespace Configuration_Manager.RelationManagers
                         SaveControlChanges(c);
                         c.cd.Changed = false;
                 }
-
-                ReReadControl(c);
             }
+
+            foreach(ICustomControl c in Model.getInstance().AllControls.Where(p => p.cd.Changed))
+                ReReadControl(c);
         }
 
         private static void SaveControlChanges(ICustomControl c)
@@ -47,8 +45,8 @@ namespace Configuration_Manager.RelationManagers
             {
                 String fileType = c.cd.MainDestination.Substring(c.cd.MainDestination.Length - 4, 4);
 
-                String path = ttt.TranslateFromTextFile(c.cd.RealSubDestination);
-                path = tct.TranslateFromControl(path).TrimStart('\\');
+                String path = TokenTextTranslator.TranslateFromTextFile(c.cd.RealSubDestination);
+                path = TokenControlTranslator.TranslateFromControl(path).TrimStart('\\');
 
                 String value = GetValueToSave(c);
 
@@ -71,8 +69,8 @@ namespace Configuration_Manager.RelationManagers
                 if (c.cd.Format != "")
                 {
                     value = c.cd.Format.Replace("##This##", c.cd.comboBoxConfigItems[(c as CComboBox).SelectedIndex]);
-                    value = TokenControlTranslator.GetInstance().TranslateFromControl(value);
-                    value = TokenTextTranslator.GetInstance().TranslateFromTextFile(value);
+                    value = TokenControlTranslator.TranslateFromControl(value);
+                    value = TokenTextTranslator.TranslateFromTextFile(value);
                 }
                 else
                 {
@@ -105,7 +103,6 @@ namespace Configuration_Manager.RelationManagers
                 xdoc.Load(c.cd.MainDestination);
 
                 xdoc.SelectSingleNode(path).InnerText = value;
-
                 xdoc.Save(c.cd.MainDestination);
                 System.Diagnostics.Debug.WriteLine(">>.Xml Saved value from: " + c.cd.Name);
 

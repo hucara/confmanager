@@ -22,6 +22,14 @@ namespace Configuration_Manager
 
         public String Name { get; set; }
         public String Text { get; set; }
+        public String RealText { get; set; }
+        public String Hint { get; set; }
+
+        private String displayRight = "00000000";
+        private String modificationRight = "00000000";
+
+        public byte[] DisplayBytes = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
+        public byte[] ModificationBytes = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
 
         public Section(CToolStripButton b, System.Windows.Forms.TabPage t, String text, bool Selected)
         {
@@ -37,7 +45,7 @@ namespace Configuration_Manager
 
             this.Button.Text = text;
             count++;
-        }
+       }
 
         public Section(CToolStripButton ctsb, System.Windows.Forms.TabPage tp, string name, string text, bool selected)
         {
@@ -52,6 +60,32 @@ namespace Configuration_Manager
 
             this.Button.Text = text;
             count++;
+        }
+
+        public String DisplayRight
+        {
+            get
+            {
+                return this.displayRight;
+            }
+            set
+            {
+                this.displayRight = value;
+                this.DisplayBytes = Model.HexToData(value);
+            }
+        }
+
+        public String ModificationRight
+        {
+            get
+            {
+                return this.modificationRight;
+            }
+            set
+            {
+                this.modificationRight = value;
+                this.ModificationBytes = Model.HexToData(value);
+            }
         }
     }
 }

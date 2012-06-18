@@ -72,27 +72,24 @@ namespace Configuration_Manager.Views
 			sectionTabControl.TabPages.Clear();
 		}
 
-		public void AddNewSection(String text)
+		public void AddNewSection(Section s)
 		{
 			if (!MaxSectionsReached())
 			{
-				Section s = ControlFactory.BuildSection(text, text, true);
+                //model.Sections.Add(s);
+                s.Button.Text = s.Text;
+                s.Tab.Text = s.Text;
 
-				if (!model.Sections.Contains(s))
-				{
-					model.Sections.Add(s);
-					Debug.WriteLine("+ Added: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
-				}
+                Debug.WriteLine("+ Added: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
+                model.logCreator.Append("+ Added: " + s.Name);
 
-				model.logCreator.Append("+ Added: " + s.Name);
+                UnCheckButtons();
+                s.Button.Checked = true;
 
-				UnCheckButtons();
-				s.Button.Checked = true;
+                UnSelectSections();
+                s.Selected = true;
 
-				UnSelectSections();
-				s.Selected = true;
-
-                Model.getInstance().uiChanged = true;
+                Model.getInstance().uiChanged = true;  
 			}
 			readAndShow();
 		}
@@ -126,6 +123,18 @@ namespace Configuration_Manager.Views
 			if (model.Sections.Count > 0) model.Sections[0].Selected = true;
 			readAndShow();
 		}
+
+        public void RemoveSection(Section s)
+        {
+            if (SelectedButton != null && model.Sections.Count > 0)
+            {
+                model.Sections.Remove(s);
+                Model.getInstance().uiChanged = true;
+
+                Debug.WriteLine("! Removed: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
+            }
+            readAndShow();
+        }
 
 		private CToolStripButton CreateToolStripButton(String text)
 		{
@@ -219,9 +228,9 @@ namespace Configuration_Manager.Views
 				infoLabel.AutoSize = false;
 				infoLabel.MaxLength = 320;
 				infoLabel.BorderStyle = BorderStyle.None;
+                infoLabel.BackColor = System.Drawing.SystemColors.Control;
 
-				infoLabel.TextBox.BackColor = System.Drawing.Color.Lavender;
-
+                
 				infoLabel.TextBox.MinimumSize = new System.Drawing.Size(100, 275);
 				infoLabel.TextBox.Enabled = false;
 				infoLabel.TextBox.Multiline = true;
