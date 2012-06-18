@@ -21,7 +21,7 @@ namespace Configuration_Manager
         public System.Windows.Forms.TabPage Tab {get; set;}
 
         public String Name { get; set; }
-        public String Text { get; set; }
+        public String text { get; private set; }
         public String RealText { get; set; }
         public String Hint { get; set; }
 
@@ -34,7 +34,7 @@ namespace Configuration_Manager
         public Section(CToolStripButton b, System.Windows.Forms.TabPage t, String text, bool Selected)
         {
             this.Name = "Section" + count;
-            this.Text = text;
+            this.text = text;
             this.Selected = Selected;
             this.Id = count;
 
@@ -50,7 +50,7 @@ namespace Configuration_Manager
         public Section(CToolStripButton ctsb, System.Windows.Forms.TabPage tp, string name, string text, bool selected)
         {
             this.Name = name;
-            this.Text = text;
+            this.text = text;
             this.Selected = selected;
             this.Button = ctsb;
             this.Tab = tp;
@@ -85,6 +85,19 @@ namespace Configuration_Manager
             {
                 this.modificationRight = value;
                 this.ModificationBytes = Model.HexToData(value);
+            }
+        }
+
+        public String Text
+        {
+            get
+            {
+                return this.text;
+            }
+            set
+            {
+                this.text = value;
+                this.Button.Text = value;
             }
         }
     }

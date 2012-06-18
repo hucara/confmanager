@@ -76,7 +76,6 @@ namespace Configuration_Manager
         {
             this.section.RealText = this.NameTextBox.Text;
             this.section.Text = TokenTextTranslator.TranslateFromTextFile(this.NameTextBox.Text);
-            this.section.Button.Text = this.section.Text;
 
             this.section.DisplayRight = this.displayRightTextBox.Text.Substring(2);
             this.section.ModificationRight = this.modificationRightTextBox.Text.Substring(2);
@@ -146,7 +145,7 @@ namespace Configuration_Manager
                 xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
                 IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
 
-                this.sectionLabel.Text = "Section : " + this.section.Text;
+                this.sectionLabel.Text = "Section : " + this.section.text;
                 this.NameLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 4).Value;
                 this.displayRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 17).Value;
                 this.modificationRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 18).Value;

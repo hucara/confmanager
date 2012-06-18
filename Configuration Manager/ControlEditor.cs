@@ -601,8 +601,9 @@ namespace Configuration_Manager
                 (control as Control).Text = Util.StringFormatter.FormatText((control as Control).Text, control.cd.Format);
         }
 
-        private void ReadFromControl()
+        public void ReadFromControl()
         {
+            ShowHeadLine();
             model.ApplyRelations(control);
 
             this.textTextBox.Text = control.cd.RealText;

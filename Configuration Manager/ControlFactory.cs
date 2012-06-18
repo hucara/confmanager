@@ -40,6 +40,7 @@ namespace Configuration_Manager
         static public TabPage BuildTabPage(String name)
         {
             TabPage tp = new TabPage(name);
+            SetDragDropHandlers(tp);
 
             //tp.MouseHover += model.UpdateInfoLabel;
 
@@ -52,6 +53,7 @@ namespace Configuration_Manager
 
             CLabel c = new CLabel();
             parent.Controls.Add(c);
+
             c.SetControlDescription();
             SetCommonHandlers(c);
 
@@ -87,8 +89,7 @@ namespace Configuration_Manager
             (parent as CTabControl).SelectedTab = c;
 
             SetCommonHandlers(c);
-            c.DragDrop += ch.OnDragDrop;
-            c.DragEnter += ch.OnDragEnter;
+            SetDragDropHandlers(c);
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -115,7 +116,6 @@ namespace Configuration_Manager
             //c.SelectedIndexChanged += IndexChanged;
 
             Model.getInstance().AllControls.Add(c);
-
             model.logCreator.Append("+ Added: " + c.cd.Name);
 
             return c;
@@ -196,9 +196,7 @@ namespace Configuration_Manager
             CGroupBox c = new CGroupBox();
             parent.Controls.Add(c);
             SetCommonHandlers(c);
-
-            c.DragDrop += ch.OnDragDrop;
-            c.DragEnter += ch.OnDragEnter;
+            SetDragDropHandlers(c);
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -218,6 +216,7 @@ namespace Configuration_Manager
             parent.Controls.Add(c);
 
             SetCommonHandlers(c);
+            SetDragDropHandlers(c);
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -232,6 +231,7 @@ namespace Configuration_Manager
 
         static private void SetCommonHandlers(Control c)
         {
+            c.AllowDrop = false;
             c.MouseDown += ch.Control_Click;
             c.MouseUp += ch.CancelDragDropTimer;
             c.MouseHover += model.UpdateInfoLabel;
@@ -240,6 +240,9 @@ namespace Configuration_Manager
 
         static private void SetDragDropHandlers(Control c)
         {
+            c.AllowDrop = true;
+            c.DragDrop += ch.OnDragDrop;
+            c.DragEnter += ch.OnDragEnter;
         }
 
         static private void SetChangesHandler(Control c)

@@ -14,7 +14,7 @@ namespace Configuration_Manager.CustomControls
 	class CustomHandler
 	{
 		const int RGBMAX = 255;
-        const bool DRAGDROP_ACTIVE = false;
+        const bool DRAGDROP_ACTIVE = true;
 
 		public ContextMenuStrip contextMenu;
 		Model model;
@@ -342,30 +342,44 @@ namespace Configuration_Manager.CustomControls
 			String name = "";
 			ICustomControl c = null;
 			Control parent = sender as Control;
-			dea.Effect = DragDropEffects.Move;
+            dea.Effect = DragDropEffects.Move;
 
-			if (parent != model.CurrentClickedControl)
-			{
-				name = (string)dea.Data.GetData(typeof(System.String));
-				c = model.AllControls.Find(control => control.cd.Name == name);
+            String parentType = parent.GetType().Name;
+            if (parentType == "CGroupBox" || parentType == "CPanel" || parentType == "CTabPage" || parentType == "TabPage")
+            {
+                if (parent != model.CurrentClickedControl)
+                {
+                    name = (string)dea.Data.GetData(typeof(System.String));
+                    c = model.AllControls.Find(control => control.cd.Name == name);
 
-				if (c != null)
-				{
-					c.cd.Parent = parent;
-					Point cord = new Point(dea.X, dea.Y);
-					cord = parent.PointToClient(cord);
-					c.cd.Top = cord.Y - model.LastClickedY;
-					c.cd.Left = cord.X - model.LastClickedX;
+                    if (c != null)
+                    {
+                        c.cd.Parent = parent;
+                        Point cord = new Point(dea.X, dea.Y);
+                        cord = parent.PointToClient(cord);
+                        c.cd.Top = cord.Y - model.LastClickedY;
+                        c.cd.Left = cord.X - model.LastClickedX;
 
-					Debug.WriteLine("! Dropped the control: " + c.cd.Name + " Parent: " + c.cd.Parent.Name + " X: " + cord.X + " Y: " + cord.Y);
-					model.CurrentSection.Tab.Refresh();
-				}
-			}
-			else
-			{
-				Debug.WriteLine("! But you tried to drop it into itself...");
-			}
+                        Debug.WriteLine("! Dropped the control: " + c.cd.Name + " Parent: " + c.cd.Parent.Name + " X: " + cord.X + " Y: " + cord.Y);
+                        model.CurrentSection.Tab.Refresh();
+                        model.uiChanged = true;
+
+                        RefreshEditorWindow(c);
+                    }
+                }
+                else
+                    Debug.WriteLine("! But you tried to drop it into itself...");
+            }
 		}
+
+        private void RefreshEditorWindow(ICustomControl c)
+        {
+            foreach (ControlEditor ed in Application.OpenForms.OfType<ControlEditor>())
+            {
+                if (ed.control == model.CurrentClickedControl)
+                    ed.ReadFromControl();
+            }
+        }
 
 		public void OnDragEnter(object sender, DragEventArgs dea)
 		{
@@ -387,5 +401,10 @@ namespace Configuration_Manager.CustomControls
             if((sender as ICustomControl).cd.MainDestination != "")
                 System.Diagnostics.Debug.WriteLine("! " +(sender as ICustomControl).cd.Name + " content has changed its value.");
         }
-	}
+
+        public void GiveFeedback(object sender, System.Windows.Forms.GiveFeedbackEventArgs e)
+        {
+
+        }
+    }
 }

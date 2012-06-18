@@ -75,7 +75,7 @@ namespace Configuration_Manager
 
                         if (s.Selected) model.CurrentSection = s;
 
-                        System.Diagnostics.Debug.WriteLine("+ Read: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
+                        System.Diagnostics.Debug.WriteLine("+ Read: (" + s.text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
                     }
                 }
             }
@@ -90,31 +90,41 @@ namespace Configuration_Manager
 
         private Section CreateDefinedSection(XElement i)
         {
-            //while (model.Sections.Exists(e => e.Name == "Section" + Section.count)) Section.count++;
-            String name = i.Element("Name").Value.ToString();
-            String realText = i.Element("Text").Value.ToString();
-            String display = i.Element("DisplayRight").Value.ToString().Substring(2);
-            String modify = i.Element("ModificationRight").Value.ToString().Substring(2);
-            bool selected = false;
+            try
+            {
+                //while (model.Sections.Exists(e => e.Name == "Section" + Section.count)) Section.count++;
+                String name = i.Element("Name").Value.ToString();
+                String realText = i.Element("Text").Value.ToString();
+                String display = i.Element("DisplayRight").Value.ToString().Substring(2);
+                String modify = i.Element("ModificationRight").Value.ToString().Substring(2);
+                bool selected = false;
 
-            if (i.Element("Selected").Value.ToString() == "true")
-                selected = true;
+                if (i.Element("Selected").Value.ToString() == "true")
+                    selected = true;
 
-            String text = TokenTextTranslator.TranslateFromTextFile(realText);
+                String text = TokenTextTranslator.TranslateFromTextFile(realText);
 
-            CToolStripButton ctsb = ControlFactory.BuildCToolStripButton(realText);
-            TabPage tp = ControlFactory.BuildTabPage(name);
+                CToolStripButton ctsb = ControlFactory.BuildCToolStripButton(realText);
+                TabPage tp = ControlFactory.BuildTabPage(name);
 
-            Section s = new Section(ctsb, tp, name, text, selected);
-            s.RealText = realText;
-            s.DisplayRight = display;
-            s.ModificationRight = modify;
+                Section s = new Section(ctsb, tp, name, text, selected);
+                s.RealText = realText;
+                s.DisplayRight = display;
+                s.ModificationRight = modify;
 
-            Model.getInstance().CurrentSection = s;
-            Model.getInstance().Sections.Add(s);
+                Model.getInstance().CurrentSection = s;
+                Model.getInstance().Sections.Add(s);
 
-            //Section s =  ControlFactory.BuildSection(name, text, selected);
-            return s;
+                //Section s =  ControlFactory.BuildSection(name, text, selected);
+                return s;
+            }
+            catch (Exception)
+            {
+                String errMsg = "Something went wrong while reading the Object Definition file: Sections.\nPlease check the file and try again.";
+                MessageBox.Show(errMsg, " Error reading XML file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Environment.Exit(0);
+                return null;
+            }
         }
 
         public void SerializeObjectDefinition()
@@ -302,7 +312,7 @@ namespace Configuration_Manager
                             System.Environment.Exit(0);
                         }
 
-                        ReadMachineConfiguration(c);
+                        ReadRelationManager.ReadConfiguration(c);
                         ApplyRights(c);
                         model.ApplyRelations(c);
                         
@@ -563,11 +573,6 @@ namespace Configuration_Manager
 
             foreach (String r in rel)
                 c.cd.RelatedWrite.Add(model.AllControls.Find(p => p.cd.Name == r));
-        }
-
-        private void ReadMachineConfiguration(ICustomControl c)
-        {
-            ReadRelationManager.ReadConfiguration(c);
         }
 
         private void ApplyRights(ICustomControl c)

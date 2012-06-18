@@ -103,6 +103,7 @@
     <Compile Include="ControlEditor.Designer.cs">
       <DependentUpon>ControlEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util\FormImmobiliser.cs" />
     <Compile Include="Util\Model.cs" />
     <Compile Include="RelationManagers\WriteConfigurationManager.cs" />
     <Compile Include="Section.cs" />

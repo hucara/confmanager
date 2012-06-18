@@ -19,6 +19,7 @@ namespace Configuration_Manager
     {
         private Model model = Model.getInstance();
         private ObjectDefinitionManager odm = ObjectDefinitionManager.getInstance();
+        private Util.FormImmobiliser fi;
 
         SectionTabsView sectionTabsView;
         SectionMenuView sectionMenuView;
@@ -27,14 +28,11 @@ namespace Configuration_Manager
         public MainForm()
         {
             this.DoubleBuffered = true;
-
             InitializeComponent();
 
             model.ReadConfigurationFile();
             SetUpMainForm();
-
             PrintWellcomeLogMessage();
-
             InitCustomHandler();
             InitViews();
             InitHandlers();
@@ -65,8 +63,7 @@ namespace Configuration_Manager
                 this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 
             if (!model.movable)
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-
+                fi = new Util.FormImmobiliser(this);
         }
 
         private void InitCustomHandler()
