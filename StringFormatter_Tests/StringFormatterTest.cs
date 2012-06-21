@@ -65,10 +65,10 @@ namespace StringFormatter_Tests
         ///A test for FormatText
         ///</summary>
         [TestMethod()]
-        public void FormatText_SimpleString_ReturnsExpected()
+        public void FormatText_SimpleStringCaseProb_ReturnsExpected()
         {
             string text = "Hola, Qué tal estamos, Adiós!";
-            string format = "Hola, ##This##, Adiós!";
+            string format = "Hola, ##this##, Adiós!";
             string expected = "Qué tal estamos";
             string actual;
             actual = StringFormatter.FormatText(text, format);
@@ -81,6 +81,17 @@ namespace StringFormatter_Tests
             string text = "RD, CD, OH, YAY";
             string format = "RD, ##This##, OH, YAY";
             string expected = "CD";
+            string actual;
+            actual = StringFormatter.FormatText(text, format);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void FormatText_SimpleString_ReturnsExpected3()
+        {
+            string text = "1, EUR, 200, 25";
+            string format = "1, EUR, ##This##, 25";
+            string expected = "200";
             string actual;
             actual = StringFormatter.FormatText(text, format);
             Assert.AreEqual(expected, actual);
@@ -119,22 +130,71 @@ namespace StringFormatter_Tests
             Assert.AreEqual(expected, actual);
         }
 
+        //[TestMethod()]
+        //public void CheckBeginning_DifferentBeginnings_ReturnsFalse()
+        //{
+        //    string text = "Uno; Dos; Cuatro; Tres; Cinco";
+        //    string format = "Uno; Dos; Tres; ##This##; Cinco";
+        //    bool actual = StringFormatter_Accessor.CheckBeginning(text, format, );
+        //    Assert.AreEqual(false, actual);
+        //}
+
+        //[TestMethod()]
+        //public void CheckBeginning_SameBeginnings_ReturnsTrue()
+        //{
+        //    string text = "Uno; Dos; Tres; Tres; Cinco";
+        //    string format = "Uno; Dos; Tres; ##This##; Cinco";
+        //    bool actual = StringFormatter_Accessor.CheckBeginning(text, format);
+        //    Assert.AreEqual(true, actual);
+        //}
+
+        //[TestMethod()]
+        //public void CheckBeginning_ContainsWildcard_Returns1()
+        //{
+        //    string text = "ABCDE";
+        //    string format = "*B##This##";
+        //    bool actual = StringFormatter_Accessor.CheckBeginning(text, format);
+        //    Assert.AreEqual(true, actual);
+        //}
+
         [TestMethod()]
-        public void FormatText_WildCards_ReturnsNoIdea()
+        public void FormatText_QuestionWildCards_ReturnsExpected1()
         {
             string text = "Hola, Qué tal, Adiós";
-            string format = "*, ##This##, *";
+            string format = "??????##This##???????";
             string expected = "Qué tal";
             string actual = StringFormatter.FormatText(text, format);
             Assert.AreEqual(expected, actual);
         }
 
-        //[TestMethod()]
-        //public void WildcardsToRegex_NormalPattern_ExpectedResult()
-        //{
-        //    string pattern = "Esta noche vamos a tope.";
-        //    string actual = StringFormatter.WildcardsToRegex(pattern);
-        //    Assert.AreEqual("Esta noche vamos a tope.", actual);
-        //}
+        [TestMethod()]
+        public void FormatText_QuestionWildCards_ReturnsExpected2()
+        {
+            string text = "Hola, Qué tal, Adiós";
+            string format = "??##This##???????";
+            string expected = "Qué tal";
+            string actual = StringFormatter.FormatText(text, format);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void FormatText_QuestionWildCardsBeginning_ReturnsExpected()
+        {
+            string text = "hola, adiós";
+            string format = "??????##This##";
+            string expected = "adiós";
+            string actual = StringFormatter.FormatText(text, format);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void FormatText_QuestionWildCardsEnd_ReturnsExpected()
+        {
+            string text = "Hola, Qué tal, Adiós";
+            string format = "##This##??????";
+            string expected = "Hola, Qué tal";
+            string actual = StringFormatter.FormatText(text, format);
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

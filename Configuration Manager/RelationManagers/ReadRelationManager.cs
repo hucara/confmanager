@@ -157,7 +157,7 @@ namespace Configuration_Manager.CustomControls
             }
             else if (r.cd.Type == "CCheckBox")
             {
-                if (value == r.cd.checkBoxCheckedValue) (r as CCheckBox).CheckState = CheckState.Checked;
+                if (value.Equals(r.cd.checkBoxCheckedValue, StringComparison.OrdinalIgnoreCase)) (r as CCheckBox).CheckState = CheckState.Checked;
                 else (r as CCheckBox).CheckState = CheckState.Unchecked;
             }
             else

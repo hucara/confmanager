@@ -19,9 +19,7 @@ namespace Configuration_Manager.CustomControls
 		public ContextMenuStrip contextMenu;
 		Model model;
 		ControlEditor editor;
-        //ControlFactory cf;
 		Rectangle previewRect = new Rectangle(0, 0, 0, 0);
-
 		Timer t = new Timer(); // Drag and drop timer.
 
 		public CustomHandler(ContextMenuStrip cms)
@@ -152,21 +150,14 @@ namespace Configuration_Manager.CustomControls
 			if (index > -1)
 			{
 				it.DropDownItems[index].Enabled = status;
-
 				for (int i = 0; i < it.DropDownItems.Count; i++)
-				{
 					if (i != index)
-					{
 						it.DropDownItems[i].Enabled = !status;
-					}
-				}
 			}
 			else
 			{
 				for (int i = 0; i < it.DropDownItems.Count; i++)
-				{
 					it.DropDownItems[i].Enabled = status;
-				}
 			}
 		}
 
@@ -241,10 +232,8 @@ namespace Configuration_Manager.CustomControls
 		public void editToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			editor = new ControlEditor();
-
 			model.LastClickedX = model.CurrentClickedControl.Location.X;
 			model.LastClickedY = model.CurrentClickedControl.Location.Y;
-
 			model.logCreator.Append("! Editing: " + model.CurrentClickedControl.Name);
 
             foreach (ControlEditor ed in Application.OpenForms.OfType<ControlEditor>())
@@ -255,7 +244,6 @@ namespace Configuration_Manager.CustomControls
                     return;
                 }
             }
-
 			editor.Show(model.CurrentClickedControl);
 		}
 
@@ -264,14 +252,11 @@ namespace Configuration_Manager.CustomControls
             // Close editor if oppened
             ControlEditor closing = null;
             foreach (ControlEditor ed in Application.OpenForms.OfType<ControlEditor>())
-            {
                 if (ed.control == model.CurrentClickedControl) closing = ed;
-            }
             if (closing != null) closing.Close();
 
             // Delete control
 			model.DeleteControl(model.CurrentClickedControl, false);
-
             Model.getInstance().uiChanged = true;
         }
 
@@ -343,8 +328,8 @@ namespace Configuration_Manager.CustomControls
 			ICustomControl c = null;
 			Control parent = sender as Control;
             dea.Effect = DragDropEffects.Move;
-
             String parentType = parent.GetType().Name;
+
             if (parentType == "CGroupBox" || parentType == "CPanel" || parentType == "CTabPage" || parentType == "TabPage")
             {
                 if (parent != model.CurrentClickedControl)
@@ -354,6 +339,8 @@ namespace Configuration_Manager.CustomControls
 
                     if (c != null)
                     {
+                        CreatePreviewRectangle(c);
+
                         c.cd.Parent = parent;
                         Point cord = new Point(dea.X, dea.Y);
                         cord = parent.PointToClient(cord);
@@ -371,6 +358,11 @@ namespace Configuration_Manager.CustomControls
                     Debug.WriteLine("! But you tried to drop it into itself...");
             }
 		}
+
+        private void CreatePreviewRectangle(ICustomControl c)
+        {
+            previewRect = new Rectangle(Cursor.Position, (c as Control).Size);
+        }
 
         private void RefreshEditorWindow(ICustomControl c)
         {
@@ -405,6 +397,11 @@ namespace Configuration_Manager.CustomControls
         public void GiveFeedback(object sender, System.Windows.Forms.GiveFeedbackEventArgs e)
         {
 
+        }
+
+        public void OnPaint(PaintEventArgs e)
+        {
+            
         }
     }
 }

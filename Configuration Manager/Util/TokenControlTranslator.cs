@@ -19,28 +19,6 @@ namespace Configuration_Manager.Util
         private static List<String> valuesToTranslate = new List<String>();
         private static List<String> translatedValues = new List<String>();
 
-        //public static TokenControlTranslator GetInstance()
-        //{
-        //    if (tokenControlTranslator == null)
-        //    {
-        //        tokenControlTranslator = new TokenControlTranslator();
-        //    }
-        //    return tokenControlTranslator;
-        //}
-
-        //private TokenControlTranslator()
-        //{
-        //    this.active = true;
-
-        //    this.valuesToTranslate = new List<String>();
-        //    this.translatedValues = new List<String>();
-        //}
-
-        //private static TokenControlTranslator(String tokenKey)
-        //{
-        //    SetTokenKey(tokenKey);
-        //}
-
         public static void SetTokenKey(String k)
         {
             if (k == "" || k == null) tokenKey = DEFAULT_TOKEN;
@@ -132,9 +110,7 @@ namespace Configuration_Manager.Util
                     //        text = (control as CComboBox).SelectedItem.ToString();
                     //}
                     if (control is CComboBox)
-                    {
                         text = GetComboBoxValue(s, control);
-                    }
                     else if (control is CCheckBox)
                     {
                         if ((control as CCheckBox).Checked)

@@ -49,9 +49,7 @@ namespace Configuration_Manager
         Color fontColor, backColor;
         Control parent;
         List<ICustomControl> currentVisibleList;
-        //ControlFactory cf;
         Model model;
-
 
         public ControlEditor()
         {
@@ -85,7 +83,6 @@ namespace Configuration_Manager
                 this.Left = MainForm.ActiveForm.Location.X + MainForm.ActiveForm.Width;
             }
 		}
-
 
         // Control.Show() method overload
         public void Show(Control c)
@@ -177,9 +174,14 @@ namespace Configuration_Manager
             controlListBox.Items.Clear();
             if (relationsComboBox.SelectedIndex > -1)
             {
-                if (relationsComboBox.SelectedItem.ToString() == this.coupled)
+                if (relationsComboBox.SelectedItem.ToString() == this.coupled && control.cd.Type == "CComboBox")
                 {
                     foreach (ICustomControl c in model.AllControls.Where(p => p.cd.Type == "CComboBox"))
+                        controlListBox.Items.Add(c.cd.Name);
+                }
+                else if (relationsComboBox.SelectedItem.ToString() == this.coupled && control.cd.Type == "CCheckBox")
+                {
+                    foreach (ICustomControl c in model.AllControls.Where(p => p.cd.Type == "CCheckBox"))
                         controlListBox.Items.Add(c.cd.Name);
                 }
                 else
@@ -234,9 +236,7 @@ namespace Configuration_Manager
         private void FillOutFileTypeComboBox()
         {
             foreach (String s in model.DestinationFileTypes)
-            {
                 destinationTypeComboBox.Items.Add(s);
-            }
         }
 
         private void EnableControls()
@@ -584,7 +584,7 @@ namespace Configuration_Manager
             }
  
             model.ApplyRelations(control);
-                ReadRelationManager.ReadConfiguration(control as ICustomControl);
+            ReadRelationManager.ReadConfiguration(control as ICustomControl);
 
             if (control.cd.Format != null && control.cd.Format != "") 
                 FormatValue(control);
@@ -595,7 +595,10 @@ namespace Configuration_Manager
             if (control.cd.Type == "CComboBox")
             {
                 int selectedIndex = (control as CComboBox).SelectedIndex;
-                (control as CComboBox).SelectedText = control.cd.comboBoxConfigItems[selectedIndex];
+                if (selectedIndex != -1)
+                    (control as CComboBox).SelectedText = control.cd.comboBoxConfigItems[selectedIndex];
+                else
+                    (control as CComboBox).SelectedText = "";
             }
             else
                 (control as Control).Text = Util.StringFormatter.FormatText((control as Control).Text, control.cd.Format);
@@ -638,8 +641,6 @@ namespace Configuration_Manager
             if (control.cd.checkBoxUncheckedValue != null && control.cd.checkBoxUncheckedValue != "")
                 this.uncheckedTextBox.Text = control.cd.checkBoxUncheckedValue;
 
-            //else this.checkBoxValueComboBox.SelectedIndex = 0;
-
             if (control.cd.DestinationType != null && control.cd.DestinationType != "") 
                 this.destinationTypeComboBox.Text = control.cd.DestinationType;
             else this.destinationTypeComboBox.SelectedIndex = 0;
@@ -652,7 +653,6 @@ namespace Configuration_Manager
         {
             //Get the control that was checked.
             ICustomControl checkedControl = model.AllControls.Find(c => c.cd.Name == controlListBox.Items[e.Index].ToString());
-
             System.Diagnostics.Debug.WriteLine(this.control.cd.RelatedRead.Count);   
 
             // If item is being activated
@@ -694,6 +694,10 @@ namespace Configuration_Manager
                 currentVisibleList.Add(checkedControl);
                 System.Diagnostics.Debug.WriteLine("+ [" + relationsComboBox.SelectedItem + "] Checked: " + checkedControl.cd.Name);
             }
+            else if (checkedControl is CCheckBox)
+            {
+                currentVisibleList.Add(checkedControl);
+            }
             else if (checkedControl is CComboBox && !validCoupleComboBox(checkedControl))
             {
                 //They can't be coupled!
@@ -701,7 +705,7 @@ namespace Configuration_Manager
                 String msg = checkedControl.cd.Name + " must contain the same number of items than " + control.cd.Name;
                 MessageBox.Show(msg, " Error coupling controls.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            else if (!(checkedControl is CComboBox))
+            else if (!(checkedControl is CComboBox) && !(checkedControl is CCheckBox))
             {
                 e.NewValue = CheckState.Unchecked;
                 String msg = "Coupled relations are only allowed between ComboBox controls";
@@ -854,13 +858,13 @@ namespace Configuration_Manager
                 // Saving labels to avoid reading from file again
                 MainDestinationText = this.fileDestinationLabel.Text;
                 RootKeyText = texts.Single(x => (int?)x.Attribute("id") == 61).Value;
-
                 this.fileDestinationButton.Text = "";
 
                 // Bottom Buttons
                 this.updateButton.Text = texts.Single(x => (int?)x.Attribute("id") == 19).Value;
                 this.cancelButton.Text = texts.Single(x => (int?)x.Attribute("id") == 20).Value;
                 this.okButton.Text = texts.Single(x => (int?)x.Attribute("id") == 21).Value;
+
             }
             catch(Exception)
             {
@@ -915,9 +919,8 @@ namespace Configuration_Manager
                 fileDestinationButton.Visible = false;
             }
             else
-            {
                 fileDestinationLabel.Text = MainDestinationText;
-            }
+
         }
 
         private void Editor_FormClosing(object sender, FormClosingEventArgs e)

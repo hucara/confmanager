@@ -99,9 +99,7 @@ namespace Configuration_Manager.Util
 					ReplaceValueToTranslation(textToTranslate);
 				}
 				else
-				{
 					return "*ERROR*";
-				}
 			}
 			return "";
 		}

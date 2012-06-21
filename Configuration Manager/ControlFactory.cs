@@ -236,6 +236,7 @@ namespace Configuration_Manager
             c.MouseUp += ch.CancelDragDropTimer;
             c.MouseHover += model.UpdateInfoLabel;
             c.MouseLeave += model.EraseInfoLabel;
+            c.GiveFeedback += ch.GiveFeedback;
         }
 
         static private void SetDragDropHandlers(Control c)

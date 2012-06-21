@@ -26,7 +26,7 @@ namespace Configuration_Manager
             int index = (cb as ComboBox).SelectedIndex;
 
             RefreshItemLists();
-            SetAddDeleteButtons();
+            SetButtons();
             SetMoveButtons();
             RefreshActualComboBox();
             ReplaceLabels();
@@ -57,6 +57,7 @@ namespace Configuration_Manager
 
                 this.addButton.Text = texts.Single(x => (int?)x.Attribute("id") == 58).Value;
                 this.deleteButton.Text = texts.Single(x => (int?)x.Attribute("id") == 29).Value;
+                this.editButton.Text = texts.Single(x=> (int?)x.Attribute("id") == 28).Value;
             }
             catch (Exception)
             {
@@ -69,15 +70,26 @@ namespace Configuration_Manager
         private void configValues_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             this.shownValues.SelectedIndex = this.configValues.SelectedIndex;
-            SetAddDeleteButtons();
+            SetButtons();
+            FillOutTextInputBoxes();
             SetMoveButtons();
         }
 
         private void shownValues_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.configValues.SelectedIndex = this.shownValues.SelectedIndex;
-            SetAddDeleteButtons();
+            SetButtons();
+            FillOutTextInputBoxes();
             SetMoveButtons();
+        }
+
+        private void FillOutTextInputBoxes()
+        {
+            if (shownValues.SelectedIndex > -1)
+            {
+                this.shownTextBox.Text = cb.cd.comboBoxRealItems[shownValues.SelectedIndex];
+                this.configTextBox.Text = cb.cd.comboBoxConfigItems[shownValues.SelectedIndex];
+            }
         }
 
         // Adding the new item
@@ -89,8 +101,7 @@ namespace Configuration_Manager
             if (shownTextBox.Text != "" && shownTextBox.Text != null &&
                 configTextBox.Text != "" && configTextBox.Text != null)
             {
-                if(!shownValues.Items.Contains(shownTextBox.Text) &&
-                    !configValues.Items.Contains(configTextBox.Text))
+                if (!ItemAlreadyExists())
                 {
                     String translated = TokenTextTranslator.TranslateFromTextFile(shownTextBox.Text);
                     translated = TokenControlTranslator.TranslateFromControl(translated);
@@ -117,7 +128,7 @@ namespace Configuration_Manager
 
             RefreshItemLists();
             SetMoveButtons();
-            SetAddDeleteButtons();
+            SetButtons();
             RefreshActualComboBox();
 
             //shownValues.SelectedItem = shownValues.Items[shownValues.Items.Count -1];
@@ -155,7 +166,7 @@ namespace Configuration_Manager
 
                 RefreshItemLists();
                 SetMoveButtons();
-                SetAddDeleteButtons();
+                SetButtons();
                 RefreshActualComboBox();
 
                 int count = (cb as ComboBox).Items.Count;
@@ -164,6 +175,9 @@ namespace Configuration_Manager
                 else if (index < count) (cb as ComboBox).SelectedIndex = index;
                 else if (count == 0) (cb as ComboBox).SelectedIndex = -1;
             }
+
+            shownTextBox.Text = "";
+            configTextBox.Text = "";
         }
 
         private void MoveUpButton_Click(object sender, EventArgs e)
@@ -210,7 +224,7 @@ namespace Configuration_Manager
 
                 RefreshItemLists();
                 SetMoveButtons();
-                SetAddDeleteButtons();
+                SetButtons();
                 RefreshActualComboBox();
 
                 shownValues.SetSelected(aux, true);
@@ -221,12 +235,20 @@ namespace Configuration_Manager
             }
         }
 
-        private void SetAddDeleteButtons()
+        private void SetButtons()
         {
             int n = shownValues.Items.Count;
 
-            if (n > 0 && shownValues.SelectedIndex != -1) deleteButton.Enabled = true;
-            else deleteButton.Enabled = false;
+            if (n > 0 && shownValues.SelectedIndex != -1)
+            {
+                deleteButton.Enabled = true;
+                editButton.Enabled = true;
+            }
+            else
+            {
+                deleteButton.Enabled = false;
+                editButton.Enabled = false;
+            }
 
             if (shownTextBox.Text != "" && shownTextBox != null) addButton.Enabled = true;
             else addButton.Enabled = false;
@@ -276,7 +298,7 @@ namespace Configuration_Manager
 
                 RefreshItemLists();
                 SetMoveButtons();
-                SetAddDeleteButtons();
+                SetButtons();
                 RefreshActualComboBox();
 
                 shownValues.SetSelected(aux, true);
@@ -322,7 +344,7 @@ namespace Configuration_Manager
 
         private void shownTextBox_TextChanged(object sender, EventArgs e)
         {
-            SetAddDeleteButtons();
+            SetButtons();
         }
 
         private void okButton_Click(object sender, EventArgs e)
@@ -343,6 +365,40 @@ namespace Configuration_Manager
                 this.addButton.PerformClick();
                 this.shownTextBox.Focus();
             }
+        }
+
+        private void editButton_Click(object sender, EventArgs e)
+        {
+            int index = shownValues.SelectedIndex;
+            if (index != -1)
+            {
+                if (!ItemAlreadyExists())
+                {
+                    String translated = TokenTextTranslator.TranslateFromTextFile(shownTextBox.Text);
+                    translated = TokenControlTranslator.TranslateFromControl(translated);
+
+                    cb.cd.comboBoxConfigItems[index] = configTextBox.Text;
+                    cb.cd.comboBoxRealItems[index] = shownTextBox.Text;
+                    cb.cd.comboBoxItems[index] = translated;
+                }
+            }
+
+            RefreshItemLists();
+            SetMoveButtons();
+            SetButtons();
+            RefreshActualComboBox();
+
+            if ((cb as ComboBox).Items.Count == 1) (cb as ComboBox).SelectedIndex = 0;
+            else (cb as ComboBox).SelectedIndex = index;
+        }
+
+        private bool ItemAlreadyExists()
+        {
+            if (cb.cd.comboBoxRealItems.Contains(shownTextBox.Text) &&
+                cb.cd.comboBoxConfigItems.Contains(configTextBox.Text))
+                return true;
+            else
+                return false;
         }
     }
 }

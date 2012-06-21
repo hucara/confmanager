@@ -40,6 +40,7 @@
             this.configValuesLabel = new System.Windows.Forms.Label();
             this.configValues = new System.Windows.Forms.ListBox();
             this.okButton = new System.Windows.Forms.Button();
+            this.editButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // shownValues
@@ -75,7 +76,7 @@
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(182, 181);
+            this.addButton.Location = new System.Drawing.Point(101, 181);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 23);
             this.addButton.TabIndex = 5;
@@ -147,11 +148,22 @@
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
+            // editButton
+            // 
+            this.editButton.Location = new System.Drawing.Point(182, 181);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(75, 23);
+            this.editButton.TabIndex = 11;
+            this.editButton.Text = "edit";
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
+            // 
             // ComboBoxEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(446, 215);
+            this.Controls.Add(this.editButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.configValues);
             this.Controls.Add(this.configValuesLabel);
@@ -190,5 +202,6 @@
         private System.Windows.Forms.Label configValuesLabel;
         private System.Windows.Forms.ListBox configValues;
         private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button editButton;
     }
 }

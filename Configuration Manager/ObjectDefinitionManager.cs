@@ -264,7 +264,8 @@ namespace Configuration_Manager
             // Everyone is assigned a section as its parent.
             foreach (var i in items)
             {
-                if (i.Attribute("type").Value == "CTabPage") CTabs.Add(i);
+                if (i.Attribute("type").Value == "CTabPage")
+                    CTabs.Add(i);
                 else
                 {
                     Section s = model.Sections.Find(se => se.Name == i.Element("Section").Value);
@@ -279,10 +280,9 @@ namespace Configuration_Manager
                 foreach (XElement e in CTabs)
                 {
                     CTabControl parentControl = model.AllControls.Find(p => p.cd.Name == e.Element("Parent").Value) as CTabControl;
-                        CTabPage ctp = ControlFactory.BuildCTabPage(parentControl);
-                        ctp.cd.Name = e.Element("Name").Value;
-                        ctp.cd.RealText = e.Element("Text").Value;
-
+                    CTabPage ctp = ControlFactory.BuildCTabPage(parentControl);
+                    ctp.cd.Name = e.Element("Name").Value;
+                    ctp.cd.RealText = e.Element("Text").Value;
                 }
             }
 
@@ -588,29 +588,5 @@ namespace Configuration_Manager
             if (p != "" && p != null) return p.Remove(0, p.Length - 3);
             else return "";
         }
-
-        // This function sets again the state of the control with visibility or coupled relations.
-        // This way, those relations are applied when loading.
-        //private void ApplyRelations(ICustomControl c)
-        //{
-        //    if (c.cd.CoupledControls.Count > 0 || c.cd.RelatedVisibility.Count > 0 || c.cd.RelatedRead.Count > 0)
-        //    {
-        //        if (c.cd.Type == "CCheckBox")
-        //        {
-        //            CheckState state = (c as CheckBox).CheckState;
-        //            if (state == CheckState.Checked) (c as CheckBox).CheckState = CheckState.Unchecked;
-        //            else (c as CheckBox).CheckState = CheckState.Checked;
-
-        //            (c as CheckBox).CheckState = state;
-        //        }
-
-        //        if (c.cd.Type == "CComboBox")
-        //        {
-        //            int index = (c as ComboBox).SelectedIndex;
-        //            (c as ComboBox).SelectedIndex = -1;
-        //            (c as ComboBox).SelectedIndex = index;
-        //        }
-        //    }
-        //}
     }
 }

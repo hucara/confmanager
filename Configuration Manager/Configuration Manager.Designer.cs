@@ -78,26 +78,26 @@ namespace Configuration_Manager
             this.editSectionNameToolStripMenuItem,
             this.deleteSectionToolStripMenuItem});
             this.contextNavMenu.Name = "contextMenuStrip1";
-            this.contextNavMenu.Size = new System.Drawing.Size(150, 70);
+            this.contextNavMenu.Size = new System.Drawing.Size(153, 92);
             // 
             // newSectionToolStripMenuItem
             // 
             this.newSectionToolStripMenuItem.Name = "newSectionToolStripMenuItem";
-            this.newSectionToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.newSectionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.newSectionToolStripMenuItem.Text = "New Section";
             this.newSectionToolStripMenuItem.Click += new System.EventHandler(this.newSectionToolStripMenuItem_Click);
             // 
             // editSectionNameToolStripMenuItem
             // 
             this.editSectionNameToolStripMenuItem.Name = "editSectionNameToolStripMenuItem";
-            this.editSectionNameToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
-            this.editSectionNameToolStripMenuItem.Text = "Edit Name";
+            this.editSectionNameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editSectionNameToolStripMenuItem.Text = "Edit Section";
             this.editSectionNameToolStripMenuItem.Click += new System.EventHandler(this.editSectionNameToolStripMenuItem_Click);
             // 
             // deleteSectionToolStripMenuItem
             // 
             this.deleteSectionToolStripMenuItem.Name = "deleteSectionToolStripMenuItem";
-            this.deleteSectionToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.deleteSectionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.deleteSectionToolStripMenuItem.Text = "Delete Section";
             this.deleteSectionToolStripMenuItem.Click += new System.EventHandler(this.deleteSectionToolStripMenuItem_Click);
             // 

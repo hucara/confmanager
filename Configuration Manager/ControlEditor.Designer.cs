@@ -429,7 +429,6 @@
             this.fileDestinationButton.Name = "fileDestinationButton";
             this.fileDestinationButton.Size = new System.Drawing.Size(36, 23);
             this.fileDestinationButton.TabIndex = 12;
-            this.fileDestinationButton.Text = "search";
             this.fileDestinationButton.UseVisualStyleBackColor = true;
             this.fileDestinationButton.Click += new System.EventHandler(this.fileDestinationButton_Click);
             // 

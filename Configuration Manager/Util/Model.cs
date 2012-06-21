@@ -254,67 +254,99 @@ namespace Configuration_Manager
 
         private void ReadSettingsSection(XDocument xdoc)
         {
-            XElement settings = xdoc.Element("ConfigurationManager").Element("Settings");
+            try
+            {
+                XElement settings = xdoc.Element("ConfigurationManager").Element("Settings");
 
-            Boolean.TryParse(settings.Element("StayOnTop").Value, out this.stayOnTop);
+                Boolean.TryParse(settings.Element("StayOnTop").Value, out this.stayOnTop);
 
-            if (settings.Element("StayOnTop").Value == "yes") this.stayOnTop = true;
-            if (settings.Element("Movable").Value == "yes") this.movable = true;
-            if (settings.Element("Resizable").Value == "yes") this.resizable = true;
+                if (settings.Element("StayOnTop").Value == "yes") this.stayOnTop = true;
+                if (settings.Element("Movable").Value == "yes") this.movable = true;
+                if (settings.Element("Resizable").Value == "yes") this.resizable = true;
 
-            Int32.TryParse(settings.Element("Top").Value.ToString(), out this.top);
-            Int32.TryParse(settings.Element("Left").Value.ToString(), out this.left);
-            Int32.TryParse(settings.Element("Width").Value.ToString(), out this.width);
-            Int32.TryParse(settings.Element("Height").Value.ToString(), out this.height);
+                Int32.TryParse(settings.Element("Top").Value.ToString(), out this.top);
+                Int32.TryParse(settings.Element("Left").Value.ToString(), out this.left);
+                Int32.TryParse(settings.Element("Width").Value.ToString(), out this.width);
+                Int32.TryParse(settings.Element("Height").Value.ToString(), out this.height);
 
-            Int32.TryParse(settings.Element("MaxSections").Value.ToString(), out this.maxSections);
-            //Int32.TryParse(settings.Element("MaxControls").Value.ToString(), out this.maxControls);
+                Int32.TryParse(settings.Element("MaxSections").Value.ToString(), out this.maxSections);
 
-            Int32.TryParse(settings.Element("ControlMargin").Value.ToString(), out this.controlMarging);
-            Int32.TryParse(settings.Element("ContainerMargin").Value.ToString(), out this.containerMargin);
+                Int32.TryParse(settings.Element("ControlMargin").Value.ToString(), out this.controlMarging);
+                Int32.TryParse(settings.Element("ContainerMargin").Value.ToString(), out this.containerMargin);
 
-            this.textToken = settings.Element("TextToken").Value.ToString();
-            this.controlToken = settings.Element("ControlToken").Value.ToString();
+                this.textToken = settings.Element("TextToken").Value.ToString();
+                this.controlToken = settings.Element("ControlToken").Value.ToString();
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("*** INFO *** There was a problem reading the Settings section in the configuration file.");
+            }
         }
 
         private void ReadLanguagesSection(XDocument xdoc)
         {
-            XElement languages = xdoc.Element("ConfigurationManager").Element("Languages");
-
-            this.CurrentLangPath = languages.Element("Current").Value.ToString();
-            this.DefaultLangPath = languages.Element("Default").Value.ToString();
-
-            if (this.CurrentLangPath != "" && this.CurrentLangPath != null)
+            try
             {
-                if (!System.IO.File.Exists(this.CurrentLangPath))
+                XElement languages = xdoc.Element("ConfigurationManager").Element("Languages");
+                this.CurrentLangPath = languages.Element("Current").Value.ToString();
+                this.DefaultLangPath = languages.Element("Default").Value.ToString();
+
+                if (this.CurrentLangPath != "" && this.CurrentLangPath != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("** INFO ** Language file not found. Selecting default language.");
+                    if (!System.IO.File.Exists(this.CurrentLangPath))
+                    {
+                        System.Diagnostics.Debug.WriteLine("** INFO ** Language file not found. Selecting default language.");
 
-                    String msg = "The file " + this.CurrentLangPath + " was not found.\nClosing the application.";
-                    MessageBox.Show(msg, "Translation file not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        String msg = "The file " + this.CurrentLangPath + " was not found.\nClosing the application.";
+                        MessageBox.Show(msg, "Translation file not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    System.Environment.Exit(0);
+                        System.Environment.Exit(0);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("*** INFO *** There was a problem reading the Languages section in the configuration file.");
             }
         }
 
         private void ReadRightsSection(XDocument xdoc)
         {
-            XElement rights = xdoc.Element("ConfigurationManager").Element("Rights");
+            try
+            {
+                XElement rights = xdoc.Element("ConfigurationManager").Element("Rights");
 
-            if (rights.Element("ProgrammerMode").Value == "yes") this.progModeAllowed = true;
-            this.MainModificationRights = HexToData(rights.Element("Modification").Value.Substring(2));
-            this.MainDisplayRights = HexToData(rights.Element("Display").Value.Substring(2));
+                var mode = ((string)rights.Element("ProgrammerMode")) ?? "";
+                if (mode.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                    this.progModeAllowed = true;
+                else
+                    this.progModeAllowed = false;
+
+                //if (rights.Element("ProgrammerMode").Value == "yes") this.progModeAllowed = true;
+                this.MainModificationRights = HexToData(rights.Element("Modification").Value.Substring(2));
+                this.MainDisplayRights = HexToData(rights.Element("Display").Value.Substring(2));
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("*** INFO *** There was a problem reading Rights in the configuration file.");
+            }
         }
+
 
         private void ReadLogsSection(XDocument xdoc)
         {
-            XElement logs = xdoc.Element("ConfigurationManager").Element("Logs");
-
-            if (logs.Element("CreateLogs").Value == "yes")
+            try
             {
-                this.createLogs = true;
-                Int32.TryParse(logs.Element("MaxAge").Value, out this.maxAgeOfLogs);
+                XElement logs = xdoc.Element("ConfigurationManager").Element("Logs");
+                if (logs.Element("CreateLogs").Value == "yes")
+                {
+                    this.createLogs = true;
+                    Int32.TryParse(logs.Element("MaxAge").Value, out this.maxAgeOfLogs);
+                }
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("*** INFO *** There was a problem reading the Logs section in the configuration file.");
             }
         }
 
