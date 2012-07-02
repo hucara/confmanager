@@ -33,8 +33,8 @@ namespace Configuration_Manager
 
         private int selectedTab;
 
-        public String DisplayRight = "00000000";
-        public String ModificationRight = "00000000";
+        public String displayRight = "00000000";
+        public String modificationRight = "00000000";
 
         public byte[] DisplayBytes = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
         public byte[] ModificationBytes = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
@@ -109,9 +109,7 @@ namespace Configuration_Manager
 			}
 			
             this.parentSection = Model.getInstance().CurrentSection;
-
             this.control.BringToFront();
-
             count++;
         }
 
@@ -151,6 +149,7 @@ namespace Configuration_Manager
             set 
             {
                 this.control.Text = value;
+                this.Changed = true;
                 this.text = value;
             }
         }
@@ -272,6 +271,34 @@ namespace Configuration_Manager
                     (this.control as CTabControl).SelectedIndex = value;
                     this.selectedTab = value;
                 }
+            }
+        }
+
+        public String DisplayRight
+        {
+            get
+            {
+                return this.displayRight;
+            }
+            set
+            {
+                this.displayRight = value;
+                this.DisplayBytes = Model.HexToData(value);
+                this.operatorVisibility = Model.ObtainRights(this.DisplayBytes, Model.getInstance().MainDisplayRights);
+            }
+        }
+
+        public String ModificationRight
+        {
+            get
+            {
+                return this.modificationRight;
+            }
+            set
+            {
+                this.modificationRight = value;
+                this.ModificationBytes = Model.HexToData(value);
+                this.operatorModification = Model.ObtainRights(this.ModificationBytes, Model.getInstance().MainModificationRights);
             }
         }
     }

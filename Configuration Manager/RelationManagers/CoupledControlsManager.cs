@@ -32,8 +32,8 @@ namespace Configuration_Manager.CustomControls
             {
                 related.CheckState = control.CheckState;
 
-                if (control.Checked) related.Enabled = false;
-                else related.Enabled = true;
+                //if (control.Checked) related.Enabled = false;
+                //else related.Enabled = true;
             }
         }
     }

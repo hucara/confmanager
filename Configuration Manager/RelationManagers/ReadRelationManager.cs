@@ -140,7 +140,8 @@ namespace Configuration_Manager.CustomControls
             {
                 if (r.cd.Format != "")
                 {
-                    string formattedValue = StringFormatter.FormatText(value, r.cd.Format);
+                    // TODO FORMAT
+                    string formattedValue = StringFormatter.GetFormattedText(value, r.cd.Format);
                     formattedValue = TokenControlTranslator.TranslateFromControl(formattedValue);
                     formattedValue = TokenTextTranslator.TranslateFromTextFile(formattedValue);
 
@@ -161,9 +162,7 @@ namespace Configuration_Manager.CustomControls
                 else (r as CCheckBox).CheckState = CheckState.Unchecked;
             }
             else
-            {
                 r.cd.Text = value;
-            }
         }
     }
 }

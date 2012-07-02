@@ -138,9 +138,8 @@ namespace Configuration_Manager
                 System.Diagnostics.Debug.WriteLine("! Printing Sections:");
 
                 foreach (Section s in model.Sections)
-                {
-                    System.Diagnostics.Debug.WriteLine(s.Name + " " + s.Tab.GetType().Name + ":" + s.Tab.Name + " " + s.Button.GetType().Name + ":" + s.Button.Text);
-                }
+                    System.Diagnostics.Debug.WriteLine(
+                        s.Name + " " + s.Tab.GetType().Name + ":" + s.Tab.Name + " " + s.Button.GetType().Name + ":" + s.Button.Text);
 
                 System.Diagnostics.Debug.WriteLine("-----------------------------------");
                 System.Diagnostics.Debug.WriteLine("! Printing List of Controls: ");

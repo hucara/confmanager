@@ -62,7 +62,6 @@ namespace Configuration_Manager
 #endif
 
             this.model = Model.getInstance();
-
             this.ErrorMsg = "";
 
             fontDialog1.ShowColor = true;
@@ -104,7 +103,6 @@ namespace Configuration_Manager
             SetLocationMargins();
 
             base.Show();
-
             SaveToControl();
         }
 
@@ -145,7 +143,12 @@ namespace Configuration_Manager
 
         private void fontButton_Click(object sender, EventArgs e)
         {
-            fontDialog1.Font = lastSelectedFont;
+            if (fontDialog1.Font.Name == "Microsoft Sans Serif"
+                && fontDialog1.Font.Style == FontStyle.Regular
+                && fontDialog1.Font.Size == 8.25)
+                fontDialog1.Font = Model.getInstance().lastSelectedFont;
+            else
+                fontDialog1.Font = control.cd.CurrentFont;
 
             DialogResult dr = fontDialog1.ShowDialog();
             if (dr == DialogResult.OK)
@@ -153,7 +156,7 @@ namespace Configuration_Manager
                 controlFont = fontDialog1.Font;
                 fontColor = fontDialog1.Color;
 
-                lastSelectedFont = controlFont;
+                Model.getInstance().lastSelectedFont = controlFont;
 
                 SetExampleTextLabel();
             }
@@ -328,9 +331,21 @@ namespace Configuration_Manager
                     break;
 
                 case "CTabControl":
+                    textLabel.Visible = false;
                     textTextBox.Visible = false;
                     relationsComboBox.Visible = false;
                     controlListBox.Visible = false;
+
+                    destinationTypeLabel.Visible = false;
+                    destinationTypeComboBox.Visible = false;
+                    fileDestinationLabel.Visible = false;
+                    fileDestinationTextBox.Visible = false;
+                    fileDestinationButton.Visible = false;
+                    subDestinationLabel.Visible = false;
+                    subDestinatonTextBox.Visible = false;
+
+                    formattingLabel.Visible = false;
+                    formattingTextBox.Visible = false;
                     break;
             }
         }
@@ -571,11 +586,11 @@ namespace Configuration_Manager
             control.cd.ModificationRight = this.modificationRightTextBox.Text.Substring(2);
             control.cd.DisplayRight = this.displayRightTextBox.Text.Substring(2);
 
-            control.cd.ModificationBytes = Model.HexToData(control.cd.ModificationRight);
-            control.cd.DisplayBytes = Model.HexToData(control.cd.DisplayRight);
+            //control.cd.ModificationBytes = Model.HexToData(control.cd.ModificationRight);
+            //control.cd.DisplayBytes = Model.HexToData(control.cd.DisplayRight);
 
-            control.cd.operatorModification = model.ObtainRights(control.cd.ModificationBytes, model.MainModificationRights);
-            control.cd.operatorVisibility = model.ObtainRights(control.cd.DisplayBytes, model.MainDisplayRights);
+            //control.cd.operatorModification = Model.ObtainRights(control.cd.ModificationBytes, model.MainModificationRights);
+            //control.cd.operatorVisibility = Model.ObtainRights(control.cd.DisplayBytes, model.MainDisplayRights);
 
             if (control is CCheckBox)
             {
@@ -600,8 +615,8 @@ namespace Configuration_Manager
                 else
                     (control as CComboBox).SelectedText = "";
             }
-            else
-                (control as Control).Text = Util.StringFormatter.FormatText((control as Control).Text, control.cd.Format);
+            else //TODO FORMAT
+                (control as Control).Text = Util.StringFormatter.GetFormattedText((control as Control).Text, control.cd.Format);
         }
 
         public void ReadFromControl()

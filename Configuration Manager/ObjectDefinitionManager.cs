@@ -84,8 +84,6 @@ namespace Configuration_Manager
                 System.Diagnostics.Debug.WriteLine("! [ERROR] Something went wrong while reading Sections in Object Definition File.");
                 model.logCreator.Append("! ERROR: Something went wrong while reading Sections in Object Definition File");
             }
-
-            model.ApplyRightsToSections();
         }
 
         private Section CreateDefinedSection(XElement i)
@@ -333,16 +331,18 @@ namespace Configuration_Manager
                         }
 
                         c.cd.Changed = false;
-
                         System.Diagnostics.Debug.WriteLine("+ Added : " + c.cd.Name + " with parent: " + c.cd.Parent.Name + " in Section: " + c.cd.ParentSection.Name);
                     }
                 }
             }
+
+            model.ApplyRightsToSections();
         }
 
         private void ApplyFormats(ICustomControl c)
         {
-            c.cd.Text = Util.StringFormatter.FormatText(c.cd.Text, c.cd.Format);
+            //TODO FORMAT
+            c.cd.Text = Util.StringFormatter.GetFormattedText(c.cd.Text, c.cd.Format);
         }
 
         private void SetSelectedTab(ICustomControl c, XElement i)
@@ -519,12 +519,12 @@ namespace Configuration_Manager
             c.cd.DisplayRight = i.Element("Settings").Element("DisplayRight").Value.Substring(2);
             c.cd.ModificationRight = i.Element("Settings").Element("ModificationRight").Value.Substring(2);
 
-            c.cd.DisplayBytes = Model.HexToData(c.cd.DisplayRight);
-            c.cd.ModificationBytes = Model.HexToData(c.cd.ModificationRight);
+            //c.cd.DisplayBytes = Model.HexToData(c.cd.DisplayRight);
+            //c.cd.ModificationBytes = Model.HexToData(c.cd.ModificationRight);
 
-            // Calculate Visibility
-            c.cd.operatorVisibility = model.ObtainRights(c.cd.DisplayBytes, model.MainDisplayRights);
-            c.cd.operatorModification = model.ObtainRights(c.cd.ModificationBytes, model.MainModificationRights);
+            //// Calculate Visibility
+            //c.cd.operatorVisibility = Model.ObtainRights(c.cd.DisplayBytes, model.MainDisplayRights);
+            //c.cd.operatorModification = Model.ObtainRights(c.cd.ModificationBytes, model.MainModificationRights);
         }
 
         private void SetRelatedReadList(ICustomControl c, XElement i)

@@ -19,15 +19,13 @@ namespace Configuration_Manager.CustomControls
 		public ContextMenuStrip contextMenu;
 		Model model;
 		ControlEditor editor;
-		Rectangle previewRect = new Rectangle(0, 0, 0, 0);
+        Rectangle previewRect = Rectangle.Empty;
 		Timer t = new Timer(); // Drag and drop timer.
 
 		public CustomHandler(ContextMenuStrip cms)
 		{
 			this.contextMenu = cms;
 			this.model = Model.getInstance();
-            //this.cf = ControlFactory.getInstance();
-
 			this.t.Interval = 200;
 			this.t.Tick += TimerTick;
 		}
@@ -61,10 +59,6 @@ namespace Configuration_Manager.CustomControls
 
 				SetContextMenuStrip(type);
                 SetContextMenuModificationRights(c);
-			}
-			else if (model.progMode && me.Button == MouseButtons.Left)
-			{
-
 			}
 		}
 
@@ -111,8 +105,8 @@ namespace Configuration_Manager.CustomControls
 				contextMenu.Items[0].Enabled = true;
 
 				enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 9, false);
-
-				contextMenu.Items[1].Enabled = true;
+				
+                contextMenu.Items[1].Enabled = true;
 				contextMenu.Items[2].Enabled = true;
 
 				// Check if it is the only and last tab inside the CTabcontrol
@@ -301,6 +295,7 @@ namespace Configuration_Manager.CustomControls
 				if (type != "TabControl" && type != "TabPage" && type != "CTabControl" && type != "CTabPage")
 				{
 					t.Start();
+                    CreatePreviewRectangle(model.CurrentClickedControl as ICustomControl);
 					Debug.WriteLine("! Timer Started");
 				}
 			}
@@ -319,6 +314,9 @@ namespace Configuration_Manager.CustomControls
 				String parent = (model.CurrentClickedControl as ICustomControl).cd.Parent.Name;
 				Debug.WriteLine("! Got the control: " + name + " with Parent: " + parent);
 				model.CurrentClickedControl.DoDragDrop(name, DragDropEffects.Move);
+                CaptureControl(model.CurrentClickedControl as Control);
+
+                previewRect = new Rectangle(model.CurrentClickedControl.Location, model.CurrentClickedControl.Size);
 			}
 		}
 
@@ -339,8 +337,6 @@ namespace Configuration_Manager.CustomControls
 
                     if (c != null)
                     {
-                        CreatePreviewRectangle(c);
-
                         c.cd.Parent = parent;
                         Point cord = new Point(dea.X, dea.Y);
                         cord = parent.PointToClient(cord);
@@ -383,6 +379,7 @@ namespace Configuration_Manager.CustomControls
 			if ((e as MouseEventArgs).Button == MouseButtons.Left)
 			{
 				t.Stop();
+                previewRect = Rectangle.Empty;
 				Debug.WriteLine("! Timer Stopped");
 			}
 		}
@@ -394,14 +391,16 @@ namespace Configuration_Manager.CustomControls
                 System.Diagnostics.Debug.WriteLine("! " +(sender as ICustomControl).cd.Name + " content has changed its value.");
         }
 
-        public void GiveFeedback(object sender, System.Windows.Forms.GiveFeedbackEventArgs e)
+        public Bitmap CaptureControl(Control control)
         {
-
-        }
-
-        public void OnPaint(PaintEventArgs e)
-        {
-            
+            Bitmap cBitmap = new Bitmap(control.Width, control.Height);
+            using (Graphics g1 = control.CreateGraphics())
+            {
+                control.DrawToBitmap(cBitmap, control.Bounds);
+                Graphics g2 = control.Parent.CreateGraphics();
+                g2.DrawImage(cBitmap, 0, 0);
+            }
+            return cBitmap;
         }
     }
 }

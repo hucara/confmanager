@@ -31,18 +31,21 @@ namespace Configuration_Manager.RelationManagers
                 if (c.cd.MainDestination != null && c.cd.MainDestination != "")
                 {
                         SaveControlChanges(c);
-                        c.cd.Changed = false;
+                        //c.cd.Changed = false;
                 }
             }
 
-            foreach(ICustomControl c in Model.getInstance().AllControls.Where(p => p.cd.Changed))
+            foreach (ICustomControl c in Model.getInstance().AllControls.Where(p => p.cd.Changed))
+            {
                 ReReadControl(c);
+                c.cd.Changed = false;
+            }
         }
 
         private static void SaveControlChanges(ICustomControl c)
         {
-            if (c.cd.Type == "CComboBox" || c.cd.Type == "CTextBox" || c.cd.Type == "CCheckBox")
-            {
+            //if (c.cd.Type == "CComboBox" || c.cd.Type == "CTextBox" || c.cd.Type == "CCheckBox")
+            //{
                 String fileType = c.cd.MainDestination.Substring(c.cd.MainDestination.Length - 4, 4);
 
                 String path = TokenTextTranslator.TranslateFromTextFile(c.cd.RealSubDestination);
@@ -58,7 +61,7 @@ namespace Configuration_Manager.RelationManagers
                     Model.getInstance().logCreator.Append("[ERROR] Destination file and type not matching for " + c.cd.Name);
                     System.Diagnostics.Debug.WriteLine("!ERROR : Destination file and type not matching for " + c.cd.Name);
                 }
-            }
+            //}
         }
 
         private static string GetValueToSave(ICustomControl c)
@@ -91,6 +94,12 @@ namespace Configuration_Manager.RelationManagers
                     value = c.cd.checkBoxCheckedValue;
                 else
                     value = c.cd.checkBoxUncheckedValue;
+            }
+            else
+            {
+                String t = TokenControlTranslator.TranslateFromControl(c.cd.RealText);
+                t = TokenTextTranslator.TranslateFromTextFile(t);
+                value = t;
             }
             return value;
         }

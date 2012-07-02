@@ -89,6 +89,8 @@ namespace Configuration_Manager
         public String textToken { get; set; }
         public String controlToken { get; set; }
 
+        public System.Drawing.Font lastSelectedFont { get; set; }
+
         // Private constructor
         private Model()
         {
@@ -651,7 +653,7 @@ namespace Configuration_Manager
             return data;
         }
 
-        public bool ObtainRights(byte[] ControlRight, byte[] MainRight)
+        public static bool ObtainRights(byte[] ControlRight, byte[] MainRight)
         {
             bool res = true;
             for (int i = 0; i < ControlRight.Length; i++)
@@ -731,14 +733,39 @@ namespace Configuration_Manager
                     {
                         s.Button.Visible = true;
                         s.Button.Enabled = true;
+
+                        foreach (ICustomControl c in AllControls.Where(p => p.cd.ParentSection == s))
+                            (c as Control).Enabled = true;
                     }
                 }
                 else
                 {
                     foreach (Section s in this.Sections)
                     {
-                        s.Button.Visible = ObtainRights(s.DisplayBytes, model.MainDisplayRights);
+                        bool visibility = ObtainRights(s.DisplayBytes, model.MainDisplayRights);
+                        if (!visibility)
+                        {
+                            foreach (ICustomControl c in AllControls.Where(p => p.cd.ParentSection == s))
+                                (c as Control).Visible = false;
+                        }
+
+                        //if (s.Button.Visible == false)
+                        //{
+                        //    s.Selected = false;
+                        //    foreach (Section se in this.Sections.Where(e => e.Button.Visible == true))
+                        //    {
+                        //        se.Selected = true;
+                        //        break;
+                        //    }
+                        //}
+
+
                         s.Button.Enabled = ObtainRights(s.ModificationBytes, model.MainModificationRights);
+                        if (!s.Button.Enabled)
+                        {
+                            foreach (ICustomControl c in AllControls.Where(p => p.cd.ParentSection == s))
+                                (c as Control).Enabled = false;
+                        }
                     }
                 }
             }

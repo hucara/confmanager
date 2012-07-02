@@ -566,7 +566,6 @@
         private System.Windows.Forms.Label HintLabel;
         private System.Windows.Forms.TextBox hintTextBox;
         private System.Windows.Forms.TextBox textTextBox;
-        private System.Windows.Forms.FontDialog fontDialog1;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.CheckedListBox controlListBox;
         private System.Windows.Forms.Button backColorButton;
@@ -605,5 +604,6 @@
         private System.Windows.Forms.TextBox checkedTextBox;
         private System.Windows.Forms.Label uncheckedLabel;
         private System.Windows.Forms.Label checkedLabel;
+        public System.Windows.Forms.FontDialog fontDialog1;
     }
 }
