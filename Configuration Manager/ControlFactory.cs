@@ -98,7 +98,6 @@ namespace Configuration_Manager
             c.cd.RealText = c.cd.Text;
 
             model.logCreator.Append("+ Added: " + c.cd.Name);
-
             return c;
         }
 

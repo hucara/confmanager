@@ -26,6 +26,7 @@ namespace Configuration_Manager.CustomControls
             foreach (ICustomControl r in c.cd.RelatedRead)
             {
                 ReadConfiguration(r);
+                System.Diagnostics.Debug.WriteLine("PEIM!");
             }
         }
 
@@ -41,13 +42,20 @@ namespace Configuration_Manager.CustomControls
             // Re-reads the value from the source file
             if (r.cd.MainDestination != null && r.cd.MainDestination != "")
             {
+                String value = "";
+
                 System.Diagnostics.Debug.WriteLine("<< Reading key: " + r.cd.SubDestination);
                 String fileType = r.cd.MainDestination.Substring(r.cd.MainDestination.Length - 4, 4);
-                if (fileType == ".ini" && r.cd.DestinationType == ".INI") ReReadINIFile(r);
-                else if (fileType == "conf" && r.cd.DestinationType == ".INI") ReReadINIFile(r);
-                else if (fileType == ".xml" && r.cd.DestinationType == ".XML") ReReadXMLFile(r);
-                else if (r.cd.DestinationType == "REG") ReReadRegistry(r);
+                if (fileType == ".ini" && r.cd.DestinationType == ".INI") value = ReReadINIFile(r);
+                else if (fileType == "conf" && r.cd.DestinationType == ".INI") value = ReReadINIFile(r);
+                else if (fileType == ".xml" && r.cd.DestinationType == ".XML") value = ReReadXMLFile(r);
+                else if (r.cd.DestinationType == "REG") value = ReReadRegistry(r);
+
+                SetReadValue(r, value);
+                //r.cd.Changed = false;
             }
+
+            //r.cd.Changed = false;
         }
 
         private static void TranslateSubDestination(ICustomControl r)
@@ -71,6 +79,7 @@ namespace Configuration_Manager.CustomControls
             int index = (r as ComboBox).SelectedIndex;
             r.cd.comboBoxItems.Clear();
             (r as ComboBox).Items.Clear();
+            (r as ComboBox).BeginUpdate();
 
             for (int i = 0; i < r.cd.comboBoxRealItems.Count; i++)
             {
@@ -79,12 +88,17 @@ namespace Configuration_Manager.CustomControls
 
                 (r as ComboBox).Items.Add(text);
                 r.cd.comboBoxItems.Add(text);
+                System.Diagnostics.Debug.WriteLine(">> TRANSLATED item: " + text + " for " + r.cd.Name);
             }
 
+            (r as ComboBox).EndUpdate();
             (r as ComboBox).SelectedIndex = index;
+            System.Diagnostics.Debug.WriteLine(">> SELECTED item: " + index + " for " + r.cd.Name);
+            
+            //if(!HasLoopRelation(r)) (r as ComboBox).SelectedIndex = index;
         }
 
-        private static void ReReadINIFile(ICustomControl r)
+        private static String ReReadINIFile(ICustomControl r)
         {
             try
             {
@@ -92,16 +106,17 @@ namespace Configuration_Manager.CustomControls
                 List<String> nodes = r.cd.SubDestination.TrimStart('\\').Split('\\').ToList();
                 String value = file.IniReadValue(nodes[0], nodes[1]);
 
-                SetReadValue(r, value);
+                return value;
             }
             catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading INI file for: " + r.cd.Name);
                 Model.getInstance().logCreator.Append("[ERROR] Re-Reading INI file for " + r.cd.Name);
             }
+            return "";
         }
 
-        private static void ReReadXMLFile(ICustomControl r)
+        private static String ReReadXMLFile(ICustomControl r)
         {
             try
             {
@@ -109,60 +124,101 @@ namespace Configuration_Manager.CustomControls
                 xdoc.Load(r.cd.MainDestination);
 
                 String value = xdoc.SelectSingleNode(r.cd.SubDestination).InnerText;
-                SetReadValue(r, value);
+                return value;
             }
             catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading XML file for: " + r.cd.Name);
                 Model.getInstance().logCreator.Append("[ERROR] Re-Reading XML file for " + r.cd.Name);
             }
+            return "";
         }
 
-        private static void ReReadRegistry(ICustomControl r)
+        private static String ReReadRegistry(ICustomControl r)
         {
             try
             {
                 RegistryManager regMan = new RegistryManager(r.cd.MainDestination);
 
                 String value = regMan.GetValue(r.cd.SubDestination);
-                SetReadValue(r, value);
+                return value;
+                //SetReadValue(r, value);
             }
             catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading REGISTRY for: " + r.cd.Name);
                 Model.getInstance().logCreator.Append("[ERROR] Re-Reading registry for " + r.cd.Name);
             }
+            return "";
         }
 
         private static void SetReadValue(ICustomControl r, String value)
         {
-            if (r.cd.Type == "CComboBox")
-            {
-                if (r.cd.Format != "")
+            //if (!HasLoopRelation(r))
+            //{
+                if (r.cd.Type == "CComboBox")
                 {
-                    // TODO FORMAT
-                    string formattedValue = StringFormatter.GetFormattedText(value, r.cd.Format);
-                    formattedValue = TokenControlTranslator.TranslateFromControl(formattedValue);
-                    formattedValue = TokenTextTranslator.TranslateFromTextFile(formattedValue);
+                    if (r.cd.Format != "" || r.cd.Format != null)
+                    {
+                        // TODO FORMAT
+                        string formattedValue = StringFormatter.GetFormattedText(value, r.cd.Format);
+                        formattedValue = TokenControlTranslator.TranslateFromControl(formattedValue);
+                        formattedValue = TokenTextTranslator.TranslateFromTextFile(formattedValue);
 
-                    int index = r.cd.comboBoxConfigItems.IndexOf(formattedValue);
-                    if ((r as ComboBox).Items.Count >= index)
-                        (r as ComboBox).SelectedIndex = index;
+                        int index = r.cd.comboBoxConfigItems.IndexOf(formattedValue);
+                        if ((r as ComboBox).Items.Count >= index)
+                            (r as ComboBox).SelectedIndex = index;
+                    }
+                    else
+                    {
+                        int index = r.cd.comboBoxConfigItems.IndexOf(value);
+                        if ((r as ComboBox).Items.Count >= index)
+                            (r as ComboBox).SelectedIndex = index;
+                    }
+
+                    r.cd.Changed = false;
+                }
+                else if (r.cd.Type == "CCheckBox")
+                {
+                    if (value.Equals(r.cd.checkBoxCheckedValue, StringComparison.OrdinalIgnoreCase)) (r as CCheckBox).CheckState = CheckState.Checked;
+                    else (r as CCheckBox).CheckState = CheckState.Unchecked;
                 }
                 else
-                {
-                    int index = r.cd.comboBoxConfigItems.IndexOf(value);
-                    if ((r as ComboBox).Items.Count >= index)
-                        (r as ComboBox).SelectedIndex = index;
-                }
-            }
-            else if (r.cd.Type == "CCheckBox")
+                    if (r.cd.Format != "" || r.cd.Format != null)
+                        r.cd.Text = StringFormatter.GetFormattedText(value, r.cd.Format);
+            //}
+            //else
+            //    System.Diagnostics.Debug.WriteLine(">!< " + r.cd.Name + " has LOOP RELATION");
+        }
+
+        private static bool HasLoopRelation(ICustomControl c)
+        {
+            List<ICustomControl> rels = new List<ICustomControl>();
+
+            foreach (ICustomControl r in c.cd.RelatedRead)
             {
-                if (value.Equals(r.cd.checkBoxCheckedValue, StringComparison.OrdinalIgnoreCase)) (r as CCheckBox).CheckState = CheckState.Checked;
-                else (r as CCheckBox).CheckState = CheckState.Unchecked;
+                rels = r.cd.RelatedRead;
+                if (rels.Contains(c)) return true;
             }
-            else
-                r.cd.Text = value;
+
+            return false;
+        }
+
+        public static string GetUnformattedValue(ICustomControl r)
+        {
+            string value = "";
+
+            if (r.cd.MainDestination != null && r.cd.MainDestination != "")
+            {
+                System.Diagnostics.Debug.WriteLine("<< Getting Unformatted value: " + r.cd.SubDestination);
+                String fileType = r.cd.MainDestination.Substring(r.cd.MainDestination.Length - 4, 4);
+                if (fileType == ".ini" && r.cd.DestinationType == ".INI") value = ReReadINIFile(r);
+                else if (fileType == "conf" && r.cd.DestinationType == ".INI") value = ReReadINIFile(r);
+                else if (fileType == ".xml" && r.cd.DestinationType == ".XML") value = ReReadXMLFile(r);
+                else if (r.cd.DestinationType == "REG") value = ReReadRegistry(r);
+            }
+
+            return value;
         }
     }
 }

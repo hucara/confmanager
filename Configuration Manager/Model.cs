@@ -605,7 +605,7 @@ namespace Configuration_Manager
 
         public void UpdateInfoLabel(object sender, EventArgs e)
         {
-            if (sender is ICustomControl)
+            if (sender is ICustomControl && !String.IsNullOrEmpty((sender as ICustomControl).cd.Hint))
             {
                 this.InfoLabel.Text = "";
                 this.InfoLabel.Text = TokenTextTranslator.TranslateFromTextFile((sender as ICustomControl).cd.Hint);

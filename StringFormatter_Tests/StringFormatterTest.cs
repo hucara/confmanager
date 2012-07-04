@@ -239,5 +239,48 @@ namespace StringFormatter_Tests
             string actual = StringFormatter.GetUnFormattedText(newValue, text, format);
             Assert.AreEqual("Qué pasa my friend", actual);
         }
+
+        [TestMethod()]
+        public void GetFormattedText_ExampleCrash_ReturnsCrash()
+        {
+            string text = "1, EUR, 200, 25";
+            string format = "1, EUR, ##this##, 25";
+            string actual = StringFormatter.GetFormattedText(text, format);
+            Assert.AreEqual("200", actual);
+        }
+
+        [TestMethod()]
+        public void GetFormattedText_ExampleCrash_ReturnsCrash3()
+        {
+            string text = "1, EUR, 200, 25";
+            string format = "*R, ##this##, *";
+            string actual = StringFormatter.GetFormattedText(text, format);
+            Assert.AreEqual("200", actual);
+        }
+
+        [TestMethod()]
+        public void SearchMatches_1()
+        {
+            string text = "1, EUR, 200, 25";
+            string format = "*R, ##this##, *";
+            StringFormatter.SearchMatches(text, format);
+        }
+
+        [TestMethod()]
+        public void SearchMatches_2()
+        {
+            string text = "1, EUR, 200, 25";
+            string format = "1, EUR, ##this##, 25";
+            StringFormatter.SearchMatches(text, format);
+        }
+
+        [TestMethod()]
+        public void GetFormattedText_4Param_ReturnsExpected()
+        {
+            string text = "1, EUR, 200, 25";
+            string format = "*, *, *, ##This##";
+            string actual = StringFormatter.GetFormattedText(text, format);
+            Assert.AreEqual("25", actual);
+        }
     }
 }

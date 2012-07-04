@@ -67,39 +67,69 @@ namespace Configuration_Manager.RelationManagers
         private static string GetValueToSave(ICustomControl c)
         {
             String value = "";
-            if (c.cd.Type == "CComboBox")
+
+            try
             {
-                if (c.cd.Format != "")
+                if (c.cd.Type == "CComboBox")
                 {
-                    value = c.cd.Format.Replace("##This##", c.cd.comboBoxConfigItems[(c as CComboBox).SelectedIndex]);
-                    value = TokenControlTranslator.TranslateFromControl(value);
-                    value = TokenTextTranslator.TranslateFromTextFile(value);
-                }
-                else
-                {
-                    if (c.cd.comboBoxConfigItems.Count > 0 && (c as CComboBox).SelectedIndex != -1)
-                        value = c.cd.comboBoxConfigItems[(c as CComboBox).SelectedIndex];
+                    if (c.cd.Format != "")
+                    {
+                        String unformatted = ReadRelationManager.GetUnformattedValue(c);
+                        String currentValue = c.cd.comboBoxConfigItems[(c as CComboBox).SelectedIndex];
+                        value = StringFormatter.GetUnFormattedText(currentValue, unformatted, c.cd.Format);
+                        value = TokenControlTranslator.TranslateFromControl(value);
+                        value = TokenTextTranslator.TranslateFromTextFile(value);
+                    }
                     else
-                        value = c.cd.comboBoxItems[(c as CComboBox).SelectedIndex];
+                    {
+                        if (c.cd.comboBoxConfigItems.Count > 0 && (c as CComboBox).SelectedIndex != -1)
+                            value = c.cd.comboBoxConfigItems[(c as CComboBox).SelectedIndex];
+                        else
+                            value = c.cd.comboBoxItems[(c as CComboBox).SelectedIndex];
+                    }
+                }
+                else if (c.cd.Type == "CTextBox")
+                {
+                    if (c.cd.Format != "" && c.cd.Format != null)
+                    {
+                        String unformatted = ReadRelationManager.GetUnformattedValue(c);
+                        String currentValue = c.cd.Text;
+                        value = StringFormatter.GetUnFormattedText(currentValue, unformatted, c.cd.Format);
+                        value = TokenControlTranslator.TranslateFromControl(value);
+                        value = TokenTextTranslator.TranslateFromTextFile(value);
+                    }
+                    else
+                        value = c.cd.Text;
+                }
+                else if (c.cd.Type == "CCheckBox")
+                {
+                    value = c.cd.checkBoxUncheckedValue;
+                    if ((c as CCheckBox).CheckState == System.Windows.Forms.CheckState.Checked)
+                        value = c.cd.checkBoxCheckedValue;
+                    else
+                        value = c.cd.checkBoxUncheckedValue;
+                }
+                else
+                {
+                    if (c.cd.Format != "" && c.cd.Format != null)
+                    {
+                        String unformatted = ReadRelationManager.GetUnformattedValue(c);
+                        String currentValue = c.cd.Text;
+                        value = StringFormatter.GetUnFormattedText(currentValue, unformatted, c.cd.Format);
+                        value = TokenControlTranslator.TranslateFromControl(value);
+                        value = TokenTextTranslator.TranslateFromTextFile(value);
+                    }
+                    else
+                    {
+                        String t = TokenControlTranslator.TranslateFromControl(c.cd.RealText);
+                        t = TokenTextTranslator.TranslateFromTextFile(t);
+                        value = t;
+                    }
                 }
             }
-            else if (c.cd.Type == "CTextBox")
+            catch (Exception)
             {
-                value = c.cd.Text;
-            }
-            else if (c.cd.Type == "CCheckBox")
-            {
-                value = c.cd.checkBoxUncheckedValue;
-                if ((c as CCheckBox).CheckState == System.Windows.Forms.CheckState.Checked)
-                    value = c.cd.checkBoxCheckedValue;
-                else
-                    value = c.cd.checkBoxUncheckedValue;
-            }
-            else
-            {
-                String t = TokenControlTranslator.TranslateFromControl(c.cd.RealText);
-                t = TokenTextTranslator.TranslateFromTextFile(t);
-                value = t;
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an exception while getting value to save for: " + c.cd.Name);
             }
             return value;
         }

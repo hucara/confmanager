@@ -34,9 +34,9 @@ namespace Configuration_Manager
 
         int top, left, height, width;
 
-        String read = DEFAULT_READ;
-        String visibility = DEFAULT_VISIBILITY;
-        String coupled = DEFAULT_COUPLED;
+        String READ = DEFAULT_READ;
+        String VISIBILITY = DEFAULT_VISIBILITY;
+        String COUPLED = DEFAULT_COUPLED;
 
         String type;
         String ErrorMsg;
@@ -177,12 +177,12 @@ namespace Configuration_Manager
             controlListBox.Items.Clear();
             if (relationsComboBox.SelectedIndex > -1)
             {
-                if (relationsComboBox.SelectedItem.ToString() == this.coupled && control.cd.Type == "CComboBox")
+                if (relationsComboBox.SelectedItem.ToString() == this.COUPLED && control.cd.Type == "CComboBox")
                 {
                     foreach (ICustomControl c in model.AllControls.Where(p => p.cd.Type == "CComboBox"))
                         controlListBox.Items.Add(c.cd.Name);
                 }
-                else if (relationsComboBox.SelectedItem.ToString() == this.coupled && control.cd.Type == "CCheckBox")
+                else if (relationsComboBox.SelectedItem.ToString() == this.COUPLED && control.cd.Type == "CCheckBox")
                 {
                     foreach (ICustomControl c in model.AllControls.Where(p => p.cd.Type == "CCheckBox"))
                         controlListBox.Items.Add(c.cd.Name);
@@ -206,9 +206,9 @@ namespace Configuration_Manager
                 IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
 
                 // Relations
-                read = texts.Single(x => (int?)x.Attribute("id") == 22).Value;
-                visibility = texts.Single(x => (int?)x.Attribute("id") == 24).Value;
-                coupled = texts.Single(x => (int?)x.Attribute("id") == 25).Value;
+                READ = texts.Single(x => (int?)x.Attribute("id") == 22).Value;
+                VISIBILITY = texts.Single(x => (int?)x.Attribute("id") == 24).Value;
+                COUPLED = texts.Single(x => (int?)x.Attribute("id") == 25).Value;
             }
             catch (Exception e)
             {
@@ -219,16 +219,16 @@ namespace Configuration_Manager
 
             if (type == "CComboBox" || type == "CCheckBox")
             {
-                relationsComboBox.Items.Add(read);
-                relationsComboBox.Items.Add(visibility);
-                relationsComboBox.Items.Add(coupled);
+                relationsComboBox.Items.Add(READ);
+                relationsComboBox.Items.Add(VISIBILITY);
+                relationsComboBox.Items.Add(COUPLED);
 
-                relationsComboBox.SelectedItem = read;
+                relationsComboBox.SelectedItem = READ;
             }
             else if (type == "CTextBox")
             {
-                relationsComboBox.Items.Add(read);
-                relationsComboBox.SelectedItem = read;
+                relationsComboBox.Items.Add(READ);
+                relationsComboBox.SelectedItem = READ;
             }
             else if (type == "CLabel" || type == "CPanel" || type == "CGroupBox" || type == "CTabPage")
             {
@@ -673,27 +673,39 @@ namespace Configuration_Manager
             // If item is being activated
             if (!controlListBox.GetItemChecked(e.Index))
             {
-                if (relationsComboBox.SelectedItem.ToString() == coupled)
+                if (relationsComboBox.SelectedItem.ToString() == COUPLED)
                     // Manage the coupled relation
                     CoupledRelationsListChanged(checkedControl, e);
-                else if (relationsComboBox.SelectedItem.ToString() == visibility)
+                else if (relationsComboBox.SelectedItem.ToString() == VISIBILITY)
                 {
                     // Manage the visibility relation
                     if (!currentVisibleList.Contains(checkedControl))
                         currentVisibleList.Add(checkedControl);
                     checkedControl.cd.inRelatedVisibility = true;
                 }
-                else if (relationsComboBox.SelectedItem.ToString() == read)
+                else if (relationsComboBox.SelectedItem.ToString() == READ)
                 {
                     // Manage the read relation
-                    if(!currentVisibleList.Contains(checkedControl))
+                    bool looping = false;
+                    if (this.control.cd.Type == "CComboBox" && checkedControl.cd.Type == "CComboBox")
+                    {
+                        if (checkedControl.cd.RelatedRead.Contains(this.control))
+                        {
+                            looping = true;
+                            e.NewValue = CheckState.Unchecked;
+                            String msg = "This would create a loop. Please, try to use a coupled relation.";
+                            MessageBox.Show(msg, " Error coupling controls.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
+                    }
+
+                    if(!currentVisibleList.Contains(checkedControl) && !looping)
                         currentVisibleList.Add(checkedControl);
                 }
             }
             else
             {
                 currentVisibleList.Remove(checkedControl);
-                if (relationsComboBox.Text == visibility) 
+                if (relationsComboBox.Text == VISIBILITY) 
                     checkedControl.cd.inRelatedVisibility = false;
                 System.Diagnostics.Debug.WriteLine("- [" + relationsComboBox.SelectedItem + "] Unchecked: " + checkedControl.cd.Name);
             }
@@ -739,7 +751,7 @@ namespace Configuration_Manager
             currentVisibleList = GetCurrentVisibleList();
             FillOutCheckedListBox();
 
-            if (relationsComboBox.SelectedItem.ToString() != this.coupled)
+            if (relationsComboBox.SelectedItem.ToString() != this.COUPLED)
             {
                 for (int i = 0; i < controlListBox.Items.Count; i++)
                 {
@@ -766,11 +778,11 @@ namespace Configuration_Manager
             String selectedList = relationsComboBox.SelectedItem.ToString();
 
             System.Diagnostics.Debug.WriteLine("! Related List: " + selectedList);
-            if (selectedList == this.read)
+            if (selectedList == this.READ)
                 return control.cd.RelatedRead;
-            else if (selectedList == this.visibility)
+            else if (selectedList == this.VISIBILITY)
                 return control.cd.RelatedVisibility;
-            else if (selectedList == this.coupled)
+            else if (selectedList == this.COUPLED)
                 return control.cd.CoupledControls;
             return control.cd.RelatedRead;
         }
@@ -941,6 +953,18 @@ namespace Configuration_Manager
         private void Editor_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.control.cd.Changed = false;
+        }
+
+        private static bool HasLoopRelation(ICustomControl c)
+        {
+            List<ICustomControl> rels = new List<ICustomControl>();
+            foreach (ICustomControl r in c.cd.RelatedRead)
+            {
+                rels = r.cd.RelatedRead;
+                if (rels.Contains(c)) return true;
+            }
+
+            return false;
         }
 	}
 }
