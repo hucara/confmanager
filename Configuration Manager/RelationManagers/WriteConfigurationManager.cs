@@ -103,11 +103,25 @@ namespace Configuration_Manager.RelationManagers
                 }
                 else if (c.cd.Type == "CCheckBox")
                 {
-                    value = c.cd.checkBoxUncheckedValue;
-                    if ((c as CCheckBox).CheckState == System.Windows.Forms.CheckState.Checked)
-                        value = c.cd.checkBoxCheckedValue;
+                    if (c.cd.Format != "" && c.cd.Format != null)
+                    {
+                        String unformatted = ReadRelationManager.GetUnformattedValue(c);
+                        String currentValue = c.cd.checkBoxUncheckedValue;
+                        if ((c as CCheckBox).CheckState == System.Windows.Forms.CheckState.Checked)
+                            currentValue = c.cd.checkBoxCheckedValue;
+                        else
+                            currentValue = c.cd.checkBoxUncheckedValue;
+                        value = StringFormatter.GetUnFormattedText(currentValue, unformatted, c.cd.Format);
+                    }
                     else
+                    {
                         value = c.cd.checkBoxUncheckedValue;
+                        if ((c as CCheckBox).CheckState == System.Windows.Forms.CheckState.Checked)
+                            value = c.cd.checkBoxCheckedValue;
+                        else
+                            value = c.cd.checkBoxUncheckedValue;
+                    }
+                    
                 }
                 else
                 {

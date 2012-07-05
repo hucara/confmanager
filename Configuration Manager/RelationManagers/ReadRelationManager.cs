@@ -24,10 +24,10 @@ namespace Configuration_Manager.CustomControls
             ICustomControl c = sender as ICustomControl;
 
             foreach (ICustomControl r in c.cd.RelatedRead)
-            {
                 ReadConfiguration(r);
-                System.Diagnostics.Debug.WriteLine("PEIM!");
-            }
+
+            foreach (ICustomControl r in c.cd.RelatedRead)
+                r.cd.Changed = false;
         }
 
         public static void ReadConfiguration(ICustomControl r)
@@ -94,7 +94,7 @@ namespace Configuration_Manager.CustomControls
             (r as ComboBox).EndUpdate();
             (r as ComboBox).SelectedIndex = index;
             System.Diagnostics.Debug.WriteLine(">> SELECTED item: " + index + " for " + r.cd.Name);
-            
+
             //if(!HasLoopRelation(r)) (r as ComboBox).SelectedIndex = index;
         }
 
@@ -156,36 +156,40 @@ namespace Configuration_Manager.CustomControls
         {
             //if (!HasLoopRelation(r))
             //{
-                if (r.cd.Type == "CComboBox")
+            if (r.cd.Type == "CComboBox")
+            {
+                if (r.cd.Format != "" || r.cd.Format != null)
                 {
-                    if (r.cd.Format != "" || r.cd.Format != null)
-                    {
-                        // TODO FORMAT
-                        string formattedValue = StringFormatter.GetFormattedText(value, r.cd.Format);
-                        formattedValue = TokenControlTranslator.TranslateFromControl(formattedValue);
-                        formattedValue = TokenTextTranslator.TranslateFromTextFile(formattedValue);
+                    // TODO FORMAT
+                    string formattedValue = StringFormatter.GetFormattedText(value, r.cd.Format);
+                    formattedValue = TokenControlTranslator.TranslateFromControl(formattedValue);
+                    formattedValue = TokenTextTranslator.TranslateFromTextFile(formattedValue);
 
-                        int index = r.cd.comboBoxConfigItems.IndexOf(formattedValue);
-                        if ((r as ComboBox).Items.Count >= index)
-                            (r as ComboBox).SelectedIndex = index;
-                    }
-                    else
-                    {
-                        int index = r.cd.comboBoxConfigItems.IndexOf(value);
-                        if ((r as ComboBox).Items.Count >= index)
-                            (r as ComboBox).SelectedIndex = index;
-                    }
-
-                    r.cd.Changed = false;
-                }
-                else if (r.cd.Type == "CCheckBox")
-                {
-                    if (value.Equals(r.cd.checkBoxCheckedValue, StringComparison.OrdinalIgnoreCase)) (r as CCheckBox).CheckState = CheckState.Checked;
-                    else (r as CCheckBox).CheckState = CheckState.Unchecked;
+                    int index = r.cd.comboBoxConfigItems.IndexOf(formattedValue);
+                    if ((r as ComboBox).Items.Count >= index)
+                        (r as ComboBox).SelectedIndex = index;
                 }
                 else
-                    if (r.cd.Format != "" || r.cd.Format != null)
-                        r.cd.Text = StringFormatter.GetFormattedText(value, r.cd.Format);
+                {
+                    int index = r.cd.comboBoxConfigItems.IndexOf(value);
+                    if ((r as ComboBox).Items.Count >= index)
+                        (r as ComboBox).SelectedIndex = index;
+                }
+            }
+            else if (r.cd.Type == "CCheckBox")
+            {
+                if (!String.IsNullOrEmpty(r.cd.Format))
+                    value = StringFormatter.GetFormattedText(value, r.cd.Format);
+
+                if (value.Equals(r.cd.checkBoxCheckedValue, StringComparison.OrdinalIgnoreCase)) (r as CCheckBox).CheckState = CheckState.Checked;
+                else (r as CCheckBox).CheckState = CheckState.Unchecked;
+
+            }
+            else
+                if (!String.IsNullOrEmpty(r.cd.Format))
+                    r.cd.Text = StringFormatter.GetFormattedText(value, r.cd.Format);
+                else
+                    r.cd.Text = value;
             //}
             //else
             //    System.Diagnostics.Debug.WriteLine(">!< " + r.cd.Name + " has LOOP RELATION");

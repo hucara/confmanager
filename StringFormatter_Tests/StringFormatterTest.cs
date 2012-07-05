@@ -282,5 +282,23 @@ namespace StringFormatter_Tests
             string actual = StringFormatter.GetFormattedText(text, format);
             Assert.AreEqual("25", actual);
         }
+
+        [TestMethod()]
+        public void GetFormattedText_CheckBoxLong1_ReturnsExpected()
+        {
+            string text = "1, 0, 1, 0, 1, 0";
+            string format = "*, *, *, ##This##, *";
+            string actual = StringFormatter.GetFormattedText(text, format);
+            Assert.AreEqual("0", actual);
+        }
+
+        [TestMethod()]
+        public void GetFormattedText_CheckBoxLong2_ReturnsExpected()
+        {
+            string text = "yes, yes, no, yes, yes, no";
+            string format = "*, *, *, ##This##, *";
+            string actual = StringFormatter.GetFormattedText(text, format);
+            Assert.AreEqual("yes", actual);
+        }
     }
 }

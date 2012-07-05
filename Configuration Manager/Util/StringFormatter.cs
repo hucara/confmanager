@@ -46,31 +46,39 @@ namespace Configuration_Manager.Util
             if (format == String.Empty || format == "") return text;
 
             GetLimits();
-
-            //bool headMatches = CheckHeadMatches();
-            //bool tailMatches = CheckTailMatches();
-
             PrintInfo();
 
-            //if (!String.IsNullOrEmpty(textHead) && !String.IsNullOrEmpty(textTail))
-            //{
-            //string value; //= text.Substring(valueStart, valueEnd - valueStart);
+            if (!String.IsNullOrEmpty(textTail))
+                text = text.Remove(valueEnd);
+
             if (!String.IsNullOrEmpty(textHead))
-                text = text.Replace(textHead, "");
+                text = text.Remove(0, valueStart);
 
-            if(!String.IsNullOrEmpty(textTail))
-                text = text.Replace(textTail, "");
-                //value = text.Replace(textHead, "").Replace(textTail, "");
 
-                System.Diagnostics.Debug.WriteLine("Text: " + stext);
-                System.Diagnostics.Debug.WriteLine("Format: " + format);
-                System.Diagnostics.Debug.WriteLine("Result: " + text);
-                System.Diagnostics.Debug.WriteLine("**                 **");
+            //if (!String.IsNullOrEmpty(textHead))
+            //    text = text.Remove(0, valueStart);
 
-                return text;
+            //if (!String.IsNullOrEmpty(textTail))
+            //{
+            //    int index = text.IndexOf(textTail);
+            //    text = text.Remove(index);
             //}
-            //else
-            //    return text;
+
+
+            //if (!String.IsNullOrEmpty(textHead))
+            //    text = text.Replace(textHead, "");
+
+            //if (!String.IsNullOrEmpty(textTail))
+            //    text = text.Replace(textTail, "");
+
+
+            System.Diagnostics.Debug.WriteLine("Text: " + stext);
+            System.Diagnostics.Debug.WriteLine("Format: " + format);
+            System.Diagnostics.Debug.WriteLine("Result: " + text);
+            System.Diagnostics.Debug.WriteLine("**                 **");
+
+            return text;
+
         }
 
         /// <summary>
@@ -105,7 +113,8 @@ namespace Configuration_Manager.Util
             if (!String.IsNullOrEmpty(textTail))
                 oldValue = oldValue.Replace(textTail, "");
 
-            string newText = oldText.Replace(oldValue, newValue);
+            //string newText = oldText.Replace(oldValue, newValue);
+            string newText = textHead + newValue + textTail;
 
             System.Diagnostics.Debug.WriteLine("Text: " + text);
             System.Diagnostics.Debug.WriteLine("Format: " + format);
@@ -138,15 +147,10 @@ namespace Configuration_Manager.Util
             textTail = GetTextTail(text, format);
 
             valueStart = textHead.Length;
-            valueEnd = text.IndexOf(textTail);
+            valueEnd = text.Length - textTail.Length;
 
             formatHead = GetFormatHead();
             formatTail = GetFormatTail();
-
-
-
-            //SetValueStart();
-            //SetValueEnd();
         }
 
         private static void SetValueEnd()
@@ -253,18 +257,7 @@ namespace Configuration_Manager.Util
             if (tokenStartDelimiter == "")
                 return 0;
             else
-            {
                 return textHead.Length;
-
-                //int index = text.IndexOf(tokenStartDelimiter);
-
-                //if (index > -1 && tokenStartDelimiter != "")
-                //    return index + tokenStartDelimiter.Length;
-                //else if (index > -1 && tokenStartDelimiter == "")
-                //    return index;
-                //else
-                //    return 0;
-            }
         }
 
         private static int GetValueEndIndex()
@@ -272,18 +265,8 @@ namespace Configuration_Manager.Util
             if (tokenEndDelimiter == "")
                 return text.Length;
             else
-            {
                 return text.IndexOf(textTail);
-                //int index = text.IndexOf(tokenEndDelimiter, valueStart + tokenStartDelimiter.Length);
-                ////int index = text.IndexOf(tokenEndDelimiter, valLength);
 
-                //if (index > -1 && tokenEndDelimiter != "")
-                //    return index;
-                //else if (index > -1 && tokenEndDelimiter == "")
-                //    return index;
-                //else
-                //    return text.Length;
-            }
         }
 
         //private static bool HeadHasQuestionWildcards()
@@ -320,10 +303,10 @@ namespace Configuration_Manager.Util
             fHead = format.Substring(0, index);
             fTail = format.Substring(index + 8);
 
-            if(fHead.Contains('?') || fHead.Contains('*'))
+            if (fHead.Contains('?') || fHead.Contains('*'))
                 fHead = WildcardsToRegex(fHead);
 
-            if(fTail.Contains('?') || fTail.Contains('*'))
+            if (fTail.Contains('?') || fTail.Contains('*'))
                 fTail = WildcardsToRegex(fTail);
 
             Match mHead = Regex.Match(text, fHead);
@@ -354,7 +337,7 @@ namespace Configuration_Manager.Util
                 fHead = fHead.Replace("*", "*?");
             }
 
-            Match mHead = Regex.Match(text , fHead, RegexOptions.Compiled);
+            Match mHead = Regex.Match(text, fHead, RegexOptions.Compiled);
             return mHead.ToString();
         }
 
