@@ -55,12 +55,6 @@ namespace Configuration_Manager
         {
             InitializeComponent();
 
-#if DEBUG
-            updateButton.Visible = true;
-#else
-            updateButton.Visible = false;
-#endif
-
             this.model = Model.getInstance();
             this.ErrorMsg = "";
 
@@ -73,15 +67,15 @@ namespace Configuration_Manager
             ReplaceLabels();
         }
 
-		private void SetLocation()
-		{
+        private void SetLocation()
+        {
             if (MainForm.ActiveForm != null)
             {
                 this.Top = MainForm.ActiveForm.Location.Y;
                 this.Height = 600;
                 this.Left = MainForm.ActiveForm.Location.X + MainForm.ActiveForm.Width;
             }
-		}
+        }
 
         // Control.Show() method overload
         public void Show(Control c)
@@ -96,9 +90,8 @@ namespace Configuration_Manager
             DisableControls(type);
 
             SetRelationComboBox();
-            //FillOutCheckedListBox();
             ReadFromControl();
-			SetLocation();
+            SetLocation();
             SetCheckBoxValuesOptions();
             SetLocationMargins();
 
@@ -127,7 +120,7 @@ namespace Configuration_Manager
         private void ShowHeadLine()
         {
             controlNameLabel.Text = "Control: " + control.cd.Name;
-			parentNameLabel.Text = "Parent: " + control.cd.Parent.Name;
+            parentNameLabel.Text = "Parent: " + control.cd.Parent.Name;
         }
 
         private void ShowMousePosition()
@@ -143,9 +136,8 @@ namespace Configuration_Manager
 
         private void fontButton_Click(object sender, EventArgs e)
         {
-            if (fontDialog1.Font.Name == "Microsoft Sans Serif"
-                && fontDialog1.Font.Style == FontStyle.Regular
-                && fontDialog1.Font.Size == 8.25)
+            if (fontDialog1.Font.Name == System.Drawing.SystemFonts.DefaultFont.Name &&
+                fontDialog1.Font.Size == System.Drawing.SystemFonts.DefaultFont.Size)
                 fontDialog1.Font = Model.getInstance().lastSelectedFont;
             else
                 fontDialog1.Font = control.cd.CurrentFont;
@@ -260,7 +252,7 @@ namespace Configuration_Manager
             {
                 case "CComboBox":
                     // Everything is enabled
-					CComboBoxEditorSetUp();
+                    CComboBoxEditorSetUp();
                     break;
 
                 case "CLabel":
@@ -290,7 +282,7 @@ namespace Configuration_Manager
                     break;
 
                 case "CTextBox":
-					CTextBoxEditorSetup();
+                    CTextBoxEditorSetup();
                     textTextBox.Enabled = false;
                     break;
 
@@ -350,10 +342,10 @@ namespace Configuration_Manager
             }
         }
 
-		private void CTextBoxEditorSetup()
-		{
-			textTextBox.Text = (control as TextBox).Text;
-		}
+        private void CTextBoxEditorSetup()
+        {
+            textTextBox.Text = (control as TextBox).Text;
+        }
 
         // //
         // Handlers
@@ -395,18 +387,22 @@ namespace Configuration_Manager
 
         private void okButton_Click(object sender, EventArgs e)
         {
+            bool vmd = ValidMainDestination();
             CheckCommonAttributes();
-            if (ErrorMsg != "" && type != "CTabPage")
+            if (ErrorMsg != "" && type != "CTabPage" && vmd)
             {
                 ErrorMsg = "Some problems were found: \n" + ErrorMsg;
                 MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                this.control.cd.Changed = true;
-                Model.getInstance().uiChanged = true;
-                SaveToControl();
-                this.Close();
+                if (ValidMainDestination())
+                {
+                    this.control.cd.Changed = true;
+                    Model.getInstance().uiChanged = true;
+                    SaveToControl();
+                    this.Close();
+                }
             }
 
             ErrorMsg = "";
@@ -414,6 +410,7 @@ namespace Configuration_Manager
 
         private void updateButton_Click(object sender, EventArgs e)
         {
+
             CheckCommonAttributes();
             if (ErrorMsg != "" && type != "CTabPage")
             {
@@ -422,9 +419,12 @@ namespace Configuration_Manager
             }
             else
             {
-                SaveToControl();
-                //model.ApplyRelations(control);
-                ReadRelationManager.ReadConfiguration(control as ICustomControl);
+                if (ValidMainDestination())
+                {
+                    SaveToControl();
+                    //model.ApplyRelations(control);
+                    ReadRelationManager.ReadConfiguration(control as ICustomControl);
+                }
             }
             ErrorMsg = "";
         }
@@ -443,7 +443,7 @@ namespace Configuration_Manager
             ParseHeight();
 
             if ((control.cd.Type != "CComboBox" && control.cd.Type != "CTabControl") && !CheckText()) ErrorMsg += "\n- Text is empty.";
-            
+
             if (CheckTop() > 0) ErrorMsg += "\n- Top value is too high.";
             if (CheckLeft() > 0) ErrorMsg += "\n- Left value is too high.";
             if (CheckWidth() > 0) ErrorMsg += "\n- Width value is too high.";
@@ -454,11 +454,11 @@ namespace Configuration_Manager
             if (CheckWidth() < 0) ErrorMsg += "\n- Width value is too low.";
             if (CheckHeight() < 0) ErrorMsg += "\n- Height value is too low.";
 
-			if (!CheckDisplayRight()) ErrorMsg += "\n - Display Right value has non valid characters.";
-			if (!CheckModificationRight()) ErrorMsg += "\n - Modification Right value has non valid characters.";
+            if (!CheckDisplayRight()) ErrorMsg += "\n - Display Right value has non valid characters.";
+            if (!CheckModificationRight()) ErrorMsg += "\n - Modification Right value has non valid characters.";
 
             if (control.cd.Type == "CCheckBox" && !CheckCheckBoxAttributes()) ErrorMsg += "\n - There is a problem with the Check Box values";
-		}
+        }
 
         private bool CheckCheckBoxAttributes()
         {
@@ -468,21 +468,21 @@ namespace Configuration_Manager
             return true;
         }
 
-		private bool CheckDisplayRight()
-		{
-			char []text = displayRightTextBox.Text.ToArray();
-			for (int i = 2; i < text.Length; i++)
-				if (text[i] > 'F') return false;
-			return true;
-		}
+        private bool CheckDisplayRight()
+        {
+            char[] text = displayRightTextBox.Text.ToArray();
+            for (int i = 2; i < text.Length; i++)
+                if (text[i] > 'F') return false;
+            return true;
+        }
 
-		private bool CheckModificationRight()
-		{
-			char [] text = modificationRightTextBox.Text.ToArray();
-			for (int i = 2; i < text.Length; i++)
-				if (text[i] > 'F') return false;
-			return true;
-		}
+        private bool CheckModificationRight()
+        {
+            char[] text = modificationRightTextBox.Text.ToArray();
+            for (int i = 2; i < text.Length; i++)
+                if (text[i] > 'F') return false;
+            return true;
+        }
 
         private void ParseTop()
         {
@@ -569,7 +569,7 @@ namespace Configuration_Manager
             control.cd.Text = TokenControlTranslator.TranslateFromControl(text);
             control.cd.RealText = this.textTextBox.Text;
             control.cd.Type = this.type;
-			control.cd.Hint = this.hintTextBox.Text;
+            control.cd.Hint = this.hintTextBox.Text;
             control.cd.CurrentFont = this.controlFont;
             control.cd.BackColor = this.backColor;
             control.cd.ForeColor = this.fontColor;
@@ -586,22 +586,16 @@ namespace Configuration_Manager
             control.cd.ModificationRight = this.modificationRightTextBox.Text.Substring(2);
             control.cd.DisplayRight = this.displayRightTextBox.Text.Substring(2);
 
-            //control.cd.ModificationBytes = Model.HexToData(control.cd.ModificationRight);
-            //control.cd.DisplayBytes = Model.HexToData(control.cd.DisplayRight);
-
-            //control.cd.operatorModification = Model.ObtainRights(control.cd.ModificationBytes, model.MainModificationRights);
-            //control.cd.operatorVisibility = Model.ObtainRights(control.cd.DisplayBytes, model.MainDisplayRights);
-
             if (control is CCheckBox)
             {
                 control.cd.checkBoxCheckedValue = this.checkedTextBox.Text;
                 control.cd.checkBoxUncheckedValue = this.uncheckedTextBox.Text;
             }
- 
+
             model.ApplyRelations(control);
             ReadRelationManager.ReadConfiguration(control as ICustomControl);
 
-            if (control.cd.Format != null && control.cd.Format != "") 
+            if (control.cd.Format != null && control.cd.Format != "")
                 FormatValue(control);
         }
 
@@ -615,7 +609,7 @@ namespace Configuration_Manager
                 else
                     (control as CComboBox).SelectedText = "";
             }
-            else //TODO FORMAT
+            else
                 (control as Control).Text = Util.StringFormatter.GetFormattedText((control as Control).Text, control.cd.Format);
         }
 
@@ -656,7 +650,7 @@ namespace Configuration_Manager
             if (control.cd.checkBoxUncheckedValue != null && control.cd.checkBoxUncheckedValue != "")
                 this.uncheckedTextBox.Text = control.cd.checkBoxUncheckedValue;
 
-            if (control.cd.DestinationType != null && control.cd.DestinationType != "") 
+            if (control.cd.DestinationType != null && control.cd.DestinationType != "")
                 this.destinationTypeComboBox.Text = control.cd.DestinationType;
             else this.destinationTypeComboBox.SelectedIndex = 0;
 
@@ -668,7 +662,7 @@ namespace Configuration_Manager
         {
             //Get the control that was checked.
             ICustomControl checkedControl = model.AllControls.Find(c => c.cd.Name == controlListBox.Items[e.Index].ToString());
-            System.Diagnostics.Debug.WriteLine(this.control.cd.RelatedRead.Count);   
+            System.Diagnostics.Debug.WriteLine(this.control.cd.RelatedRead.Count);
 
             // If item is being activated
             if (!controlListBox.GetItemChecked(e.Index))
@@ -698,14 +692,14 @@ namespace Configuration_Manager
                         }
                     }
 
-                    if(!currentVisibleList.Contains(checkedControl) && !looping)
+                    if (!currentVisibleList.Contains(checkedControl) && !looping)
                         currentVisibleList.Add(checkedControl);
                 }
             }
             else
             {
                 currentVisibleList.Remove(checkedControl);
-                if (relationsComboBox.Text == VISIBILITY) 
+                if (relationsComboBox.Text == VISIBILITY)
                     checkedControl.cd.inRelatedVisibility = false;
                 System.Diagnostics.Debug.WriteLine("- [" + relationsComboBox.SelectedItem + "] Unchecked: " + checkedControl.cd.Name);
             }
@@ -787,55 +781,55 @@ namespace Configuration_Manager
             return control.cd.RelatedRead;
         }
 
-		//
-		// Function not working or creating weird / nullException stuff
-		//
+        //
+        // Function not working or creating weird / nullException stuff
+        //
         private void HighLightRequiredControls()
         {
             Rectangle rect = default(Rectangle);
             Pen p = new Pen(Color.Red, 3);
             Graphics g = parent.CreateGraphics();
 
-			foreach (Control c in currentVisibleList)
-			{
-				if (c.Visible && model.AllControls.Contains(c as ICustomControl))
-				{
-					rect = c.Bounds;
-					rect.Inflate(3, 3);
-					g.DrawRectangle(p, rect);
-					g.DrawLine(p, (control as Control).Location, c.Location);
-				}
-			}
+            foreach (Control c in currentVisibleList)
+            {
+                if (c.Visible && model.AllControls.Contains(c as ICustomControl))
+                {
+                    rect = c.Bounds;
+                    rect.Inflate(3, 3);
+                    g.DrawRectangle(p, rect);
+                    g.DrawLine(p, (control as Control).Location, c.Location);
+                }
+            }
         }
 
-		private void CComboBoxEditorSetUp()
-		{
-			EnableControls();
+        private void CComboBoxEditorSetUp()
+        {
+            EnableControls();
 
-			textTextBox.Hide();
+            textTextBox.Hide();
             textTextBox.Text = control.cd.Name;
-			comboBoxEditPanel.Show();
-		}
+            comboBoxEditPanel.Show();
+        }
 
-		private void Editor_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.S && e.Control)
-			{
-				// Save and close
-				CheckCommonAttributes();
-				if (ErrorMsg != "")
-				{
-					ErrorMsg = "Some problems were found: \n" + ErrorMsg;
-					MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
-				else
-				{
-					SaveToControl();
-					this.Close();
-				}
-				ErrorMsg = "";
-			}
-		}
+        private void Editor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.S && e.Control)
+            {
+                // Save and close
+                CheckCommonAttributes();
+                if (ErrorMsg != "")
+                {
+                    ErrorMsg = "Some problems were found: \n" + ErrorMsg;
+                    MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    SaveToControl();
+                    this.Close();
+                }
+                ErrorMsg = "";
+            }
+        }
 
         private void SetCheckBoxValuesOptions()
         {
@@ -858,7 +852,7 @@ namespace Configuration_Manager
                 this.Text = texts.Single(x => (int?)x.Attribute("id") == 1).Value;
 
                 // Description labels
-                this.controlNameLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 2).Value;     
+                this.controlNameLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 2).Value;
                 this.parentNameLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 3).Value;
                 this.textLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 4).Value;
                 this.fontButton.Text = texts.Single(x => (int?)x.Attribute("id") == 5).Value;
@@ -893,7 +887,7 @@ namespace Configuration_Manager
                 this.okButton.Text = texts.Single(x => (int?)x.Attribute("id") == 21).Value;
 
             }
-            catch(Exception)
+            catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** There was a problem reading texts for the Editor Form.");
                 Model.getInstance().logCreator.Append("[ERROR] There was a problem reading texts for the Editor form.");
@@ -946,7 +940,10 @@ namespace Configuration_Manager
                 fileDestinationButton.Visible = false;
             }
             else
+            {
                 fileDestinationLabel.Text = MainDestinationText;
+                fileDestinationButton.Visible = true;
+            }
 
         }
 
@@ -966,5 +963,23 @@ namespace Configuration_Manager
 
             return false;
         }
-	}
+
+        private bool ValidMainDestination()
+        {
+            bool isFile;
+            if (fileDestinationTextBox.Text.Contains(@":\"))
+                isFile = true;
+            else
+                isFile = false;
+
+            if (destinationTypeComboBox.SelectedItem == "REG" && isFile)
+            {
+                String msg = "You selected a Registry value, but the Root Key looks like a file path.";
+                MessageBox.Show(msg, " Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            return true;
+        }
+    }
 }

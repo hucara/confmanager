@@ -94,7 +94,6 @@
     <Compile Include="Configuration Manager.Designer.cs">
       <DependentUpon>Configuration Manager.cs</DependentUpon>
     </Compile>
-    <Compile Include="CustomControls\MouseDragElementBehavior.cs" />
     <Compile Include="RelationManagers\CoupledControlsManager.cs" />
     <Compile Include="RelationManagers\ReadRelationManager.cs" />
     <Compile Include="RelationManagers\VisibilityRelationManager.cs" />

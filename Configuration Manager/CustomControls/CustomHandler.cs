@@ -313,12 +313,21 @@ namespace Configuration_Manager.CustomControls
 				String name = (model.CurrentClickedControl as ICustomControl).cd.Name;
 				String parent = (model.CurrentClickedControl as ICustomControl).cd.Parent.Name;
 				Debug.WriteLine("! Got the control: " + name + " with Parent: " + parent);
-				model.CurrentClickedControl.DoDragDrop(name, DragDropEffects.Move);
-                CaptureControl(model.CurrentClickedControl as Control);
 
-                previewRect = new Rectangle(model.CurrentClickedControl.Location, model.CurrentClickedControl.Size);
+                //previewRect = new Rectangle(model.CurrentClickedControl.Location, model.CurrentClickedControl.Size);
+                //DrawRectangle(model.CurrentClickedControl.Parent);
+
+                //Do drag drop event is where the "control is moving"
+				model.CurrentClickedControl.DoDragDrop(name, DragDropEffects.Move);
 			}
 		}
+
+        private void DrawRectangle(Control parent)
+        {
+            Graphics g = parent.CreateGraphics();
+            g.DrawRectangle(new Pen(Color.Aqua), previewRect);
+            parent.Update();
+        }
 
 		public void OnDragDrop(object sender, DragEventArgs dea)
 		{

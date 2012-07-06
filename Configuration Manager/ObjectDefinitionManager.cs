@@ -15,10 +15,8 @@ namespace Configuration_Manager
     {
         //private ControlFactory cf = ControlFactory.getInstance();
         private Model model = Model.getInstance();
-
         private static ObjectDefinitionManager odm;
         private XDocument xdoc;
-
         private TypeConverter fontConverter = TypeDescriptor.GetConverter(typeof(Font));
         private TypeConverter colorConverter = TypeDescriptor.GetConverter(typeof(Color));
 
@@ -90,7 +88,6 @@ namespace Configuration_Manager
         {
             try
             {
-                //while (model.Sections.Exists(e => e.Name == "Section" + Section.count)) Section.count++;
                 String name = i.Element("Name").Value.ToString();
                 String realText = i.Element("Text").Value.ToString();
                 String display = i.Element("DisplayRight").Value.ToString().Substring(2);
@@ -113,7 +110,6 @@ namespace Configuration_Manager
                 Model.getInstance().CurrentSection = s;
                 Model.getInstance().Sections.Add(s);
 
-                //Section s =  ControlFactory.BuildSection(name, text, selected);
                 return s;
             }
             catch (Exception)
@@ -196,9 +192,6 @@ namespace Configuration_Manager
                                         new XElement("SubDestination", item.cd.RealSubDestination)
                                     ),
                                     new XElement("Relations",
-                                        //new XElement("Write",
-                                        //    item.cd.RelatedWrite.Select(write => write.cd.Name + ", ")
-                                        //),
                                         new XElement("Read",
                                             item.cd.RelatedRead.Select(read => read.cd.Name + ", ")
                                         ),
@@ -341,7 +334,6 @@ namespace Configuration_Manager
 
         private void ApplyFormats(ICustomControl c)
         {
-            //TODO FORMAT
             c.cd.Text = Util.StringFormatter.GetFormattedText(c.cd.Text, c.cd.Format);
         }
 

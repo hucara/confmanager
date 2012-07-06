@@ -291,7 +291,7 @@ namespace StringFormatter_Tests
             string actual = StringFormatter.GetFormattedText(text, format);
             Assert.AreEqual("0", actual);
         }
-
+        
         [TestMethod()]
         public void GetFormattedText_CheckBoxLong2_ReturnsExpected()
         {

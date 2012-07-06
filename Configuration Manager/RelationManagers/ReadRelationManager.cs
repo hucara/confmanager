@@ -154,13 +154,10 @@ namespace Configuration_Manager.CustomControls
 
         private static void SetReadValue(ICustomControl r, String value)
         {
-            //if (!HasLoopRelation(r))
-            //{
             if (r.cd.Type == "CComboBox")
             {
                 if (r.cd.Format != "" || r.cd.Format != null)
                 {
-                    // TODO FORMAT
                     string formattedValue = StringFormatter.GetFormattedText(value, r.cd.Format);
                     formattedValue = TokenControlTranslator.TranslateFromControl(formattedValue);
                     formattedValue = TokenTextTranslator.TranslateFromTextFile(formattedValue);
@@ -190,9 +187,6 @@ namespace Configuration_Manager.CustomControls
                     r.cd.Text = StringFormatter.GetFormattedText(value, r.cd.Format);
                 else
                     r.cd.Text = value;
-            //}
-            //else
-            //    System.Diagnostics.Debug.WriteLine(">!< " + r.cd.Name + " has LOOP RELATION");
         }
 
         private static bool HasLoopRelation(ICustomControl c)

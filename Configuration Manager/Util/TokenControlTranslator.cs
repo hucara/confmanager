@@ -101,14 +101,6 @@ namespace Configuration_Manager.Util
                 text = "";
                 if (control != null)
                 {
-                    //if (control is CComboBox && (control as CComboBox).SelectedItem != null)
-                    //{
-                    //    int index = (control as CComboBox).SelectedIndex;
-                    //    if(control.cd.comboBoxConfigItems[index] != String.Empty)
-                    //        text = control.cd.comboBoxConfigItems[index];
-                    //    else
-                    //        text = (control as CComboBox).SelectedItem.ToString();
-                    //}
                     if (control is CComboBox)
                         text = GetComboBoxValue(s, control);
                     else if (control is CCheckBox)

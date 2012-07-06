@@ -513,9 +513,7 @@ namespace Configuration_Manager
         public void GetArguments(string[] args)
         {
             if (args != null)
-            {
                 this.args = args;
-            }
         }
 
         private void SetArguments()
@@ -748,17 +746,6 @@ namespace Configuration_Manager
                             foreach (ICustomControl c in AllControls.Where(p => p.cd.ParentSection == s))
                                 (c as Control).Visible = false;
                         }
-
-                        //if (s.Button.Visible == false)
-                        //{
-                        //    s.Selected = false;
-                        //    foreach (Section se in this.Sections.Where(e => e.Button.Visible == true))
-                        //    {
-                        //        se.Selected = true;
-                        //        break;
-                        //    }
-                        //}
-
 
                         s.Button.Enabled = ObtainRights(s.ModificationBytes, model.MainModificationRights);
                         if (!s.Button.Enabled)
