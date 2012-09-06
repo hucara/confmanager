@@ -61,11 +61,11 @@ namespace Configuration_Manager
             this.sectionBar.Dock = System.Windows.Forms.DockStyle.Left;
             this.sectionBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.sectionBar.Location = new System.Drawing.Point(0, 0);
-            this.sectionBar.MaximumSize = new System.Drawing.Size(131, 572);
+            this.sectionBar.MaximumSize = new System.Drawing.Size(175, 704);
             this.sectionBar.Name = "sectionBar";
             this.sectionBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.sectionBar.ShowItemToolTips = false;
-            this.sectionBar.Size = new System.Drawing.Size(131, 572);
+            this.sectionBar.Size = new System.Drawing.Size(175, 567);
             this.sectionBar.TabIndex = 1;
             this.sectionBar.Text = "toolStrip1";
             this.sectionBar.SizeChanged += new System.EventHandler(this.toolStrip_SizeChanged);
@@ -131,59 +131,59 @@ namespace Configuration_Manager
             // labelToolStripMenuItem
             // 
             this.labelToolStripMenuItem.Name = "labelToolStripMenuItem";
-            this.labelToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.labelToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.labelToolStripMenuItem.Text = "Label";
             // 
             // textBoxToolStripMenuItem
             // 
             this.textBoxToolStripMenuItem.Name = "textBoxToolStripMenuItem";
-            this.textBoxToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.textBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.textBoxToolStripMenuItem.Text = "TextBox";
             // 
             // checkBoxToolStripMenuItem
             // 
             this.checkBoxToolStripMenuItem.Name = "checkBoxToolStripMenuItem";
-            this.checkBoxToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.checkBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.checkBoxToolStripMenuItem.Text = "CheckBox";
             // 
             // comboBoxToolStripMenuItem
             // 
             this.comboBoxToolStripMenuItem.Name = "comboBoxToolStripMenuItem";
-            this.comboBoxToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.comboBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.comboBoxToolStripMenuItem.Text = "ComboBox";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(131, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // groupBoxToolStripMenuItem
             // 
             this.groupBoxToolStripMenuItem.Name = "groupBoxToolStripMenuItem";
-            this.groupBoxToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.groupBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.groupBoxToolStripMenuItem.Text = "GroupBox";
             // 
             // shapeToolStripMenuItem
             // 
             this.shapeToolStripMenuItem.Name = "shapeToolStripMenuItem";
-            this.shapeToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.shapeToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.shapeToolStripMenuItem.Text = "Shape";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(131, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // tabControlMenuItem
             // 
             this.tabControlMenuItem.Name = "tabControlMenuItem";
-            this.tabControlMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.tabControlMenuItem.Size = new System.Drawing.Size(152, 24);
             this.tabControlMenuItem.Text = "TabControl";
             // 
             // tabPageMenuItem
             // 
             this.tabPageMenuItem.Name = "tabPageMenuItem";
-            this.tabPageMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.tabPageMenuItem.Size = new System.Drawing.Size(152, 24);
             this.tabPageMenuItem.Text = "TabPage";
             // 
             // editToolStripMenuItem
@@ -201,23 +201,25 @@ namespace Configuration_Manager
             // tabControl
             // 
             this.tabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.tabControl.Location = new System.Drawing.Point(134, -24);
+            this.tabControl.Location = new System.Drawing.Point(179, -30);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(661, 596);
+            this.tabControl.Size = new System.Drawing.Size(881, 734);
             this.tabControl.TabIndex = 0;
             this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 572);
+            this.ClientSize = new System.Drawing.Size(794, 567);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.sectionBar);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";

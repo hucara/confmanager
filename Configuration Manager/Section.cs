@@ -9,8 +9,6 @@ namespace Configuration_Manager
     public class Section
     {
         public static int count = 0;
-        private CToolStripButton ctsb;
-        private System.Windows.Forms.TabPage tp;
         public bool Selected { get; set; }
 
         public int Id { get; private set; }

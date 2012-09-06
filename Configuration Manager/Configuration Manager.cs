@@ -31,11 +31,33 @@ namespace Configuration_Manager
             InitializeComponent();
 
             model.ReadConfigurationFile();
+            CheckObjectDefinitionIntegrity();
+
+            SetUpHeadLine();
             SetUpMainForm();
             PrintWellcomeLogMessage();
             InitCustomHandler();
             InitViews();
             InitHandlers();
+        }
+
+        // Checks if the structure of the XML file is correct. Deal with it.
+        private void CheckObjectDefinitionIntegrity()
+        {
+            if (System.IO.File.Exists(model.ObjectDefinitionsPath) && !model.ObjectDefinitionExists)
+            {
+                // The structure is broken
+                String caption = Model.GetTranslationFromID(37);
+                String msg = Model.GetTranslationFromID(47) + " " + Model.GetTranslationFromID(52) + "\n" +Model.GetTranslationFromID(43);
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                System.Environment.Exit(0);
+            }
+        }
+
+        private void SetUpHeadLine()
+        {
+            this.Text = model.Headline;
         }
 
         private void PrintWellcomeLogMessage()
@@ -184,8 +206,9 @@ namespace Configuration_Manager
 
         private void deleteSectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            String msg = "This will delete the section and all of its children.";
-            DialogResult dr = MessageBox.Show(msg, " Deleting Section", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            String msg = Model.GetTranslationFromID(36);
+            String caption = Model.GetTranslationFromID(32);
+            DialogResult dr = MessageBox.Show(msg, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
                 sectionMenuView.RemoveSection();
@@ -232,7 +255,7 @@ namespace Configuration_Manager
             XDocument xdoc;
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
+                xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
                 IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
                 this.Text = texts.Single(x => (int?)x.Attribute("id") == 26).Value;
             }
@@ -251,8 +274,9 @@ namespace Configuration_Manager
         {
             if (Model.getInstance().uiChanged)
             {
-                String msg = "Some changes were made to the User Interface. Do you want to save before closing?";
-                DialogResult dr = MessageBox.Show(msg, "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                String caption = Model.GetTranslationFromID(60);
+                String msg = Model.GetTranslationFromID(62);
+                DialogResult dr = MessageBox.Show(msg, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                 
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
@@ -269,8 +293,9 @@ namespace Configuration_Manager
             {
                 if (c.cd.Changed && c.cd.MainDestination != "")
                 {
-                    String msg = "Some changes were made to the configuration. Do you want to save before closing?";
-                    DialogResult dr = MessageBox.Show(msg, "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                    String caption = Model.GetTranslationFromID(60);
+                    String msg = Model.GetTranslationFromID(61);
+                    DialogResult dr = MessageBox.Show(msg, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
                     if (dr == System.Windows.Forms.DialogResult.Yes)
                     {

@@ -18,6 +18,10 @@ namespace Configuration_Manager
         const String DEFAULT_VISIBILITY = "Related Visibility";
         const String DEFAULT_COUPLED = "Coupled Controls";
 
+        const String DEFAULT_LEFT_ORIENTATION = "Left";
+        const String DEFAULT_RIGHT_ORIENTATION = "Right";
+        const String DEFAULT_CENTER_ORIENTATION = "Center";
+
         const bool ERROR = false;
         const bool OK = true;
 
@@ -38,12 +42,14 @@ namespace Configuration_Manager
         String VISIBILITY = DEFAULT_VISIBILITY;
         String COUPLED = DEFAULT_COUPLED;
 
+        String LEFT_OR = DEFAULT_LEFT_ORIENTATION;
+        String RIGHT_OR = DEFAULT_RIGHT_ORIENTATION;
+        String CENTER_OR = DEFAULT_CENTER_ORIENTATION;
+
         String type;
         String ErrorMsg;
         String RootKeyText = "root key";
         String MainDestinationText = "main destination";
-
-        Font lastSelectedFont;
         Font controlFont;
 
         Color fontColor, backColor;
@@ -72,7 +78,7 @@ namespace Configuration_Manager
             if (MainForm.ActiveForm != null)
             {
                 this.Top = MainForm.ActiveForm.Location.Y;
-                this.Height = 600;
+                this.Height = 737;
                 this.Left = MainForm.ActiveForm.Location.X + MainForm.ActiveForm.Width;
             }
         }
@@ -88,6 +94,12 @@ namespace Configuration_Manager
             ShowHeadLine();
             ShowDefaultSize();
             DisableControls(type);
+            
+            if (type == "CLabel") 
+                SetOrientationComboBox();
+
+            if (this.control.cd.Type == "CComboBox") 
+                textLabel.Text = "";
 
             SetRelationComboBox();
             ReadFromControl();
@@ -162,6 +174,9 @@ namespace Configuration_Manager
             fontLabel.BackColor = backColor;
 
             fontLabel.Text = controlFont.Name + " " + Math.Round(controlFont.Size);
+
+            if (control.cd.Type == "CPanel")
+                fontLabel.Text = "";
         }
 
         private void FillOutCheckedListBox()
@@ -186,6 +201,8 @@ namespace Configuration_Manager
                 }
                 controlListBox.Items.Remove(control.cd.Name);
             }
+
+            controlListBox.Sorted = true;
         }
 
         private void SetRelationComboBox()
@@ -194,7 +211,7 @@ namespace Configuration_Manager
 
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
+                xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
                 IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
 
                 // Relations
@@ -247,6 +264,7 @@ namespace Configuration_Manager
         {
             // Remember the fileDialogbutton
             EnableControls();
+            labelOrientationPanel.Visible = false;
 
             switch (type)
             {
@@ -256,7 +274,7 @@ namespace Configuration_Manager
                     break;
 
                 case "CLabel":
-                    relationsComboBox.Visible = false;
+                    labelOrientationPanel.Visible = true;
                     controlListBox.Visible = false;
                     break;
 
@@ -264,7 +282,7 @@ namespace Configuration_Manager
                     textLabel.Visible = false;
                     textTextBox.Visible = false;
                     fontButton.Visible = false;
-                    fontLabel.Visible = false;
+                    fontLabel.Visible = true;
 
                     relationsComboBox.Visible = false;
                     controlListBox.Visible = false;
@@ -287,7 +305,6 @@ namespace Configuration_Manager
                     break;
 
                 case "CCheckBox":
-                    //Everything is enabled
                     break;
 
                 case "CGroupBox":
@@ -362,6 +379,31 @@ namespace Configuration_Manager
             }
         }
 
+        private void SetOrientationComboBox()
+        {
+            XDocument xdoc;
+            try
+            {
+                xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
+                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
+
+                // Orientations
+                LEFT_OR = texts.Single(x => (int?)x.Attribute("id") == 11).Value;
+                RIGHT_OR = texts.Single(x => (int?)x.Attribute("id") == 101).Value;
+                CENTER_OR = texts.Single(x => (int?)x.Attribute("id") == 102).Value;
+            }
+            catch (Exception)
+            {
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was a problem reading the relation names inside editor.");
+            }
+
+            orientationComboBox.Items.Clear();
+            orientationComboBox.Items.Add(LEFT_OR);
+            orientationComboBox.Items.Add(RIGHT_OR);
+            orientationComboBox.Items.Add(CENTER_OR);
+            orientationComboBox.SelectedIndex = 0;
+        }
+
         private void fileDestinationButton_Click(object sender, EventArgs e)
         {
             DialogResult dr = openFileDialog1.ShowDialog();
@@ -391,18 +433,16 @@ namespace Configuration_Manager
             CheckCommonAttributes();
             if (ErrorMsg != "" && type != "CTabPage" && vmd)
             {
-                ErrorMsg = "Some problems were found: \n" + ErrorMsg;
-                MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                String caption = Model.GetTranslationFromID(37);
+                ErrorMsg = Model.GetTranslationFromID(57) + ErrorMsg;
+                MessageBox.Show(ErrorMsg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else
+            else if (ValidMainDestination())
             {
-                if (ValidMainDestination())
-                {
                     this.control.cd.Changed = true;
                     Model.getInstance().uiChanged = true;
                     SaveToControl();
                     this.Close();
-                }
             }
 
             ErrorMsg = "";
@@ -410,21 +450,18 @@ namespace Configuration_Manager
 
         private void updateButton_Click(object sender, EventArgs e)
         {
-
             CheckCommonAttributes();
             if (ErrorMsg != "" && type != "CTabPage")
             {
-                ErrorMsg = "Some problems were found: \n" + ErrorMsg;
-                MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                String caption = Model.GetTranslationFromID(37);
+                ErrorMsg = Model.GetTranslationFromID(57) + ErrorMsg;
+                MessageBox.Show(ErrorMsg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else
+            else if (ValidMainDestination())
             {
-                if (ValidMainDestination())
-                {
                     SaveToControl();
                     //model.ApplyRelations(control);
                     ReadRelationManager.ReadConfiguration(control as ICustomControl);
-                }
             }
             ErrorMsg = "";
         }
@@ -592,6 +629,9 @@ namespace Configuration_Manager
                 control.cd.checkBoxUncheckedValue = this.uncheckedTextBox.Text;
             }
 
+            if (control is CLabel)
+                SetOrientationToLabel();
+
             model.ApplyRelations(control);
             ReadRelationManager.ReadConfiguration(control as ICustomControl);
 
@@ -654,8 +694,23 @@ namespace Configuration_Manager
                 this.destinationTypeComboBox.Text = control.cd.DestinationType;
             else this.destinationTypeComboBox.SelectedIndex = 0;
 
+            if (control.cd.Type == "CLabel")
+                ReadTextOrientation(control as CLabel);
+
             // Update the example font label
             SetExampleTextLabel();
+        }
+
+        private void ReadTextOrientation(CLabel cLabel)
+        {
+            if (cLabel.TextAlign == ContentAlignment.TopLeft)
+                orientationComboBox.SelectedIndex = 0;
+            else if (cLabel.TextAlign == ContentAlignment.TopRight)
+                orientationComboBox.SelectedIndex = 1;
+            else if (cLabel.TextAlign == ContentAlignment.TopCenter)
+                orientationComboBox.SelectedIndex = 2;
+            else
+                orientationComboBox.SelectedIndex = 0;
         }
 
         private void controlListBox_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -669,7 +724,8 @@ namespace Configuration_Manager
             {
                 if (relationsComboBox.SelectedItem.ToString() == COUPLED)
                     // Manage the coupled relation
-                    CoupledRelationsListChanged(checkedControl, e);
+                    if (!currentVisibleList.Contains(checkedControl))
+                        CoupledRelationsListChanged(checkedControl, e);
                 else if (relationsComboBox.SelectedItem.ToString() == VISIBILITY)
                 {
                     // Manage the visibility relation
@@ -687,8 +743,9 @@ namespace Configuration_Manager
                         {
                             looping = true;
                             e.NewValue = CheckState.Unchecked;
-                            String msg = "This would create a loop. Please, try to use a coupled relation.";
-                            MessageBox.Show(msg, " Error coupling controls.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            String caption = Model.GetTranslationFromID(37);
+                            String msg = Model.GetTranslationFromID(63);
+                            MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }
 
@@ -723,14 +780,16 @@ namespace Configuration_Manager
             {
                 //They can't be coupled!
                 e.NewValue = CheckState.Unchecked;
-                String msg = checkedControl.cd.Name + " must contain the same number of items than " + control.cd.Name;
-                MessageBox.Show(msg, " Error coupling controls.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                String caption = Model.GetTranslationFromID(37);
+                String msg = checkedControl.cd.Name + Model.GetTranslationFromID(64) + control.cd.Name;
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else if (!(checkedControl is CComboBox) && !(checkedControl is CCheckBox))
             {
                 e.NewValue = CheckState.Unchecked;
-                String msg = "Coupled relations are only allowed between ComboBox controls";
-                MessageBox.Show(msg, " Error coupling controls.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                String caption = Model.GetTranslationFromID(37);
+                String msg = Model.GetTranslationFromID(65);
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -819,8 +878,9 @@ namespace Configuration_Manager
                 CheckCommonAttributes();
                 if (ErrorMsg != "")
                 {
-                    ErrorMsg = "Some problems were found: \n" + ErrorMsg;
-                    MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    String caption = Model.GetTranslationFromID(37);
+                    ErrorMsg = Model.GetTranslationFromID(57) + ErrorMsg;
+                    MessageBox.Show(ErrorMsg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
@@ -845,8 +905,8 @@ namespace Configuration_Manager
 
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
-                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
+                xdoc = XDocument.Load(Model.getInstance().TranslationLangPath);
+                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Text");
 
                 // Title of the form
                 this.Text = texts.Single(x => (int?)x.Attribute("id") == 1).Value;
@@ -871,21 +931,21 @@ namespace Configuration_Manager
                 this.subDestinationLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 16).Value;
                 this.displayRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 17).Value;
                 this.modificationRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 18).Value;
-                this.editComboBoxButton.Text = texts.Single(x => (int?)x.Attribute("id") == 60).Value;
-                this.checkedLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 86).Value;
-                this.uncheckedLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 87).Value;
-                this.formattingLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 88).Value;
+                this.editComboBoxButton.Text = texts.Single(x => (int?)x.Attribute("id") == 95).Value;
+                this.checkedLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 97).Value;
+                this.uncheckedLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 98).Value;
+                this.formattingLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 99).Value;
+                this.orientationLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 100).Value;
 
                 // Saving labels to avoid reading from file again
                 MainDestinationText = this.fileDestinationLabel.Text;
-                RootKeyText = texts.Single(x => (int?)x.Attribute("id") == 61).Value;
+                RootKeyText = texts.Single(x => (int?)x.Attribute("id") == 96).Value;
                 this.fileDestinationButton.Text = "";
 
                 // Bottom Buttons
                 this.updateButton.Text = texts.Single(x => (int?)x.Attribute("id") == 19).Value;
                 this.cancelButton.Text = texts.Single(x => (int?)x.Attribute("id") == 20).Value;
                 this.okButton.Text = texts.Single(x => (int?)x.Attribute("id") == 21).Value;
-
             }
             catch (Exception)
             {
@@ -902,7 +962,6 @@ namespace Configuration_Manager
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            //DialogResult dr = MessageBox.Show("", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
             this.control.cd.Changed = false;
             this.Close();
         }
@@ -934,7 +993,7 @@ namespace Configuration_Manager
 
         private void ReplaceRegSelectedLabels()
         {
-            if (destinationTypeComboBox.SelectedItem == "REG")
+            if (destinationTypeComboBox.SelectedItem.ToString() == "REG")
             {
                 fileDestinationLabel.Text = RootKeyText;
                 fileDestinationButton.Visible = false;
@@ -972,14 +1031,30 @@ namespace Configuration_Manager
             else
                 isFile = false;
 
-            if (destinationTypeComboBox.SelectedItem == "REG" && isFile)
+            if (destinationTypeComboBox.SelectedItem.ToString() == "REG" && isFile)
             {
-                String msg = "You selected a Registry value, but the Root Key looks like a file path.";
-                MessageBox.Show(msg, " Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                String caption = Model.GetTranslationFromID(37);
+                String msg = Model.GetTranslationFromID(66);
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
             return true;
+        }
+
+        private void SetOrientationToLabel()
+        {
+            int index = orientationComboBox.SelectedIndex;
+            String align = orientationComboBox.SelectedItem.ToString();
+
+            if(align == LEFT_OR)
+                (control as CLabel).TextAlign = ContentAlignment.TopLeft;
+            else if( align == RIGHT_OR)
+                (control as CLabel).TextAlign = ContentAlignment.TopRight;
+            else if( align == CENTER_OR)
+                (control as CLabel).TextAlign = ContentAlignment.TopCenter;
+            else
+                (control as CLabel).TextAlign = ContentAlignment.TopLeft;
         }
     }
 }

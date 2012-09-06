@@ -282,7 +282,6 @@ namespace Configuration_Manager.Util
 
         public static void SearchMatches(string text, string format)
         {
-            string tHead, tTail;
             string fHead, fTail;
             int index = format.IndexOf(TOKEN, StringComparison.OrdinalIgnoreCase);
 

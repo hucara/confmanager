@@ -50,6 +50,8 @@ namespace Configuration_Manager
         public bool ObjectDefinitionExists { get; set; }
         public bool ConfigFileExists { get; set; }
 
+        public String Headline { get; private set; }
+
         public String ExePath { get; private set; }
         public String AppFolderPath { get; private set; }
 
@@ -59,8 +61,10 @@ namespace Configuration_Manager
         public String ConfigFilePath { get; private set; }
 
         public string LangID { get; set; }
-        public String LangFolderPath { get; private set; }
-        public String CurrentLangPath { get; private set; }
+        public String TextsFilesFolderPath { get; private set; }
+        public String TextsFilePath { get; private set; }
+        public String TranslationLangPath { get; private set; }
+        private static String translationPath;
         public String DefaultLangPath { get; private set; }
         public String ObjectDefinitionsPath { get; private set; }
 
@@ -79,7 +83,7 @@ namespace Configuration_Manager
 
         public XDocument ConfigObjects { get; private set; }
         public XDocument ConfigFile { get; private set; }
-        public XDocument TextFile { get; private set; }
+        public static XDocument TextFile { get; private set; }
 
         public LogCreation logCreator { get; private set; }
         public LogDeletion logDeleter { get; private set; }
@@ -138,8 +142,9 @@ namespace Configuration_Manager
                 ConfigFileExists = false;
                 System.Diagnostics.Debug.WriteLine("** ERROR ** " + ConfigFilePath + " - File not found");
 
-                String msg = "File " + ConfigFilePath + " not found.\nThe application will now close.";
-                MessageBox.Show(msg, "Configuration file not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                String caption = GetTranslationFromID(37);
+                String msg = GetTranslationFromID(41) +" "+ GetTranslationFromID(43);
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 System.Environment.Exit(0);
             }
@@ -153,7 +158,7 @@ namespace Configuration_Manager
                 ObjectDefinitionExists = true;
                 System.Diagnostics.Debug.WriteLine("** OK ** " + ObjectDefinitionsPath + " - File found");
             }
-            catch (FileNotFoundException e)
+            catch (Exception)
             {
                 ObjectDefinitionExists = false;
                 System.Diagnostics.Debug.WriteLine("** INFO ** " + ObjectDefinitionsPath + " - File not found");
@@ -167,7 +172,7 @@ namespace Configuration_Manager
             this.MainFolderPath = GetMainFolderPath();
             this.ConfigFolderPath = this.MainFolderPath + "\\config";
             this.LogFolderPath = this.MainFolderPath + "\\log";
-            this.LangFolderPath = this.MainFolderPath + "\\texts";
+            this.TextsFilesFolderPath = this.MainFolderPath + "\\texts";
             this.ObjectDefinitionsPath = this.ConfigFolderPath + "\\ObjectDefinition.xml";
             this.ConfigFilePath = this.ConfigFolderPath + "\\ConfigurationManager.xml";
         }
@@ -210,10 +215,14 @@ namespace Configuration_Manager
             {
                 XDocument xdoc = this.ConfigFile;
 
+                this.Headline = (String)xdoc.Element("ConfigurationManager").Element("Headline") ?? "Configuration Manager - DEFAULT HEADLINE";
+
                 ReadSettingsSection(xdoc);
                 ReadLanguagesSection(xdoc);
                 ReadRightsSection(xdoc);
                 ReadLogsSection(xdoc);
+
+                String[] arguments = Environment.GetCommandLineArgs();
 
                 if (this.args != null)
                 {
@@ -225,8 +234,8 @@ namespace Configuration_Manager
                     logDeleter = new LogDeletion("ConfigurationManager", "CM", this.maxAgeOfLogs);
                 }
 
-                if (this.textToken == "" || this.textToken == null) TokenTextTranslator.SetTokenTextTranslator(null, this.CurrentLangPath);
-                else TokenTextTranslator.SetTokenTextTranslator(textToken, this.CurrentLangPath);
+                if (this.textToken == "" || this.textToken == null) TokenTextTranslator.SetTokenTextTranslator(null, this.TextsFilePath);
+                else TokenTextTranslator.SetTokenTextTranslator(textToken, this.TextsFilePath);
 
                 if (this.controlToken == "" || this.controlToken == null) TokenControlTranslator.SetTokenKey("##");
                 else TokenControlTranslator.SetTokenKey(controlToken);
@@ -240,7 +249,7 @@ namespace Configuration_Manager
                 System.Diagnostics.Debug.WriteLine(" - StayOnTop: " + this.stayOnTop);
                 System.Diagnostics.Debug.WriteLine(" - Movable: " + this.movable);
                 System.Diagnostics.Debug.WriteLine(" - Resizable: " + this.resizable);
-                System.Diagnostics.Debug.WriteLine(" - Lang: " + this.CurrentLangPath);
+                System.Diagnostics.Debug.WriteLine(" - Lang: " + this.TextsFilePath);
                 System.Diagnostics.Debug.WriteLine(" - DefLang: " + this.DefaultLangPath);
                 System.Diagnostics.Debug.WriteLine(" - Createlogs: " + this.createLogs);
                 System.Diagnostics.Debug.WriteLine(" - MaxAgeOfLogs: " + this.maxAgeOfLogs);
@@ -290,20 +299,23 @@ namespace Configuration_Manager
             try
             {
                 XElement languages = xdoc.Element("ConfigurationManager").Element("Languages");
-                this.CurrentLangPath = languages.Element("Current").Value.ToString();
-                this.DefaultLangPath = languages.Element("Default").Value.ToString();
+                this.TextsFilePath = languages.Element("Text").Value.ToString();
+                this.TranslationLangPath = languages.Element("Translation").Value.ToString();
+                this.DefaultLangPath = languages.Element("Translation").Value.ToString();
 
-                if (this.CurrentLangPath != "" && this.CurrentLangPath != null)
+                if (this.TextsFilePath != "" && this.TextsFilePath != null)
                 {
-                    if (!System.IO.File.Exists(this.CurrentLangPath))
+                    if (!System.IO.File.Exists(this.TextsFilePath))
                     {
-                        System.Diagnostics.Debug.WriteLine("** INFO ** Language file not found. Selecting default language.");
+                        System.Diagnostics.Debug.WriteLine("** INFO ** Language file not found.");
 
-                        String msg = "The file " + this.CurrentLangPath + " was not found.\nClosing the application.";
-                        MessageBox.Show(msg, "Translation file not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                        String caption = GetTranslationFromID(37);
+                        String msg = GetTranslationFromID(439) +" "+ GetTranslationFromID(43);
+                        MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         System.Environment.Exit(0);
                     }
+                    else
+                        Model.translationPath = this.TranslationLangPath;
                 }
             }
             catch (Exception)
@@ -318,7 +330,7 @@ namespace Configuration_Manager
             {
                 XElement rights = xdoc.Element("ConfigurationManager").Element("Rights");
 
-                var mode = ((string)rights.Element("ProgrammerMode")) ?? "";
+                string mode = ((string)rights.Element("ProgrammerMode")) ?? "";
                 if (mode.Equals("yes", StringComparison.OrdinalIgnoreCase))
                     this.progModeAllowed = true;
                 else
@@ -355,7 +367,7 @@ namespace Configuration_Manager
         public void DeleteControl(Control c, bool deletingSection)
         {
             DialogResult delChildren = DialogResult.OK;
-            DialogResult delRelations = DialogResult.OK;
+            DialogResult deleteControl = DialogResult.OK;
             Boolean hasRelations = false;
             String relMessage = "";
 
@@ -365,16 +377,20 @@ namespace Configuration_Manager
             {
                 if (c.Controls.Count > 0)
                 {
-                    String msg = "This will remove the control and all its children.";
-                    delChildren = MessageBox.Show(msg, "Remove control", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                    String msg = GetTranslationFromID(33) + c.Name + "\n" + GetTranslationFromID(36);
+                    String caption = GetTranslationFromID(32);
+                    delChildren = MessageBox.Show(msg, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 }
 
                 if (c.GetType().Name != "TabPage") hasRelations = HasRelations(c, out relMessage);
 
                 if (hasRelations)
-                    delRelations = MessageBox.Show(relMessage, "Remove control", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                    deleteControl = MessageBox.Show(relMessage, "Remove control", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                else
+                    deleteControl = MessageBox.Show("Are you sure you want to remove " + c.Name + "?", "Remove control", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
-                if (delChildren == DialogResult.OK && delRelations == DialogResult.OK)
+
+                if (delChildren == DialogResult.OK && deleteControl == DialogResult.OK)
                 {
                     DeleteChildren(c);
                     logCreator.Append("- Deleted: " + c.Name);
@@ -421,7 +437,7 @@ namespace Configuration_Manager
         private Boolean HasRelations(Control control, out String Message)
         {
             String msg = "";
-            String question = "\nAre you sure you want to delete " + control.Name + "?";
+            //String question = "\nAre you sure you want to remove " + control.Name + "?";
             String references = "";
             String referencedBy = "";
 
@@ -430,18 +446,18 @@ namespace Configuration_Manager
             // Check if this control has anything else inside the related list
             if (ControlReferencesOthers(c, out references))
             {
-                msg += c.cd.Name + " is related to some other controls:\n";
+                msg += c.cd.Name + GetTranslationFromID(34) + "\n";
                 msg += references + "\n";
             }
 
             // Check if this control is inside the related lists of other controls
             if (ControlIsReferenced(c, out referencedBy))
             {
-                msg += c.cd.Name + " is being related by some other controls:\n";
+                msg += GetTranslationFromID(35) + " " + c.cd.Name + ":\n";
                 msg += referencedBy;
             }
 
-            Message = msg + question;
+            Message = msg;
 
             if (msg != "") return true;
             else return false;
@@ -468,7 +484,7 @@ namespace Configuration_Manager
             references = "";
             if (c.cd.RelatedRead.Count > 0)
             {
-                references += "- Related read: ";
+                references += "- " + GetTranslationFromID(22) + ": ";
                 foreach (Control co in c.cd.RelatedRead)
                 {
                     references += (co as ICustomControl).cd.Name + " ";
@@ -478,7 +494,7 @@ namespace Configuration_Manager
 
             if (c.cd.RelatedWrite.Count > 0)
             {
-                references += "- Related write: ";
+                references += "- " + GetTranslationFromID(23) + ": ";
                 foreach (Control co in c.cd.RelatedWrite)
                 {
                     references += (co as ICustomControl).cd.Name + " ";
@@ -488,7 +504,7 @@ namespace Configuration_Manager
 
             if (c.cd.RelatedVisibility.Count > 0)
             {
-                references += "- Related visibility: ";
+                references += "- " + GetTranslationFromID(24) + ": ";
                 foreach (Control co in c.cd.RelatedVisibility)
                 {
                     references += (co as ICustomControl).cd.Name + " ";
@@ -498,7 +514,7 @@ namespace Configuration_Manager
 
             if (c.cd.CoupledControls.Count > 0)
             {
-                references += "- Coupled controls: ";
+                references += "- " + GetTranslationFromID(25) + ": ";
                 foreach (Control co in c.cd.CoupledControls)
                 {
                     references += (co as ICustomControl).cd.Name + " ";
@@ -591,9 +607,8 @@ namespace Configuration_Manager
             }
             catch (ArgumentOutOfRangeException e)
             {
-                string msg = "There was an error while parsing the arguments.\nPlease, check them and try again.";
-                string caption = "Error while parsing arguments";
-
+                string msg = GetTranslationFromID(58);
+                string caption = GetTranslationFromID(37);
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 System.Diagnostics.Debug.WriteLine("! Error when parsing the arguments. Out of range?");
 
@@ -655,9 +670,7 @@ namespace Configuration_Manager
         {
             bool res = true;
             for (int i = 0; i < ControlRight.Length; i++)
-            {
                 if ((ControlRight[i] & MainRight[i]) != ControlRight[i]) res = false;
-            }
 
             return res;
         }
@@ -682,12 +695,10 @@ namespace Configuration_Manager
                     logCreator.Append("[INFO] Programmer mode INACTIVE");
                     logCreator.Append("");
 
-                    // Close opened editors
-                    List<ControlEditor> eds = Application.OpenForms.OfType<ControlEditor>().ToList();
-                    for (int i = 0; i < eds.Count; i++)
-                    {
-                        eds[i].Close();
-                    }
+                    // Close open editors
+                    List<ControlEditor> editors = Application.OpenForms.OfType<ControlEditor>().ToList();
+                    for (int i = 0; i < editors.Count; i++)
+                        editors[i].Close();
                 }
             }
 
@@ -705,17 +716,18 @@ namespace Configuration_Manager
                     {
                         if (c.cd.Type != "CTabPage")
                         {
-                            if (!c.cd.inRelatedVisibility) c.cd.Visible = true;
                             c.cd.Enabled = true;
+                            c.cd.Visible = true;
                         }
                     }
                     else
                     {
                         if (c.cd.Type != "CTabPage")
                         {
-                            if (!c.cd.inRelatedVisibility) c.cd.Visible = c.cd.operatorVisibility;
+                            //c.cd.Visible = c.cd.operatorVisibility;
+                            c.cd.Enabled = c.cd.operatorModification;
+                            ApplyRelations(c);
                         }
-                        c.cd.Enabled = c.cd.operatorModification;
                     }
                 }
             }
@@ -778,6 +790,22 @@ namespace Configuration_Manager
                     (c as ComboBox).SelectedIndex = index;
                 }
             }
+        }
+
+        public static String GetTranslationFromID(int id)
+        {
+            String text = "TEXT NOT FOUND";
+            try
+            {
+                XDocument trans = XDocument.Load(Model.translationPath);
+                text = trans.Descendants("TextFile").Descendants("Text").Single(x => (int?)x.Attribute("id") == id).Value;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("No translation file was found. The application will now close.", "Critical error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                System.Environment.Exit(0);
+            }
+            return text;
         }
     }
 }

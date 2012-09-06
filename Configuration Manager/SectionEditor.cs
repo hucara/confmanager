@@ -142,7 +142,7 @@ namespace Configuration_Manager
 
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
+                xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
                 IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
 
                 this.sectionLabel.Text = "Section : " + this.section.text;

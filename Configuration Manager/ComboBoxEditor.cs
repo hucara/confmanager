@@ -41,27 +41,27 @@ namespace Configuration_Manager
 
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
-                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
+                xdoc = XDocument.Load(Model.getInstance().TranslationLangPath);
+                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Text");
 
                 // Title of the form
-                this.Text = texts.Single(x => (int?)x.Attribute("id") == 59).Value;
+                this.Text = texts.Single(x => (int?)x.Attribute("id") == 90).Value;
 
                 // Labels of the form
-                this.valuesLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 54).Value;
-                this.configValuesLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 55).Value;
+                this.valuesLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 103).Value;
+                this.configValuesLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 104).Value;
                 this.okButton.Text = texts.Single(x => (int?)x.Attribute("id") == 21).Value;
 
                 this.moveUpButton.Text = "";
                 this.moveDownButton.Text = "";
 
-                this.addButton.Text = texts.Single(x => (int?)x.Attribute("id") == 58).Value;
+                this.addButton.Text = texts.Single(x => (int?)x.Attribute("id") == 91).Value;
                 this.deleteButton.Text = texts.Single(x => (int?)x.Attribute("id") == 29).Value;
-                this.editButton.Text = texts.Single(x=> (int?)x.Attribute("id") == 28).Value;
+                this.editButton.Text = texts.Single(x=> (int?)x.Attribute("id") == 92).Value;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was a problem reading texts for the Editor Form.");
+                System.Diagnostics.Debug.WriteLine("*** ERROR *** There was a problem reading texts for the Editor Form." + e);
                 Model.getInstance().logCreator.Append("[ERROR] There was a problem reading texts for the ComboBox Editor form.");
             }
             
@@ -131,10 +131,16 @@ namespace Configuration_Manager
             SetButtons();
             RefreshActualComboBox();
 
-            //shownValues.SelectedItem = shownValues.Items[shownValues.Items.Count -1];
-
-            if ((cb as ComboBox).Items.Count == 1) (cb as ComboBox).SelectedIndex = 0;
-            else (cb as ComboBox).SelectedIndex = index;
+            if ((cb as ComboBox).Items.Count == 1)
+            {
+                (cb as ComboBox).SelectedIndex = 0;
+                shownValues.SelectedIndex = 0;
+            }
+            else
+            {
+                (cb as ComboBox).SelectedIndex = index;
+                shownValues.SelectedIndex = (cb as ComboBox).Items.Count -1;
+            }
 
             shownTextBox.Text = "";
             configTextBox.Text = "";

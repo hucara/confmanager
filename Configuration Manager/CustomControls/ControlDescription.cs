@@ -21,6 +21,7 @@ namespace Configuration_Manager
 		public String RealText { get; set; }
         public String Type { get; set; }
         public String Format { get; set; }
+        public ContentAlignment TextAlign { get; set; }
 
         private Font currentFont;
         private Color backColor;
@@ -43,7 +44,8 @@ namespace Configuration_Manager
         private Control parent;
 
         private bool currentVisibility;
-        
+
+        public bool oldVisibility;
         public bool operatorVisibility;
         public bool operatorModification;
         public bool inRelatedVisibility;
@@ -248,12 +250,10 @@ namespace Configuration_Manager
             set { this.parentSection = value; }
         }
 
-        public bool Enabled {
+        public bool Enabled 
+        {
             get { return this.control.Enabled; }
-            set
-            {
-                this.control.Enabled = value;
-            }
+            set { this.control.Enabled = value;}
         }
 
         public int SelectedTab
@@ -276,10 +276,7 @@ namespace Configuration_Manager
 
         public String DisplayRight
         {
-            get
-            {
-                return this.displayRight;
-            }
+            get { return this.displayRight; }
             set
             {
                 this.displayRight = value;
@@ -290,10 +287,7 @@ namespace Configuration_Manager
 
         public String ModificationRight
         {
-            get
-            {
-                return this.modificationRight;
-            }
+            get{ return this.modificationRight; }
             set
             {
                 this.modificationRight = value;

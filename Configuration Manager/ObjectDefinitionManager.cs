@@ -20,6 +20,8 @@ namespace Configuration_Manager
         private TypeConverter fontConverter = TypeDescriptor.GetConverter(typeof(Font));
         private TypeConverter colorConverter = TypeDescriptor.GetConverter(typeof(Color));
 
+        int progress = 0;
+
         public static ObjectDefinitionManager getInstance()
         {
             if (odm == null)
@@ -33,6 +35,130 @@ namespace Configuration_Manager
         {
             this.xdoc = xdoc;
         }
+
+        public void SerializeObjectDefinition()
+        {
+            try
+            {
+                XDocument doc = new XDocument(
+                    new XDeclaration("1.0", "utf-8", "yes"),
+                    new XComment(""),
+                    new XElement("ObjectDefinition",
+                        new XElement("Sections",
+                                Model.getInstance().Sections.Select(item =>
+                                new XElement("Section",
+                                    new XAttribute("id", item.Id),
+                                    new XElement("Name", item.Name),
+                                    new XElement("Selected", item.Selected),
+                                    new XElement("Text", item.RealText),
+                                    new XElement("DisplayRight", "0x" + item.DisplayRight),
+                                    new XElement("ModificationRight", "0x" + item.ModificationRight),
+                                    new XElement("Hint", item.Hint)
+                                )   //end Section
+                                )
+                        ),       //end Sections
+                        new XElement("Controls",
+                                Model.getInstance().AllControls.Select(item =>
+                                new XElement("Control",
+                                    new XAttribute("id", item.cd.Id),
+                                    new XAttribute("type", item.cd.Type),
+                                    new XElement("Name", item.cd.Name),
+                                    new XElement("Text", item.cd.RealText),
+                                    new XElement("Hint", item.cd.Hint.Replace("\r\n", "&#13;&#10;")),
+                                    new XElement("Parent", item.cd.Parent.Name),
+                                    new XElement("Section", item.cd.ParentSection.Name),
+                                    new XElement("Settings",
+                                        new XElement("Top", item.cd.Top),
+                                        new XElement("Left", item.cd.Left),
+                                        new XElement("Width", item.cd.Width),
+                                        new XElement("Height", item.cd.Height),
+                                        new XElement("Visible", item.cd.Visible),
+                                        new XElement("Font", fontConverter.ConvertToString(item.cd.CurrentFont)),
+                                        new XElement("FontColor", colorConverter.ConvertToString(item.cd.ForeColor)),
+                                        new XElement("Format", item.cd.Format),
+                                        new XElement("BackColor", colorConverter.ConvertToString(item.cd.BackColor)),
+                                        new XElement("DisplayRight", "0x" + item.cd.DisplayRight),
+                                        new XElement("ModificationRight", "0x" + item.cd.ModificationRight),
+
+                                        item.cd.Type == "CLabel"?
+                                        new XElement("TextAlignment", (item as CLabel).TextAlign.ToString()) : null,
+
+                                        item.cd.Type == "CTabControl"?
+                                        new XElement("ActiveTab", item.cd.SelectedTab) : null,
+
+                                        item.cd.Type == "CCheckBox"?
+                                        new XElement("CheckedValue", item.cd.checkBoxCheckedValue) : null,
+
+                                        item.cd.Type == "CCheckBox"?
+                                        new XElement("UncheckedValue", item.cd.checkBoxUncheckedValue) : null
+                                    ),
+
+                                    item.cd.Type == "CComboBox" ?
+                                    new XElement("Items",
+                                          WriteComboBoxItems(item as CComboBox)) : null,
+
+                                    item.cd.Type == "CComboBox" ?
+                                    new XElement("ConfigItems",
+                                        WriteComboBoxConfigItems(item as CComboBox)) : null,
+
+                                    item.cd.Type == "CCheckBox" ?
+                                    new XElement("Checked", (item as CheckBox).Checked.ToString()) : null,
+
+                                    new XElement("Paths",
+                                        new XElement("DestinationType", item.cd.DestinationType),
+                                        new XElement("DestinationFile", item.cd.MainDestination),
+                                        new XElement("SubDestination", item.cd.RealSubDestination)
+                                    ),
+                                    new XElement("Relations",
+                                        new XElement("Read",
+                                            item.cd.RelatedRead.Select(read => read.cd.Name + ", ")
+                                        ),
+                                        new XElement("Visibility",
+                                            item.cd.RelatedVisibility.Select(view => view.cd.Name + ", ")
+                                        ),
+                                        new XElement("Coupled",
+                                            item.cd.CoupledControls.Select(coupled => coupled.cd.Name + ", ")
+                                        )
+                                    )
+                                )
+                            )
+                            )
+                            )
+                        );
+                doc.Save(Model.getInstance().ObjectDefinitionsPath);
+                model.uiChanged = false;
+                System.Diagnostics.Debug.WriteLine("*** Object Definition File created ***");
+                model.logCreator.AppendCenteredWithFrame(" Object Definition File saved ");
+            }
+            catch (Exception e)
+            {
+                String errMsg = "Something went wrong while writing the Object Definition file.\nPlease, try again.";
+                MessageBox.Show(errMsg, " Error creating XML file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                System.Diagnostics.Debug.WriteLine("[ERROR] Something went wrong when creating Object Definition File.");
+                model.logCreator.Append("! ERROR: Something went wrong when creating Object Definition File.");
+                System.Diagnostics.Debug.WriteLine(e);
+            }
+        }
+
+        private IEnumerable<XElement> WriteComboBoxItems(CComboBox cb)
+        {
+            if (cb.SelectedIndex > -1)
+                yield return new XElement("Selected", cb.cd.comboBoxRealItems[cb.SelectedIndex]);
+
+            foreach (String s in cb.cd.comboBoxRealItems)
+                yield return new XElement("Item", s);
+        }
+
+        private IEnumerable<XElement> WriteComboBoxConfigItems(CComboBox cb)
+        {
+            if (cb.SelectedIndex > -1)
+                yield return new XElement("Selected", cb.cd.comboBoxConfigItems[cb.SelectedIndex]);
+
+            foreach (String s in cb.cd.comboBoxConfigItems)
+                yield return new XElement("Item", s);
+        }
+
 
         public void RestoreOldUI()
         {
@@ -114,131 +240,13 @@ namespace Configuration_Manager
             }
             catch (Exception)
             {
-                String errMsg = "Something went wrong while reading the Object Definition file: Sections.\nPlease check the file and try again.";
-                MessageBox.Show(errMsg, " Error reading XML file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                String caption = Model.GetTranslationFromID(37);
+                String msg = Model.GetTranslationFromID(47) +" "+ Model.GetTranslationFromID(52);
+
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Environment.Exit(0);
                 return null;
             }
-        }
-
-        public void SerializeObjectDefinition()
-        {
-            try
-            {
-                XDocument doc = new XDocument(
-                    new XDeclaration("1.0", "utf-8", "yes"),
-                    new XComment(""),
-                    new XElement("ObjectDefinition",
-                        new XElement("Sections",
-                                Model.getInstance().Sections.Select(item =>
-                                new XElement("Section",
-                                    new XAttribute("id", item.Id),
-                                    new XElement("Name", item.Name),
-                                    new XElement("Selected", item.Selected),
-                                    new XElement("Text", item.RealText),
-                                    new XElement("DisplayRight", "0x" + item.DisplayRight),
-                                    new XElement("ModificationRight", "0x" + item.ModificationRight),
-                                    new XElement("Hint", item.Hint)
-                                )   //end Section
-                                )
-                        ),       //end Sections
-                        new XElement("Controls",
-                                Model.getInstance().AllControls.Select(item =>
-                                new XElement("Control",
-                                    new XAttribute("id", item.cd.Id),
-                                    new XAttribute("type", item.cd.Type),
-                                    new XElement("Name", item.cd.Name),
-                                    new XElement("Text", item.cd.RealText),
-                                    new XElement("Hint", item.cd.Hint.Replace("\r\n", "&#13;&#10;")),
-                                    new XElement("Parent", item.cd.Parent.Name),
-                                    new XElement("Section", item.cd.ParentSection.Name),
-                                    new XElement("Settings",
-                                        new XElement("Top", item.cd.Top),
-                                        new XElement("Left", item.cd.Left),
-                                        new XElement("Width", item.cd.Width),
-                                        new XElement("Height", item.cd.Height),
-                                        new XElement("Visible", item.cd.Visible),
-                                        new XElement("Font", fontConverter.ConvertToString(item.cd.CurrentFont)),
-                                        new XElement("FontColor", colorConverter.ConvertToString(item.cd.ForeColor)),
-                                        new XElement("Format", item.cd.Format),
-                                        new XElement("BackColor", colorConverter.ConvertToString(item.cd.BackColor)),
-                                        new XElement("DisplayRight", "0x" + item.cd.DisplayRight),
-                                        new XElement("ModificationRight", "0x" + item.cd.ModificationRight),
-
-                                        item.cd.Type == "CTabControl"?
-                                        new XElement("ActiveTab", item.cd.SelectedTab) : null,
-
-                                        item.cd.Type == "CCheckBox"?
-                                        new XElement("CheckedValue", item.cd.checkBoxCheckedValue) : null,
-
-                                        item.cd.Type == "CCheckBox"?
-                                        new XElement("UncheckedValue", item.cd.checkBoxUncheckedValue) : null
-                                    ),
-
-                                    item.cd.Type == "CComboBox" ?
-                                    new XElement("Items",
-                                          WriteComboBoxItems(item as CComboBox)) : null,
-
-                                    item.cd.Type == "CComboBox" ?
-                                    new XElement("ConfigItems",
-                                        WriteComboBoxConfigItems(item as CComboBox)) : null,
-
-                                    item.cd.Type == "CCheckBox" ?
-                                    new XElement("Checked", (item as CheckBox).Checked.ToString()) : null,
-
-                                    new XElement("Paths",
-                                        new XElement("DestinationType", item.cd.DestinationType),
-                                        new XElement("DestinationFile", item.cd.MainDestination),
-                                        new XElement("SubDestination", item.cd.RealSubDestination)
-                                    ),
-                                    new XElement("Relations",
-                                        new XElement("Read",
-                                            item.cd.RelatedRead.Select(read => read.cd.Name + ", ")
-                                        ),
-                                        new XElement("Visibility",
-                                            item.cd.RelatedVisibility.Select(view => view.cd.Name + ", ")
-                                        ),
-                                        new XElement("Coupled",
-                                            item.cd.CoupledControls.Select(coupled => coupled.cd.Name + ", ")
-                                        )
-                                    )
-                                )
-                            )
-                            )
-                            )
-                        );
-                doc.Save(Model.getInstance().ObjectDefinitionsPath);
-                model.uiChanged = false;
-                System.Diagnostics.Debug.WriteLine("*** Object Definition File created ***");
-                model.logCreator.AppendCenteredWithFrame(" Object Definition File saved ");
-            }
-            catch (Exception e)
-            {
-                String errMsg = "Something went wrong while writing the Object Definition file.\nPlease, try again.";
-                MessageBox.Show(errMsg, " Error creating XML file", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                System.Diagnostics.Debug.WriteLine("[ERROR] Something went wrong when creating Object Definition File.");
-                model.logCreator.Append("! ERROR: Something went wrong when creating Object Definition File.");
-                System.Diagnostics.Debug.WriteLine(e);
-            }
-        }
-
-        private IEnumerable<XElement> WriteComboBoxItems(CComboBox cb)
-        {
-            if (cb.SelectedIndex > -1)
-                yield return new XElement("Selected", cb.cd.comboBoxRealItems[cb.SelectedIndex]);
-
-            foreach (String s in cb.cd.comboBoxRealItems)
-                yield return new XElement("Item", s);
-        }
-
-        private IEnumerable<XElement> WriteComboBoxConfigItems(CComboBox cb)
-        {
-            if (cb.SelectedIndex > -1)
-                yield return new XElement("Selected", cb.cd.comboBoxConfigItems[cb.SelectedIndex]);
-
-            foreach (String s in cb.cd.comboBoxConfigItems)
-                yield return new XElement("Item", s);
         }
 
         private void CreateDefinedControls(XDocument xdoc)
@@ -276,8 +284,8 @@ namespace Configuration_Manager
                     ctp.cd.RealText = e.Element("Text").Value;
                 }
             }
-
-            // Fill out the controls with the info from ObjectDefinition.xml
+            
+            //Fill out the controls with the info from ObjectDefinition.xml
             foreach (var i in items)
             {
                 foreach (ICustomControl c in model.AllControls)
@@ -298,9 +306,9 @@ namespace Configuration_Manager
                         }
                         catch (Exception)
                         {
-                            String msg = "There is a problem with the ObjectDefinition.xml file.\n Please check it and try again.";
-                            MessageBox.Show(msg, " Error while reading Object Definition", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            System.Environment.Exit(0);
+                            String caption = Model.GetTranslationFromID(37);
+                            String msg = Model.GetTranslationFromID(47) + " " + Model.GetTranslationFromID(52);
+                            MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error); System.Environment.Exit(0);
                         }
 
                         ReadRelationManager.ReadConfiguration(c);
@@ -317,9 +325,10 @@ namespace Configuration_Manager
                             }
                             catch (Exception)
                             {
-                                String msg = "There is a problem with the ObjectDefinition.xml file.\n Please check it and try again.";
-                                MessageBox.Show(msg, " Error while reading Object Definition", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                System.Environment.Exit(0);
+                                String caption = Model.GetTranslationFromID(37);
+                                String msg = Model.GetTranslationFromID(47) + " " + Model.GetTranslationFromID(52);
+
+                                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error); System.Environment.Exit(0);
                             }
                         }
 
@@ -328,7 +337,6 @@ namespace Configuration_Manager
                     }
                 }
             }
-
             model.ApplyRightsToSections();
         }
 
@@ -389,7 +397,7 @@ namespace Configuration_Manager
                     c.cd.checkBoxCheckedValue = i.Element("Settings").Element("CheckedValue").Value;
                     c.cd.checkBoxUncheckedValue = i.Element("Settings").Element("UncheckedValue").Value;
                 }
-                catch (NullReferenceException e)
+                catch
                 {
                     System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading CheckBox Attributes");
                 }
@@ -505,22 +513,34 @@ namespace Configuration_Manager
             newColor = (Color)colorConverter.ConvertFromString(i.Element("Settings").Element("BackColor").Value);
             c.cd.BackColor = newColor;
 
+            if (c.cd.Type == "CLabel")
+            {
+                String align = (String)i.Element("Settings").Element("TextAlignment") ?? "TopLeft";
+                SetTextAlignment(c, align);
+            }
+     
             c.cd.Format = i.Element("Settings").Element("Format").Value;
 
             // Get Display and Modification rights
             c.cd.DisplayRight = i.Element("Settings").Element("DisplayRight").Value.Substring(2);
             c.cd.ModificationRight = i.Element("Settings").Element("ModificationRight").Value.Substring(2);
+        }
 
-            //c.cd.DisplayBytes = Model.HexToData(c.cd.DisplayRight);
-            //c.cd.ModificationBytes = Model.HexToData(c.cd.ModificationRight);
-
-            //// Calculate Visibility
-            //c.cd.operatorVisibility = Model.ObtainRights(c.cd.DisplayBytes, model.MainDisplayRights);
-            //c.cd.operatorModification = Model.ObtainRights(c.cd.ModificationBytes, model.MainModificationRights);
+        private void SetTextAlignment(ICustomControl c, string align)
+        {
+            if (align == "TopLeft")
+                (c as CLabel).TextAlign = ContentAlignment.TopLeft;
+            else if (align == "TopRight")
+                (c as CLabel).TextAlign = ContentAlignment.TopRight;
+            else if (align == "TopCenter")
+                (c as CLabel).TextAlign = ContentAlignment.TopCenter;
+            else
+                (c as CLabel).TextAlign = ContentAlignment.TopLeft;
         }
 
         private void SetRelatedReadList(ICustomControl c, XElement i)
         {
+            c.cd.RelatedRead.Clear();
             string s = i.Element("Relations").Element("Read").Value;
             string[] f = { ", " };
 
@@ -532,6 +552,7 @@ namespace Configuration_Manager
 
         private void SetCoupledControls(ICustomControl c, XElement i)
         {
+            c.cd.CoupledControls.Clear();
             string s = i.Element("Relations").Element("Coupled").Value;
             string[] f = { ", " };
 
@@ -543,6 +564,7 @@ namespace Configuration_Manager
 
         private void SetRelatedVisibility(ICustomControl c, XElement i)
         {
+            c.cd.RelatedVisibility.Clear();
             string s = i.Element("Relations").Element("Visibility").Value;
             string[] f = { ", " };
 
@@ -569,7 +591,7 @@ namespace Configuration_Manager
 
         private void ApplyRights(ICustomControl c)
         {
-            if(!c.cd.inRelatedVisibility)
+            if(!c.cd.inRelatedVisibility && c.cd.Type != "CTabPage")
                 (c as Control).Visible = c.cd.operatorVisibility;
 
             (c as Control).Enabled = c.cd.operatorModification;

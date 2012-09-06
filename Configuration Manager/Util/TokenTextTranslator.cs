@@ -11,13 +11,13 @@ namespace Configuration_Manager.Util
 		private static String DEFAULT_TOKEN = "@@";
 
         private static Boolean active = true;
-        private static Boolean defaultMode = false;		// Shall we use a sidekick language file for not found tokens? 
+        //private static Boolean defaultMode = false;		// Shall we use a sidekick language file for not found tokens? 
 
-        private static String defaultLang = "";				// In case the token is not found in the current language, search it here
-        private static String defaultSubPath;				// Search 
+        //private static String defaultLang = "";				// In case the token is not found in the current language, search it here
+        //private static String defaultSubPath;				// Search 
 
         private static String currentLang;					// Language file from where we take the values out
-        private static String currentSubPath;
+        //private static String currentSubPath;
 
         private static String tokenKey;					// The defining characters that delimite a token
 
@@ -202,9 +202,9 @@ namespace Configuration_Manager.Util
 		{
 			try
 			{
-				if (System.IO.File.Exists(Model.getInstance().CurrentLangPath))
+				if (System.IO.File.Exists(Model.getInstance().TextsFilePath))
 				{
-					XDocument xdoc = XDocument.Load(Model.getInstance().CurrentLangPath);
+					XDocument xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
 					foreach (String s in valuesToTranslate)
 					{
 						var q = from c in xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text")

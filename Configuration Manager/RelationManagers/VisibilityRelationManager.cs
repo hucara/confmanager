@@ -22,7 +22,7 @@ namespace Configuration_Manager.CustomControls
 
             foreach (ICustomControl related in control.cd.RelatedVisibility)
             {
-                if (control.SelectedIndex > 0)
+                if (control.SelectedIndex > 0 || Model.getInstance().progMode)
                     related.cd.Visible = true;
                 else if (control.SelectedIndex <= 0)
                 {
@@ -42,7 +42,7 @@ namespace Configuration_Manager.CustomControls
 
             foreach (ICustomControl related in control.cd.RelatedVisibility)
             {
-                if (control.Checked)
+                if (control.Checked || Model.getInstance().progMode)
                     related.cd.Visible = true;
                 else
                 {
@@ -61,7 +61,8 @@ namespace Configuration_Manager.CustomControls
                 ReadRelationManager.ReadConfiguration(r);
             }
             if (r is CComboBox)
-                (r as CComboBox).SelectedIndex = 0;
+                //(r as CComboBox).SelectedIndex = -1;
+                ReadRelationManager.ReadConfiguration(r);
             else
                 r.cd.Visible = false;
 
