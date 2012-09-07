@@ -394,6 +394,9 @@ namespace Configuration_Manager
             SetButtons();
             RefreshActualComboBox();
 
+            shownTextBox.Text = "";
+            configTextBox.Text = "";
+
             if ((cb as ComboBox).Items.Count == 1) (cb as ComboBox).SelectedIndex = 0;
             else (cb as ComboBox).SelectedIndex = index;
         }

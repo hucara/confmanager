@@ -115,7 +115,6 @@ namespace Configuration_Manager
         {
             openFileDialog1.Multiselect = false;
             openFileDialog1.FileName = "";
-            openFileDialog1.Filter = "INI Files(*.ini)|*.ini|XML Files(*.xml)|*.xml|All Files (*.*)|*.*";
         }
 
         private void ShowDefaultSize()
@@ -271,11 +270,13 @@ namespace Configuration_Manager
                 case "CComboBox":
                     // Everything is enabled
                     CComboBoxEditorSetUp();
+                    exePathPanel.Visible = false;
                     break;
 
                 case "CLabel":
                     labelOrientationPanel.Visible = true;
                     controlListBox.Visible = false;
+                    exePathPanel.Visible = false;
                     break;
 
                 case "CPanel":
@@ -294,6 +295,7 @@ namespace Configuration_Manager
                     fileDestinationButton.Visible = false;
                     subDestinationLabel.Visible = false;
                     subDestinatonTextBox.Visible = false;
+                    exePathPanel.Visible = false;
 
                     formattingLabel.Visible = false;
                     formattingTextBox.Visible = false;
@@ -302,14 +304,17 @@ namespace Configuration_Manager
                 case "CTextBox":
                     CTextBoxEditorSetup();
                     textTextBox.Enabled = false;
+                    exePathPanel.Visible = false;
                     break;
 
                 case "CCheckBox":
+                    exePathPanel.Visible = false;
                     break;
 
                 case "CGroupBox":
                     relationsComboBox.Visible = false;
                     controlListBox.Visible = false;
+                    exePathPanel.Visible = false;
                     break;
 
                 case "CTabPage":
@@ -334,6 +339,7 @@ namespace Configuration_Manager
                     fileDestinationButton.Visible = false;
                     subDestinationLabel.Visible = false;
                     subDestinatonTextBox.Visible = false;
+                    exePathPanel.Visible = false;
 
                     formattingLabel.Visible = false;
                     formattingTextBox.Visible = false;
@@ -352,9 +358,15 @@ namespace Configuration_Manager
                     fileDestinationButton.Visible = false;
                     subDestinationLabel.Visible = false;
                     subDestinatonTextBox.Visible = false;
+                    exePathPanel.Visible = false;
 
                     formattingLabel.Visible = false;
                     formattingTextBox.Visible = false;
+                    break;
+
+                case "CButton":
+                    labelOrientationPanel.Visible = false;
+                    checkBoxValuePanel.Visible = false;
                     break;
             }
         }
@@ -406,6 +418,7 @@ namespace Configuration_Manager
 
         private void fileDestinationButton_Click(object sender, EventArgs e)
         {
+            openFileDialog1.Filter = "INI files (*.ini)|*.ini|XML files (*.xml)|*.xml|All files (*.*)|*.*";
             DialogResult dr = openFileDialog1.ShowDialog();
             if (dr == DialogResult.OK && openFileDialog1.CheckFileExists)
             {
@@ -479,22 +492,30 @@ namespace Configuration_Manager
             ParseWidth();
             ParseHeight();
 
-            if ((control.cd.Type != "CComboBox" && control.cd.Type != "CTabControl") && !CheckText()) ErrorMsg += "\n- Text is empty.";
+            if ((control.cd.Type != "CComboBox" && control.cd.Type != "CTabControl") && !CheckText()) ErrorMsg += "\n - " + Model.GetTranslationFromID(140);
 
-            if (CheckTop() > 0) ErrorMsg += "\n- Top value is too high.";
-            if (CheckLeft() > 0) ErrorMsg += "\n- Left value is too high.";
-            if (CheckWidth() > 0) ErrorMsg += "\n- Width value is too high.";
-            if (CheckHeight() > 0) ErrorMsg += "\n- Height value is too high.";
+            if (CheckTop() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(147) + " " + Model.GetTranslationFromID(145);
+            if (CheckLeft() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(148) + " " + Model.GetTranslationFromID(145);
+            if (CheckWidth() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(150) + " " + Model.GetTranslationFromID(145);
+            if (CheckHeight() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(151) + " " + Model.GetTranslationFromID(145);
 
-            if (CheckTop() < 0) ErrorMsg += "\n- Top value is too low.";
-            if (CheckLeft() < 0) ErrorMsg += "\n- Left value is too low.";
-            if (CheckWidth() < 0) ErrorMsg += "\n- Width value is too low.";
-            if (CheckHeight() < 0) ErrorMsg += "\n- Height value is too low.";
+            if (CheckTop() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(147) + " " + Model.GetTranslationFromID(146);
+            if (CheckLeft() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(148) + " " + Model.GetTranslationFromID(146);
+            if (CheckWidth() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(150) + " " + Model.GetTranslationFromID(146);
+            if (CheckHeight() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(151) + " " + Model.GetTranslationFromID(146);
 
-            if (!CheckDisplayRight()) ErrorMsg += "\n - Display Right value has non valid characters.";
-            if (!CheckModificationRight()) ErrorMsg += "\n - Modification Right value has non valid characters.";
+            if (!CheckDisplayRight()) ErrorMsg += "\n - " + Model.GetTranslationFromID(142);
+            if (!CheckModificationRight()) ErrorMsg += "\n - " + Model.GetTranslationFromID(143);
 
-            if (control.cd.Type == "CCheckBox" && !CheckCheckBoxAttributes()) ErrorMsg += "\n - There is a problem with the Check Box values";
+            if (control.cd.Type == "CCheckBox" && !CheckCheckBoxAttributes()) ErrorMsg += "\n - " +Model.GetTranslationFromID(153);
+
+            if (control.cd.Type == "CButton" && !CheckButtonExePath()) ErrorMsg += "\n - " +Model.GetTranslationFromID(67);
+        }
+
+        private bool CheckButtonExePath()
+        {
+            if (String.IsNullOrEmpty(exePathTextBox.Text) || !System.IO.File.Exists(exePathTextBox.Text)) return false;
+            return true;
         }
 
         private bool CheckCheckBoxAttributes()
@@ -524,25 +545,25 @@ namespace Configuration_Manager
         private void ParseTop()
         {
             if (topTextBox.Enabled && !Int32.TryParse(topTextBox.Text, out top))
-                ErrorMsg += "\n- Top is not a valid value.";
+                ErrorMsg += "\n- "+Model.GetTranslationFromID(10) + " " + Model.GetTranslationFromID(152);
         }
 
         private void ParseLeft()
         {
             if (leftTextBox.Enabled && !Int32.TryParse(leftTextBox.Text, out left))
-                ErrorMsg += "\n- Left is not a valid value.";
+                ErrorMsg += "\n- " + Model.GetTranslationFromID(11) + " " + Model.GetTranslationFromID(152);
         }
 
         private void ParseWidth()
         {
             if (widthTextBox.Enabled && !Int32.TryParse(widthTextBox.Text, out width))
-                ErrorMsg += "\n- Width is not a valid value.";
+                ErrorMsg += "\n- " + Model.GetTranslationFromID(8) + " " + Model.GetTranslationFromID(152);
         }
 
         private void ParseHeight()
         {
             if (heightTextBox.Enabled && !Int32.TryParse(heightTextBox.Text, out height))
-                ErrorMsg += "\n- Height is not a valid value.";
+                ErrorMsg += "\n- " + Model.GetTranslationFromID(9) + " " + Model.GetTranslationFromID(152);
         }
 
         private bool CheckText()
@@ -632,6 +653,12 @@ namespace Configuration_Manager
             if (control is CLabel)
                 SetOrientationToLabel();
 
+            if (control is CButton)
+            {
+                control.cd.RealExePath = exePathTextBox.Text;
+                control.cd.Parameters = exeArgumentsTextBox.Text;
+            }
+
             model.ApplyRelations(control);
             ReadRelationManager.ReadConfiguration(control as ICustomControl);
 
@@ -696,6 +723,12 @@ namespace Configuration_Manager
 
             if (control.cd.Type == "CLabel")
                 ReadTextOrientation(control as CLabel);
+
+            if (control.cd.Type == "CButton")
+            {
+                exePathTextBox.Text = control.cd.RealExePath;
+                exeArgumentsTextBox.Text = control.cd.Parameters;
+            }
 
             // Update the example font label
             SetExampleTextLabel();
@@ -937,6 +970,9 @@ namespace Configuration_Manager
                 this.formattingLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 99).Value;
                 this.orientationLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 100).Value;
 
+                this.exePathLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 105).Value;
+                this.exeArgumentsLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 106).Value;
+
                 // Saving labels to avoid reading from file again
                 MainDestinationText = this.fileDestinationLabel.Text;
                 RootKeyText = texts.Single(x => (int?)x.Attribute("id") == 96).Value;
@@ -1055,6 +1091,16 @@ namespace Configuration_Manager
                 (control as CLabel).TextAlign = ContentAlignment.TopCenter;
             else
                 (control as CLabel).TextAlign = ContentAlignment.TopLeft;
+        }
+
+        private void exePathButton_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Executable files (*.exe)|*.exe";
+            DialogResult dr = openFileDialog1.ShowDialog();
+            if (dr == DialogResult.OK && openFileDialog1.CheckFileExists)
+            {
+                exePathTextBox.Text = openFileDialog1.FileName;
+            }
         }
     }
 }

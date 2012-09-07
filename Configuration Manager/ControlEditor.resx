@@ -133,6 +133,21 @@
         rkJggg==
 </value>
   </data>
+  <data name="exePathButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADrwAAA68AZW8ckkAAAHxSURBVDhPpZM9LENRFMefj1UQk4HOFonRVwyYLSQ2gwmD
+        CIJQDIKILj4WHWxSU4V6Vc0jROuzouoREWm1qj7bVFWbGI77v02bV20iYjjpfff2/zv/c869AhFl/CeE
+        n+Jeo1xdu3hwo9JIX5kjRkJUaS2+9lV7V7pESYDGpZPtgkkzNS/byHTto3t/iI7crzRguqT88U2qWLD4
+        BiVZpQQlABAXa7bI6nqhaDSaEg+BEFVordxNCgC2c8ZMPFtcHI5EyR+O8MAa+3avn/KYE2U53EH94uFN
+        k86WEEPkDH6SHAjzwBp7gLTqz3gpcRccgIbpL7z8D8gGwfHrB0mPIdpigTX2cLbJepMxLDJZbHockMU6
+        fff2zgHIhKwQ69xB0nmCHHLJ9nB26nlLD8CBEgARxMsstp9igMBnhOb2b6loWvpKclCttXq7RTmlBEAg
+        PmEluFgJIQYoX7BQHbsnSYCONUdn4ZREbkUZqBlZERAj+4rsJZTbs+6oTALgA/Mtmdnho4o3EzVDiMwQ
+        F0yYqXR+9yrtRRrccBQBghvXsXZOe85nsrG+zFpvue3sUSOxaXkENgFBLeqFfkN+YgpKYtuKvRMgjAqB
+        huFtwLbQZ84V1OvOGIT9DollKY/pt5fJstdwQMxJzZ8B3Paw2CKoDQ1YfwMApQ2F0MBHnAAAAABJRU5E
+        rkJggg==
+</value>
+  </data>
   <metadata name="fontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

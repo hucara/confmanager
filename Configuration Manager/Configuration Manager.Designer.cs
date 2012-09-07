@@ -42,6 +42,7 @@ namespace Configuration_Manager
             this.textBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.groupBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,26 +79,26 @@ namespace Configuration_Manager
             this.editSectionNameToolStripMenuItem,
             this.deleteSectionToolStripMenuItem});
             this.contextNavMenu.Name = "contextMenuStrip1";
-            this.contextNavMenu.Size = new System.Drawing.Size(153, 92);
+            this.contextNavMenu.Size = new System.Drawing.Size(176, 76);
             // 
             // newSectionToolStripMenuItem
             // 
             this.newSectionToolStripMenuItem.Name = "newSectionToolStripMenuItem";
-            this.newSectionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newSectionToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.newSectionToolStripMenuItem.Text = "New Section";
             this.newSectionToolStripMenuItem.Click += new System.EventHandler(this.newSectionToolStripMenuItem_Click);
             // 
             // editSectionNameToolStripMenuItem
             // 
             this.editSectionNameToolStripMenuItem.Name = "editSectionNameToolStripMenuItem";
-            this.editSectionNameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editSectionNameToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.editSectionNameToolStripMenuItem.Text = "Edit Section";
             this.editSectionNameToolStripMenuItem.Click += new System.EventHandler(this.editSectionNameToolStripMenuItem_Click);
             // 
             // deleteSectionToolStripMenuItem
             // 
             this.deleteSectionToolStripMenuItem.Name = "deleteSectionToolStripMenuItem";
-            this.deleteSectionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteSectionToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.deleteSectionToolStripMenuItem.Text = "Delete Section";
             this.deleteSectionToolStripMenuItem.Click += new System.EventHandler(this.deleteSectionToolStripMenuItem_Click);
             // 
@@ -109,7 +110,7 @@ namespace Configuration_Manager
             this.deleteToolStripMenuItem});
             this.contextMenu.Name = "contextMenuStrip1";
             this.contextMenu.ShowImageMargin = false;
-            this.contextMenu.Size = new System.Drawing.Size(83, 70);
+            this.contextMenu.Size = new System.Drawing.Size(128, 98);
             // 
             // newToolStripMenuItem
             // 
@@ -118,6 +119,7 @@ namespace Configuration_Manager
             this.textBoxToolStripMenuItem,
             this.checkBoxToolStripMenuItem,
             this.comboBoxToolStripMenuItem,
+            this.buttonToolStripMenuItem,
             this.toolStripSeparator1,
             this.groupBoxToolStripMenuItem,
             this.shapeToolStripMenuItem,
@@ -125,7 +127,7 @@ namespace Configuration_Manager
             this.tabControlMenuItem,
             this.tabPageMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
             this.newToolStripMenuItem.Text = "New";
             // 
             // labelToolStripMenuItem
@@ -151,6 +153,13 @@ namespace Configuration_Manager
             this.comboBoxToolStripMenuItem.Name = "comboBoxToolStripMenuItem";
             this.comboBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.comboBoxToolStripMenuItem.Text = "ComboBox";
+            // 
+            // buttonToolStripMenuItem
+            // 
+            this.buttonToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.buttonToolStripMenuItem.Name = "buttonToolStripMenuItem";
+            this.buttonToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.buttonToolStripMenuItem.Text = "Button";
             // 
             // toolStripSeparator1
             // 
@@ -189,13 +198,13 @@ namespace Configuration_Manager
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // tabControl
@@ -257,6 +266,7 @@ namespace Configuration_Manager
         private System.Windows.Forms.ToolStripMenuItem tabControlMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem tabPageMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editSectionNameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem buttonToolStripMenuItem;
 
     }
 }

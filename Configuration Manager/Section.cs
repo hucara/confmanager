@@ -19,9 +19,9 @@ namespace Configuration_Manager
         public System.Windows.Forms.TabPage Tab {get; set;}
 
         public String Name { get; set; }
-        public String text { get; private set; }
+        private String text;
         public String RealText { get; set; }
-        public String Hint { get; set; }
+        private String hint;
 
         private String displayRight = "00000000";
         private String modificationRight = "00000000";
@@ -96,6 +96,16 @@ namespace Configuration_Manager
             {
                 this.text = value;
                 this.Button.Text = value;
+            }
+        }
+
+        public String Hint
+        {
+            get { return this.hint; }
+            set
+            {
+                this.hint = value;
+                this.Button.ToolTipText = value;
             }
         }
     }

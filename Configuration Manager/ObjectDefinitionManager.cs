@@ -90,7 +90,13 @@ namespace Configuration_Manager
                                         new XElement("CheckedValue", item.cd.checkBoxCheckedValue) : null,
 
                                         item.cd.Type == "CCheckBox"?
-                                        new XElement("UncheckedValue", item.cd.checkBoxUncheckedValue) : null
+                                        new XElement("UncheckedValue", item.cd.checkBoxUncheckedValue) : null,
+
+                                        item.cd.Type == "CButton" ? 
+                                        new XElement("ExePath", item.cd.RealExePath) : null,
+
+                                        item.cd.Type == "CButton" ?
+                                        new XElement("CallParameters", item.cd.Parameters) : null
                                     ),
 
                                     item.cd.Type == "CComboBox" ?
@@ -196,10 +202,8 @@ namespace Configuration_Manager
                     if (model.Sections.Count < Model.getInstance().maxSections)
                     {
                         Section s = CreateDefinedSection(i);
-
                         if (s.Selected) model.CurrentSection = s;
-
-                        System.Diagnostics.Debug.WriteLine("+ Read: (" + s.text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
+                        System.Diagnostics.Debug.WriteLine("+ Read: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
                     }
                 }
             }
@@ -214,13 +218,14 @@ namespace Configuration_Manager
         {
             try
             {
-                String name = i.Element("Name").Value.ToString();
-                String realText = i.Element("Text").Value.ToString();
+                String name = i.Element("Name").Value;
+                String realText = i.Element("Text").Value;
                 String display = i.Element("DisplayRight").Value.ToString().Substring(2);
                 String modify = i.Element("ModificationRight").Value.ToString().Substring(2);
+                String hint = i.Element("Hint").Value;
                 bool selected = false;
 
-                if (i.Element("Selected").Value.ToString() == "true")
+                if (i.Element("Selected").Value == "true")
                     selected = true;
 
                 String text = TokenTextTranslator.TranslateFromTextFile(realText);
@@ -232,10 +237,10 @@ namespace Configuration_Manager
                 s.RealText = realText;
                 s.DisplayRight = display;
                 s.ModificationRight = modify;
+                s.Hint = hint;
 
                 Model.getInstance().CurrentSection = s;
                 Model.getInstance().Sections.Add(s);
-
                 return s;
             }
             catch (Exception)
@@ -402,6 +407,19 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading CheckBox Attributes");
                 }
             }
+            else if (c.cd.Type == "CButton")
+            {
+                try
+                {
+                    CButton b = c as CButton;
+                    b.cd.RealExePath = i.Element("Settings").Element("ExePath").Value;
+                    b.cd.Parameters = i.Element("Settings").Element("CallParameters").Value;
+                }
+                catch
+                {
+                    System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading Exe Path for Button");
+                }
+            }
         }
 
         private void SetPaths(ICustomControl c, XElement i)
@@ -429,6 +447,11 @@ namespace Configuration_Manager
                     cb.cd.Name = i.Element("Name").Value;
                     break;
 
+                case "CButton":
+                    CButton b = ControlFactory.BuildCButton(s.Tab);
+                    b.cd.Name = i.Element("Name").Value;
+                    break;
+    
                 case "CGroupBox":
                     CGroupBox gb = ControlFactory.BuildCGroupBox(s.Tab);
                     gb.cd.Name = i.Element("Name").Value;

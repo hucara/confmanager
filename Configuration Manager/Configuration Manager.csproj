@@ -92,6 +92,9 @@
       <DependentUpon>ComboBoxEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="ControlFactory.cs" />
+    <Compile Include="CustomControls\CButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CustomControls\ControlDescription.cs" />
     <Compile Include="CustomControls\CCheckBox.cs">
       <SubType>Component</SubType>

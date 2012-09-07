@@ -100,6 +100,7 @@ namespace Configuration_Manager
             this.textBoxToolStripMenuItem.Click += ch.textBoxToolStripMenuItem_Click;
             this.checkBoxToolStripMenuItem.Click += ch.checkBoxToolStripMenuItem_Click;
             this.comboBoxToolStripMenuItem.Click += ch.comboBoxToolStripMenuItem_Click;
+            this.buttonToolStripMenuItem.Click += ch.buttonToolStripMenuItem_Click;
 
             this.groupBoxToolStripMenuItem.Click += ch.groupBoxToolStripMenuItem_Click;
             this.shapeToolStripMenuItem.Click += ch.shapeToolStripMenuItem_Click;

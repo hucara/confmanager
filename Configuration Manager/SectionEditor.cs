@@ -23,7 +23,6 @@ namespace Configuration_Manager
         {
             InitializeComponent();
             section = ControlFactory.BuildSection("", "", true);
-
             SetLabels();
         }
 
@@ -32,6 +31,7 @@ namespace Configuration_Manager
             InitializeComponent();
             SetLabels();
             this.NameTextBox.Text = oldName;
+            this.NameTextBox.Focus();
         }
 
         public SectionEditor(Section section)
@@ -41,6 +41,7 @@ namespace Configuration_Manager
 
             SetLabels();
             LoadSection();
+            this.NameTextBox.Focus();
         }
 
         private void LoadSection()
@@ -67,8 +68,9 @@ namespace Configuration_Manager
             }
             else
             {
-                ErrorMsg = "Errors found when editing section: \n" + ErrorMsg;
-                MessageBox.Show(ErrorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                String msg = Model.GetTranslationFromID(57) + ":\n" + ErrorMsg;
+                String caption = Model.GetTranslationFromID(37);
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -80,24 +82,25 @@ namespace Configuration_Manager
             this.section.DisplayRight = this.displayRightTextBox.Text.Substring(2);
             this.section.ModificationRight = this.modificationRightTextBox.Text.Substring(2);
 
-            this.section.Hint = this.hintTextBox.Text;
+            this.section.Hint = TokenTextTranslator.TranslateFromTextFile(this.hintTextBox.Text);
         }
 
         private String CheckAttributes()
         {
             String msg = "";
-            if (!CheckText()) msg += "\n- Text field is not valid.";
-            if (!CheckDuplicatedText()) msg += "\n- A section with the same name already exists.";
-            if (!CheckDisplayRight()) msg += "\n- Display Right field is not valid.";
-            if (!CheckModificationRight()) msg += "\n- Modification Right field is not valid.";
+            if (!CheckText()) msg += "\n- " + Model.GetTranslationFromID(140);
+            if (!CheckDuplicatedText()) msg += "\n- "+ Model.GetTranslationFromID(141);
+            if (!CheckDisplayRight()) msg += "\n- " + Model.GetTranslationFromID(142);
+            if (!CheckModificationRight()) msg += "\n- " + Model.GetTranslationFromID(143);
             return msg;
         }
 
         private bool CheckDuplicatedText()
         {
             foreach (Section s in Model.getInstance().Sections)
-                if (s.RealText == section.RealText) return true;
-            return false;
+                if(s != section && 
+                    (s.RealText == this.NameTextBox.Text || s.Text == this.NameTextBox.Text)) return false;
+            return true;
         }
 
         private bool CheckText()
@@ -145,12 +148,17 @@ namespace Configuration_Manager
                 xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
                 IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
 
-                this.sectionLabel.Text = "Section : " + this.section.text;
-                this.NameLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 4).Value;
-                this.displayRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 17).Value;
-                this.modificationRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 18).Value;
-                this.HintLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 7).Value;
-                this.OkButton.Text = texts.Single(x => (int?)x.Attribute("id") == 21).Value;
+                if(section.Text == "" || section.Text == null)
+                    this.sectionLabel.Text = Model.GetTranslationFromID(120) + ": " + section.Name;
+                else
+                    this.sectionLabel.Text = Model.GetTranslationFromID(120) + ": " + section.Text;
+
+                this.groupBox1.Text = " " +Model.GetTranslationFromID(12) +" ";
+                this.NameLabel.Text = Model.GetTranslationFromID(4);
+                this.displayRightLabel.Text = Model.GetTranslationFromID(17);
+                this.modificationRightLabel.Text = Model.GetTranslationFromID(18);
+                this.HintLabel.Text = Model.GetTranslationFromID(7);
+                this.OkButton.Text = Model.GetTranslationFromID(21);
             }
             catch(Exception)
             {

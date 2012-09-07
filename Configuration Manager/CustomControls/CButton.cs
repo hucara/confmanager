@@ -6,14 +6,14 @@ using System.Windows.Forms;
 
 namespace Configuration_Manager.CustomControls
 {
-    class CTextBox : TextBox, ICustomControl
+    class CButton : Button, ICustomControl
     {
         public static int count = 0;
         public ControlDescription cd;
 
-        public CTextBox()
+        public CButton()
         {
-            this.Name = "CTextBox" + count;
+            this.Name = "CButton" + count;
             count++;
         }
 
@@ -24,14 +24,8 @@ namespace Configuration_Manager.CustomControls
 
         ControlDescription ICustomControl.cd
         {
-            get
-            {
-                return cd;
-            }
-            set
-            {
-                cd = value;
-            }
+            get { return cd; }
+            set { cd = value; }
         }
     }
 }

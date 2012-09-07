@@ -61,6 +61,10 @@ namespace Configuration_Manager
         public String SubDestination { get; set; }          // SubDestination path already translated
         public String RealSubDestination { get; set; }      // SubDestination path without being translated
 
+        public String ExePath { get; private set; }
+        public String Parameters { get; set; }
+        private String realExePath;
+
         private List<String> SubDestinationNodes;
 
         public List<ICustomControl> RelatedWrite { get; set; }
@@ -293,6 +297,17 @@ namespace Configuration_Manager
                 this.modificationRight = value;
                 this.ModificationBytes = Model.HexToData(value);
                 this.operatorModification = Model.ObtainRights(this.ModificationBytes, Model.getInstance().MainModificationRights);
+            }
+        }
+
+        public String RealExePath
+        {
+            get { return this.realExePath; }
+            set
+            {
+                this.realExePath = value;
+                this.ExePath = Util.TokenControlTranslator.TranslateFromControl(realExePath);
+                this.ExePath = Util.TokenTextTranslator.TranslateFromTextFile(this.ExePath);
             }
         }
     }

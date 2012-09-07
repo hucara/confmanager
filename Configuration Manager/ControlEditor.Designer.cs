@@ -50,9 +50,6 @@
             this.comboBoxEditPanel = new System.Windows.Forms.Panel();
             this.editComboBoxButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.labelOrientationPanel = new System.Windows.Forms.Panel();
-            this.orientationComboBox = new System.Windows.Forms.ComboBox();
-            this.orientationLabel = new System.Windows.Forms.Label();
             this.formattingTextBox = new System.Windows.Forms.TextBox();
             this.formattingLabel = new System.Windows.Forms.Label();
             this.checkBoxValuePanel = new System.Windows.Forms.Panel();
@@ -79,11 +76,21 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.updateButton = new System.Windows.Forms.Button();
+            this.exePathPanel = new System.Windows.Forms.Panel();
+            this.exePathLabel = new System.Windows.Forms.Label();
+            this.exePathTextBox = new System.Windows.Forms.TextBox();
+            this.exePathButton = new System.Windows.Forms.Button();
+            this.exeArgumentsLabel = new System.Windows.Forms.Label();
+            this.exeArgumentsTextBox = new System.Windows.Forms.TextBox();
+            this.orientationLabel = new System.Windows.Forms.Label();
+            this.orientationComboBox = new System.Windows.Forms.ComboBox();
+            this.labelOrientationPanel = new System.Windows.Forms.Panel();
             this.groupBox1.SuspendLayout();
             this.comboBoxEditPanel.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.labelOrientationPanel.SuspendLayout();
             this.checkBoxValuePanel.SuspendLayout();
+            this.exePathPanel.SuspendLayout();
+            this.labelOrientationPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // controlNameLabel
@@ -318,6 +325,7 @@
             this.groupBox2.Controls.Add(this.destinationTypeLabel);
             this.groupBox2.Controls.Add(this.controlListBox);
             this.groupBox2.Controls.Add(this.relationsComboBox);
+            this.groupBox2.Controls.Add(this.exePathPanel);
             this.groupBox2.Location = new System.Drawing.Point(16, 272);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
@@ -326,33 +334,6 @@
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
-            // 
-            // labelOrientationPanel
-            // 
-            this.labelOrientationPanel.Controls.Add(this.orientationComboBox);
-            this.labelOrientationPanel.Controls.Add(this.orientationLabel);
-            this.labelOrientationPanel.Location = new System.Drawing.Point(8, 153);
-            this.labelOrientationPanel.Name = "labelOrientationPanel";
-            this.labelOrientationPanel.Size = new System.Drawing.Size(384, 36);
-            this.labelOrientationPanel.TabIndex = 23;
-            // 
-            // orientationComboBox
-            // 
-            this.orientationComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.orientationComboBox.FormattingEnabled = true;
-            this.orientationComboBox.Location = new System.Drawing.Point(133, 6);
-            this.orientationComboBox.Name = "orientationComboBox";
-            this.orientationComboBox.Size = new System.Drawing.Size(121, 24);
-            this.orientationComboBox.TabIndex = 1;
-            // 
-            // orientationLabel
-            // 
-            this.orientationLabel.AutoSize = true;
-            this.orientationLabel.Location = new System.Drawing.Point(12, 9);
-            this.orientationLabel.Name = "orientationLabel";
-            this.orientationLabel.Size = new System.Drawing.Size(101, 17);
-            this.orientationLabel.TabIndex = 0;
-            this.orientationLabel.Text = "text orientation";
             // 
             // formattingTextBox
             // 
@@ -598,6 +579,92 @@
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
+            // exePathPanel
+            // 
+            this.exePathPanel.Controls.Add(this.exeArgumentsTextBox);
+            this.exePathPanel.Controls.Add(this.exeArgumentsLabel);
+            this.exePathPanel.Controls.Add(this.exePathButton);
+            this.exePathPanel.Controls.Add(this.exePathTextBox);
+            this.exePathPanel.Controls.Add(this.exePathLabel);
+            this.exePathPanel.Location = new System.Drawing.Point(7, 226);
+            this.exePathPanel.Name = "exePathPanel";
+            this.exePathPanel.Size = new System.Drawing.Size(436, 66);
+            this.exePathPanel.TabIndex = 24;
+            // 
+            // exePathLabel
+            // 
+            this.exePathLabel.AutoSize = true;
+            this.exePathLabel.Location = new System.Drawing.Point(10, 8);
+            this.exePathLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.exePathLabel.Name = "exePathLabel";
+            this.exePathLabel.Size = new System.Drawing.Size(59, 17);
+            this.exePathLabel.TabIndex = 25;
+            this.exePathLabel.Text = "exePath";
+            // 
+            // exePathTextBox
+            // 
+            this.exePathTextBox.Location = new System.Drawing.Point(135, 5);
+            this.exePathTextBox.Margin = new System.Windows.Forms.Padding(4);
+            this.exePathTextBox.Name = "exePathTextBox";
+            this.exePathTextBox.Size = new System.Drawing.Size(236, 22);
+            this.exePathTextBox.TabIndex = 26;
+            // 
+            // exePathButton
+            // 
+            this.exePathButton.Image = ((System.Drawing.Image)(resources.GetObject("exePathButton.Image")));
+            this.exePathButton.Location = new System.Drawing.Point(380, 2);
+            this.exePathButton.Margin = new System.Windows.Forms.Padding(4);
+            this.exePathButton.Name = "exePathButton";
+            this.exePathButton.Size = new System.Drawing.Size(48, 28);
+            this.exePathButton.TabIndex = 27;
+            this.exePathButton.UseVisualStyleBackColor = true;
+            this.exePathButton.Click += new System.EventHandler(this.exePathButton_Click);
+            // 
+            // exeArgumentsLabel
+            // 
+            this.exeArgumentsLabel.AutoSize = true;
+            this.exeArgumentsLabel.Location = new System.Drawing.Point(11, 39);
+            this.exeArgumentsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.exeArgumentsLabel.Name = "exeArgumentsLabel";
+            this.exeArgumentsLabel.Size = new System.Drawing.Size(75, 17);
+            this.exeArgumentsLabel.TabIndex = 28;
+            this.exeArgumentsLabel.Text = "arguments";
+            // 
+            // exeArgumentsTextBox
+            // 
+            this.exeArgumentsTextBox.Location = new System.Drawing.Point(135, 34);
+            this.exeArgumentsTextBox.Margin = new System.Windows.Forms.Padding(4);
+            this.exeArgumentsTextBox.Name = "exeArgumentsTextBox";
+            this.exeArgumentsTextBox.Size = new System.Drawing.Size(236, 22);
+            this.exeArgumentsTextBox.TabIndex = 29;
+            // 
+            // orientationLabel
+            // 
+            this.orientationLabel.AutoSize = true;
+            this.orientationLabel.Location = new System.Drawing.Point(12, 9);
+            this.orientationLabel.Name = "orientationLabel";
+            this.orientationLabel.Size = new System.Drawing.Size(101, 17);
+            this.orientationLabel.TabIndex = 0;
+            this.orientationLabel.Text = "text orientation";
+            // 
+            // orientationComboBox
+            // 
+            this.orientationComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.orientationComboBox.FormattingEnabled = true;
+            this.orientationComboBox.Location = new System.Drawing.Point(133, 6);
+            this.orientationComboBox.Name = "orientationComboBox";
+            this.orientationComboBox.Size = new System.Drawing.Size(121, 24);
+            this.orientationComboBox.TabIndex = 1;
+            // 
+            // labelOrientationPanel
+            // 
+            this.labelOrientationPanel.Controls.Add(this.orientationComboBox);
+            this.labelOrientationPanel.Controls.Add(this.orientationLabel);
+            this.labelOrientationPanel.Location = new System.Drawing.Point(8, 153);
+            this.labelOrientationPanel.Name = "labelOrientationPanel";
+            this.labelOrientationPanel.Size = new System.Drawing.Size(384, 36);
+            this.labelOrientationPanel.TabIndex = 23;
+            // 
             // ControlEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -628,10 +695,12 @@
             this.comboBoxEditPanel.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.labelOrientationPanel.ResumeLayout(false);
-            this.labelOrientationPanel.PerformLayout();
             this.checkBoxValuePanel.ResumeLayout(false);
             this.checkBoxValuePanel.PerformLayout();
+            this.exePathPanel.ResumeLayout(false);
+            this.exePathPanel.PerformLayout();
+            this.labelOrientationPanel.ResumeLayout(false);
+            this.labelOrientationPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -685,6 +754,12 @@
         private System.Windows.Forms.Label uncheckedLabel;
         private System.Windows.Forms.Label checkedLabel;
         public System.Windows.Forms.FontDialog fontDialog1;
+        private System.Windows.Forms.Panel exePathPanel;
+        private System.Windows.Forms.Button exePathButton;
+        private System.Windows.Forms.TextBox exePathTextBox;
+        private System.Windows.Forms.Label exePathLabel;
+        private System.Windows.Forms.TextBox exeArgumentsTextBox;
+        private System.Windows.Forms.Label exeArgumentsLabel;
         private System.Windows.Forms.Panel labelOrientationPanel;
         private System.Windows.Forms.ComboBox orientationComboBox;
         private System.Windows.Forms.Label orientationLabel;

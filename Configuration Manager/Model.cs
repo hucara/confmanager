@@ -618,19 +618,25 @@ namespace Configuration_Manager
 
         public void UpdateInfoLabel(object sender, EventArgs e)
         {
-            if (sender is ICustomControl && !String.IsNullOrEmpty((sender as ICustomControl).cd.Hint))
+            if (sender is CToolStripButton)
             {
-                this.InfoLabel.Text = "";
-                this.InfoLabel.Text = TokenTextTranslator.TranslateFromTextFile((sender as ICustomControl).cd.Hint);
-                if (this.InfoLabel.Text != "")
-                {
-                    this.InfoLabel.Text = TokenControlTranslator.TranslateFromControl(this.InfoLabel.Text);
-                    this.InfoLabel.BackColor = System.Drawing.Color.Lavender;
-                }
+                CToolStripButton ct = sender as CToolStripButton;
+                if(CurrentSection.Button == ct)
+                    SetInfoLabelText((sender as CToolStripButton).ToolTipText);
             }
-            else if (sender is TabControl)
-            {
+            else
+                if (!String.IsNullOrEmpty((sender as ICustomControl).cd.Hint))
+                    SetInfoLabelText((sender as ICustomControl).cd.Hint);
+        }
 
+        private void SetInfoLabelText(String hint)
+        {
+            this.InfoLabel.Text = "";
+            this.InfoLabel.Text = hint;
+            if (this.InfoLabel.Text != "")
+            {
+                this.InfoLabel.Text = TokenControlTranslator.TranslateFromControl(this.InfoLabel.Text);
+                this.InfoLabel.BackColor = System.Drawing.Color.Lavender;
             }
         }
 

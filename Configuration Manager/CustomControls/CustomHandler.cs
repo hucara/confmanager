@@ -187,6 +187,14 @@ namespace Configuration_Manager.CustomControls
 			editor.Show(checkBox);
 		}
 
+        public void buttonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CButton button = ControlFactory.BuildCButton(model.CurrentClickedControl);
+
+            editor = new ControlEditor();
+            editor.Show(button);
+        }
+
 		public void groupBoxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
             CGroupBox groupBox = ControlFactory.BuildCGroupBox(model.CurrentClickedControl);
@@ -410,6 +418,25 @@ namespace Configuration_Manager.CustomControls
                 g2.DrawImage(cBitmap, 0, 0);
             }
             return cBitmap;
+        }
+
+        public void CButton_Click(object sender, EventArgs e)
+        {
+            String exe = (sender as CButton).cd.ExePath;
+            String arg = (sender as CButton).cd.Parameters;
+            if (!String.IsNullOrEmpty(exe) && System.IO.File.Exists(exe))
+            {
+                if (!String.IsNullOrEmpty(arg))
+                    System.Diagnostics.Process.Start(exe, arg);
+                else
+                    System.Diagnostics.Process.Start(exe);
+            }
+            else
+            {
+                String msg = Model.GetTranslationFromID(67) +" "+ Model.GetTranslationFromID(52);
+                String caption = Model.GetTranslationFromID(37);
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

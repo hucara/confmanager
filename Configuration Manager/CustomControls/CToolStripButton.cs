@@ -32,7 +32,7 @@ namespace Configuration_Manager.CustomControls
 
             this.TypeId = count;
             this.Name = s.Name;
-            this.Text = s.text;
+            this.Text = s.Text;
             this.RelatedTabPage = null;
 
             this.CheckOnClick = true;
@@ -49,7 +49,7 @@ namespace Configuration_Manager.CustomControls
             if (s == null) throw new ArgumentNullException();
 
             this.Name = s.Name;
-            this.Text = s.text;
+            this.Text = s.Text;
         }
 
         public void SetSectionName(String s)

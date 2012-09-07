@@ -77,10 +77,10 @@ namespace Configuration_Manager.Views
 			if (!MaxSectionsReached())
 			{
                 //model.Sections.Add(s);
-                s.Button.Text = s.text;
-                s.Tab.Text = s.text;
+                s.Button.Text = s.Text;
+                s.Tab.Text = s.Text;
 
-                Debug.WriteLine("+ Added: (" + s.text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
+                Debug.WriteLine("+ Added: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
                 model.logCreator.Append("+ Added: " + s.Name);
 
                 UnCheckButtons();
@@ -110,7 +110,7 @@ namespace Configuration_Manager.Views
 			if (SelectedButton != null && model.Sections.Count > 0)
 			{
 				Section s = model.Sections.Find(se => se.Button == SelectedButton);
-				Debug.WriteLine("! Removed: (" + s.text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
+				Debug.WriteLine("! Removed: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
 
 				model.logCreator.Append("- Removed: " + s.Name);
 				model.DeleteControl(s.Tab, true);
@@ -130,7 +130,7 @@ namespace Configuration_Manager.Views
                 model.Sections.Remove(s);
                 Model.getInstance().uiChanged = true;
 
-                Debug.WriteLine("! Removed: (" + s.text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
+                Debug.WriteLine("! Removed: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
             }
             readAndShow();
         }
@@ -179,7 +179,7 @@ namespace Configuration_Manager.Views
 
 				Debug.WriteLine("! Clicked: " + b.Name + " \"" + b.Text + "\"");
 				sectionTabControl.SelectTab(s.Tab);
-				Debug.WriteLine("! Selected: " + model.CurrentSection.Name + " with Text: " + s.text);
+				Debug.WriteLine("! Selected: " + model.CurrentSection.Name + " with Text: " + s.Text);
 			}
 		}
 

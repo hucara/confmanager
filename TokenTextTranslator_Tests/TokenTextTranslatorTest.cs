@@ -40,6 +40,7 @@ namespace TokenTextTranslator_Tests
 		public static void MyClassInitialize(TestContext testContext)
 		{
             TokenTextTranslator.SetTokenTextTranslator("@@");
+            TokenTextTranslator_Accessor.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\translation_EN.xml";
 		}
 		//
 		//Use ClassCleanup to run code after all tests in a class have run
@@ -145,8 +146,6 @@ namespace TokenTextTranslator_Tests
         //[TestMethod()]
 		public void GetTranslatedValues_EnglishFile_TranslatesOK()
 		{
-            TokenTextTranslator_Accessor.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
-
             TokenTextTranslator_Accessor.valuesToTranslate.Add("0");
             TokenTextTranslator_Accessor.valuesToTranslate.Add("1");
             TokenTextTranslator_Accessor.valuesToTranslate.Add("2");
@@ -169,42 +168,36 @@ namespace TokenTextTranslator_Tests
 		[TestMethod()]
 		public void Translate_StringWithoutValues_ReturnsSameString()
 		{
-            TokenTextTranslator_Accessor.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
             Assert.AreEqual("Hola?", TokenTextTranslator_Accessor.TranslateFromTextFile("Hola?"));
 		}
 
 		[TestMethod()]
 		public void Translate_NullString_ReturnsEmptyString()
 		{
-            TokenTextTranslator_Accessor.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
             Assert.AreEqual("", TokenTextTranslator_Accessor.TranslateFromTextFile(null));
 		}
 
 		[TestMethod()]
 		public void Translate_EmptyString_ReturnsEmptyString()
 		{
-            TokenTextTranslator_Accessor.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
             Assert.AreEqual("", TokenTextTranslator_Accessor.TranslateFromTextFile(""));
 		}
 
 		[TestMethod()]
 		public void Translate_UnevenTokenString_ReturnsSameString()
 		{
-            TokenTextTranslator_Accessor.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
             Assert.AreEqual("@1@@ Hola", TokenTextTranslator_Accessor.TranslateFromTextFile("@1@@ Hola"));
 		}
 
 		[TestMethod()]
 		public void Translate_CorrectedString_ReturnsValues()
 		{
-            TokenTextTranslator_Accessor.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
             Assert.AreEqual("Editor: Control, Parent", TokenTextTranslator_Accessor.TranslateFromTextFile("@@1@@: @@2@@, @@3@@"));
 		}
 
 		[TestMethod()]
 		public void TranslateFormTextFile_StringWithoutTokens_ReturnsSameString()
 		{
-            TokenTextTranslator_Accessor.currentLang = @"C:\Projects\Configuration Manager\Configuration Manager\bin\texts\EN.xml";
             Assert.AreEqual("I don't have tokens!", TokenTextTranslator_Accessor.TranslateFromTextFile("I don't have tokens!"));
 		}
 	}

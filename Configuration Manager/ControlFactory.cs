@@ -68,7 +68,8 @@ namespace Configuration_Manager
         {
             CToolStripButton c = new CToolStripButton(s);
             c.SetSectionDescription(s);
-
+            c.MouseHover += model.UpdateInfoLabel;
+            c.MouseLeave += model.EraseInfoLabel;
             return c;
         }
 
@@ -76,7 +77,8 @@ namespace Configuration_Manager
         {
             CToolStripButton c = new CToolStripButton();
             c.SetSectionName(s);
-
+            c.MouseHover += model.UpdateInfoLabel;
+            c.MouseLeave += model.EraseInfoLabel;
             return c;
         }
 
@@ -163,6 +165,25 @@ namespace Configuration_Manager
 
             model.logCreator.Append("+ Added: " + c.cd.Name);
 
+            return c;
+        }
+
+        static public CButton BuildCButton(Control parent)
+        {
+            while (model.AllControls.Exists(l => l.cd.Name == "CButton" + CButton.count)) CButton.count++;
+            CButton c = new CButton();
+            parent.Controls.Add(c);
+
+            SetCommonHandlers(c);
+            SetChangesHandler(c);
+
+            Model.getInstance().AllControls.Add(c);
+            c.SetControlDescription();
+
+            c.cd.RealText = c.cd.Text;
+            c.Click += ch.CButton_Click;
+
+            model.logCreator.Append("+ Added " + c.cd.Name);
             return c;
         }
 
