@@ -171,6 +171,14 @@ namespace Configuration_Manager.CustomControls
 			editor.Show(textBox);
 		}
 
+        public void bitmapToolSTripMenuItem_Click(object sender, EventArgs e)
+        {
+            CBitmap bitmap = ControlFactory.BuildCBitmap(model.CurrentClickedControl);
+
+            editor = new ControlEditor();
+            editor.Show(bitmap);
+        }
+
 		public void comboBoxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
             CComboBox comboBox = ControlFactory.BuildCComboBox(model.CurrentClickedControl);
@@ -422,7 +430,7 @@ namespace Configuration_Manager.CustomControls
 
         public void CButton_Click(object sender, EventArgs e)
         {
-            String exe = (sender as CButton).cd.ExePath;
+            String exe = (sender as CButton).cd.MainPath;
             String arg = (sender as CButton).cd.Parameters;
             if (!String.IsNullOrEmpty(exe) && System.IO.File.Exists(exe))
             {

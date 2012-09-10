@@ -93,10 +93,13 @@ namespace Configuration_Manager
                                         new XElement("UncheckedValue", item.cd.checkBoxUncheckedValue) : null,
 
                                         item.cd.Type == "CButton" ? 
-                                        new XElement("ExePath", item.cd.RealExePath) : null,
+                                        new XElement("ExePath", item.cd.RealPath) : null,
 
                                         item.cd.Type == "CButton" ?
-                                        new XElement("CallParameters", item.cd.Parameters) : null
+                                        new XElement("CallParameters", item.cd.Parameters) : null,
+
+                                        item.cd.Type == "CBitmap" ?
+                                        new XElement("Path", item.cd.RealPath): null
                                     ),
 
                                     item.cd.Type == "CComboBox" ?
@@ -412,8 +415,20 @@ namespace Configuration_Manager
                 try
                 {
                     CButton b = c as CButton;
-                    b.cd.RealExePath = i.Element("Settings").Element("ExePath").Value;
+                    b.cd.RealPath = i.Element("Settings").Element("ExePath").Value;
                     b.cd.Parameters = i.Element("Settings").Element("CallParameters").Value;
+                }
+                catch
+                {
+                    System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading Exe Path for Button");
+                }
+            }
+            else if (c.cd.Type == "CBitmap")
+            {
+                try
+                {
+                    CBitmap m = c as CBitmap;
+                    m.cd.RealPath = i.Element("Settings").Element("Path").Value;
                 }
                 catch
                 {
@@ -460,6 +475,11 @@ namespace Configuration_Manager
                 case "CPanel":
                     CPanel pl = ControlFactory.BuildCPanel(s.Tab);
                     pl.cd.Name = i.Element("Name").Value;
+                    break;
+
+                case "CBitmap":
+                    CBitmap bm = ControlFactory.BuildCBitmap(s.Tab);
+                    bm.cd.Name = i.Element("Name").Value;
                     break;
 
                 case "CTextBox":

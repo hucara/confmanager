@@ -14,6 +14,8 @@ namespace Configuration_Manager
     public partial class ComboBoxEditor : Form
     {
         Configuration_Manager.CustomControls.ICustomControl cb;
+        const bool ADDING_NEW_ITEM = true;
+        const bool EDITING_ITEM = false;
 
         public ComboBoxEditor(Configuration_Manager.CustomControls.ICustomControl cb)
         {
@@ -101,7 +103,7 @@ namespace Configuration_Manager
             if (shownTextBox.Text != "" && shownTextBox.Text != null &&
                 configTextBox.Text != "" && configTextBox.Text != null)
             {
-                if (!ItemAlreadyExists())
+                if (!ItemAlreadyExists(ADDING_NEW_ITEM))
                 {
                     String translated = TokenTextTranslator.TranslateFromTextFile(shownTextBox.Text);
                     translated = TokenControlTranslator.TranslateFromControl(translated);
@@ -248,7 +250,7 @@ namespace Configuration_Manager
             if (n > 0 && shownValues.SelectedIndex != -1)
             {
                 deleteButton.Enabled = true;
-                editButton.Enabled = true;
+                if(shownTextBox.Text != "") editButton.Enabled = true;
             }
             else
             {
@@ -378,7 +380,7 @@ namespace Configuration_Manager
             int index = shownValues.SelectedIndex;
             if (index != -1)
             {
-                if (!ItemAlreadyExists())
+                if (!ItemAlreadyExists(EDITING_ITEM) && shownTextBox.Text != "")
                 {
                     String translated = TokenTextTranslator.TranslateFromTextFile(shownTextBox.Text);
                     translated = TokenControlTranslator.TranslateFromControl(translated);
@@ -401,13 +403,24 @@ namespace Configuration_Manager
             else (cb as ComboBox).SelectedIndex = index;
         }
 
-        private bool ItemAlreadyExists()
+        private bool ItemAlreadyExists(bool addingNewItem)
         {
-            if (cb.cd.comboBoxRealItems.Contains(shownTextBox.Text) &&
-                cb.cd.comboBoxConfigItems.Contains(configTextBox.Text))
-                return true;
+            if (addingNewItem)
+            {
+                if (cb.cd.comboBoxRealItems.Contains(shownTextBox.Text) &&
+                    cb.cd.comboBoxConfigItems.Contains(configTextBox.Text))
+                    return true;
+                else
+                    return false;
+            }
             else
-                return false;
+            {
+                if (cb.cd.comboBoxConfigItems.Contains(configTextBox.Text) &&
+                    configTextBox.Text != configValues.Text)
+                    return true;
+                else
+                    return false;
+            }
         }
     }
 }

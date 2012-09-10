@@ -52,6 +52,7 @@ namespace Configuration_Manager
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
+            this.ImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextNavMenu.SuspendLayout();
             this.contextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -110,7 +111,7 @@ namespace Configuration_Manager
             this.deleteToolStripMenuItem});
             this.contextMenu.Name = "contextMenuStrip1";
             this.contextMenu.ShowImageMargin = false;
-            this.contextMenu.Size = new System.Drawing.Size(128, 98);
+            this.contextMenu.Size = new System.Drawing.Size(98, 76);
             // 
             // newToolStripMenuItem
             // 
@@ -120,6 +121,7 @@ namespace Configuration_Manager
             this.checkBoxToolStripMenuItem,
             this.comboBoxToolStripMenuItem,
             this.buttonToolStripMenuItem,
+            this.ImageToolStripMenuItem,
             this.toolStripSeparator1,
             this.groupBoxToolStripMenuItem,
             this.shapeToolStripMenuItem,
@@ -127,7 +129,7 @@ namespace Configuration_Manager
             this.tabControlMenuItem,
             this.tabPageMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
             this.newToolStripMenuItem.Text = "New";
             // 
             // labelToolStripMenuItem
@@ -198,33 +200,39 @@ namespace Configuration_Manager
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // tabControl
             // 
             this.tabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.tabControl.Location = new System.Drawing.Point(179, -30);
+            this.tabControl.Location = new System.Drawing.Point(173, -25);
             this.tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(881, 734);
+            this.tabControl.Size = new System.Drawing.Size(620, 592);
             this.tabControl.TabIndex = 0;
             this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            // 
+            // ImageToolStripMenuItem
+            // 
+            this.ImageToolStripMenuItem.Name = "ImageToolStripMenuItem";
+            this.ImageToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.ImageToolStripMenuItem.Text = "Image";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 567);
-            this.Controls.Add(this.tabControl);
             this.Controls.Add(this.sectionBar);
+            this.Controls.Add(this.tabControl);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -267,6 +275,7 @@ namespace Configuration_Manager
 		private System.Windows.Forms.ToolStripMenuItem tabPageMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editSectionNameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem buttonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ImageToolStripMenuItem;
 
     }
 }

@@ -187,6 +187,24 @@ namespace Configuration_Manager
             return c;
         }
 
+        static public CBitmap BuildCBitmap(Control parent)
+        {
+            while (model.AllControls.Exists(l => l.cd.Name == "CBitmap" + CBitmap.count)) CBitmap.count++;
+            CBitmap c = new CBitmap();
+            parent.Controls.Add(c);
+
+            SetCommonHandlers(c);
+            SetChangesHandler(c);
+
+            Model.getInstance().AllControls.Add(c);
+            c.SetControlDescription();
+            (c as PictureBox).SizeMode = PictureBoxSizeMode.Zoom;
+            (c as PictureBox).Image = System.Drawing.SystemIcons.Error.ToBitmap();
+
+            model.logCreator.Append("+ Added " + c.cd.Name);
+            return c;
+        }
+
         static public CCheckBox BuildCCheckBox(Control parent)
         {
             while (model.AllControls.Exists(l => l.cd.Name == "CCheckBox" + CCheckBox.count)) CCheckBox.count++;

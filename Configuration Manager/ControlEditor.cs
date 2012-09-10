@@ -365,8 +365,50 @@ namespace Configuration_Manager
                     break;
 
                 case "CButton":
+                    destinationTypeLabel.Visible = false;
+                    destinationTypeComboBox.Visible = false;
+                    fileDestinationLabel.Visible = false;
+                    fileDestinationTextBox.Visible = false;
+                    fileDestinationButton.Visible = false;
+                    subDestinationLabel.Visible = false;
+                    subDestinatonTextBox.Visible = false;
+                    formattingLabel.Visible = false;
+                    formattingTextBox.Visible = false;
+
+                    relationsComboBox.Visible = false;
+                    controlListBox.Visible = false;
+
                     labelOrientationPanel.Visible = false;
                     checkBoxValuePanel.Visible = false;
+                    break;
+
+                case "CBitmap":
+                    // shut. down. EVERYTHING.
+                    textTextBox.Enabled = false;
+                    textLabel.Visible = false;
+                    textTextBox.Visible = false;
+                    fontButton.Visible = false;
+                    backColorButton.Visible = false;
+                    fontLabel.Visible = false;
+                    relationsComboBox.Visible = false;
+                    controlListBox.Visible = false;
+                    destinationTypeLabel.Visible = false;
+                    destinationTypeComboBox.Visible = false;
+                    fileDestinationLabel.Visible = false;
+                    fileDestinationTextBox.Visible = false;
+                    fileDestinationButton.Visible = false;
+                    subDestinationLabel.Visible = false;
+                    subDestinatonTextBox.Visible = false;
+                    formattingLabel.Visible = false;
+                    formattingTextBox.Visible = false;
+
+                    relationsComboBox.Visible = false;
+                    controlListBox.Visible = false;
+
+                    labelOrientationPanel.Visible = false;
+                    checkBoxValuePanel.Visible = false;
+                    exeArgumentsLabel.Visible = false;
+                    exeArgumentsTextBox.Visible = false;
                     break;
             }
         }
@@ -655,9 +697,12 @@ namespace Configuration_Manager
 
             if (control is CButton)
             {
-                control.cd.RealExePath = exePathTextBox.Text;
+                control.cd.RealPath = exePathTextBox.Text;
                 control.cd.Parameters = exeArgumentsTextBox.Text;
             }
+
+            if (control is CBitmap)
+                control.cd.RealPath = exePathTextBox.Text;
 
             model.ApplyRelations(control);
             ReadRelationManager.ReadConfiguration(control as ICustomControl);
@@ -726,9 +771,12 @@ namespace Configuration_Manager
 
             if (control.cd.Type == "CButton")
             {
-                exePathTextBox.Text = control.cd.RealExePath;
+                exePathTextBox.Text = control.cd.RealPath;
                 exeArgumentsTextBox.Text = control.cd.Parameters;
             }
+
+            if (control.cd.Type == "CBitmap")
+                exePathTextBox.Text = control.cd.RealPath;
 
             // Update the example font label
             SetExampleTextLabel();
@@ -972,7 +1020,7 @@ namespace Configuration_Manager
 
                 this.exePathLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 105).Value;
                 this.exeArgumentsLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 106).Value;
-
+                
                 // Saving labels to avoid reading from file again
                 MainDestinationText = this.fileDestinationLabel.Text;
                 RootKeyText = texts.Single(x => (int?)x.Attribute("id") == 96).Value;
@@ -1037,7 +1085,7 @@ namespace Configuration_Manager
             else
             {
                 fileDestinationLabel.Text = MainDestinationText;
-                fileDestinationButton.Visible = true;
+                //fileDestinationButton.Visible = true;
             }
 
         }
@@ -1095,11 +1143,23 @@ namespace Configuration_Manager
 
         private void exePathButton_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "Executable files (*.exe)|*.exe";
-            DialogResult dr = openFileDialog1.ShowDialog();
-            if (dr == DialogResult.OK && openFileDialog1.CheckFileExists)
+            if (this.type == "CButton")
             {
-                exePathTextBox.Text = openFileDialog1.FileName;
+                openFileDialog1.Filter = "Executable files (*.exe)|*.exe";
+                DialogResult dr = openFileDialog1.ShowDialog();
+                if (dr == DialogResult.OK && openFileDialog1.CheckFileExists)
+                {
+                    exePathTextBox.Text = openFileDialog1.FileName;
+                }
+            }
+            else if (this.type == "CBitmap")
+            {
+                openFileDialog1.Filter = "Image files (*.jpg; *.bmp; *.jpeg; *.png; *.gif)|*.jpg; *.bmp; *.jpeg; *.png; *.gif";
+                DialogResult dr = openFileDialog1.ShowDialog();
+                if (dr == DialogResult.OK && openFileDialog1.CheckFileExists)
+                {
+                    exePathTextBox.Text = openFileDialog1.FileName;
+                }
             }
         }
     }

@@ -104,6 +104,7 @@ namespace Configuration_Manager
 
             this.groupBoxToolStripMenuItem.Click += ch.groupBoxToolStripMenuItem_Click;
             this.shapeToolStripMenuItem.Click += ch.shapeToolStripMenuItem_Click;
+            this.ImageToolStripMenuItem.Click += ch.bitmapToolSTripMenuItem_Click;
 
             this.tabControlMenuItem.Click += ch.tabControlToolStripMenuItem_Click;
             this.tabPageMenuItem.Click += ch.tabPageToolStripMenuItem_Click;
