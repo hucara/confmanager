@@ -11,9 +11,16 @@ namespace Configuration_Manager
 {
     public partial class SplashScreen : Form
     {
+        Bitmap bm;
+        int xForProgress;
+        const int lowShineWidth = 20;
+        const int highShineWidth = 5;
+
         public SplashScreen()
         {
             InitializeComponent();
+            bm = (Bitmap)pictureBox1.Image;
+            xForProgress = bm.Width / 100;
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)

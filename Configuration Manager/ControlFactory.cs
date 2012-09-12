@@ -59,7 +59,6 @@ namespace Configuration_Manager
 
             Model.getInstance().AllControls.Add(c);
             c.cd.RealText = c.cd.Text;
-
             model.logCreator.Append("+ Added: " + c.cd.Name);
             return c;
         }
@@ -113,7 +112,6 @@ namespace Configuration_Manager
 
             c.SetControlDescription();
             c.cd.RealText = c.cd.Text;
-
             //c.SelectedIndexChanged += IndexChanged;
 
             Model.getInstance().AllControls.Add(c);
@@ -137,7 +135,6 @@ namespace Configuration_Manager
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
-
             c.DropDownStyle = ComboBoxStyle.DropDownList;
 
             model.logCreator.Append("+ Added: " + c.cd.Name);
@@ -162,6 +159,7 @@ namespace Configuration_Manager
             c.SetControlDescription();
 
             c.cd.RealText = c.cd.Text;
+            c.AllowDrop = false;
 
             model.logCreator.Append("+ Added: " + c.cd.Name);
 
@@ -182,6 +180,7 @@ namespace Configuration_Manager
 
             c.cd.RealText = c.cd.Text;
             c.Click += ch.CButton_Click;
+            c.AllowDrop = false;
 
             model.logCreator.Append("+ Added " + c.cd.Name);
             return c;

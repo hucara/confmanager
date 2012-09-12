@@ -22,6 +22,9 @@ namespace Configuration_Manager.CustomControls
         Rectangle previewRect = Rectangle.Empty;
 		Timer t = new Timer(); // Drag and drop timer.
 
+        Point controlOriginalLocation;
+        Control controlOriginalParent;
+
 		public CustomHandler(ContextMenuStrip cms)
 		{
 			this.contextMenu = cms;
@@ -328,12 +331,15 @@ namespace Configuration_Manager.CustomControls
 			{
 				String name = (model.CurrentClickedControl as ICustomControl).cd.Name;
 				String parent = (model.CurrentClickedControl as ICustomControl).cd.Parent.Name;
+                controlOriginalLocation = model.CurrentClickedControl.Location;
+                controlOriginalParent = model.CurrentClickedControl.Parent;
 				Debug.WriteLine("! Got the control: " + name + " with Parent: " + parent);
 
-                //previewRect = new Rectangle(model.CurrentClickedControl.Location, model.CurrentClickedControl.Size);
-                //DrawRectangle(model.CurrentClickedControl.Parent);
+                //Send all the controls to back
+                //foreach (ICustomControl c in model.AllControls.Where(co => co.cd.ParentSection == model.CurrentSection))
+                //    (c as Control).BringToFront();
 
-                //Do drag drop event is where the "control is moving"
+                model.CurrentClickedControl.Enabled = false;                
 				model.CurrentClickedControl.DoDragDrop(name, DragDropEffects.Move);
 			}
 		}
@@ -345,40 +351,70 @@ namespace Configuration_Manager.CustomControls
             parent.Update();
         }
 
+        // This occurs when the user releases the object being dragged.
 		public void OnDragDrop(object sender, DragEventArgs dea)
 		{
 			String name = "";
 			ICustomControl c = null;
 			Control parent = sender as Control;
             dea.Effect = DragDropEffects.Move;
-            String parentType = parent.GetType().Name;
-
-            if (parentType == "CGroupBox" || parentType == "CPanel" || parentType == "CTabPage" || parentType == "TabPage")
-            {
-                if (parent != model.CurrentClickedControl)
+            
+                if (parent != model.CurrentClickedControl && model.CurrentClickedControl != null)
                 {
-                    name = (string)dea.Data.GetData(typeof(System.String));
-                    c = model.AllControls.Find(control => control.cd.Name == name);
+                    // Get information of the state of the control once dropped.
+                    c = model.CurrentClickedControl as ICustomControl;
+                    c.cd.Parent = parent;
+                    Point cord = new Point(dea.X, dea.Y);
+                    Debug.WriteLine("(Screen point)" + cord.ToString());
+          
+                    // Make it invisible so we can get the container under the mouse where it will be placed.
+                    (c as Control).Enabled = false;
 
-                    if (c != null)
+                    parent = GetTopChildOnCoordinates(model.CurrentSection.Tab, cord);
+                    String parentType = parent.GetType().Name;
+                    if (parentType == "CGroupBox" || parentType == "CPanel" || parentType == "CTabPage" || parentType == "TabPage")
                     {
                         c.cd.Parent = parent;
-                        Point cord = new Point(dea.X, dea.Y);
-                        cord = parent.PointToClient(cord);
+                        cord = c.cd.Parent.PointToClient(cord);
+                        Debug.WriteLine("(Relative to old parent)" + cord.ToString());
                         c.cd.Top = cord.Y - model.LastClickedY;
                         c.cd.Left = cord.X - model.LastClickedX;
-
-                        Debug.WriteLine("! Dropped the control: " + c.cd.Name + " Parent: " + c.cd.Parent.Name + " X: " + cord.X + " Y: " + cord.Y);
-                        model.CurrentSection.Tab.Refresh();
-                        model.uiChanged = true;
-
-                        RefreshEditorWindow(c);
                     }
+                    else
+                    {
+                        c.cd.Parent = controlOriginalParent;
+                        (c as Control).Location = controlOriginalLocation;
+                    }
+                    (c as Control).Enabled = true;
+                    
+                    c.cd.Parent.Update();
+ 
+                    Debug.WriteLine("! Dropped the control: " + c.cd.Name + " Parent: " + c.cd.Parent.Name + " " +cord.ToString());
+                    model.CurrentSection.Tab.Refresh();
+                    model.uiChanged = true;
+                    RefreshEditorWindow(c);
+
                 }
                 else
                     Debug.WriteLine("! But you tried to drop it into itself...");
-            }
 		}
+
+        private Control GetTopChildOnCoordinates(Control sectionTab, Point screenCoord)
+        {
+            Point relCoord = sectionTab.PointToClient(screenCoord);
+            Control p = sectionTab.GetChildAtPoint(relCoord, GetChildAtPointSkip.Disabled);
+            Control newParent = p;
+
+            while (p != null)
+            {
+                relCoord = p.PointToClient(screenCoord);
+                p = p.GetChildAtPoint(relCoord, GetChildAtPointSkip.Disabled);
+                if (p != null) newParent = p; 
+            }
+
+            if (newParent != null) return newParent;
+            else return sectionTab;
+        }
 
         private void CreatePreviewRectangle(ICustomControl c)
         {
@@ -394,9 +430,14 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
+        //This event happens when the user gets into a dropable area
 		public void OnDragEnter(object sender, DragEventArgs dea)
 		{
-			dea.Effect = DragDropEffects.Move;
+            dea.Effect = DragDropEffects.Move;
+            Control c = sender as Control;
+            Debug.WriteLine(">> Created preview picturebox.");
+            c.DragOver -= moveControlWhileDragging_DragOver;
+            c.DragOver += moveControlWhileDragging_DragOver;
 		}
 
 		public void CancelDragDropTimer(object sender, EventArgs e)
@@ -416,18 +457,6 @@ namespace Configuration_Manager.CustomControls
                 System.Diagnostics.Debug.WriteLine("! " +(sender as ICustomControl).cd.Name + " content has changed its value.");
         }
 
-        public Bitmap CaptureControl(Control control)
-        {
-            Bitmap cBitmap = new Bitmap(control.Width, control.Height);
-            using (Graphics g1 = control.CreateGraphics())
-            {
-                control.DrawToBitmap(cBitmap, control.Bounds);
-                Graphics g2 = control.Parent.CreateGraphics();
-                g2.DrawImage(cBitmap, 0, 0);
-            }
-            return cBitmap;
-        }
-
         public void CButton_Click(object sender, EventArgs e)
         {
             String exe = (sender as CButton).cd.MainPath;
@@ -444,6 +473,27 @@ namespace Configuration_Manager.CustomControls
                 String msg = Model.GetTranslationFromID(67) +" "+ Model.GetTranslationFromID(52);
                 String caption = Model.GetTranslationFromID(37);
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void moveControlWhileDragging_DragOver(object sender, DragEventArgs dea)
+        {
+            Control c = Model.getInstance().CurrentClickedControl;
+            if (c != null)
+            {
+                Point cord = new Point(dea.X, dea.Y);
+                Control posParent = GetTopChildOnCoordinates(model.CurrentSection.Tab, cord);
+
+                posParent.BringToFront();
+                posParent.SendToBack();
+                posParent.Update();
+
+                cord = (c as ICustomControl).cd.Parent.PointToClient(cord);
+                c.Top = cord.Y - model.LastClickedY;
+                c.Left = cord.X - model.LastClickedX;
+
+                //Debug.WriteLine("Possible parent: " +posParent.Name+ " Location: " + c.Location.ToString());
+                c.Update();
             }
         }
     }
