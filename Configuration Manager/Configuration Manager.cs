@@ -24,13 +24,35 @@ namespace Configuration_Manager
         SectionTabsView sectionTabsView;
         SectionMenuView sectionMenuView;
         CustomHandler ch;
+        SplashScreen sc;
 
         public MainForm()
         {
             this.DoubleBuffered = true;
+            this.Visible = false;
             InitializeComponent();
 
             model.ReadConfigurationFile();
+
+            sc = new SplashScreen();
+            System.Threading.Thread t = new System.Threading.Thread(ShowSplashScreen);
+            t.Start();
+            
+            System.Threading.Thread.Sleep(1000);
+            LoadingProcess();
+            this.Visible = true;
+            System.Threading.Thread.Sleep(100);
+            
+            t.Abort();
+        }
+
+        public void ShowSplashScreen()
+        {
+            sc.Show(model.Headline, Application.ProductVersion);
+        }
+
+        public void LoadingProcess()
+        {
             CheckObjectDefinitionIntegrity();
 
             SetUpHeadLine();
@@ -51,7 +73,7 @@ namespace Configuration_Manager
                 String msg = Model.GetTranslationFromID(47) + " " + Model.GetTranslationFromID(52) + "\n" +Model.GetTranslationFromID(43);
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                System.Environment.Exit(0);
+                System.Environment.Exit(1);
             }
         }
 

@@ -243,6 +243,8 @@ namespace Configuration_Manager
 
             model.logCreator.Append("+ Added: " + c.cd.Name);
 
+            //AddSnapGrid(c);
+
             return c;
         }
 
@@ -280,6 +282,7 @@ namespace Configuration_Manager
             c.AllowDrop = true;
             c.DragDrop += ch.OnDragDrop;
             c.DragEnter += ch.OnDragEnter;
+            c.DragLeave += ch.OnDragLeave;
         }
 
         static private void SetChangesHandler(Control c)
@@ -292,6 +295,20 @@ namespace Configuration_Manager
         static public void IndexChanged(object sender, EventArgs e)
         {
             (sender as ICustomControl).cd.SelectedTab = (sender as TabControl).TabIndex;
+        }
+
+        static public void AddSnapGrid(Control c)
+        {
+            TableLayoutPanel tlp = new TableLayoutPanel();
+            tlp.Size = c.Size;
+            tlp.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+            tlp.RowCount = c.Size.Height / 30;
+            tlp.ColumnCount = c.Size.Width / 75;
+            tlp.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            tlp.Top = 20;
+            tlp.Left = 10;
+            tlp.Visible = true;
+            c.Controls.Add(tlp);
         }
     }
 }

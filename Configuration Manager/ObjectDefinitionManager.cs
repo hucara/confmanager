@@ -13,7 +13,6 @@ namespace Configuration_Manager
 {
     class ObjectDefinitionManager
     {
-        //private ControlFactory cf = ControlFactory.getInstance();
         private Model model = Model.getInstance();
         private static ObjectDefinitionManager odm;
         private XDocument xdoc;
@@ -21,6 +20,8 @@ namespace Configuration_Manager
         private TypeConverter colorConverter = TypeDescriptor.GetConverter(typeof(Color));
 
         int progress = 0;
+        SplashScreen sc;
+        System.Threading.Thread t;
 
         public static ObjectDefinitionManager getInstance()
         {
@@ -188,6 +189,7 @@ namespace Configuration_Manager
             model.logCreator.Append(" ");
         }
 
+
         // Reads the sections defined inside the ObjectDefinition file.
         // Then, creates and adds those sections to the Sections list.
         private void BuildDefinedSectionList(XDocument xdoc)
@@ -252,7 +254,7 @@ namespace Configuration_Manager
                 String msg = Model.GetTranslationFromID(47) +" "+ Model.GetTranslationFromID(52);
 
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Environment.Exit(0);
+                System.Environment.Exit(1);
                 return null;
             }
         }
@@ -261,9 +263,12 @@ namespace Configuration_Manager
         {
             List<XContainer> CTabs = new List<XContainer>();
             List<XContainer> CTabControls = new List<XContainer>();
+            
+            // Action delegate to update the SplashScreen
+            Action <int> incPercentage = x => sc.IncreasePercentage(x);
 
             this.xdoc = xdoc;
-            var items = from item in xdoc.Descendants("Controls")
+            var items = from item in this.xdoc.Descendants("Controls")
                             .Descendants("Control")
                         select item;
 
@@ -292,7 +297,9 @@ namespace Configuration_Manager
                     ctp.cd.RealText = e.Element("Text").Value;
                 }
             }
-            
+
+            int incPerItem = 90 / items.Count();
+            progress = 10;
             //Fill out the controls with the info from ObjectDefinition.xml
             foreach (var i in items)
             {
@@ -303,7 +310,6 @@ namespace Configuration_Manager
                         try
                         {
                             SetRealParent(c, i as XContainer);
-
                             SetRealProperties(c, i);
                             SetPaths(c, i);
                             SetControlSpecificProperties(c, i);
@@ -316,7 +322,8 @@ namespace Configuration_Manager
                         {
                             String caption = Model.GetTranslationFromID(37);
                             String msg = Model.GetTranslationFromID(47) + " " + Model.GetTranslationFromID(52);
-                            MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error); System.Environment.Exit(0);
+                            MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                            System.Environment.Exit(1);
                         }
 
                         ReadRelationManager.ReadConfiguration(c);
@@ -343,6 +350,9 @@ namespace Configuration_Manager
                         c.cd.Changed = false;
                         System.Diagnostics.Debug.WriteLine("+ Added : " + c.cd.Name + " with parent: " + c.cd.Parent.Name + " in Section: " + c.cd.ParentSection.Name);
                     }
+
+                    // Update the Splash Screen
+                    progress += incPerItem;
                 }
             }
             model.ApplyRightsToSections();

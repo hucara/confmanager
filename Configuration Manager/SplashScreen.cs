@@ -12,27 +12,54 @@ namespace Configuration_Manager
     public partial class SplashScreen : Form
     {
         Bitmap bm;
-        int xForProgress;
         const int lowShineWidth = 20;
         const int highShineWidth = 5;
+        public int progress;
 
         public SplashScreen()
         {
             InitializeComponent();
             bm = (Bitmap)pictureBox1.Image;
-            xForProgress = bm.Width / 100;
         }
 
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        public void SetBarPercentage(int p)
         {
-            progressBar1.Value = e.ProgressPercentage;
-            System.Diagnostics.Debug.WriteLine("Reading UI..."+e.ProgressPercentage+"%");
+            if (p > 0 && p < 101)
+            {
+                this.progressBar1.Value = p;
+            }
         }
 
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        public void IncreasePercentage(int p)
         {
-            System.Threading.Thread.Sleep(500);
-            this.Close();
+            int t = this.progressBar1.Value + p;
+            if (t > 0 && t < 101)
+            {
+                this.progressBar1.Value += p;
+            }
+
+            this.progressBar1.Update();
+        }
+
+        new public void Show(String title, String version)
+        {
+            // Worst Splash Screen ever.
+
+            this.toolNameLabel.Text = title;
+            this.versionLabel.Text = version;
+
+            this.Opacity = .00;
+            base.Show();
+            for (double i = .00 ; i < 1.00; i += 0.08)
+            {
+                this.Opacity = i;
+                if(this.progressBar1.Value + 8 < 100) this.progressBar1.Value += 8;
+                System.Threading.Thread.Sleep(80);
+                this.Update();
+            }
+            this.progressBar1.Value = this.progressBar1.Maximum;
+            this.Update();
+            System.Threading.Thread.Sleep(10000);
         }
     }
 }

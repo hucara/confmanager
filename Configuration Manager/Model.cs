@@ -146,7 +146,7 @@ namespace Configuration_Manager
                 String msg = GetTranslationFromID(41) +" "+ GetTranslationFromID(43);
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                System.Environment.Exit(0);
+                System.Environment.Exit(1);
             }
         }
 
@@ -336,7 +336,6 @@ namespace Configuration_Manager
                 else
                     this.progModeAllowed = false;
 
-                //if (rights.Element("ProgrammerMode").Value == "yes") this.progModeAllowed = true;
                 this.MainModificationRights = HexToData(rights.Element("Modification").Value.Substring(2));
                 this.MainDisplayRights = HexToData(rights.Element("Display").Value.Substring(2));
             }
@@ -486,9 +485,7 @@ namespace Configuration_Manager
             {
                 references += "- " + GetTranslationFromID(22) + ": ";
                 foreach (Control co in c.cd.RelatedRead)
-                {
                     references += (co as ICustomControl).cd.Name + " ";
-                }
                 references += "\n";
             }
 
@@ -496,9 +493,7 @@ namespace Configuration_Manager
             {
                 references += "- " + GetTranslationFromID(23) + ": ";
                 foreach (Control co in c.cd.RelatedWrite)
-                {
                     references += (co as ICustomControl).cd.Name + " ";
-                }
                 references += "\n";
             }
 
@@ -506,9 +501,7 @@ namespace Configuration_Manager
             {
                 references += "- " + GetTranslationFromID(24) + ": ";
                 foreach (Control co in c.cd.RelatedVisibility)
-                {
                     references += (co as ICustomControl).cd.Name + " ";
-                }
                 references += "\n";
             }
 
@@ -516,9 +509,7 @@ namespace Configuration_Manager
             {
                 references += "- " + GetTranslationFromID(25) + ": ";
                 foreach (Control co in c.cd.CoupledControls)
-                {
                     references += (co as ICustomControl).cd.Name + " ";
-                }
                 references += "\n";
             }
 

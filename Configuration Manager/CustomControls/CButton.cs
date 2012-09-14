@@ -14,6 +14,7 @@ namespace Configuration_Manager.CustomControls
         public CButton()
         {
             this.Name = "CButton" + count;
+            this.DoubleBuffered = true;
             count++;
         }
 

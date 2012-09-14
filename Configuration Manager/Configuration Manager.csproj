@@ -134,6 +134,12 @@
     <Compile Include="Configuration Manager.Designer.cs">
       <DependentUpon>Configuration Manager.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="RelationManagers\CoupledControlsManager.cs" />
     <Compile Include="RelationManagers\ReadRelationManager.cs" />
     <Compile Include="RelationManagers\VisibilityRelationManager.cs" />
@@ -180,6 +186,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ControlEditor.resx">
       <DependentUpon>ControlEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
