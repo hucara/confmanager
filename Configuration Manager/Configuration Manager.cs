@@ -30,6 +30,11 @@ namespace Configuration_Manager
         {
             this.DoubleBuffered = true;
             this.Visible = false;
+            //this.Font = System.Drawing.SystemFonts.DefaultFont;
+            //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+
             InitializeComponent();
 
             model.ReadConfigurationFile();
@@ -96,11 +101,10 @@ namespace Configuration_Manager
         private void SetUpMainForm()
         {
             this.TopMost = model.stayOnTop;
-            this.Width = model.width;
-            this.Height = model.height;
             this.Top = model.top;
             this.Left = model.left;
 
+            this.ClientSize = new Size(model.width, model.height);
             if (model.resizable)
                 this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             else
@@ -334,10 +338,10 @@ namespace Configuration_Manager
                     break;
                 }
             }
-            SaveCurrentLocation();
+            SaveBoundaries();
         }
 
-        private void SaveCurrentLocation()
+        private void SaveBoundaries()
         {
             XDocument xdoc;
             try
@@ -347,6 +351,8 @@ namespace Configuration_Manager
 
                 settings.Element("Top").Value = this.Top.ToString();
                 settings.Element("Left").Value = this.Left.ToString();
+                settings.Element("Height").Value = this.Height.ToString();
+                settings.Element("Width").Value = this.Width.ToString();
 
                 xdoc.Save(model.ConfigFilePath);
             }
@@ -370,6 +376,17 @@ namespace Configuration_Manager
                 se.ShowDialog();
                 //sectionMenuView.readAndShow();
             }
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            this.model.width = this.Width;
+            this.model.height = this.Height;
+
+            this.tabControl.Width = this.Width - 190;
+            this.tabControl.Height = this.Height - 20;
+
+            this.sectionBar.Height = this.Height;
         }
     }
 }

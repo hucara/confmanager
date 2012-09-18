@@ -78,7 +78,7 @@ namespace Configuration_Manager
             if (MainForm.ActiveForm != null)
             {
                 this.Top = MainForm.ActiveForm.Location.Y;
-                this.Height = 737;
+                this.ClientSize = new Size(685, 700);
                 this.Left = MainForm.ActiveForm.Location.X + MainForm.ActiveForm.Width;
             }
         }
@@ -130,8 +130,8 @@ namespace Configuration_Manager
 
         private void ShowHeadLine()
         {
-            controlNameLabel.Text = "Control: " + control.cd.Name;
-            parentNameLabel.Text = "Parent: " + control.cd.Parent.Name;
+            controlNameLabel.Text = Model.GetTranslationFromID(2) + ": " + control.cd.Name;
+            parentNameLabel.Text = Model.GetTranslationFromID(3) + ": " + control.cd.Parent.Name;
         }
 
         private void ShowMousePosition()
@@ -206,17 +206,12 @@ namespace Configuration_Manager
 
         private void SetRelationComboBox()
         {
-            XDocument xdoc;
-
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
-                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
-
                 // Relations
-                READ = texts.Single(x => (int?)x.Attribute("id") == 22).Value;
-                VISIBILITY = texts.Single(x => (int?)x.Attribute("id") == 24).Value;
-                COUPLED = texts.Single(x => (int?)x.Attribute("id") == 25).Value;
+                READ = Model.GetTranslationFromID(22);
+                VISIBILITY = Model.GetTranslationFromID(24);
+                COUPLED = Model.GetTranslationFromID(25);
             }
             catch (Exception e)
             {
@@ -276,6 +271,7 @@ namespace Configuration_Manager
                 case "CLabel":
                     labelOrientationPanel.Visible = true;
                     controlListBox.Visible = false;
+                    relationsComboBox.Visible = false;
                     exePathPanel.Visible = false;
                     break;
 
@@ -435,16 +431,12 @@ namespace Configuration_Manager
 
         private void SetOrientationComboBox()
         {
-            XDocument xdoc;
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
-                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
-
                 // Orientations
-                LEFT_OR = texts.Single(x => (int?)x.Attribute("id") == 11).Value;
-                RIGHT_OR = texts.Single(x => (int?)x.Attribute("id") == 101).Value;
-                CENTER_OR = texts.Single(x => (int?)x.Attribute("id") == 102).Value;
+                LEFT_OR = Model.GetTranslationFromID(11);
+                RIGHT_OR = Model.GetTranslationFromID(101);
+                CENTER_OR = Model.GetTranslationFromID(102);
             }
             catch (Exception)
             {
@@ -804,9 +796,11 @@ namespace Configuration_Manager
             if (!controlListBox.GetItemChecked(e.Index))
             {
                 if (relationsComboBox.SelectedItem.ToString() == COUPLED)
+                {
                     // Manage the coupled relation
                     if (!currentVisibleList.Contains(checkedControl))
                         CoupledRelationsListChanged(checkedControl, e);
+                }
                 else if (relationsComboBox.SelectedItem.ToString() == VISIBILITY)
                 {
                     // Manage the visibility relation
@@ -982,54 +976,49 @@ namespace Configuration_Manager
 
         private void ReplaceLabels()
         {
-            XDocument xdoc;
-
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().TranslationLangPath);
-                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Text");
-
                 // Title of the form
-                this.Text = texts.Single(x => (int?)x.Attribute("id") == 1).Value;
+                this.Text = Model.GetTranslationFromID(1);
 
                 // Description labels
-                this.controlNameLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 2).Value;
-                this.parentNameLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 3).Value;
-                this.textLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 4).Value;
-                this.fontButton.Text = texts.Single(x => (int?)x.Attribute("id") == 5).Value;
-                this.backColorButton.Text = texts.Single(x => (int?)x.Attribute("id") == 6).Value;
-                this.HintLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 7).Value;
-                this.widthLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 8).Value;
-                this.heightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 9).Value;
-                this.topLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 10).Value;
-                this.leftLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 11).Value;
-                this.groupBox1.Text = texts.Single(x => (int?)x.Attribute("id") == 12).Value;
+                this.controlNameLabel.Text = Model.GetTranslationFromID(2);
+                this.parentNameLabel.Text = Model.GetTranslationFromID(3);
+                this.textLabel.Text = Model.GetTranslationFromID(4);
+                this.fontButton.Text = Model.GetTranslationFromID(5);
+                this.backColorButton.Text = Model.GetTranslationFromID(6);
+                this.HintLabel.Text = Model.GetTranslationFromID(7);
+                this.widthLabel.Text = Model.GetTranslationFromID(8);
+                this.heightLabel.Text = Model.GetTranslationFromID(9);
+                this.topLabel.Text = Model.GetTranslationFromID(10);
+                this.leftLabel.Text = Model.GetTranslationFromID(11);
+                this.groupBox1.Text = Model.GetTranslationFromID(12);
 
                 // Attributes labels
-                this.groupBox2.Text = texts.Single(x => (int?)x.Attribute("id") == 13).Value;
-                this.destinationTypeLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 14).Value;
-                this.fileDestinationLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 15).Value;
-                this.subDestinationLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 16).Value;
-                this.displayRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 17).Value;
-                this.modificationRightLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 18).Value;
-                this.editComboBoxButton.Text = texts.Single(x => (int?)x.Attribute("id") == 95).Value;
-                this.checkedLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 97).Value;
-                this.uncheckedLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 98).Value;
-                this.formattingLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 99).Value;
-                this.orientationLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 100).Value;
+                this.groupBox2.Text = Model.GetTranslationFromID(13);
+                this.destinationTypeLabel.Text = Model.GetTranslationFromID(14);
+                this.fileDestinationLabel.Text = Model.GetTranslationFromID(15);
+                this.subDestinationLabel.Text = Model.GetTranslationFromID(16);
+                this.displayRightLabel.Text = Model.GetTranslationFromID(17);
+                this.modificationRightLabel.Text = Model.GetTranslationFromID(18);
+                this.editComboBoxButton.Text = Model.GetTranslationFromID(95);
+                this.checkedLabel.Text = Model.GetTranslationFromID(97);
+                this.uncheckedLabel.Text = Model.GetTranslationFromID(98);
+                this.formattingLabel.Text = Model.GetTranslationFromID(99);
+                this.orientationLabel.Text = Model.GetTranslationFromID(100);
 
-                this.exePathLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 105).Value;
-                this.exeArgumentsLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 106).Value;
+                this.exePathLabel.Text = Model.GetTranslationFromID(105);
+                this.exeArgumentsLabel.Text = Model.GetTranslationFromID(106);
                 
                 // Saving labels to avoid reading from file again
                 MainDestinationText = this.fileDestinationLabel.Text;
-                RootKeyText = texts.Single(x => (int?)x.Attribute("id") == 96).Value;
+                RootKeyText = Model.GetTranslationFromID(96);
                 this.fileDestinationButton.Text = "";
 
                 // Bottom Buttons
-                this.updateButton.Text = texts.Single(x => (int?)x.Attribute("id") == 19).Value;
-                this.cancelButton.Text = texts.Single(x => (int?)x.Attribute("id") == 20).Value;
-                this.okButton.Text = texts.Single(x => (int?)x.Attribute("id") == 21).Value;
+                this.updateButton.Text = Model.GetTranslationFromID(19);
+                this.cancelButton.Text = Model.GetTranslationFromID(20);
+                this.okButton.Text = Model.GetTranslationFromID(21);
             }
             catch (Exception)
             {

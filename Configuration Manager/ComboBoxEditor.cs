@@ -35,31 +35,28 @@ namespace Configuration_Manager
 
             if ((cb as ComboBox).Items.Count > 0)
                 (cb as ComboBox).SelectedIndex = index;
+
+            this.ClientSize = new Size(590, 265);
         }
 
         private void ReplaceLabels()
         {
-            XDocument xdoc;
-
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().TranslationLangPath);
-                IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Text");
-
                 // Title of the form
-                this.Text = texts.Single(x => (int?)x.Attribute("id") == 90).Value;
+                this.Text = Model.GetTranslationFromID(90);
 
                 // Labels of the form
-                this.valuesLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 103).Value;
-                this.configValuesLabel.Text = texts.Single(x => (int?)x.Attribute("id") == 104).Value;
-                this.okButton.Text = texts.Single(x => (int?)x.Attribute("id") == 21).Value;
+                this.valuesLabel.Text = Model.GetTranslationFromID(103);
+                this.configValuesLabel.Text = Model.GetTranslationFromID(104);
+                this.okButton.Text = Model.GetTranslationFromID(21);
 
                 this.moveUpButton.Text = "";
                 this.moveDownButton.Text = "";
 
-                this.addButton.Text = texts.Single(x => (int?)x.Attribute("id") == 91).Value;
-                this.deleteButton.Text = texts.Single(x => (int?)x.Attribute("id") == 29).Value;
-                this.editButton.Text = texts.Single(x=> (int?)x.Attribute("id") == 92).Value;
+                this.addButton.Text = Model.GetTranslationFromID(91);
+                this.deleteButton.Text = Model.GetTranslationFromID(29);
+                this.editButton.Text = Model.GetTranslationFromID(92);
             }
             catch (Exception e)
             {

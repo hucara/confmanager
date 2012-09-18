@@ -29,6 +29,7 @@ namespace Configuration_Manager.CustomControls
 
         Point controlOriginalLocation;
         Control controlOriginalParent;
+        Control posParent;
 
 		public CustomHandler(ContextMenuStrip cms)
 		{
@@ -341,10 +342,11 @@ namespace Configuration_Manager.CustomControls
 
                 //model.CurrentClickedControl.Parent.Invalidate();
                 this.snapRectangle = CreateSnapRectangle(model.CurrentClickedControl as Control);
-
                 this.previewRectangle = model.CurrentClickedControl.DisplayRectangle;
-                model.CurrentClickedControl.DrawToBitmap(this.previewImage, model.CurrentClickedControl.DisplayRectangle);
-
+                
+                Bitmap bm = new Bitmap(this.previewRectangle.Width, this.previewRectangle.Height);
+                model.CurrentClickedControl.DrawToBitmap(bm, this.previewRectangle);
+                previewImage = bm;
                 g = Model.getInstance().CurrentSection.Tab.CreateGraphics();
                 g.DrawRectangle(System.Drawing.Pens.Aqua, snapRectangle);
                 dragging = true;
@@ -380,7 +382,6 @@ namespace Configuration_Manager.CustomControls
         // This occurs when the user releases the object being dragged.
 		public void OnDragDrop(object sender, DragEventArgs dea)
 		{
-			String name = "";
 			ICustomControl c = null;
 			Control parent = sender as Control;
             dea.Effect = DragDropEffects.Move;
@@ -413,16 +414,18 @@ namespace Configuration_Manager.CustomControls
                         (c as Control).Location = controlOriginalLocation;
                     }
                     (c as Control).Enabled = true;
-                    
-                    c.cd.Parent.Update();
  
                     Debug.WriteLine("! Dropped the control: " + c.cd.Name + " Parent: " + c.cd.Parent.Name + " " +cord.ToString());
                     dragging = false;
-                    model.CurrentSection.Tab.Refresh();
                     model.uiChanged = true;
                     RefreshEditorWindow(c);
                     (c as Control).Enabled = true;
+                    (c as Control).Visible = true;
 
+                    c.cd.Parent.Refresh();
+                    foreach (Control cont in model.CurrentSection.Tab.Controls)
+                        cont.Refresh();
+                    //model.CurrentSection.Tab.Refresh();
                 }
                 else
                     Debug.WriteLine("! But you tried to drop it into itself...");
@@ -430,20 +433,21 @@ namespace Configuration_Manager.CustomControls
 
         public void CheckSnapOnDrop(Control control, Control parent)
         {
+            ICustomControl c = control as ICustomControl;
             int margin = 10;
             int marginTop = 10;
             if (parent is TabPage) margin = 4;
             if (parent is CGroupBox) marginTop = 20;
 
             // Check Snaps to parent
-            if (control.Top < marginTop)
-                control.Top = marginTop;
-            if (control.Left < margin)
-                control.Left = margin;
-            if (control.Top + control.Height > parent.Height - margin)
-                control.Top = parent.Height - control.Height - margin;
-            if (control.Left + control.Width > parent.Width - margin)
-                control.Left = parent.Width - control.Width - margin;
+            if (c.cd.Top < marginTop)
+                c.cd.Top = marginTop;
+            if (c.cd.Left < margin)
+                c.cd.Left = margin;
+            if (c.cd.Top + c.cd.Height > parent.Height - margin)
+                c.cd.Top = parent.Height - c.cd.Height - margin;
+            if (c.cd.Left + c.cd.Width > parent.Width - margin)
+                c.cd.Left = parent.Width - c.cd.Width - margin;
         }
 
         private Control GetTopChildOnCoordinates(Control sectionTab, Point screenCoord)
@@ -482,7 +486,6 @@ namespace Configuration_Manager.CustomControls
 		{
             dea.Effect = DragDropEffects.Move;
             Control c = sender as Control;
-            Debug.WriteLine(">> Created preview picturebox.");
             c.DragOver -= moveControlWhileDragging_DragOver;
             c.DragOver += moveControlWhileDragging_DragOver;
 		}
@@ -529,12 +532,8 @@ namespace Configuration_Manager.CustomControls
             if (c != null)
             {
                 Point cord = new Point(dea.X, dea.Y);
-                Control posParent = GetTopChildOnCoordinates(model.CurrentSection.Tab, cord);
-
+                posParent = GetTopChildOnCoordinates(model.CurrentSection.Tab, cord);
                 cord = (c as ICustomControl).cd.Parent.PointToClient(cord);
-                //Point previewCord = posParent.PointToClient(new Point(dea.X, dea.Y));
-
-                //ShowPreviewDuringDrag(c, posParent, previewCord);
 
                 if (posParent == c.Parent)
                 {
@@ -545,35 +544,28 @@ namespace Configuration_Manager.CustomControls
                 {
                     posParent.Paint -= posParent_Paint;
                     posParent.Paint += posParent_Paint;
-                    posParent.Invalidate();
+                    c.Visible = false;
                 }
 
-                //if (posParent != c.Parent) posParent.Invalidate();
-                //else
-                //{
-                //    cord = (c as ICustomControl).cd.Parent.PointToClient(cord);
-                //    Point previewCord = posParent.PointToClient(new Point(dea.X, dea.Y));
-
-                //    ShowPreviewDuringDrag(c, posParent, previewCord);
-
-                //    c.Top = cord.Y - model.LastClickedY;
-                //    c.Left = cord.X - model.LastClickedX;
-                //}
-                //model.CurrentSection.Tab.Invalidate();
+                posParent.Invalidate();
+                model.CurrentSection.Tab.Refresh();
+                model.CurrentSection.Tab.SendToBack();
             }
         }
 
         private void posParent_Paint(object sender, PaintEventArgs pea)
         {
             Control c = model.CurrentClickedControl;
-            Control posParent = sender as Control;
-            Point cord = posParent.PointToClient(System.Windows.Forms.Cursor.Position);
+            Control possibleParent = sender as Control;
+            Point cord = possibleParent.PointToClient(System.Windows.Forms.Cursor.Position);
 
-            if(posParent != c.Parent && dragging)
+            if (possibleParent != c.Parent && dragging)
             {
                 cord.X -= model.LastClickedX;
                 cord.Y -= model.LastClickedY;
-                pea.Graphics.DrawImage(previewImage, cord);
+                Color tColor = Color.FromArgb(65, Color.Blue);
+                //pea.Graphics.DrawRectangle(Pens.Aqua, cord.X, cord.Y, c.DisplayRectangle.Width, c.DisplayRectangle.Height);
+                pea.Graphics.FillRectangle(new SolidBrush(tColor), cord.X, cord.Y, c.DisplayRectangle.Width, c.DisplayRectangle.Height);
             }
         }
 
@@ -585,6 +577,7 @@ namespace Configuration_Manager.CustomControls
                 previewCord.Y -= model.LastClickedY;
 
                 g = posParent.CreateGraphics();
+                //g.DrawRectangle(Pens.Aqua, control.DisplayRectangle);
                 g.DrawImageUnscaled(previewImage, previewCord);
                 posParent.Invalidate();
             }

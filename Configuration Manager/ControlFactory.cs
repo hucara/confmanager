@@ -86,7 +86,6 @@ namespace Configuration_Manager
             while (model.AllControls.Exists(l => l.cd.Name == "CTabPage" + CTabPage.count)) CTabPage.count++;
             CTabPage c = new CTabPage();
             parent.Controls.Add(c);
-
             (parent as CTabControl).SelectedTab = c;
 
             SetCommonHandlers(c);

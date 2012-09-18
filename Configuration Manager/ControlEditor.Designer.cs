@@ -101,7 +101,7 @@
             this.controlNameLabel.Name = "controlNameLabel";
             this.controlNameLabel.Size = new System.Drawing.Size(303, 20);
             this.controlNameLabel.TabIndex = 0;
-            this.controlNameLabel.Text = "Control";
+            this.controlNameLabel.Text = "control";
             // 
             // parentNameLabel
             // 
@@ -111,7 +111,7 @@
             this.parentNameLabel.Name = "parentNameLabel";
             this.parentNameLabel.Size = new System.Drawing.Size(339, 20);
             this.parentNameLabel.TabIndex = 1;
-            this.parentNameLabel.Text = "Parent";
+            this.parentNameLabel.Text = "parent";
             this.parentNameLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // groupBox1
@@ -226,7 +226,7 @@
             this.backColorButton.Location = new System.Drawing.Point(21, 111);
             this.backColorButton.Margin = new System.Windows.Forms.Padding(4);
             this.backColorButton.Name = "backColorButton";
-            this.backColorButton.Size = new System.Drawing.Size(76, 28);
+            this.backColorButton.Size = new System.Drawing.Size(95, 28);
             this.backColorButton.TabIndex = 4;
             this.backColorButton.Text = "backcolor";
             this.backColorButton.UseVisualStyleBackColor = true;
@@ -237,7 +237,7 @@
             this.fontButton.Location = new System.Drawing.Point(21, 66);
             this.fontButton.Margin = new System.Windows.Forms.Padding(4);
             this.fontButton.Name = "fontButton";
-            this.fontButton.Size = new System.Drawing.Size(76, 28);
+            this.fontButton.Size = new System.Drawing.Size(95, 28);
             this.fontButton.TabIndex = 3;
             this.fontButton.Text = "font";
             this.fontButton.UseVisualStyleBackColor = true;
@@ -257,7 +257,7 @@
             // HintLabel
             // 
             this.HintLabel.AutoSize = true;
-            this.HintLabel.Location = new System.Drawing.Point(479, 33);
+            this.HintLabel.Location = new System.Drawing.Point(465, 28);
             this.HintLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.HintLabel.Name = "HintLabel";
             this.HintLabel.Size = new System.Drawing.Size(35, 17);

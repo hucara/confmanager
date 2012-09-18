@@ -83,6 +83,7 @@ namespace Configuration_Manager
 
         public XDocument ConfigObjects { get; private set; }
         public XDocument ConfigFile { get; private set; }
+        public static XDocument translationFile { get; private set; }
         public static XDocument TextFile { get; private set; }
 
         public LogCreation logCreator { get; private set; }
@@ -225,9 +226,8 @@ namespace Configuration_Manager
                 String[] arguments = Environment.GetCommandLineArgs();
 
                 if (this.args != null)
-                {
                     SetArguments();
-                }
+                
                 if (this.createLogs)
                 {
                     logCreator = new LogCreation("CM", 70, '#', this.createLogs);
@@ -268,7 +268,6 @@ namespace Configuration_Manager
             try
             {
                 XElement settings = xdoc.Element("ConfigurationManager").Element("Settings");
-
                 Boolean.TryParse(settings.Element("StayOnTop").Value, out this.stayOnTop);
 
                 if (settings.Element("StayOnTop").Value == "yes") this.stayOnTop = true;
@@ -316,6 +315,8 @@ namespace Configuration_Manager
                     }
                     else
                         Model.translationPath = this.TranslationLangPath;
+
+                    translationFile = XDocument.Load(this.TranslationLangPath);
                 }
             }
             catch (Exception)
@@ -381,7 +382,7 @@ namespace Configuration_Manager
                     delChildren = MessageBox.Show(msg, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 }
 
-                if (c.GetType().Name != "TabPage") hasRelations = HasRelations(c, out relMessage);
+                if (!(c is TabPage)) hasRelations = HasRelations(c, out relMessage);
 
                 if (hasRelations)
                     deleteControl = MessageBox.Show(relMessage, "Remove control", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
@@ -627,6 +628,7 @@ namespace Configuration_Manager
             if (this.InfoLabel.Text != "")
             {
                 this.InfoLabel.Text = TokenControlTranslator.TranslateFromControl(this.InfoLabel.Text);
+                this.InfoLabel.Text = TokenTextTranslator.TranslateFromTextFile(this.InfoLabel.Text);
                 this.InfoLabel.BackColor = System.Drawing.Color.Lavender;
             }
         }
@@ -711,7 +713,7 @@ namespace Configuration_Manager
                 {
                     if (progMode)
                     {
-                        if (c.cd.Type != "CTabPage")
+                        if (!(c is CTabPage))
                         {
                             c.cd.Enabled = true;
                             c.cd.Visible = true;
@@ -719,7 +721,7 @@ namespace Configuration_Manager
                     }
                     else
                     {
-                        if (c.cd.Type != "CTabPage")
+                        if (!(c is CTabPage))
                         {
                             //c.cd.Visible = c.cd.operatorVisibility;
                             c.cd.Enabled = c.cd.operatorModification;
@@ -771,7 +773,7 @@ namespace Configuration_Manager
         {
             if (c.cd.CoupledControls.Count > 0 || c.cd.RelatedVisibility.Count > 0 || c.cd.RelatedRead.Count > 0)
             {
-                if (c.cd.Type == "CCheckBox")
+                if (c is CCheckBox)
                 {
                     CheckState state = (c as CheckBox).CheckState;
                     if (state == CheckState.Checked) (c as CheckBox).CheckState = CheckState.Unchecked;
@@ -780,7 +782,7 @@ namespace Configuration_Manager
                     (c as CheckBox).CheckState = state;
                 }
 
-                if (c.cd.Type == "CComboBox")
+                if (c is CComboBox)
                 {
                     int index = (c as ComboBox).SelectedIndex;
                     (c as ComboBox).SelectedIndex = -1;
@@ -794,12 +796,11 @@ namespace Configuration_Manager
             String text = "TEXT NOT FOUND";
             try
             {
-                XDocument trans = XDocument.Load(Model.translationPath);
-                text = trans.Descendants("TextFile").Descendants("Text").Single(x => (int?)x.Attribute("id") == id).Value;
+                text = translationFile.Descendants("TextFile").Descendants("Texts").Descendants("Text").Single(x => (int?)x.Attribute("id") == id).Value;
             }
             catch (Exception)
             {
-                MessageBox.Show("No translation file was found. The application will now close.", "Critical error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Error found in the translation file. The application will now close.", "Critical error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 System.Environment.Exit(0);
             }
             return text;

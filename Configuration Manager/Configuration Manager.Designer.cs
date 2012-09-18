@@ -43,6 +43,7 @@ namespace Configuration_Manager
             this.checkBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.groupBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +53,6 @@ namespace Configuration_Manager
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.ImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextNavMenu.SuspendLayout();
             this.contextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -63,7 +63,6 @@ namespace Configuration_Manager
             this.sectionBar.Dock = System.Windows.Forms.DockStyle.Left;
             this.sectionBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.sectionBar.Location = new System.Drawing.Point(0, 0);
-            this.sectionBar.MaximumSize = new System.Drawing.Size(175, 704);
             this.sectionBar.Name = "sectionBar";
             this.sectionBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.sectionBar.ShowItemToolTips = false;
@@ -163,6 +162,12 @@ namespace Configuration_Manager
             this.buttonToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
             this.buttonToolStripMenuItem.Text = "Button";
             // 
+            // ImageToolStripMenuItem
+            // 
+            this.ImageToolStripMenuItem.Name = "ImageToolStripMenuItem";
+            this.ImageToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.ImageToolStripMenuItem.Text = "Image";
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -220,12 +225,6 @@ namespace Configuration_Manager
             this.tabControl.TabIndex = 0;
             this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             // 
-            // ImageToolStripMenuItem
-            // 
-            this.ImageToolStripMenuItem.Name = "ImageToolStripMenuItem";
-            this.ImageToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
-            this.ImageToolStripMenuItem.Text = "Image";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -246,6 +245,7 @@ namespace Configuration_Manager
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.contextNavMenu.ResumeLayout(false);
             this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);

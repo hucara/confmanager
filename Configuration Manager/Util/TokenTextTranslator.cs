@@ -163,41 +163,6 @@ namespace Configuration_Manager.Util
 			return translated;
 		}
 
-		//private void GetTranslatedValues()
-		//{
-		//    try
-		//    {
-		//        XDocument xdoc = XDocument.Load(currentLang);
-
-		//        if (subPathElements.Count > 0)
-		//        {
-		//            // Search from the subpath
-		//            XElement e = xdoc.Element(subPathElements[0]);
-		//            foreach (String s in subPathElements)
-		//            {
-		//                e = xdoc.Element(s);
-		//                System.Diagnostics.Debug.WriteLine("! Getting into: "+s);
-		//            }
-
-		//            translatedValues.Add(e.Value);
-		//        }
-		//        else
-		//        {
-		//            // Search directly from the root
-		//            foreach (String s in valuesToTranslate)
-		//            {
-		//                translatedValues.Add(xdoc.Element(s).Value);
-		//            }
-		//        }
-		//    }
-		//    catch (System.IO.FileNotFoundException e)
-		//    {
-		//        System.Diagnostics.Debug.WriteLine("! Problem reading the language file:");
-		//        System.Diagnostics.Debug.WriteLine("/!\\Exception:" + e.ToString());
-		//    }
-		//}
-
-
 		private static void GetTranslatedValues()
 		{
 			try
