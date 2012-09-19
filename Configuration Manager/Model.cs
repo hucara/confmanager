@@ -223,7 +223,7 @@ namespace Configuration_Manager
                 ReadRightsSection(xdoc);
                 ReadLogsSection(xdoc);
 
-                String[] arguments = Environment.GetCommandLineArgs();
+                this.args = Environment.GetCommandLineArgs();
 
                 if (this.args != null)
                     SetArguments();
@@ -669,8 +669,10 @@ namespace Configuration_Manager
         {
             bool res = true;
             for (int i = 0; i < ControlRight.Length; i++)
-                if ((ControlRight[i] & MainRight[i]) != ControlRight[i]) res = false;
+                if ((ControlRight[i] & MainRight[i]) != ControlRight[i])
+                    res = false;
 
+            System.Diagnostics.Debug.WriteLine("R&R: " + BitConverter.ToString(ControlRight) + " Result: " + res.ToString());
             return res;
         }
 
@@ -705,7 +707,7 @@ namespace Configuration_Manager
             ApplyRightsToSections();
         }
 
-        private void ApplyRightsToControls()
+        public void ApplyRightsToControls()
         {
             if (progModeAllowed)
             {

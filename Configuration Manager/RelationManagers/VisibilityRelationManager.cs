@@ -23,13 +23,18 @@ namespace Configuration_Manager.CustomControls
             foreach (ICustomControl related in control.cd.RelatedVisibility)
             {
                 if (control.SelectedIndex > 0 || Model.getInstance().progMode)
+                {
                     related.cd.Visible = true;
+                }
                 else if (control.SelectedIndex <= 0)
                 {
                     if (related is CCheckBox || related is CComboBox)
                         SetDependentVisibility(related);
                     related.cd.Visible = false;
                 }
+
+                if (!related.cd.operatorVisibility && !Model.getInstance().progMode)
+                    related.cd.Visible = false;
             }
         }
 
@@ -50,6 +55,9 @@ namespace Configuration_Manager.CustomControls
                         SetDependentVisibility(related);
                     related.cd.Visible = false;
                 }
+
+                if (!related.cd.operatorVisibility && !Model.getInstance().progMode)
+                    related.cd.Visible = false;
             }
         }
 

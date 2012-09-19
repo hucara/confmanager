@@ -347,7 +347,8 @@ namespace Configuration_Manager
                     progress += incPerItem;
                 }
             }
-            model.ApplyRightsToSections();
+
+            model.ApplyRightsToControls();
         }
 
         private void ApplyFormats(ICustomControl c)
