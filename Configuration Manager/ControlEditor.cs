@@ -213,7 +213,7 @@ namespace Configuration_Manager
                 VISIBILITY = Model.GetTranslationFromID(24);
                 COUPLED = Model.GetTranslationFromID(25);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** There was a problem reading the relation names inside editor.");
             }
@@ -1092,7 +1092,6 @@ namespace Configuration_Manager
                 rels = r.cd.RelatedRead;
                 if (rels.Contains(c)) return true;
             }
-
             return false;
         }
 

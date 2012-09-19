@@ -63,7 +63,6 @@ namespace Configuration_Manager.Util
             if (text == null) return text;
 
 			translatedText = text;
-
 			if (active && text.Contains(DEFAULT_TOKEN))
 			{
 				valuesToTranslate.Clear();
@@ -124,7 +123,6 @@ namespace Configuration_Manager.Util
 		private static void GetValuesToTranslate()
 		{
 			System.Text.RegularExpressions.MatchCollection mc = System.Text.RegularExpressions.Regex.Matches(textToTranslate, tokenKey + "\\w*" + tokenKey);
-
 			foreach (System.Text.RegularExpressions.Match token in mc)
 			{
 				if (ValidateToken(token.ToString()))
@@ -153,7 +151,6 @@ namespace Configuration_Manager.Util
 			for (int i = 0; i < valuesToTranslate.Count; i++)
 			{
                 String replace = tokenKey + valuesToTranslate[i].ToString() + tokenKey;
-				
 				if (translatedValues.Count > i)
 				{
 					String with = translatedValues[i].ToString();
@@ -180,7 +177,7 @@ namespace Configuration_Manager.Util
 					}
 				}
 			}
-			catch (System.IO.FileNotFoundException e)
+			catch (System.IO.FileNotFoundException)
 			{
                 System.Diagnostics.Debug.WriteLine("! Problem found while translating text to value.");
 			}

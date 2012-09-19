@@ -597,7 +597,7 @@ namespace Configuration_Manager
                     this.LangID = ag[i + 1];
                 }
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 string msg = GetTranslationFromID(58);
                 string caption = GetTranslationFromID(37);
@@ -640,7 +640,7 @@ namespace Configuration_Manager
         }
 
         // Converts the string of characters to array of bytes.
-        // The format correct is "00000000"
+        // The correct format is "00000000"
         public static byte[] HexToData(string hexString)
         {
             if (hexString == null)
@@ -657,7 +657,7 @@ namespace Configuration_Manager
                     data[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
                 //byte.TryParse(hexString.Substring(i * 2, 2), System.Globalization.NumberStyles.AllowHexSpecifier, out data[i]);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 model.logCreator.Append("[ERROR] Problem converting rights to the correct format: " + hexString);
             }
@@ -723,9 +723,10 @@ namespace Configuration_Manager
                     {
                         if (!(c is CTabPage))
                         {
-                            //c.cd.Visible = c.cd.operatorVisibility;
-                            c.cd.Enabled = c.cd.operatorModification;
+                            // This is fucked
                             ApplyRelations(c);
+                            if(!c.cd.operatorVisibility) c.cd.Visible = c.cd.operatorVisibility;
+                            if(!c.cd.operatorModification) c.cd.Enabled = c.cd.operatorModification;
                         }
                     }
                 }

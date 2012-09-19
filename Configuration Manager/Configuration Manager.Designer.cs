@@ -66,7 +66,7 @@ namespace Configuration_Manager
             this.sectionBar.Name = "sectionBar";
             this.sectionBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.sectionBar.ShowItemToolTips = false;
-            this.sectionBar.Size = new System.Drawing.Size(175, 567);
+            this.sectionBar.Size = new System.Drawing.Size(219, 709);
             this.sectionBar.TabIndex = 1;
             this.sectionBar.Text = "toolStrip1";
             this.sectionBar.SizeChanged += new System.EventHandler(this.toolStrip_SizeChanged);
@@ -217,25 +217,26 @@ namespace Configuration_Manager
             // tabControl
             // 
             this.tabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.tabControl.Location = new System.Drawing.Point(173, -25);
-            this.tabControl.Margin = new System.Windows.Forms.Padding(4);
+            this.tabControl.Location = new System.Drawing.Point(216, -31);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(620, 592);
+            this.tabControl.Size = new System.Drawing.Size(775, 740);
             this.tabControl.TabIndex = 0;
             this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 567);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.ClientSize = new System.Drawing.Size(992, 709);
             this.Controls.Add(this.sectionBar);
             this.Controls.Add(this.tabControl);
             this.DoubleBuffered = true;
+            this.Font = new System.Drawing.Font("Arial", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
@@ -243,7 +244,6 @@ namespace Configuration_Manager
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Configuration Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.contextNavMenu.ResumeLayout(false);

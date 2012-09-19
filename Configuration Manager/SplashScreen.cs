@@ -41,7 +41,7 @@ namespace Configuration_Manager
             this.progressBar1.Update();
         }
 
-        new public void Show(String title, String version)
+        public void Show(String title, String version)
         {
             // Worst Splash Screen ever.
 

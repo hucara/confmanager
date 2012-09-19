@@ -28,15 +28,8 @@ namespace Configuration_Manager
 
         public MainForm()
         {
-            this.DoubleBuffered = true;
             this.Visible = false;
-            //this.Font = System.Drawing.SystemFonts.DefaultFont;
-            //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-
             InitializeComponent();
-
             model.ReadConfigurationFile();
 
             sc = new SplashScreen();
@@ -208,6 +201,9 @@ namespace Configuration_Manager
             if (e.Alt && e.Control && e.KeyCode == Keys.R)
             {
                 System.Diagnostics.Debug.WriteLine("\n###################################");
+                Debug.WriteLine("Main Visibility Rights: " + model.MainDisplayRights.ToString());
+                Debug.WriteLine("Main Modificiation Rights: " + model.MainModificationRights.ToString());
+                Debug.WriteLine("---------------------------------------------------------");
                 foreach (ICustomControl c in model.AllControls)
                 {
                     string line = "\t";
@@ -291,11 +287,6 @@ namespace Configuration_Manager
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** There was an error reading text for main form labels.");
             }
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

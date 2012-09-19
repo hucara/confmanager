@@ -20,15 +20,11 @@ namespace Configuration_Manager
         private TypeConverter colorConverter = TypeDescriptor.GetConverter(typeof(Color));
 
         int progress = 0;
-        SplashScreen sc;
-        System.Threading.Thread t;
 
         public static ObjectDefinitionManager getInstance()
         {
             if (odm == null)
-            {
                 odm = new ObjectDefinitionManager();
-            }
             return odm;
         }
 
@@ -174,7 +170,6 @@ namespace Configuration_Manager
         {
             System.Diagnostics.Debug.WriteLine("** Reading Object Definition File **");
             System.Diagnostics.Debug.WriteLine("** Setting up last UI **");
-
             model.logCreator.Append(" ");
             model.logCreator.AppendCenteredWithFrame(" Reading Object Definition File ");
             model.logCreator.AppendCenteredWithFrame(" Setting up last UI ");
@@ -264,9 +259,6 @@ namespace Configuration_Manager
             List<XContainer> CTabs = new List<XContainer>();
             List<XContainer> CTabControls = new List<XContainer>();
             
-            // Action delegate to update the SplashScreen
-            Action <int> incPercentage = x => sc.IncreasePercentage(x);
-
             this.xdoc = xdoc;
             var items = from item in this.xdoc.Descendants("Controls")
                             .Descendants("Control")
@@ -378,10 +370,8 @@ namespace Configuration_Manager
                 {
                     String value = e.Value.ToString();
                     c.cd.comboBoxRealItems.Add(value);
-
                     value = TokenTextTranslator.TranslateFromTextFile(value);
                     value = TokenControlTranslator.TranslateFromControl(value);
-
                     c.cd.comboBoxItems.Add(value);
                 }
 
@@ -398,11 +388,10 @@ namespace Configuration_Manager
                     {
                         String value = TokenTextTranslator.TranslateFromTextFile(i.Element("Items").Element("Selected").Value);
                         value = TokenControlTranslator.TranslateFromControl(value);
-
                         cb.SelectedItem = value;
                     }
                 }
-                catch (NullReferenceException e)
+                catch (NullReferenceException)
                 {
                     System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading "+c.cd.Name+" Attributes. No items defined?");
                 }
