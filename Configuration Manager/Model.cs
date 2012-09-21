@@ -725,10 +725,10 @@ namespace Configuration_Manager
                     {
                         if (!(c is CTabPage))
                         {
-                            // This is fucked
                             ApplyRelations(c);
                             if(!c.cd.operatorVisibility) c.cd.Visible = c.cd.operatorVisibility;
                             if(!c.cd.operatorModification) c.cd.Enabled = c.cd.operatorModification;
+                            c.cd.Changed = false;
                         }
                     }
                 }
@@ -745,9 +745,6 @@ namespace Configuration_Manager
                     {
                         s.Button.Visible = true;
                         s.Button.Enabled = true;
-
-                        foreach (ICustomControl c in AllControls.Where(p => p.cd.ParentSection == s))
-                            (c as Control).Enabled = true;
                     }
                 }
                 else
@@ -757,16 +754,21 @@ namespace Configuration_Manager
                         bool visibility = ObtainRights(s.DisplayBytes, model.MainDisplayRights);
                         if (!visibility)
                         {
-                            foreach (ICustomControl c in AllControls.Where(p => p.cd.ParentSection == s))
-                                (c as Control).Visible = false;
+                            s.Button.Visible = false;
+                            if (s.Selected) this.Sections.First().Button.PerformClick();
                         }
+                        else
+                            s.Button.Visible = true;
 
-                        s.Button.Enabled = ObtainRights(s.ModificationBytes, model.MainModificationRights);
-                        if (!s.Button.Enabled)
+                        bool modification = ObtainRights(s.ModificationBytes, model.MainModificationRights);
+                        if (!modification)
                         {
-                            foreach (ICustomControl c in AllControls.Where(p => p.cd.ParentSection == s))
-                                (c as Control).Enabled = false;
+                            s.Button.Enabled = false;
+                            if (s.Selected) this.Sections.First().Button.PerformClick();
                         }
+                        else
+                            s.Button.Enabled = true;
+                    
                     }
                 }
             }

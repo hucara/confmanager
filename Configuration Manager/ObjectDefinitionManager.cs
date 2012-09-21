@@ -182,6 +182,14 @@ namespace Configuration_Manager
             System.Diagnostics.Debug.WriteLine("** End of Object Definition File **");
             model.logCreator.AppendCenteredWithFrame("End of Object Definition File");
             model.logCreator.Append(" ");
+
+            SetChangedFlagToFalse();
+        }
+
+        private void SetChangedFlagToFalse()
+        {
+            foreach (ICustomControl c in model.AllControls)
+                c.cd.Changed = false;
         }
 
 
@@ -349,6 +357,7 @@ namespace Configuration_Manager
             }
 
             model.ApplyRightsToControls();
+            model.ApplyRightsToSections();
         }
 
         private void ApplyFormats(ICustomControl c)

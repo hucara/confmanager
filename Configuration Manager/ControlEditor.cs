@@ -486,7 +486,7 @@ namespace Configuration_Manager
             }
             else if (ValidMainDestination())
             {
-                    this.control.cd.Changed = true;
+                    //this.control.cd.Changed = true;
                     Model.getInstance().uiChanged = true;
                     SaveToControl();
                     this.Close();

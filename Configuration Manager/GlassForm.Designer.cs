@@ -1,6 +1,6 @@
 ﻿namespace Configuration_Manager
 {
-    partial class Form1
+    partial class GlassForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,13 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // Form1
+            // GlassForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(790, 514);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "GlassForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.Text = "Glass";
             this.ResumeLayout(false);
 
         }

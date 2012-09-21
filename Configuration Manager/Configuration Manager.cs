@@ -28,25 +28,34 @@ namespace Configuration_Manager
 
         public MainForm()
         {
-            this.Visible = false;
             InitializeComponent();
-            model.ReadConfigurationFile();
+            this.Show();
+            this.Visible = false;
+            this.BringToFront();
 
+            model.ReadConfigurationFile();
             sc = new SplashScreen();
+            sc.SendToBack();
             System.Threading.Thread t = new System.Threading.Thread(ShowSplashScreen);
             t.Start();
             
             System.Threading.Thread.Sleep(1000);
             LoadingProcess();
-            this.Visible = true;
+
             System.Threading.Thread.Sleep(100);
-            
             t.Abort();
+
+            this.Activate();
+            this.TopMost = true;
+            this.TopMost = false;
+            this.Focus();
         }
 
         public void ShowSplashScreen()
         {
             sc.Show(model.Headline, Application.ProductVersion);
+            sc.SendToBack();
+            sc.Dispose();
         }
 
         public void LoadingProcess()
@@ -97,7 +106,12 @@ namespace Configuration_Manager
             this.Top = model.top;
             this.Left = model.left;
 
-            this.ClientSize = new Size(model.width, model.height);
+            this.Width = model.width;
+            this.Height = model.height;
+
+            this.tabControl.Width = this.ClientSize.Width - (this.sectionBar.Width + 5);
+            this.tabControl.Height = this.ClientSize.Height + 30;
+
             if (model.resizable)
                 this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             else
@@ -105,6 +119,8 @@ namespace Configuration_Manager
 
             if (!model.movable)
                 fi = new Util.FormImmobiliser(this);
+
+            this.BringToFront();
         }
 
         private void InitCustomHandler()
@@ -312,6 +328,7 @@ namespace Configuration_Manager
             {
                 if (c.cd.Changed && c.cd.MainDestination != "")
                 {
+                    Debug.WriteLine("Changed: " + c.cd.Name);
                     String caption = Model.GetTranslationFromID(60);
                     String msg = Model.GetTranslationFromID(61);
                     DialogResult dr = MessageBox.Show(msg, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
@@ -371,13 +388,18 @@ namespace Configuration_Manager
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
+            // Update the info in the model
             this.model.width = this.Width;
             this.model.height = this.Height;
 
-            this.tabControl.Width = this.Width - 190;
-            this.tabControl.Height = this.Height - 20;
+            // Set the size of the tabs
+            this.tabControl.Width = this.ClientSize.Width - (this.sectionBar.Width + 5);
+            this.tabControl.Height = this.ClientSize.Height + 30;
 
-            this.sectionBar.Height = this.Height;
+            Debug.WriteLine(" ");
+            Debug.WriteLine("Form: " + this.Size + " || Section bar: " +sectionBar.Width);
+            Debug.WriteLine("Tab Control: " +tabControl.Size);
+            // 
         }
     }
 }

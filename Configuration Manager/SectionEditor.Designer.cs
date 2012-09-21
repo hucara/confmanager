@@ -56,7 +56,7 @@
             // NameTextBox
             // 
             this.NameTextBox.Location = new System.Drawing.Point(165, 28);
-            this.NameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.NameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.NameTextBox.Name = "NameTextBox";
             this.NameTextBox.Size = new System.Drawing.Size(217, 22);
             this.NameTextBox.TabIndex = 1;
@@ -65,7 +65,7 @@
             // OkButton
             // 
             this.OkButton.Location = new System.Drawing.Point(563, 276);
-            this.OkButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.OkButton.Margin = new System.Windows.Forms.Padding(4);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(100, 28);
             this.OkButton.TabIndex = 2;
@@ -84,9 +84,9 @@
             this.groupBox1.Controls.Add(this.NameLabel);
             this.groupBox1.Controls.Add(this.NameTextBox);
             this.groupBox1.Location = new System.Drawing.Point(16, 34);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(651, 230);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
@@ -95,7 +95,7 @@
             // HintLabel
             // 
             this.HintLabel.AutoSize = true;
-            this.HintLabel.Location = new System.Drawing.Point(476, 32);
+            this.HintLabel.Location = new System.Drawing.Point(465, 32);
             this.HintLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.HintLabel.Name = "HintLabel";
             this.HintLabel.Size = new System.Drawing.Size(35, 17);
@@ -105,7 +105,7 @@
             // hintTextBox
             // 
             this.hintTextBox.Location = new System.Drawing.Point(468, 52);
-            this.hintTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.hintTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.hintTextBox.MaxLength = 320;
             this.hintTextBox.Multiline = true;
             this.hintTextBox.Name = "hintTextBox";
@@ -138,7 +138,7 @@
             this.displayRightTextBox.AsciiOnly = true;
             this.displayRightTextBox.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.displayRightTextBox.Location = new System.Drawing.Point(251, 161);
-            this.displayRightTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.displayRightTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.displayRightTextBox.Mask = "\\0\\x>AAAAAAAA<";
             this.displayRightTextBox.Name = "displayRightTextBox";
             this.displayRightTextBox.PromptChar = '0';
@@ -153,7 +153,7 @@
             this.modificationRightTextBox.AsciiOnly = true;
             this.modificationRightTextBox.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.modificationRightTextBox.Location = new System.Drawing.Point(251, 193);
-            this.modificationRightTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.modificationRightTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.modificationRightTextBox.Mask = "\\0\\x>AAAAAAAA<";
             this.modificationRightTextBox.Name = "modificationRightTextBox";
             this.modificationRightTextBox.PromptChar = '0';
@@ -182,7 +182,7 @@
             this.Controls.Add(this.OkButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SectionEditor";

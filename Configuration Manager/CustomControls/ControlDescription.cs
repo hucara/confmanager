@@ -155,7 +155,7 @@ namespace Configuration_Manager
             set 
             {
                 this.control.Text = value;
-                this.Changed = true;
+                //this.Changed = true;
                 this.text = value;
             }
         }

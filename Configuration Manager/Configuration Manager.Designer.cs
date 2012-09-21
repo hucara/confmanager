@@ -66,7 +66,7 @@ namespace Configuration_Manager
             this.sectionBar.Name = "sectionBar";
             this.sectionBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.sectionBar.ShowItemToolTips = false;
-            this.sectionBar.Size = new System.Drawing.Size(219, 709);
+            this.sectionBar.Size = new System.Drawing.Size(180, 709);
             this.sectionBar.TabIndex = 1;
             this.sectionBar.Text = "toolStrip1";
             this.sectionBar.SizeChanged += new System.EventHandler(this.toolStrip_SizeChanged);
@@ -217,11 +217,11 @@ namespace Configuration_Manager
             // tabControl
             // 
             this.tabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.tabControl.Location = new System.Drawing.Point(216, -31);
-            this.tabControl.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tabControl.Location = new System.Drawing.Point(185, -31);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(5);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(775, 740);
+            this.tabControl.Size = new System.Drawing.Size(810, 740);
             this.tabControl.TabIndex = 0;
             this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             // 
@@ -236,7 +236,7 @@ namespace Configuration_Manager
             this.Font = new System.Drawing.Font("Arial", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
