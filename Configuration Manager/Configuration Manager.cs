@@ -25,6 +25,7 @@ namespace Configuration_Manager
         SectionMenuView sectionMenuView;
         CustomHandler ch;
         SplashScreen sc;
+        GlassForm gf;
 
         public MainForm()
         {
@@ -49,6 +50,20 @@ namespace Configuration_Manager
             this.TopMost = true;
             this.TopMost = false;
             this.Focus();
+
+            gf = new GlassForm();
+            SetUpGlassForm();
+
+            this.Width += 1;
+            this.Width -= 1;
+        }
+
+        private void SetUpGlassForm()
+        {
+            model.glassScreen = gf;
+            gf.Show();
+            gf.Enabled = false;
+            gf.Visible = false;
         }
 
         public void ShowSplashScreen()
@@ -106,8 +121,7 @@ namespace Configuration_Manager
             this.Top = model.top;
             this.Left = model.left;
 
-            this.Width = model.width;
-            this.Height = model.height;
+            this.ClientSize = new Size(model.width, model.height);
 
             this.tabControl.Width = this.ClientSize.Width - (this.sectionBar.Width + 5);
             this.tabControl.Height = this.ClientSize.Height + 30;
@@ -359,8 +373,8 @@ namespace Configuration_Manager
 
                 settings.Element("Top").Value = this.Top.ToString();
                 settings.Element("Left").Value = this.Left.ToString();
-                settings.Element("Height").Value = this.Height.ToString();
-                settings.Element("Width").Value = this.Width.ToString();
+                settings.Element("Height").Value = this.ClientSize.Height.ToString();
+                settings.Element("Width").Value = this.ClientSize.Width.ToString();
 
                 xdoc.Save(model.ConfigFilePath);
             }
@@ -389,8 +403,8 @@ namespace Configuration_Manager
         private void MainForm_Resize(object sender, EventArgs e)
         {
             // Update the info in the model
-            this.model.width = this.Width;
-            this.model.height = this.Height;
+            this.model.width = this.ClientSize.Width;
+            this.model.height = this.ClientSize.Height;
 
             // Set the size of the tabs
             this.tabControl.Width = this.ClientSize.Width - (this.sectionBar.Width + 5);
@@ -399,7 +413,21 @@ namespace Configuration_Manager
             Debug.WriteLine(" ");
             Debug.WriteLine("Form: " + this.Size + " || Section bar: " +sectionBar.Width);
             Debug.WriteLine("Tab Control: " +tabControl.Size);
-            // 
+
+            if (gf != null) UpdateGlassForm();
+        }
+
+        private void MainForm_Move(object sender, EventArgs e)
+        {
+            if (gf != null) UpdateGlassForm();
+        }
+
+        private void UpdateGlassForm()
+        {
+            //gf.Activate();
+            gf.Size = this.tabControl.SelectedTab.ClientSize;
+            Size difference = this.tabControl.Size - this.tabControl.SelectedTab.ClientSize;
+            gf.DesktopLocation = this.PointToScreen(this.tabControl.Location + difference);
         }
     }
 }

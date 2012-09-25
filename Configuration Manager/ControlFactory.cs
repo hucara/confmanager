@@ -41,7 +41,7 @@ namespace Configuration_Manager
         {
             TabPage tp = new TabPage(name);
             SetDragDropHandlers(tp);
-
+            tp.AllowDrop = true;
             //tp.MouseHover += model.UpdateInfoLabel;
 
             return tp;
@@ -108,6 +108,7 @@ namespace Configuration_Manager
             parent.Controls.Add(c);
 
             SetCommonHandlers(c);
+            c.AllowDrop = true;
 
             c.SetControlDescription();
             c.cd.RealText = c.cd.Text;
@@ -279,9 +280,6 @@ namespace Configuration_Manager
         static private void SetDragDropHandlers(Control c)
         {
             c.AllowDrop = true;
-            c.DragDrop += ch.OnDragDrop;
-            c.DragEnter += ch.OnDragEnter;
-            c.DragLeave += ch.OnDragLeave;
         }
 
         static private void SetChangesHandler(Control c)

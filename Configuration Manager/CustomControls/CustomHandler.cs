@@ -15,7 +15,6 @@ namespace Configuration_Manager.CustomControls
 	{
 		const int RGBMAX = 255;
         const bool DRAGDROP_ACTIVE = true;
-        bool dragging = false;
 
 		public ContextMenuStrip contextMenu;
 		Model model;
@@ -26,12 +25,6 @@ namespace Configuration_Manager.CustomControls
         Rectangle previewRectangle = Rectangle.Empty;
         Rectangle snapRectangle = Rectangle.Empty;
         Graphics g;
-
-        Point controlOriginalLocation;
-        Control controlOriginalParent;
-        Control posParent;
-
-        GlassForm gf;
 
 		public CustomHandler(ContextMenuStrip cms)
 		{
@@ -56,8 +49,6 @@ namespace Configuration_Manager.CustomControls
 				model.LastClickedY = me.Y;
 
 				SetContextMenuStrip(type);
-                SetContextMenuModificationRights(c);
-
 				contextMenu.Show(c, me.X, me.Y);
 			}
 			else if (!model.progMode && me.Button == MouseButtons.Right)
@@ -69,25 +60,8 @@ namespace Configuration_Manager.CustomControls
 				model.LastClickedY = me.Y;
 
 				SetContextMenuStrip(type);
-                SetContextMenuModificationRights(c);
 			}
 		}
-
-        private void SetContextMenuModificationRights(Control c)
-        {
-            ICustomControl co = c as ICustomControl;
-
-            if (!co.cd.operatorModification)
-            {
-                //c.Enabled = true;
-                //contextMenu.Items[1].Enabled = true;
-            }
-            else
-            {
-                //c.Enabled = false;
-                //contextMenu.Items[1].Enabled = false;  // Disable the Edit option
-            }
-        }
 
 		private void SetContextMenuStrip(string type)
 		{
@@ -97,6 +71,9 @@ namespace Configuration_Manager.CustomControls
 			{
 				// Editable Containers
 				contextMenu.Items[0].Enabled = true;
+
+                enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, false);
+
 				contextMenu.Items[1].Enabled = true;
 				contextMenu.Items[2].Enabled = true;
 			}
@@ -105,7 +82,7 @@ namespace Configuration_Manager.CustomControls
 				// Section Tabs
 				contextMenu.Items[0].Enabled = true;
 
-				enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 9, false);
+				enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, false);
 
 				contextMenu.Items[1].Enabled = false;
 				contextMenu.Items[2].Enabled = false;
@@ -115,7 +92,7 @@ namespace Configuration_Manager.CustomControls
 				// Custom Tabs
 				contextMenu.Items[0].Enabled = true;
 
-				enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 9, false);
+				enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, false);
 				
                 contextMenu.Items[1].Enabled = true;
 				contextMenu.Items[2].Enabled = true;
@@ -127,22 +104,24 @@ namespace Configuration_Manager.CustomControls
 					contextMenu.Items[2].Enabled = false;
 				}
 			}
-			else if (type == "CTabControl")
-			{
-				contextMenu.Items[0].Enabled = true;
+            else if (type == "CTabControl")
+            {
+                contextMenu.Items[0].Enabled = true;
 
-				enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 9, true);
+                enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, true);
 
-				contextMenu.Items[1].Enabled = true;
-				contextMenu.Items[2].Enabled = true;
-			}
-			else
-			{
-				// Not a container
-				contextMenu.Items[0].Enabled = false;
-				contextMenu.Items[1].Enabled = true;
-				contextMenu.Items[2].Enabled = true;
-			}
+                contextMenu.Items[1].Enabled = true;
+                contextMenu.Items[2].Enabled = true;
+            }
+            else
+            {
+                contextMenu.Items[0].Enabled = false;
+
+                enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, false);
+
+                contextMenu.Items[1].Enabled = true;
+                contextMenu.Items[2].Enabled = true;
+            }
 		}
 
 		//////////////////////////////////////////////
@@ -319,8 +298,9 @@ namespace Configuration_Manager.CustomControls
 			}
             else if (model.progMode && me.Button == MouseButtons.Left && DRAGDROP_ACTIVE)
 			{
-				if (type != "TabControl" && type != "TabPage" && type != "CTabControl" && type != "CTabPage")
-				{
+                //if (type != "TabControl" && type != "TabPage" && type != "CTabControl" && type != "CTabPage")
+                if (type != "TabControl" && type != "TabPage" && type != "CTabPage")
+                {
 					t.Start();
                     CreatePreviewRectangle(model.CurrentClickedControl as ICustomControl);
 					Debug.WriteLine("! Timer Started");
@@ -336,46 +316,8 @@ namespace Configuration_Manager.CustomControls
 			(sender as Timer).Stop();
 			MouseEventArgs me = e as MouseEventArgs;
 
-			if (model.CurrentClickedControl != null)
-			{
-                model.CurrentClickedControl.BringToFront();
-
-                // Get information from the control being dragged
-				String name = (model.CurrentClickedControl as ICustomControl).cd.Name;
-				String parent = (model.CurrentClickedControl as ICustomControl).cd.Parent.Name;
-                controlOriginalLocation = model.CurrentClickedControl.Location;
-                controlOriginalParent = model.CurrentClickedControl.Parent;
-
-                // Get and set the rectangles that define the area for drawing and snap features
-                this.snapRectangle = CreateSnapRectangle(model.CurrentClickedControl as Control);
-                this.previewRectangle = model.CurrentClickedControl.DisplayRectangle;
-
-                Bitmap bm = new Bitmap(this.previewRectangle.Width, this.previewRectangle.Height);
-                model.CurrentClickedControl.DrawToBitmap(bm, this.previewRectangle);
-                previewImage = bm;
-
-                dragging = true;
-
-				Debug.WriteLine("! Got the control: " + name + " with Parent: " + parent);
-
-                model.CurrentClickedControl.Enabled = false;                
-				model.CurrentClickedControl.DoDragDrop(name, DragDropEffects.Move);
-
-                //
-                // GLASS FROM STUFF
-                //
-
-                Point glassLocation = model.CurrentSection.Tab.Parent.PointToScreen(model.CurrentSection.Tab.Parent.Location);
-                Debug.WriteLine(glassLocation);
-
-                Point location = model.CurrentSection.Tab.PointToClient(System.Windows.Forms.Cursor.Position);
-                location.X -= model.LastClickedX;
-                location.Y -= model.LastClickedY;
-
-                // GLASS CONROL
-                gf = new GlassForm(model.CurrentSection.Tab.Size, glassLocation);
-                gf.Show(model.CurrentClickedControl, location);
-			}
+            if (model.CurrentClickedControl != null)
+                model.glassScreen.ActivateDragDrop();
 		}
 
         private Rectangle CreateSnapRectangle(Control control)
@@ -395,58 +337,6 @@ namespace Configuration_Manager.CustomControls
             parent.Update();
         }
 
-        // This occurs when the user releases the object being dragged.
-		public void OnDragDrop(object sender, DragEventArgs dea)
-		{
-			ICustomControl c = null;
-			Control parent = sender as Control;
-            dea.Effect = DragDropEffects.Move;
-            
-                if (parent != model.CurrentClickedControl && model.CurrentClickedControl != null)
-                {
-                    // Get information of the state of the control once dropped.
-                    c = model.CurrentClickedControl as ICustomControl;
-                    c.cd.Parent = parent;
-                    Point cord = new Point(dea.X, dea.Y);
-                    Debug.WriteLine("(Screen point)" + cord.ToString());
-          
-                    // Make it invisible so we can get the container under the mouse where it will be placed.
-                    (c as Control).Enabled = false;
-                    parent = GetTopChildOnCoordinates(model.CurrentSection.Tab, cord);
-                    
-                    if (parent is CGroupBox || parent is CPanel || parent is CTabPage || parent is TabPage)
-                    {
-                        c.cd.Parent = parent;
-                        cord = c.cd.Parent.PointToClient(cord);
-                        Debug.WriteLine("(Relative to old parent)" + cord.ToString());
-                        c.cd.Top = cord.Y - model.LastClickedY;
-                        c.cd.Left = cord.X - model.LastClickedX;
-
-                        CheckSnapOnDrop(c as Control, parent);
-                    }
-                    else
-                    {
-                        c.cd.Parent = controlOriginalParent;
-                        (c as Control).Location = controlOriginalLocation;
-                    }
-                    (c as Control).Enabled = true;
- 
-                    Debug.WriteLine("! Dropped the control: " + c.cd.Name + " Parent: " + c.cd.Parent.Name + " " +cord.ToString());
-                    dragging = false;
-                    model.uiChanged = true;
-                    RefreshEditorWindow(c);
-
-                    (c as Control).Enabled = true;
-                    (c as Control).Visible = true;
-
-                    model.CurrentSection.Tab.Invalidate();
-
-                    gf.Close();
-                }
-                else
-                    Debug.WriteLine("! But you tried to drop it into itself...");
-		}
-
         public void CheckSnapOnDrop(Control control, Control parent)
         {
             ICustomControl c = control as ICustomControl;
@@ -464,23 +354,6 @@ namespace Configuration_Manager.CustomControls
                 c.cd.Top = parent.Height - c.cd.Height - margin;
             if (c.cd.Left + c.cd.Width > parent.Width - margin)
                 c.cd.Left = parent.Width - c.cd.Width - margin;
-        }
-
-        private Control GetTopChildOnCoordinates(Control sectionTab, Point screenCoord)
-        {
-            Point relCoord = sectionTab.PointToClient(screenCoord);
-            Control p = sectionTab.GetChildAtPoint(relCoord, GetChildAtPointSkip.Disabled);
-            Control newParent = p;
-
-            while (p != null)
-            {
-                relCoord = p.PointToClient(screenCoord);
-                p = p.GetChildAtPoint(relCoord, GetChildAtPointSkip.Disabled);
-                if (p != null) newParent = p; 
-            }
-
-            if (newParent != null) return newParent;
-            else return sectionTab;
         }
 
         private void CreatePreviewRectangle(ICustomControl c)
@@ -502,8 +375,8 @@ namespace Configuration_Manager.CustomControls
 		{
             dea.Effect = DragDropEffects.Move;
             Control c = sender as Control;
-            c.DragOver -= moveControlWhileDragging_DragOver;
-            c.DragOver += moveControlWhileDragging_DragOver;
+            //c.DragOver -= moveControlWhileDragging_DragOver;
+            //c.DragOver += moveControlWhileDragging_DragOver;
 		}
 
 		public void CancelDragDropTimer(object sender, EventArgs e)
@@ -545,76 +418,10 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
-        private void moveControlWhileDragging_DragOver(object sender, DragEventArgs dea)
-        {
-            Control c = Model.getInstance().CurrentClickedControl;
-            if (c != null)
-            {
-                Point cord = new Point(dea.X, dea.Y);
-                posParent = GetTopChildOnCoordinates(model.CurrentSection.Tab, cord);
-                cord = (c as ICustomControl).cd.Parent.PointToClient(cord);
-                if (posParent == c.Parent)
-                {
-                    c.Top = cord.Y - model.LastClickedY;
-                    c.Left = cord.X - model.LastClickedX;
-                }
-                else if(posParent != c.Parent && dragging)
-                {
-                    posParent.Paint -= posParent_Paint;
-                    posParent.Paint += posParent_Paint;
-                    c.Visible = false;
-                }
-
-                posParent.Invalidate();
-                model.CurrentSection.Tab.Refresh();
-                model.CurrentSection.Tab.SendToBack();
-            }
-        }
-
-        private void posParent_Paint(object sender, PaintEventArgs pea)
-        {
-            Control c = model.CurrentClickedControl;
-            Control possibleParent = sender as Control;
-            Point cord = possibleParent.PointToClient(System.Windows.Forms.Cursor.Position);
-
-            if (possibleParent != c.Parent && dragging)
-            {
-                cord.X -= model.LastClickedX;
-                cord.Y -= model.LastClickedY;
-                Color tColor = Color.FromArgb(65, Color.Blue);
-                //pea.Graphics.DrawRectangle(Pens.Aqua, cord.X, cord.Y, c.DisplayRectangle.Width, c.DisplayRectangle.Height);
-                pea.Graphics.FillRectangle(new SolidBrush(tColor), cord.X, cord.Y, c.DisplayRectangle.Width, c.DisplayRectangle.Height);
-            }
-            else if(possibleParent == this.controlOriginalParent && dragging)
-            {
-                cord.X -= model.LastClickedX;
-                cord.Y -= model.LastClickedY;
-                pea.Graphics.DrawImageUnscaled(previewImage, cord);
-            }
-        }
-
-        //private void ShowPreviewDuringDrag(Control control, Control posParent, Point previewCord)
-        //{
-        //    if (control.Parent != posParent)
-        //    {
-        //        previewCord.X -= model.LastClickedX;
-        //        previewCord.Y -= model.LastClickedY;
-
-        //        g = posParent.CreateGraphics();
-        //        //g.DrawRectangle(Pens.Aqua, control.DisplayRectangle);
-        //        g.DrawImageUnscaled(previewImage, previewCord);
-        //        posParent.Invalidate();
-        //    }
-        //    else
-        //    {
-
-        //    }
-        //}
-
         public void OnDragLeave(object sender, EventArgs e)
         {
-            CheckSnapOnDrop(model.CurrentClickedControl, model.CurrentClickedControl.Parent);
-            model.CurrentClickedControl.Enabled = true;
+            //CheckSnapOnDrop(model.CurrentClickedControl, model.CurrentClickedControl.Parent);
+            //model.CurrentClickedControl.Enabled = true;
         }
     }
 }

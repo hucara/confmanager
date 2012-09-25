@@ -78,7 +78,7 @@ namespace Configuration_Manager
             if (MainForm.ActiveForm != null)
             {
                 this.Top = MainForm.ActiveForm.Location.Y;
-                this.ClientSize = new Size(685, 700);
+                //this.ClientSize = new Size(685, 700);
                 this.Left = MainForm.ActiveForm.Location.X + MainForm.ActiveForm.Width;
             }
         }

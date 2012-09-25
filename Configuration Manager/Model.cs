@@ -96,6 +96,8 @@ namespace Configuration_Manager
 
         public System.Drawing.Font lastSelectedFont { get; set; }
 
+        public GlassForm glassScreen { get; set; }
+
         // Private constructor
         private Model()
         {

@@ -60,6 +60,7 @@ namespace Configuration_Manager
             // sectionBar
             // 
             this.sectionBar.AutoSize = false;
+            this.sectionBar.CanOverflow = false;
             this.sectionBar.Dock = System.Windows.Forms.DockStyle.Left;
             this.sectionBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.sectionBar.Location = new System.Drawing.Point(0, 0);
@@ -110,7 +111,7 @@ namespace Configuration_Manager
             this.deleteToolStripMenuItem});
             this.contextMenu.Name = "contextMenuStrip1";
             this.contextMenu.ShowImageMargin = false;
-            this.contextMenu.Size = new System.Drawing.Size(98, 76);
+            this.contextMenu.Size = new System.Drawing.Size(128, 98);
             // 
             // newToolStripMenuItem
             // 
@@ -128,31 +129,35 @@ namespace Configuration_Manager
             this.tabControlMenuItem,
             this.tabPageMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
             this.newToolStripMenuItem.Text = "New";
             // 
             // labelToolStripMenuItem
             // 
             this.labelToolStripMenuItem.Name = "labelToolStripMenuItem";
             this.labelToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.labelToolStripMenuItem.Tag = "label";
             this.labelToolStripMenuItem.Text = "Label";
             // 
             // textBoxToolStripMenuItem
             // 
             this.textBoxToolStripMenuItem.Name = "textBoxToolStripMenuItem";
             this.textBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.textBoxToolStripMenuItem.Tag = "textbox";
             this.textBoxToolStripMenuItem.Text = "TextBox";
             // 
             // checkBoxToolStripMenuItem
             // 
             this.checkBoxToolStripMenuItem.Name = "checkBoxToolStripMenuItem";
             this.checkBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.checkBoxToolStripMenuItem.Tag = "checkbox";
             this.checkBoxToolStripMenuItem.Text = "CheckBox";
             // 
             // comboBoxToolStripMenuItem
             // 
             this.comboBoxToolStripMenuItem.Name = "comboBoxToolStripMenuItem";
             this.comboBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.comboBoxToolStripMenuItem.Tag = "combobox";
             this.comboBoxToolStripMenuItem.Text = "ComboBox";
             // 
             // buttonToolStripMenuItem
@@ -160,12 +165,14 @@ namespace Configuration_Manager
             this.buttonToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.buttonToolStripMenuItem.Name = "buttonToolStripMenuItem";
             this.buttonToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.buttonToolStripMenuItem.Tag = "button";
             this.buttonToolStripMenuItem.Text = "Button";
             // 
             // ImageToolStripMenuItem
             // 
             this.ImageToolStripMenuItem.Name = "ImageToolStripMenuItem";
             this.ImageToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.ImageToolStripMenuItem.Tag = "bitmap";
             this.ImageToolStripMenuItem.Text = "Image";
             // 
             // toolStripSeparator1
@@ -177,12 +184,14 @@ namespace Configuration_Manager
             // 
             this.groupBoxToolStripMenuItem.Name = "groupBoxToolStripMenuItem";
             this.groupBoxToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.groupBoxToolStripMenuItem.Tag = "groupbox";
             this.groupBoxToolStripMenuItem.Text = "GroupBox";
             // 
             // shapeToolStripMenuItem
             // 
             this.shapeToolStripMenuItem.Name = "shapeToolStripMenuItem";
             this.shapeToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.shapeToolStripMenuItem.Tag = "shape";
             this.shapeToolStripMenuItem.Text = "Shape";
             // 
             // toolStripSeparator2
@@ -194,24 +203,26 @@ namespace Configuration_Manager
             // 
             this.tabControlMenuItem.Name = "tabControlMenuItem";
             this.tabControlMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.tabControlMenuItem.Tag = "tabcontrol";
             this.tabControlMenuItem.Text = "TabControl";
             // 
             // tabPageMenuItem
             // 
             this.tabPageMenuItem.Name = "tabPageMenuItem";
             this.tabPageMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.tabPageMenuItem.Tag = "tabpage";
             this.tabPageMenuItem.Text = "TabPage";
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // tabControl
@@ -245,6 +256,7 @@ namespace Configuration_Manager
             this.Text = "Configuration Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            this.Move += new System.EventHandler(this.MainForm_Move);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.contextNavMenu.ResumeLayout(false);
             this.contextMenu.ResumeLayout(false);
