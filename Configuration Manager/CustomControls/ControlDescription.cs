@@ -324,5 +324,14 @@ namespace Configuration_Manager
                 }
             }
         }
+
+        public Control ThisControl
+        {
+            get { return this.control; }
+            set
+            {
+                this.control = value;
+            }
+        }
     }
 }

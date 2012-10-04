@@ -55,6 +55,9 @@ namespace Configuration_Manager.CustomControls
                 //r.cd.Changed = false;
             }
 
+            if (r.cd.Type == "CBitmap")
+                r.cd.RealPath = r.cd.RealPath;
+
             //r.cd.Changed = false;
         }
 

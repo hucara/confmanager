@@ -73,41 +73,44 @@ namespace Configuration_Manager
                                         new XElement("Font", fontConverter.ConvertToString(item.cd.CurrentFont)),
                                         new XElement("FontColor", colorConverter.ConvertToString(item.cd.ForeColor)),
                                         new XElement("Format", item.cd.Format),
-                                        new XElement("BackColor", colorConverter.ConvertToString(item.cd.BackColor)),
+
+                                        item.cd.BackColor == System.Drawing.SystemColors.Control?
+                                        new XElement("BackColor", "") : new XElement("BackColor", colorConverter.ConvertToString(item.cd.BackColor)),
+                                        
                                         new XElement("DisplayRight", "0x" + item.cd.DisplayRight),
                                         new XElement("ModificationRight", "0x" + item.cd.ModificationRight),
 
-                                        item.cd.Type == "CLabel"?
+                                        item is CLabel?
                                         new XElement("TextAlignment", (item as CLabel).TextAlign.ToString()) : null,
 
-                                        item.cd.Type == "CTabControl"?
+                                        item is CTabControl?
                                         new XElement("ActiveTab", item.cd.SelectedTab) : null,
 
-                                        item.cd.Type == "CCheckBox"?
+                                        item is CCheckBox?
                                         new XElement("CheckedValue", item.cd.checkBoxCheckedValue) : null,
 
-                                        item.cd.Type == "CCheckBox"?
+                                        item is CCheckBox?
                                         new XElement("UncheckedValue", item.cd.checkBoxUncheckedValue) : null,
 
-                                        item.cd.Type == "CButton" ? 
+                                        item is CButton? 
                                         new XElement("ExePath", item.cd.RealPath) : null,
 
-                                        item.cd.Type == "CButton" ?
+                                        item is CButton?
                                         new XElement("CallParameters", item.cd.Parameters) : null,
 
-                                        item.cd.Type == "CBitmap" ?
+                                        item is CBitmap?
                                         new XElement("Path", item.cd.RealPath): null
                                     ),
 
-                                    item.cd.Type == "CComboBox" ?
+                                    item is CComboBox?
                                     new XElement("Items",
                                           WriteComboBoxItems(item as CComboBox)) : null,
 
-                                    item.cd.Type == "CComboBox" ?
+                                    item is CComboBox?
                                     new XElement("ConfigItems",
                                         WriteComboBoxConfigItems(item as CComboBox)) : null,
 
-                                    item.cd.Type == "CCheckBox" ?
+                                    item is CCheckBox?
                                     new XElement("Checked", (item as CheckBox).Checked.ToString()) : null,
 
                                     new XElement("Paths",
@@ -332,7 +335,7 @@ namespace Configuration_Manager
                         
                         if(c.cd.Format != "") ApplyFormats(c);
 
-                        if (c.cd.Type == "CTabControl")
+                        if (c is CTabControl)
                         {
                             try
                             {
@@ -372,7 +375,7 @@ namespace Configuration_Manager
 
         private void SetControlSpecificProperties(ICustomControl c, XElement i)
         {
-            if (c.cd.Type == "CComboBox")
+            if (c is CComboBox)
             {
                 // Fill out the lists of items inside combo box
                 ComboBox cb = c as ComboBox;
@@ -406,7 +409,7 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading "+c.cd.Name+" Attributes. No items defined?");
                 }
             }
-            else if (c.cd.Type == "CCheckBox")
+            else if (c is CCheckBox)
             {
                 CheckBox cb = c as CheckBox;
                 try
@@ -419,7 +422,7 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading CheckBox Attributes");
                 }
             }
-            else if (c.cd.Type == "CButton")
+            else if (c is CButton)
             {
                 try
                 {
@@ -432,7 +435,7 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine("*** INFO *** Problem reading Exe Path for Button");
                 }
             }
-            else if (c.cd.Type == "CBitmap")
+            else if (c is CBitmap)
             {
                 try
                 {
@@ -540,7 +543,7 @@ namespace Configuration_Manager
             Font newFont;
             Color newColor;
             
-            if(c.cd.Type != "CTextBox")
+            if(!(c is CTextBox))
                 c.cd.RealText = i.Element("Text").Value;
 
             String text = TokenTextTranslator.TranslateFromTextFile(c.cd.RealText);
@@ -562,10 +565,15 @@ namespace Configuration_Manager
             colorConverter = TypeDescriptor.GetConverter(typeof(Color));
             newColor = (Color)colorConverter.ConvertFromString(i.Element("Settings").Element("FontColor").Value);
             c.cd.ForeColor = newColor;
-            newColor = (Color)colorConverter.ConvertFromString(i.Element("Settings").Element("BackColor").Value);
-            c.cd.BackColor = newColor;
 
-            if (c.cd.Type == "CLabel")
+            String colorValue = i.Element("Settings").Element("BackColor").Value;
+            if (colorValue != "")
+                c.cd.BackColor = (Color)colorConverter.ConvertFromString(colorValue);
+
+            //newColor = (Color)colorConverter.ConvertFromString(i.Element("Settings").Element("BackColor").Value);
+            //c.cd.BackColor = newColor;
+
+            if (c is CLabel)
             {
                 String align = (String)i.Element("Settings").Element("TextAlignment") ?? "TopLeft";
                 SetTextAlignment(c, align);
@@ -643,7 +651,7 @@ namespace Configuration_Manager
 
         private void ApplyRights(ICustomControl c)
         {
-            if(!c.cd.inRelatedVisibility && c.cd.Type != "CTabPage")
+            if(!c.cd.inRelatedVisibility && !(c is CTabPage))
                 (c as Control).Visible = c.cd.operatorVisibility;
 
             (c as Control).Enabled = c.cd.operatorModification;

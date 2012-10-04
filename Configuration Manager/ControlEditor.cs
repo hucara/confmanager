@@ -95,17 +95,16 @@ namespace Configuration_Manager
             ShowDefaultSize();
             DisableControls(type);
             
-            if (type == "CLabel") 
+            if (this.control is CLabel) 
                 SetOrientationComboBox();
 
-            if (this.control.cd.Type == "CComboBox") 
+            if (this.control is CComboBox) 
                 textLabel.Text = "";
 
             SetRelationComboBox();
             ReadFromControl();
             SetLocation();
             SetCheckBoxValuesOptions();
-            SetLocationMargins();
 
             base.Show();
             SaveToControl();
@@ -174,7 +173,7 @@ namespace Configuration_Manager
 
             fontLabel.Text = controlFont.Name + " " + Math.Round(controlFont.Size);
 
-            if (control.cd.Type == "CPanel")
+            if (control is CPanel)
                 fontLabel.Text = "";
         }
 
@@ -183,14 +182,14 @@ namespace Configuration_Manager
             controlListBox.Items.Clear();
             if (relationsComboBox.SelectedIndex > -1)
             {
-                if (relationsComboBox.SelectedItem.ToString() == this.COUPLED && control.cd.Type == "CComboBox")
+                if (relationsComboBox.SelectedItem.ToString() == this.COUPLED && control is CComboBox)
                 {
-                    foreach (ICustomControl c in model.AllControls.Where(p => p.cd.Type == "CComboBox"))
+                    foreach (ICustomControl c in model.AllControls.Where(p => p is CComboBox))
                         controlListBox.Items.Add(c.cd.Name);
                 }
-                else if (relationsComboBox.SelectedItem.ToString() == this.COUPLED && control.cd.Type == "CCheckBox")
+                else if (relationsComboBox.SelectedItem.ToString() == this.COUPLED && control is CCheckBox)
                 {
-                    foreach (ICustomControl c in model.AllControls.Where(p => p.cd.Type == "CCheckBox"))
+                    foreach (ICustomControl c in model.AllControls.Where(p => p is CCheckBox))
                         controlListBox.Items.Add(c.cd.Name);
                 }
                 else
@@ -220,7 +219,7 @@ namespace Configuration_Manager
 
             relationsComboBox.Items.Clear();
 
-            if (type == "CComboBox" || type == "CCheckBox")
+            if (control is CComboBox || control is CCheckBox)
             {
                 relationsComboBox.Items.Add(READ);
                 relationsComboBox.Items.Add(VISIBILITY);
@@ -228,15 +227,15 @@ namespace Configuration_Manager
 
                 relationsComboBox.SelectedItem = READ;
             }
-            else if (type == "CTextBox")
+            else if (control is CTextBox)
             {
                 relationsComboBox.Items.Add(READ);
                 relationsComboBox.SelectedItem = READ;
             }
-            else if (type == "CLabel" || type == "CPanel" || type == "CGroupBox" || type == "CTabPage")
-            {
-                //deactivated or empty
-            }
+            //else if (type == "CLabel" || type == "CPanel" || type == "CGroupBox" || type == "CTabPage")
+            //{
+            //    //deactivated or empty
+            //}
         }
 
         private void FillOutFileTypeComboBox()
@@ -419,12 +418,15 @@ namespace Configuration_Manager
         // //
         private void backColorButton_Click(object sender, EventArgs e)
         {
-            int c = ColorTranslator.ToWin32(Color.FromKnownColor(KnownColor.Control));
+            int c = ColorTranslator.ToWin32(System.Drawing.SystemColors.Control);
+            //int c = ColorTranslator.ToWin32(Color.FromKnownColor(KnownColor.Control));
             colorDialog1.CustomColors = new int[] { c };
             DialogResult dr = colorDialog1.ShowDialog();
             if (dr == DialogResult.OK)
             {
                 backColor = colorDialog1.Color;
+                if (colorDialog1.Color.ToArgb().Equals(System.Drawing.SystemColors.Control.ToArgb()))
+                    backColor = System.Drawing.SystemColors.Control;
                 SetExampleTextLabel();
             }
         }
@@ -478,7 +480,7 @@ namespace Configuration_Manager
         {
             bool vmd = ValidMainDestination();
             CheckCommonAttributes();
-            if (ErrorMsg != "" && type != "CTabPage" && vmd)
+            if (ErrorMsg != "" && !(control is CTabPage) && vmd)
             {
                 String caption = Model.GetTranslationFromID(37);
                 ErrorMsg = Model.GetTranslationFromID(57) + ErrorMsg;
@@ -498,7 +500,7 @@ namespace Configuration_Manager
         private void updateButton_Click(object sender, EventArgs e)
         {
             CheckCommonAttributes();
-            if (ErrorMsg != "" && type != "CTabPage")
+            if (ErrorMsg != "" && !(control is CTabPage))
             {
                 String caption = Model.GetTranslationFromID(37);
                 ErrorMsg = Model.GetTranslationFromID(57) + ErrorMsg;
@@ -526,7 +528,7 @@ namespace Configuration_Manager
             ParseWidth();
             ParseHeight();
 
-            if ((control.cd.Type != "CComboBox" && control.cd.Type != "CTabControl") && !CheckText()) ErrorMsg += "\n - " + Model.GetTranslationFromID(140);
+            if (!(control is CComboBox) && !(control is CTabControl) && !CheckText()) ErrorMsg += "\n - " + Model.GetTranslationFromID(140);
 
             if (CheckTop() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(147) + " " + Model.GetTranslationFromID(145);
             if (CheckLeft() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(148) + " " + Model.GetTranslationFromID(145);
@@ -541,9 +543,9 @@ namespace Configuration_Manager
             if (!CheckDisplayRight()) ErrorMsg += "\n - " + Model.GetTranslationFromID(142);
             if (!CheckModificationRight()) ErrorMsg += "\n - " + Model.GetTranslationFromID(143);
 
-            if (control.cd.Type == "CCheckBox" && !CheckCheckBoxAttributes()) ErrorMsg += "\n - " +Model.GetTranslationFromID(153);
+            if (control is CCheckBox && !CheckCheckBoxAttributes()) ErrorMsg += "\n - " +Model.GetTranslationFromID(153);
 
-            if (control.cd.Type == "CButton" && !CheckButtonExePath()) ErrorMsg += "\n - " +Model.GetTranslationFromID(67);
+            if (control is CButton && !CheckButtonExePath()) ErrorMsg += "\n - " +Model.GetTranslationFromID(67);
         }
 
         private bool CheckButtonExePath()
@@ -705,7 +707,7 @@ namespace Configuration_Manager
 
         private void FormatValue(ICustomControl control)
         {
-            if (control.cd.Type == "CComboBox")
+            if (control is CComboBox)
             {
                 int selectedIndex = (control as CComboBox).SelectedIndex;
                 if (selectedIndex != -1)
@@ -758,16 +760,16 @@ namespace Configuration_Manager
                 this.destinationTypeComboBox.Text = control.cd.DestinationType;
             else this.destinationTypeComboBox.SelectedIndex = 0;
 
-            if (control.cd.Type == "CLabel")
+            if (control is CLabel)
                 ReadTextOrientation(control as CLabel);
 
-            if (control.cd.Type == "CButton")
+            if (control is CButton)
             {
                 exePathTextBox.Text = control.cd.RealPath;
                 exeArgumentsTextBox.Text = control.cd.Parameters;
             }
 
-            if (control.cd.Type == "CBitmap")
+            if (control is CBitmap)
                 exePathTextBox.Text = control.cd.RealPath;
 
             // Update the example font label
@@ -812,7 +814,7 @@ namespace Configuration_Manager
                 {
                     // Manage the read relation
                     bool looping = false;
-                    if (this.control.cd.Type == "CComboBox" && checkedControl.cd.Type == "CComboBox")
+                    if (control is CComboBox && checkedControl is CComboBox)
                     {
                         if (checkedControl.cd.RelatedRead.Contains(this.control))
                         {
@@ -1039,26 +1041,6 @@ namespace Configuration_Manager
             this.Close();
         }
 
-        private void SetLocationMargins()
-        {
-            String parentType = control.cd.Parent.GetType().Name;
-            if (parentType == "CTabControl" || parentType == "TabControl")
-            {
-                //topMargin = 10;
-                //leftMargin = 10;
-            }
-            else if (parentType == "CGroupBox" || parentType == "GroupBox")
-            {
-                //topMargin = 20;
-                //leftMargin = 10;
-            }
-            else if (parentType == "CPanel" || parentType == "Panel")
-            {
-                //topMargin = 10;
-                //leftMargin = 10;
-            }
-        }
-
         private void destinationTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ReplaceRegSelectedLabels();
@@ -1131,7 +1113,7 @@ namespace Configuration_Manager
 
         private void exePathButton_Click(object sender, EventArgs e)
         {
-            if (this.type == "CButton")
+            if (this.control is CButton)
             {
                 openFileDialog1.Filter = "Executable files (*.exe)|*.exe";
                 DialogResult dr = openFileDialog1.ShowDialog();
@@ -1140,7 +1122,7 @@ namespace Configuration_Manager
                     exePathTextBox.Text = openFileDialog1.FileName;
                 }
             }
-            else if (this.type == "CBitmap")
+            else if (this.control is CBitmap)
             {
                 openFileDialog1.Filter = "Image files (*.jpg; *.bmp; *.jpeg; *.png; *.gif)|*.jpg; *.bmp; *.jpeg; *.png; *.gif";
                 DialogResult dr = openFileDialog1.ShowDialog();

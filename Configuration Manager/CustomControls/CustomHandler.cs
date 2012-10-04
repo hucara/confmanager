@@ -24,7 +24,6 @@ namespace Configuration_Manager.CustomControls
         Bitmap previewImage = System.Drawing.SystemIcons.Error.ToBitmap();
         Rectangle previewRectangle = Rectangle.Empty;
         Rectangle snapRectangle = Rectangle.Empty;
-        Graphics g;
 
 		public CustomHandler(ContextMenuStrip cms)
 		{
@@ -71,57 +70,67 @@ namespace Configuration_Manager.CustomControls
 			{
 				// Editable Containers
 				contextMenu.Items[0].Enabled = true;
-
                 enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, false);
 
 				contextMenu.Items[1].Enabled = true;
-				contextMenu.Items[2].Enabled = true;
+                contextMenu.Items[3].Enabled = true;
+                contextMenu.Items[4].Enabled = true;
+				contextMenu.Items[7].Enabled = true;
 			}
 			else if (type == "TabPage")
 			{
 				// Section Tabs
 				contextMenu.Items[0].Enabled = true;
-
 				enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, false);
 
-				contextMenu.Items[1].Enabled = false;
-				contextMenu.Items[2].Enabled = false;
+                contextMenu.Items[1].Enabled = false;
+                contextMenu.Items[3].Enabled = false;
+                contextMenu.Items[4].Enabled = false;
+				contextMenu.Items[7].Enabled = false;
 			}
 			else if (type == "CTabPage")
 			{
 				// Custom Tabs
 				contextMenu.Items[0].Enabled = true;
-
 				enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, false);
 				
                 contextMenu.Items[1].Enabled = true;
-				contextMenu.Items[2].Enabled = true;
+                contextMenu.Items[3].Enabled = false;
+                contextMenu.Items[4].Enabled = false;
+				contextMenu.Items[7].Enabled = true;
 
 				// Check if it is the only and last tab inside the CTabcontrol
 				CTabPage p = model.CurrentClickedControl as CTabPage;
 				if ((p.Parent as CTabControl).TabCount <= 1)
-				{
-					contextMenu.Items[2].Enabled = false;
-				}
+					contextMenu.Items[7].Enabled = false;
 			}
             else if (type == "CTabControl")
             {
                 contextMenu.Items[0].Enabled = true;
-
                 enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, true);
 
                 contextMenu.Items[1].Enabled = true;
-                contextMenu.Items[2].Enabled = true;
+                contextMenu.Items[3].Enabled = false;
+                contextMenu.Items[4].Enabled = false;
+                contextMenu.Items[7].Enabled = true;
             }
             else
             {
+                // Not a container
                 contextMenu.Items[0].Enabled = false;
-
                 enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, false);
 
                 contextMenu.Items[1].Enabled = true;
-                contextMenu.Items[2].Enabled = true;
+                contextMenu.Items[3].Enabled = true;
+                contextMenu.Items[4].Enabled = true;
+                contextMenu.Items[7].Enabled = true;
             }
+
+            // Set the PASTE option
+            if (model.CopiedControl || model.CutControl)
+                contextMenu.Items[5].Enabled = true;
+            else
+                contextMenu.Items[5].Enabled = false;
 		}
 
 		//////////////////////////////////////////////
@@ -298,7 +307,6 @@ namespace Configuration_Manager.CustomControls
 			}
             else if (model.progMode && me.Button == MouseButtons.Left && DRAGDROP_ACTIVE)
 			{
-                //if (type != "TabControl" && type != "TabPage" && type != "CTabControl" && type != "CTabPage")
                 if (type != "TabControl" && type != "TabPage" && type != "CTabPage")
                 {
 					t.Start();
@@ -375,9 +383,7 @@ namespace Configuration_Manager.CustomControls
 		{
             dea.Effect = DragDropEffects.Move;
             Control c = sender as Control;
-            //c.DragOver -= moveControlWhileDragging_DragOver;
-            //c.DragOver += moveControlWhileDragging_DragOver;
-		}
+        }
 
 		public void CancelDragDropTimer(object sender, EventArgs e)
 		{
@@ -418,10 +424,159 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
-        public void OnDragLeave(object sender, EventArgs e)
+        public void copyStripMenuItem_Click(object sender, EventArgs e)
         {
-            //CheckSnapOnDrop(model.CurrentClickedControl, model.CurrentClickedControl.Parent);
-            //model.CurrentClickedControl.Enabled = true;
+            model.copiedControlData = model.CurrentClickedControl as ICustomControl;
+            model.CopiedControl = true;
+            model.CutControl = false;
+        }
+
+        public void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (model.CopiedControl)
+                CreateControlCopy();
+            else if (model.CutControl)
+                MoveControl();
+        }
+
+        public void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(model.CurrentClickedControl != null)
+            {
+                model.cutControlData = model.CurrentClickedControl as ICustomControl;
+                model.CurrentClickedControl.Parent.Controls.Remove(model.CurrentClickedControl);
+                model.CopiedControl = false;
+                model.CutControl = true;
+            }
+        }
+
+        private void MoveControl()
+        {
+            model.cutControlData.cd.Top = model.LastClickedY;
+            model.cutControlData.cd.Left = model.LastClickedX;
+            model.CurrentClickedControl.Controls.Add(model.cutControlData as Control);
+            model.cutControlData.cd.Parent = model.CurrentClickedControl;
+            model.cutControlData.cd.ParentSection = model.CurrentSection;
+
+            model.CopiedControl = false;
+            model.CutControl = false;
+        }
+
+        private void CreateControlCopy()
+        {
+            String copyType = model.copiedControlData.cd.Type;
+            ICustomControl c = null;
+
+            switch (copyType)
+            {
+                case "CLabel":
+                    c = ControlFactory.BuildCLabel(model.CurrentClickedControl);
+                    break;
+
+                case "CTextBox":
+                    c = ControlFactory.BuildCTextBox(model.CurrentClickedControl);
+                    break;
+
+                case "CButton":
+                    c = ControlFactory.BuildCButton(model.CurrentClickedControl);
+                    break;
+
+                case "CBitmap":
+                    c = ControlFactory.BuildCBitmap(model.CurrentClickedControl);
+                    break;
+
+                case "CCheckBox":
+                    c = ControlFactory.BuildCCheckBox(model.CurrentClickedControl);
+                    break;
+
+                case "CComboBox":
+                    c = ControlFactory.BuildCComboBox(model.CurrentClickedControl);
+                    break;
+
+                case "CPanel":
+                    c = ControlFactory.BuildCPanel(model.CurrentClickedControl);
+                    break;
+
+                case "CTabControl":
+                    c = ControlFactory.BuildCTabControl(model.CurrentClickedControl);
+                    break;
+
+                case "CGroupBox":
+                    c = ControlFactory.BuildCGroupBox(model.CurrentClickedControl);
+                    break;
+            }
+
+            if (c is CTabControl)
+            {
+                TabPage[] tpc = new TabPage[(model.copiedControlData as CTabControl).TabCount];
+                int numPages = (model.copiedControlData as CTabControl).TabCount;
+
+                for (int i = 0; i < numPages; i++)
+                    tpc[i] = (model.copiedControlData as CTabControl).TabPages[i];
+
+                (c as CTabControl).TabPages.AddRange(tpc);
+            }
+
+            if (c != null)
+            {
+                CopyControlProperties(c);
+                c.cd.ParentSection = model.CurrentSection;
+                c.cd.Parent = model.CurrentClickedControl;
+
+                c.cd.Top = model.LastClickedY;
+                c.cd.Left = model.LastClickedX;
+
+                CheckSnapOnDrop(c as Control, c.cd.Parent);
+            }
+        }
+
+        private void CopyControlProperties(ICustomControl c)
+        {
+            ICustomControl source = model.copiedControlData;
+
+            c.cd.Text = source.cd.Text;
+            c.cd.Changed = source.cd.Changed;
+            c.cd.RealText = source.cd.RealText;
+            c.cd.Type = source.cd.Type;
+            c.cd.Format = source.cd.Format;
+            c.cd.TextAlign = source.cd.TextAlign;
+
+            c.cd.Width = source.cd.Width;
+            c.cd.Height = source.cd.Height;
+
+            c.cd.CurrentFont = source.cd.CurrentFont;
+            c.cd.BackColor = source.cd.BackColor;
+            c.cd.ThisControl = c as Control;
+
+            c.cd.DisplayRight = source.cd.DisplayRight;
+            c.cd.ModificationRight = source.cd.ModificationRight;
+
+            //c.cd.operatorModification = source.cd.operatorModification;
+            //c.cd.operatorVisibility = source.cd.operatorVisibility;
+
+            c.cd.checkBoxCheckedValue = source.cd.checkBoxCheckedValue;
+            c.cd.checkBoxUncheckedValue = source.cd.checkBoxUncheckedValue;
+
+            c.cd.DestinationType = source.cd.DestinationType;
+            c.cd.MainDestination = source.cd.MainDestination;
+            c.cd.SubDestination = source.cd.SubDestination;
+            c.cd.RealSubDestination = source.cd.RealSubDestination;
+
+            c.cd.RealPath = source.cd.RealPath;
+            c.cd.Parameters = source.cd.Parameters;
+
+            c.cd.RelatedRead.AddRange(source.cd.RelatedRead);
+            c.cd.RelatedVisibility.AddRange(source.cd.RelatedVisibility);
+            c.cd.CoupledControls.AddRange(source.cd.CoupledControls);
+
+            if (source.cd.comboBoxItems != null)
+            {
+                c.cd.comboBoxItems.AddRange(source.cd.comboBoxItems);
+                c.cd.comboBoxRealItems.AddRange(source.cd.comboBoxRealItems);
+                c.cd.comboBoxConfigItems.AddRange(source.cd.comboBoxConfigItems);
+            }
+
+            c.cd.Visible = source.cd.Visible;
         }
     }
 }

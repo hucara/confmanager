@@ -35,6 +35,9 @@ namespace Configuration_Manager
         public int controlMarging = 10;
         public int containerMargin = 10;
 
+        public int cellHeight = 40;
+        public int cellWidth = 120;
+
         public byte[] MainModificationRights = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
         public byte[] MainDisplayRights = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
 
@@ -46,9 +49,13 @@ namespace Configuration_Manager
         public bool editingUI = false;
         public bool creatingNewComponent = false;
         public bool editingOldComponent = false;
-
         public bool ObjectDefinitionExists { get; set; }
         public bool ConfigFileExists { get; set; }
+        
+        public bool CopiedControl { get; set; }
+        public bool CutControl { get; set; }
+        public ICustomControl copiedControlData { get; set; }
+        public ICustomControl cutControlData { get; set; } 
 
         public String Headline { get; private set; }
 
@@ -280,6 +287,8 @@ namespace Configuration_Manager
                 Int32.TryParse(settings.Element("Left").Value.ToString(), out this.left);
                 Int32.TryParse(settings.Element("Width").Value.ToString(), out this.width);
                 Int32.TryParse(settings.Element("Height").Value.ToString(), out this.height);
+                Int32.TryParse(settings.Element("CellWidth").Value.ToString(), out this.cellWidth);
+                Int32.TryParse(settings.Element("CellHeight").Value.ToString(), out this.cellHeight);
 
                 Int32.TryParse(settings.Element("MaxSections").Value.ToString(), out this.maxSections);
 

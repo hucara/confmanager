@@ -14,6 +14,10 @@ namespace Configuration_Manager
     {
         public ICustomControl dragControl;
         private Model model;
+        private Color oldColor;
+
+        private int CELL_WIDTH = 100;
+        private int CELL_HEIGHT = 40;
 
         private Control oldParent;
         private Point oldLocation;
@@ -26,6 +30,9 @@ namespace Configuration_Manager
             this.Opacity = .00;
 
             InitializeComponent();
+
+            CELL_HEIGHT = model.cellHeight;
+            CELL_WIDTH = model.cellWidth;
 
             this.AllowDrop = true;
             this.DoubleBuffered = true;
@@ -53,6 +60,9 @@ namespace Configuration_Manager
                 oldLocation = model.CurrentClickedControl.Location;
                 oldParent = model.CurrentClickedControl.Parent;
 
+                oldColor = (dragControl as Control).BackColor;
+                (dragControl as Control).BackColor = System.Drawing.Color.DarkRed;
+
                 model.CurrentClickedControl.BringToFront();
 
                 dragControl.cd.Parent.Controls.Remove(dragControl as Control);
@@ -74,10 +84,53 @@ namespace Configuration_Manager
 
         private void GlassForm_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
         {
+            if (mouseOverForm)
+            {
                 Point cord = System.Windows.Forms.Cursor.Position;
                 cord = this.PointToClient(cord);
                 dragControl.cd.Top = cord.Y - model.LastClickedY;
                 dragControl.cd.Left = cord.X - model.LastClickedX;
+                CalculateSnapToGrid();
+            }
+            else
+            {
+                e.Action = DragAction.Cancel;
+                this.Controls.Remove(dragControl as Control);
+                RestoreControlState();
+
+                for (double i = .30; i > 0.00; i -= 0.05)
+                {
+                    this.Opacity = i;
+                    System.Threading.Thread.Sleep(30);
+                }
+            }
+        }
+
+        private void CalculateSnapToGrid()
+        {
+            Point location = this.PointToScreen((dragControl as Control).Location);
+            Point cursor = System.Windows.Forms.Cursor.Position;
+
+            // Get the distance between the control location and the closest -x-y grid lines.
+            int difY = location.Y % CELL_HEIGHT;
+            int difX = location.X % CELL_WIDTH;
+
+            int newY = cursor.Y;
+            int newX = cursor.X;
+
+            if (difY < 5 && difY > 0) newY = cursor.Y - difY;
+            if (difX < 5 && difX > 0) newX = cursor.X - difX;
+
+            if (newY != cursor.Y || newX != cursor.X)
+            {
+                //System.Diagnostics.Debug.WriteLine("-- SNAPPING --");
+                //System.Diagnostics.Debug.WriteLine("DifXY: " + difX + "," + difY);
+                //System.Diagnostics.Debug.WriteLine("LocXY: " + location.X + "," + location.Y);
+                //System.Diagnostics.Debug.WriteLine("CurXY: " + cursor.X + "," + cursor.Y);
+                //System.Diagnostics.Debug.WriteLine("NewXY: " + newX + "," + newY);
+                //System.Diagnostics.Debug.WriteLine("--------------");
+                System.Windows.Forms.Cursor.Position = new Point(newX, newY);
+            }
         }
 
         private void GlassForm_DragDrop(object sender, DragEventArgs e)
@@ -99,9 +152,10 @@ namespace Configuration_Manager
 
                     CheckSnapOnDrop(dragControl as Control, parent);
 
-                    if(!(parent is CTabPage))
+                    if(!(parent is TabPage))
                     {
                         (dragControl as Control).Enabled = true;
+                        (dragControl as Control).BringToFront();
                         this.Controls.Remove(model.CurrentClickedControl);
                         parent.Controls.Add(model.CurrentClickedControl);
                         (model.CurrentClickedControl as ICustomControl).cd.Parent = parent;
@@ -109,6 +163,7 @@ namespace Configuration_Manager
                     else
                     {
                         (dragControl as Control).Enabled = true;
+                        (dragControl as Control).BringToFront();
                         int tpi = (parent.Parent as TabControl).SelectedIndex;
                         parent = (parent.Parent as TabControl).TabPages[tpi];
                         this.Controls.Remove(model.CurrentClickedControl);
@@ -116,6 +171,7 @@ namespace Configuration_Manager
                         (model.CurrentClickedControl as ICustomControl).cd.Parent = parent;
                     }
 
+                    model.uiChanged = true;
                     System.Diagnostics.Debug.WriteLine("Dropped on: " + (dragControl as Control).Location);
                     System.Diagnostics.Debug.WriteLine("New parent: " + model.CurrentClickedControl.Parent.Name);
                 }
@@ -137,6 +193,8 @@ namespace Configuration_Manager
 
             this.Enabled = true;
             this.Visible = false;
+            (dragControl as Control).BackColor = oldColor;
+            //oldColor = (dragControl as Control).BackColor;
         }
 
         private void RestoreControlState()
@@ -149,7 +207,7 @@ namespace Configuration_Manager
             (dragControl as Control).Enabled = true;
         }
 
-        void GlassForm_DragEnter(object sender, DragEventArgs e)
+        private void GlassForm_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data != null) e.Effect = DragDropEffects.Move;
         }
@@ -165,6 +223,7 @@ namespace Configuration_Manager
             {
                 relCoord = p.PointToClient(screenCoord);
                 p = p.GetChildAtPoint(relCoord, GetChildAtPointSkip.Disabled);
+                if (p is CTabPage) return p;
                 if (p != null) newParent = p;
             }
 
@@ -194,6 +253,24 @@ namespace Configuration_Manager
         private void GlassForm_DragLeave(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Do you think you can leave with that?");
+            mouseOverForm = false;
+        }
+
+        // Override of the OnPaint event to draw the grid lines.
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            for (int x = 0; x <= this.Width; x += CELL_WIDTH)
+            {
+                e.Graphics.DrawLine(System.Drawing.Pens.White, new Point(x, 0), new Point(x, this.Height));
+                e.Graphics.FillRectangle(System.Drawing.Brushes.DarkRed, new Rectangle(new Point(x, 0), new Size(this.Width, 5)));
+            }
+
+            for (int y = 0; y <= this.Height; y += CELL_HEIGHT)
+            {
+                e.Graphics.DrawLine(System.Drawing.Pens.White, new Point(0, y), new Point(this.Width, y));
+                e.Graphics.FillRectangle(System.Drawing.Brushes.DarkRed, new Rectangle(new Point(0, y), new Size(this.Width, 5)));
+            }
         }
     }
 }

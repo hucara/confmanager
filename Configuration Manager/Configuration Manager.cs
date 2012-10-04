@@ -159,6 +159,9 @@ namespace Configuration_Manager
             this.tabPageMenuItem.Click += ch.tabPageToolStripMenuItem_Click;
 
             this.editToolStripMenuItem.Click += ch.editToolStripMenuItem_Click;
+            this.copyStripMenuItem.Click += ch.copyStripMenuItem_Click;
+            this.cutToolStripMenuItem.Click += ch.cutToolStripMenuItem_Click;
+            this.pasteToolStripMenuItem.Click += ch.pasteToolStripMenuItem_Click;
             this.deleteToolStripMenuItem.Click += ch.deleteToolStripMenuItem_Click;
         }
 
@@ -256,6 +259,9 @@ namespace Configuration_Manager
                 model.Sections.Remove(se.section);
                 sectionTabsView.readAndShow();
             }
+
+            this.Width++;
+            this.Width--;
         }
 
         private void deleteSectionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -425,9 +431,12 @@ namespace Configuration_Manager
         private void UpdateGlassForm()
         {
             //gf.Activate();
-            gf.Size = this.tabControl.SelectedTab.ClientSize;
-            Size difference = this.tabControl.Size - this.tabControl.SelectedTab.ClientSize;
-            gf.DesktopLocation = this.PointToScreen(this.tabControl.Location + difference);
+            if (this.tabControl.TabCount > 0)
+            {
+                gf.Size = this.tabControl.SelectedTab.ClientSize;
+                Size difference = this.tabControl.Size - this.tabControl.SelectedTab.ClientSize;
+                gf.DesktopLocation = this.PointToScreen(this.tabControl.Location + difference);
+            }
         }
     }
 }

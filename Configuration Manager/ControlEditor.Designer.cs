@@ -245,6 +245,7 @@
             // 
             // fontLabel
             // 
+            this.fontLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fontLabel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.fontLabel.Location = new System.Drawing.Point(124, 66);
             this.fontLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);

@@ -23,9 +23,7 @@ namespace Configuration_Manager.CustomControls
             foreach (ICustomControl related in control.cd.RelatedVisibility)
             {
                 if (control.SelectedIndex > 0 || Model.getInstance().progMode)
-                {
                     related.cd.Visible = true;
-                }
                 else if (control.SelectedIndex <= 0)
                 {
                     if (related is CCheckBox || related is CComboBox)

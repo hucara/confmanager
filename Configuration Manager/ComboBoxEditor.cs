@@ -72,6 +72,7 @@ namespace Configuration_Manager
             SetButtons();
             FillOutTextInputBoxes();
             SetMoveButtons();
+            this.configValues.AutoScrollOffset = this.shownValues.AutoScrollOffset;
         }
 
         private void shownValues_SelectedIndexChanged(object sender, EventArgs e)
@@ -80,6 +81,7 @@ namespace Configuration_Manager
             SetButtons();
             FillOutTextInputBoxes();
             SetMoveButtons();
+            this.shownValues.AutoScrollOffset = this.configValues.AutoScrollOffset;
         }
 
         private void FillOutTextInputBoxes()
@@ -393,8 +395,9 @@ namespace Configuration_Manager
             SetButtons();
             RefreshActualComboBox();
 
-            shownTextBox.Text = "";
-            configTextBox.Text = "";
+            //shownTextBox.Text = "";
+            //configTextBox.Text = "";
+            shownValues.SelectedItem = shownTextBox.Text;
 
             if ((cb as ComboBox).Items.Count == 1) (cb as ComboBox).SelectedIndex = 0;
             else (cb as ComboBox).SelectedIndex = index;
