@@ -173,7 +173,7 @@ namespace Configuration_Manager
             parent.Controls.Add(c);
 
             SetCommonHandlers(c);
-            SetChangesHandler(c);
+            //SetChangesHandler(c);
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
@@ -197,7 +197,7 @@ namespace Configuration_Manager
 
             Model.getInstance().AllControls.Add(c);
             c.SetControlDescription();
-            (c as PictureBox).SizeMode = PictureBoxSizeMode.Zoom;
+            (c as PictureBox).SizeMode = PictureBoxSizeMode.StretchImage;
             (c as PictureBox).Image = System.Drawing.SystemIcons.Error.ToBitmap();
 
             model.logCreator.Append("+ Added " + c.cd.Name);

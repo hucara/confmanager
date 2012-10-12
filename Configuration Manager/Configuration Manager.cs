@@ -95,6 +95,9 @@ namespace Configuration_Manager
                 String msg = Model.GetTranslationFromID(47) + " " + Model.GetTranslationFromID(52) + "\n" +Model.GetTranslationFromID(43);
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                model.logCreator.Append("Integrity problem in Object Definition File");
+                model.logCreator.Append(msg);
+
                 System.Environment.Exit(1);
             }
         }

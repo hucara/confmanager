@@ -69,13 +69,13 @@ namespace Configuration_Manager.CustomControls
 			if (type == "CGroupBox" || type == "CPanel")
 			{
 				// Editable Containers
-				contextMenu.Items[0].Enabled = true;
+				contextMenu.Items[0].Enabled = true;    // New
                 enableDropDownItems(contextMenu.Items[0] as ToolStripMenuItem, 11, false);
 
-				contextMenu.Items[1].Enabled = true;
-                contextMenu.Items[3].Enabled = true;
-                contextMenu.Items[4].Enabled = true;
-				contextMenu.Items[7].Enabled = true;
+				contextMenu.Items[1].Enabled = true;    // Edit
+                contextMenu.Items[3].Enabled = true;    // Copy
+                contextMenu.Items[4].Enabled = true;    // Cut
+				contextMenu.Items[7].Enabled = true;    // Delete
 			}
 			else if (type == "TabPage")
 			{
@@ -111,7 +111,7 @@ namespace Configuration_Manager.CustomControls
 
                 contextMenu.Items[1].Enabled = true;
                 contextMenu.Items[3].Enabled = false;
-                contextMenu.Items[4].Enabled = false;
+                contextMenu.Items[4].Enabled = true;
                 contextMenu.Items[7].Enabled = true;
             }
             else
@@ -325,7 +325,7 @@ namespace Configuration_Manager.CustomControls
 			MouseEventArgs me = e as MouseEventArgs;
 
             if (model.CurrentClickedControl != null)
-                model.glassScreen.ActivateDragDrop();
+                model.glassScreen.ActivateDragDrop(editor);
 		}
 
         private Rectangle CreateSnapRectangle(Control control)
@@ -378,13 +378,6 @@ namespace Configuration_Manager.CustomControls
             }
         }
 
-        //This event happens when the user gets into a dropable area
-		public void OnDragEnter(object sender, DragEventArgs dea)
-		{
-            dea.Effect = DragDropEffects.Move;
-            Control c = sender as Control;
-        }
-
 		public void CancelDragDropTimer(object sender, EventArgs e)
 		{
 			if ((e as MouseEventArgs).Button == MouseButtons.Left)
@@ -420,6 +413,7 @@ namespace Configuration_Manager.CustomControls
             {
                 String msg = Model.GetTranslationFromID(67) +" "+ Model.GetTranslationFromID(52);
                 String caption = Model.GetTranslationFromID(37);
+                //System.Threading.Thread.Sleep(350); // Fixes the drag and drop bug.
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -434,7 +428,14 @@ namespace Configuration_Manager.CustomControls
         public void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (model.CopiedControl)
-                CreateControlCopy();
+            {
+                if ((model.copiedControlData as Control).HasChildren)
+                {
+                    RecursiveControlCopy(model.copiedControlData as Control);
+                }
+                else
+                    CreateControlCopy();
+            }
             else if (model.CutControl)
                 MoveControl();
         }
@@ -462,7 +463,7 @@ namespace Configuration_Manager.CustomControls
             model.CutControl = false;
         }
 
-        private void CreateControlCopy()
+        private Control CreateControlCopy()
         {
             String copyType = model.copiedControlData.cd.Type;
             ICustomControl c = null;
@@ -520,6 +521,12 @@ namespace Configuration_Manager.CustomControls
             if (c != null)
             {
                 CopyControlProperties(c);
+                if ((model.copiedControlData as Control).HasChildren)
+                {
+                 //   foreach(Control child in (model.copiedControlData as Control).Controls)
+                 //       (c as Control).Controls.Add(CopyControlProperties(child as ICustomControl));
+                }
+
                 c.cd.ParentSection = model.CurrentSection;
                 c.cd.Parent = model.CurrentClickedControl;
 
@@ -527,10 +534,13 @@ namespace Configuration_Manager.CustomControls
                 c.cd.Left = model.LastClickedX;
 
                 CheckSnapOnDrop(c as Control, c.cd.Parent);
+                return c as Control;
             }
+
+            return null;
         }
 
-        private void CopyControlProperties(ICustomControl c)
+        private Control CopyControlProperties(ICustomControl c)
         {
             ICustomControl source = model.copiedControlData;
 
@@ -577,6 +587,21 @@ namespace Configuration_Manager.CustomControls
             }
 
             c.cd.Visible = source.cd.Visible;
+
+            return c as Control;
+        }
+
+        public void RecursiveControlCopy(Control currParent)
+        {
+            currParent = CreateControlCopy();
+            if (currParent.HasChildren)
+            {
+                foreach (Control child in currParent.Controls)
+                {
+
+                    currParent.Controls.Add(child);
+                }
+            }
         }
     }
 }

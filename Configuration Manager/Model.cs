@@ -118,8 +118,22 @@ namespace Configuration_Manager
 
             SetPaths();
             LoadFiles();
+            CheckPaths();
+            //ReadConfigurationFile();
 
             FillDestinationFileTypes();
+        }
+
+        private void CheckPaths()
+        {
+            if (!File.Exists(ConfigFilePath))
+            {
+                //String caption = Model.GetTranslationFromID(37);
+                //String msg = GetTranslationFromID(41) + " " + GetTranslationFromID(43);
+                MessageBox.Show(ConfigFilePath + " not found. The application will now close.", "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                System.Environment.Exit(0);
+            }
         }
 
         // Singleton
@@ -154,9 +168,8 @@ namespace Configuration_Manager
 
                 String caption = GetTranslationFromID(37);
                 String msg = GetTranslationFromID(41) +" "+ GetTranslationFromID(43);
-                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                System.Environment.Exit(1);
+                MessageBox.Show(ConfigFilePath + " not found. The application will now close.", "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Environment.Exit(0);
             }
         }
 
@@ -301,6 +314,12 @@ namespace Configuration_Manager
             catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** INFO *** There was a problem reading the Settings section in the configuration file.");
+
+                String caption = Model.GetTranslationFromID(37);
+                String msg = Model.GetTranslationFromID(44) + " " + Model.GetTranslationFromID(52);
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                System.Environment.Exit(1);
             }
         }
 
@@ -615,7 +634,7 @@ namespace Configuration_Manager
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 System.Diagnostics.Debug.WriteLine("! Error when parsing the arguments. Out of range?");
 
-                System.Environment.Exit(0);
+                System.Environment.Exit(1);
             }
         }
 
@@ -817,7 +836,7 @@ namespace Configuration_Manager
             catch (Exception)
             {
                 MessageBox.Show("Error found in the translation file. The application will now close.", "Critical error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                System.Environment.Exit(0);
+                System.Environment.Exit(1);
             }
             return text;
         }

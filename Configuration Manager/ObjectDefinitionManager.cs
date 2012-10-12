@@ -254,12 +254,16 @@ namespace Configuration_Manager
                 Model.getInstance().Sections.Add(s);
                 return s;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 String caption = Model.GetTranslationFromID(37);
                 String msg = Model.GetTranslationFromID(47) +" "+ Model.GetTranslationFromID(52);
-
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                model.logCreator.Append("Creating defined section:" +i.Element("Name").Value);
+                model.logCreator.Append(msg);
+                model.logCreator.Append(e.ToString());
+                
                 System.Environment.Exit(1);
                 return null;
             }
@@ -321,11 +325,16 @@ namespace Configuration_Manager
                             SetRelatedVisibility(c, i);
                             SetCoupledControls(c, i);
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
                             String caption = Model.GetTranslationFromID(37);
                             String msg = Model.GetTranslationFromID(47) + " " + Model.GetTranslationFromID(52);
-                            MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                            MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            model.logCreator.Append("Creating: " + c.cd.Name);
+                            model.logCreator.Append(msg);
+                            model.logCreator.Append(e.ToString());
+
                             System.Environment.Exit(1);
                         }
 
@@ -334,26 +343,28 @@ namespace Configuration_Manager
                         model.ApplyRelations(c);
                         
                         if(c.cd.Format != "") ApplyFormats(c);
-
                         if (c is CTabControl)
                         {
                             try
                             {
                                 SetSelectedTab(c, i);
                             }
-                            catch (Exception)
+                            catch (Exception e)
                             {
                                 String caption = Model.GetTranslationFromID(37);
                                 String msg = Model.GetTranslationFromID(47) + " " + Model.GetTranslationFromID(52);
+                                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error); System.Environment.Exit(0);
+                                model.logCreator.Append("Setting tab: " + c.cd.Name);
+                                model.logCreator.Append(msg);
+                                model.logCreator.Append(e.ToString());
+
+                                System.Environment.Exit(1);
                             }
                         }
-
                         c.cd.Changed = false;
                         System.Diagnostics.Debug.WriteLine("+ Added : " + c.cd.Name + " with parent: " + c.cd.Parent.Name + " in Section: " + c.cd.ParentSection.Name);
                     }
-
                     // Update the Splash Screen
                     progress += incPerItem;
                 }
@@ -569,6 +580,8 @@ namespace Configuration_Manager
             String colorValue = i.Element("Settings").Element("BackColor").Value;
             if (colorValue != "")
                 c.cd.BackColor = (Color)colorConverter.ConvertFromString(colorValue);
+            else
+                c.cd.BackColor = System.Drawing.SystemColors.Control;
 
             //newColor = (Color)colorConverter.ConvertFromString(i.Element("Settings").Element("BackColor").Value);
             //c.cd.BackColor = newColor;
@@ -636,17 +649,6 @@ namespace Configuration_Manager
                 p.cd.inRelatedVisibility = true;
                 c.cd.RelatedVisibility.Add(p);
             }
-        }
-
-        private void SetRelatedWriteList(ICustomControl c, XElement i)
-        {
-            string s = i.Element("Relations").Element("Write").Value;
-            string[] f = { ", " };
-
-            List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
-
-            foreach (String r in rel)
-                c.cd.RelatedWrite.Add(model.AllControls.Find(p => p.cd.Name == r));
         }
 
         private void ApplyRights(ICustomControl c)

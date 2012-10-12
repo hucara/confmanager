@@ -21,13 +21,13 @@ namespace Configuration_Manager.Util
 
         public static void SetTokenKey(String k)
         {
-            if (k == "" || k == null) tokenKey = DEFAULT_TOKEN;
-            else tokenKey = k;
+            if (!String.IsNullOrEmpty(k)) tokenKey = k;
+            else tokenKey = DEFAULT_TOKEN;
         }
 
         public static String TranslateFromControl(String text)
         {
-            if (text == null) return text;
+            if (String.IsNullOrEmpty(text)) return "";
 
             translatedText = text;
 
@@ -38,7 +38,7 @@ namespace Configuration_Manager.Util
 
                 textToTranslate = text;
 
-                if (textToTranslate != null && textToTranslate != "")
+                if (!String.IsNullOrEmpty(textToTranslate))
                 {
                     if (TextHasEvenTokens())
                     {
@@ -54,7 +54,7 @@ namespace Configuration_Manager.Util
 
         private static bool TextHasEvenTokens()
         {
-            if (textToTranslate != null && textToTranslate != "" && tokenKey != null)
+            if (!String.IsNullOrEmpty(textToTranslate) && tokenKey != null)
             {
                 int count = System.Text.RegularExpressions.Regex.Matches(textToTranslate, tokenKey).Count;
                 if (count % 2 == 0) return true;

@@ -14,13 +14,13 @@ namespace Configuration_Manager
     {
         public ICustomControl dragControl;
         private Model model;
-        private Color oldColor;
 
         private int CELL_WIDTH = 100;
         private int CELL_HEIGHT = 40;
 
         private Control oldParent;
         private Point oldLocation;
+        private ControlEditor editor;
 
         private bool mouseOverForm = false;
 
@@ -47,11 +47,12 @@ namespace Configuration_Manager
             this.DragEnter += new DragEventHandler(GlassForm_DragEnter);
         }
 
-        public void ActivateDragDrop()
+        public void ActivateDragDrop(ControlEditor editor)
         {
             this.Visible = true;
             this.Enabled = false;
             this.mouseOverForm = true;
+            this.editor = editor;
             this.Activate();
 
             dragControl = model.CurrentClickedControl as ICustomControl;
@@ -59,10 +60,6 @@ namespace Configuration_Manager
             {
                 oldLocation = model.CurrentClickedControl.Location;
                 oldParent = model.CurrentClickedControl.Parent;
-
-                oldColor = (dragControl as Control).BackColor;
-                (dragControl as Control).BackColor = System.Drawing.Color.DarkRed;
-
                 model.CurrentClickedControl.BringToFront();
 
                 dragControl.cd.Parent.Controls.Remove(dragControl as Control);
@@ -90,7 +87,7 @@ namespace Configuration_Manager
                 cord = this.PointToClient(cord);
                 dragControl.cd.Top = cord.Y - model.LastClickedY;
                 dragControl.cd.Left = cord.X - model.LastClickedX;
-                CalculateSnapToGrid();
+                //CalculateSnapToGrid();
             }
             else
             {
@@ -118,8 +115,8 @@ namespace Configuration_Manager
             int newY = cursor.Y;
             int newX = cursor.X;
 
-            if (difY < 5 && difY > 0) newY = cursor.Y - difY;
-            if (difX < 5 && difX > 0) newX = cursor.X - difX;
+            if (difY < 5 && difY > 0) newY = cursor.Y + difY;
+            if (difX < 5 && difX > 0) newX = cursor.X + difX;
 
             if (newY != cursor.Y || newX != cursor.X)
             {
@@ -181,6 +178,10 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine("That guy does not accept drops... ");
                     RestoreControlState();
                 }
+
+                (dragControl as Control).BringToFront();
+                parent.Invalidate();
+                if(editor!= null) editor.ReadFromControl();
             }
             else
                 System.Diagnostics.Debug.WriteLine("You tried to drop it over itself... ");
@@ -193,8 +194,8 @@ namespace Configuration_Manager
 
             this.Enabled = true;
             this.Visible = false;
-            (dragControl as Control).BackColor = oldColor;
-            //oldColor = (dragControl as Control).BackColor;
+            this.Focus();
+            (dragControl as Control).Update();
         }
 
         private void RestoreControlState()
@@ -223,8 +224,11 @@ namespace Configuration_Manager
             {
                 relCoord = p.PointToClient(screenCoord);
                 p = p.GetChildAtPoint(relCoord, GetChildAtPointSkip.Disabled);
-                if (p is CTabPage) return p;
-                if (p != null) newParent = p;
+                if (p != null)
+                {
+                    if (p.GetType().Equals(sectionTab)) return p;
+                    newParent = p;
+                }
             }
 
             if (newParent != null) return newParent;
@@ -263,13 +267,13 @@ namespace Configuration_Manager
             for (int x = 0; x <= this.Width; x += CELL_WIDTH)
             {
                 e.Graphics.DrawLine(System.Drawing.Pens.White, new Point(x, 0), new Point(x, this.Height));
-                e.Graphics.FillRectangle(System.Drawing.Brushes.DarkRed, new Rectangle(new Point(x, 0), new Size(this.Width, 5)));
+                //e.Graphics.FillRectangle(System.Drawing.Brushes.DarkRed, new Rectangle(new Point(x, 0), new Size(this.Width, 5)));
             }
 
             for (int y = 0; y <= this.Height; y += CELL_HEIGHT)
             {
                 e.Graphics.DrawLine(System.Drawing.Pens.White, new Point(0, y), new Point(this.Width, y));
-                e.Graphics.FillRectangle(System.Drawing.Brushes.DarkRed, new Rectangle(new Point(0, y), new Size(this.Width, 5)));
+                //e.Graphics.FillRectangle(System.Drawing.Brushes.DarkRed, new Rectangle(new Point(0, y), new Size(this.Width, 5)));
             }
         }
     }

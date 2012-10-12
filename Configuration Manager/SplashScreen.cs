@@ -59,7 +59,7 @@ namespace Configuration_Manager
             }
 
             this.progressBar1.Value = this.progressBar1.Maximum;
-            System.Threading.Thread.Sleep(10000);
+            System.Threading.Thread.Sleep(20000);
         }
 
         private void GetBitmapRectangle()
@@ -82,7 +82,7 @@ namespace Configuration_Manager
             // Copy the RGB values into the array.
             System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, numBytes);
 
-            // Manipulate the bitmap, sucha as changing the
+            // Manipulate the bitmap, such as changing the
             // blue value for every other pixel in the bitmap.
             for (int counter = 0; counter < rgbValues.Length; counter += 6)
                 rgbValues[counter] = 200;

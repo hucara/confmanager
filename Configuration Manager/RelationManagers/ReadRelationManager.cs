@@ -32,15 +32,15 @@ namespace Configuration_Manager.CustomControls
 
         public static void ReadConfiguration(ICustomControl r)
         {
-            if (r.cd.RealSubDestination != "" && r.cd.RealSubDestination != null)
+            if (!String.IsNullOrEmpty(r.cd.RealSubDestination))
                 TranslateSubDestination(r);
 
             // Updates the Text field or Items from the ComboBox
-            if (r.cd.Type == "CComboBox") TranslateComboBoxItems(r);
+            if (r is CComboBox) TranslateComboBoxItems(r);
             else TranslateText(r);
 
             // Re-reads the value from the source file
-            if (r.cd.MainDestination != null && r.cd.MainDestination != "")
+            if (!String.IsNullOrEmpty(r.cd.MainDestination))
             {
                 String value = "";
 
@@ -55,7 +55,7 @@ namespace Configuration_Manager.CustomControls
                 //r.cd.Changed = false;
             }
 
-            if (r.cd.Type == "CBitmap")
+            if (r is CBitmap)
                 r.cd.RealPath = r.cd.RealPath;
 
             //r.cd.Changed = false;
@@ -127,6 +127,9 @@ namespace Configuration_Manager.CustomControls
                 xdoc.Load(r.cd.MainDestination);
 
                 String value = xdoc.SelectSingleNode(r.cd.SubDestination).InnerText;
+                //if(String.IsNullOrEmpty(value))
+                //    value = xdoc.SelectSingleNode(r.cd.SubDestination)
+
                 return value;
             }
             catch (Exception)
@@ -157,9 +160,9 @@ namespace Configuration_Manager.CustomControls
 
         private static void SetReadValue(ICustomControl r, String value)
         {
-            if (r.cd.Type == "CComboBox")
+            if (r is CComboBox)
             {
-                if (r.cd.Format != "" || r.cd.Format != null)
+                if (!String.IsNullOrEmpty(r.cd.Format))
                 {
                     string formattedValue = StringFormatter.GetFormattedText(value, r.cd.Format);
                     formattedValue = TokenControlTranslator.TranslateFromControl(formattedValue);
@@ -172,11 +175,12 @@ namespace Configuration_Manager.CustomControls
                 else
                 {
                     int index = r.cd.comboBoxConfigItems.IndexOf(value);
+                    if (index == -1) index = r.cd.comboBoxItems.IndexOf(value);
                     if ((r as ComboBox).Items.Count >= index)
                         (r as ComboBox).SelectedIndex = index;
                 }
             }
-            else if (r.cd.Type == "CCheckBox")
+            else if (r is CCheckBox)
             {
                 if (!String.IsNullOrEmpty(r.cd.Format))
                     value = StringFormatter.GetFormattedText(value, r.cd.Format);
@@ -209,7 +213,7 @@ namespace Configuration_Manager.CustomControls
         {
             string value = "";
 
-            if (r.cd.MainDestination != null && r.cd.MainDestination != "")
+            if (!String.IsNullOrEmpty(r.cd.MainDestination))
             {
                 System.Diagnostics.Debug.WriteLine("<< Getting Unformatted value: " + r.cd.SubDestination);
                 String fileType = r.cd.MainDestination.Substring(r.cd.MainDestination.Length - 4, 4);

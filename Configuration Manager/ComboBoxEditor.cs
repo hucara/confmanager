@@ -123,7 +123,7 @@ namespace Configuration_Manager
 
                     cb.cd.comboBoxItems.Add(translated);
                     cb.cd.comboBoxRealItems.Add(shownTextBox.Text);
-                    cb.cd.comboBoxConfigItems.Add(String.Empty);
+                    //cb.cd.comboBoxConfigItems.Add(String.Empty);
                 }
             }
 
@@ -347,6 +347,12 @@ namespace Configuration_Manager
                 shownValues.Items.Add(cb.cd.comboBoxItems[i]);
                 configValues.Items.Add(cb.cd.comboBoxConfigItems[i]);
             }
+
+            //foreach (String s in cb.cd.comboBoxItems)
+            //    shownValues.Items.Add(s);
+
+            //foreach (String s in cb.cd.comboBoxConfigItems)
+            //    configValues.Items.Add(s);
         }
 
         private void shownTextBox_TextChanged(object sender, EventArgs e)

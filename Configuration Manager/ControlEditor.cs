@@ -87,6 +87,8 @@ namespace Configuration_Manager
         public void Show(Control c)
         {
             this.control = (ICustomControl)c;
+            if (this.control == null) return;
+
             this.parent = control.cd.Parent;
             this.type = c.GetType().Name;
 
@@ -94,11 +96,11 @@ namespace Configuration_Manager
             ShowHeadLine();
             ShowDefaultSize();
             DisableControls(type);
-            
-            if (this.control is CLabel) 
+
+            if (this.control is CLabel)
                 SetOrientationComboBox();
 
-            if (this.control is CComboBox) 
+            if (this.control is CComboBox)
                 textLabel.Text = "";
 
             SetRelationComboBox();
@@ -455,6 +457,7 @@ namespace Configuration_Manager
         private void fileDestinationButton_Click(object sender, EventArgs e)
         {
             openFileDialog1.Filter = "INI files (*.ini)|*.ini|XML files (*.xml)|*.xml|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 3;
             DialogResult dr = openFileDialog1.ShowDialog();
             if (dr == DialogResult.OK && openFileDialog1.CheckFileExists)
             {
@@ -488,10 +491,10 @@ namespace Configuration_Manager
             }
             else if (ValidMainDestination())
             {
-                    //this.control.cd.Changed = true;
-                    Model.getInstance().uiChanged = true;
-                    SaveToControl();
-                    this.Close();
+                //this.control.cd.Changed = true;
+                Model.getInstance().uiChanged = true;
+                SaveToControl();
+                this.Close();
             }
 
             ErrorMsg = "";
@@ -508,9 +511,8 @@ namespace Configuration_Manager
             }
             else if (ValidMainDestination())
             {
-                    SaveToControl();
-                    //model.ApplyRelations(control);
-                    ReadRelationManager.ReadConfiguration(control as ICustomControl);
+                SaveToControl();
+                ReadRelationManager.ReadConfiguration(control as ICustomControl);
             }
             ErrorMsg = "";
         }
@@ -543,9 +545,8 @@ namespace Configuration_Manager
             if (!CheckDisplayRight()) ErrorMsg += "\n - " + Model.GetTranslationFromID(142);
             if (!CheckModificationRight()) ErrorMsg += "\n - " + Model.GetTranslationFromID(143);
 
-            if (control is CCheckBox && !CheckCheckBoxAttributes()) ErrorMsg += "\n - " +Model.GetTranslationFromID(153);
-
-            if (control is CButton && !CheckButtonExePath()) ErrorMsg += "\n - " +Model.GetTranslationFromID(67);
+            if (control is CCheckBox && !CheckCheckBoxAttributes()) ErrorMsg += "\n - " + Model.GetTranslationFromID(153);
+            if (control is CButton && !CheckButtonExePath()) ErrorMsg += "\n - " + Model.GetTranslationFromID(67);
         }
 
         private bool CheckButtonExePath()
@@ -581,7 +582,7 @@ namespace Configuration_Manager
         private void ParseTop()
         {
             if (topTextBox.Enabled && !Int32.TryParse(topTextBox.Text, out top))
-                ErrorMsg += "\n- "+Model.GetTranslationFromID(10) + " " + Model.GetTranslationFromID(152);
+                ErrorMsg += "\n- " + Model.GetTranslationFromID(10) + " " + Model.GetTranslationFromID(152);
         }
 
         private void ParseLeft()
@@ -966,6 +967,21 @@ namespace Configuration_Manager
                 }
                 ErrorMsg = "";
             }
+            else if (e.KeyCode == Keys.A && e.Control)
+            {
+                CheckCommonAttributes();
+                if (ErrorMsg != "")
+                {
+                    String caption = Model.GetTranslationFromID(37);
+                    ErrorMsg = Model.GetTranslationFromID(57) + ErrorMsg;
+                    MessageBox.Show(ErrorMsg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    updateButton.PerformClick();
+                }
+                ErrorMsg = "";
+            }
         }
 
         private void SetCheckBoxValuesOptions()
@@ -1011,7 +1027,7 @@ namespace Configuration_Manager
 
                 this.exePathLabel.Text = Model.GetTranslationFromID(105);
                 this.exeArgumentsLabel.Text = Model.GetTranslationFromID(106);
-                
+
                 // Saving labels to avoid reading from file again
                 MainDestinationText = this.fileDestinationLabel.Text;
                 RootKeyText = Model.GetTranslationFromID(96);
@@ -1101,11 +1117,11 @@ namespace Configuration_Manager
             int index = orientationComboBox.SelectedIndex;
             String align = orientationComboBox.SelectedItem.ToString();
 
-            if(align == LEFT_OR)
+            if (align == LEFT_OR)
                 (control as CLabel).TextAlign = ContentAlignment.TopLeft;
-            else if( align == RIGHT_OR)
+            else if (align == RIGHT_OR)
                 (control as CLabel).TextAlign = ContentAlignment.TopRight;
-            else if( align == CENTER_OR)
+            else if (align == CENTER_OR)
                 (control as CLabel).TextAlign = ContentAlignment.TopCenter;
             else
                 (control as CLabel).TextAlign = ContentAlignment.TopLeft;

@@ -70,9 +70,9 @@ namespace Configuration_Manager.RelationManagers
 
             try
             {
-                if (c.cd.Type == "CComboBox")
+                if (c is CComboBox)
                 {
-                    if (c.cd.Format != "")
+                    if (!String.IsNullOrEmpty(c.cd.Format))
                     {
                         String unformatted = ReadRelationManager.GetUnformattedValue(c);
                         String currentValue = c.cd.comboBoxConfigItems[(c as CComboBox).SelectedIndex];
@@ -83,14 +83,16 @@ namespace Configuration_Manager.RelationManagers
                     else
                     {
                         if (c.cd.comboBoxConfigItems.Count > 0 && (c as CComboBox).SelectedIndex != -1)
+                        {
                             value = c.cd.comboBoxConfigItems[(c as CComboBox).SelectedIndex];
-                        else
-                            value = c.cd.comboBoxItems[(c as CComboBox).SelectedIndex];
+                            if (String.IsNullOrEmpty(value))
+                                value = c.cd.comboBoxItems[(c as CComboBox).SelectedIndex];
+                        }
                     }
                 }
-                else if (c.cd.Type == "CTextBox")
+                else if (c is CTextBox)
                 {
-                    if (c.cd.Format != "" && c.cd.Format != null)
+                    if (!String.IsNullOrEmpty(c.cd.Format))
                     {
                         String unformatted = ReadRelationManager.GetUnformattedValue(c);
                         String currentValue = c.cd.Text;
@@ -101,9 +103,9 @@ namespace Configuration_Manager.RelationManagers
                     else
                         value = c.cd.Text;
                 }
-                else if (c.cd.Type == "CCheckBox")
+                else if (c is CCheckBox)
                 {
-                    if (c.cd.Format != "" && c.cd.Format != null)
+                    if (!String.IsNullOrEmpty(c.cd.Format))
                     {
                         String unformatted = ReadRelationManager.GetUnformattedValue(c);
                         String currentValue = c.cd.checkBoxUncheckedValue;
@@ -125,7 +127,7 @@ namespace Configuration_Manager.RelationManagers
                 }
                 else
                 {
-                    if (c.cd.Format != "" && c.cd.Format != null)
+                    if (!String.IsNullOrEmpty(c.cd.Format))
                     {
                         String unformatted = ReadRelationManager.GetUnformattedValue(c);
                         String currentValue = c.cd.Text;
