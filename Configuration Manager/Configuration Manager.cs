@@ -247,6 +247,11 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine(line);
                 }
             }
+
+            if (e.Control && e.KeyCode == Keys.Down)
+            {
+                ch.MultiplyControl();
+            }
         }
 
         private void newSectionToolStripMenuItem_Click(object sender, EventArgs e)

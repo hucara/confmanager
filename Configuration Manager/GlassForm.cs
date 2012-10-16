@@ -218,6 +218,10 @@ namespace Configuration_Manager
         {
             Point relCoord = sectionTab.PointToClient(screenCoord);
             Control p = sectionTab.GetChildAtPoint(relCoord, GetChildAtPointSkip.Disabled);
+            
+            if (p != null && p.Parent is CTabControl) 
+                p = (p.Parent as TabControl).SelectedTab;
+            
             Control newParent = p;
 
             while (p != null)

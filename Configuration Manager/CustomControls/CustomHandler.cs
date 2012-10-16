@@ -429,12 +429,7 @@ namespace Configuration_Manager.CustomControls
         {
             if (model.CopiedControl)
             {
-                if ((model.copiedControlData as Control).HasChildren)
-                {
-                    RecursiveControlCopy(model.copiedControlData as Control);
-                }
-                else
-                    CreateControlCopy();
+                CreateControlCopy(model.copiedControlData as ICustomControl);
             }
             else if (model.CutControl)
                 MoveControl();
@@ -463,51 +458,51 @@ namespace Configuration_Manager.CustomControls
             model.CutControl = false;
         }
 
-        private Control CreateControlCopy()
+        private Control CreateControlCopy(ICustomControl source)
         {
-            String copyType = model.copiedControlData.cd.Type;
-            ICustomControl c = null;
+            ICustomControl newControl = null;
+            newControl = SetCopyType(source.cd.Type);
 
-            switch (copyType)
+            if (newControl is CTabControl) 
+                SetCopyTabControl(newControl);
+
+            if (newControl != null)
             {
-                case "CLabel":
-                    c = ControlFactory.BuildCLabel(model.CurrentClickedControl);
-                    break;
+                CopyControlProperties(newControl, source);
+                Debug.WriteLine("Copied control: " +newControl.cd.Name);
 
-                case "CTextBox":
-                    c = ControlFactory.BuildCTextBox(model.CurrentClickedControl);
-                    break;
+                if ((source as Control).HasChildren)
+                {
+                    Debug.WriteLine("Has children!"); 
+                    foreach (Control child in (source as Control).Controls)
+                    {
+                        Control childCopy = CreateControlCopy(child as ICustomControl);
+                        (newControl as Control).Controls.Add(childCopy);
+                        (childCopy as ICustomControl).cd.Parent = newControl as Control;
+                        //(newControl as Control).Controls.Add(CreateControlCopy(child as ICustomControl));
+                        Debug.WriteLine("|_> Copied child: " + child.Name); 
+                    }
+                }
 
-                case "CButton":
-                    c = ControlFactory.BuildCButton(model.CurrentClickedControl);
-                    break;
+                if (newControl.cd.RealText == model.copiedControlData.cd.RealText)
+                {
+                    newControl.cd.ParentSection = model.CurrentSection;
+                    newControl.cd.Parent = model.CurrentClickedControl;
 
-                case "CBitmap":
-                    c = ControlFactory.BuildCBitmap(model.CurrentClickedControl);
-                    break;
+                    newControl.cd.Top = model.LastClickedY;
+                    newControl.cd.Left = model.LastClickedX;
+                }
 
-                case "CCheckBox":
-                    c = ControlFactory.BuildCCheckBox(model.CurrentClickedControl);
-                    break;
+                CheckSnapOnDrop(newControl as Control, newControl.cd.Parent);
 
-                case "CComboBox":
-                    c = ControlFactory.BuildCComboBox(model.CurrentClickedControl);
-                    break;
-
-                case "CPanel":
-                    c = ControlFactory.BuildCPanel(model.CurrentClickedControl);
-                    break;
-
-                case "CTabControl":
-                    c = ControlFactory.BuildCTabControl(model.CurrentClickedControl);
-                    break;
-
-                case "CGroupBox":
-                    c = ControlFactory.BuildCGroupBox(model.CurrentClickedControl);
-                    break;
+                return newControl as Control;
             }
+            return null;
+        }
 
-            if (c is CTabControl)
+        private void SetCopyTabControl(ICustomControl newControl)
+        {
+            if (newControl is CTabControl)
             {
                 TabPage[] tpc = new TabPage[(model.copiedControlData as CTabControl).TabCount];
                 int numPages = (model.copiedControlData as CTabControl).TabCount;
@@ -515,92 +510,135 @@ namespace Configuration_Manager.CustomControls
                 for (int i = 0; i < numPages; i++)
                     tpc[i] = (model.copiedControlData as CTabControl).TabPages[i];
 
-                (c as CTabControl).TabPages.AddRange(tpc);
+                (newControl as CTabControl).TabPages.AddRange(tpc);
             }
-
-            if (c != null)
-            {
-                CopyControlProperties(c);
-                if ((model.copiedControlData as Control).HasChildren)
-                {
-                 //   foreach(Control child in (model.copiedControlData as Control).Controls)
-                 //       (c as Control).Controls.Add(CopyControlProperties(child as ICustomControl));
-                }
-
-                c.cd.ParentSection = model.CurrentSection;
-                c.cd.Parent = model.CurrentClickedControl;
-
-                c.cd.Top = model.LastClickedY;
-                c.cd.Left = model.LastClickedX;
-
-                CheckSnapOnDrop(c as Control, c.cd.Parent);
-                return c as Control;
-            }
-
-            return null;
         }
 
-        private Control CopyControlProperties(ICustomControl c)
+        private ICustomControl SetCopyType(string sourceType)
         {
-            ICustomControl source = model.copiedControlData;
+            ICustomControl newControl = null;
+            switch (sourceType)
+            {
+                case "CLabel":
+                    newControl = ControlFactory.BuildCLabel(model.CurrentClickedControl);
+                    break;
 
-            c.cd.Text = source.cd.Text;
-            c.cd.Changed = source.cd.Changed;
-            c.cd.RealText = source.cd.RealText;
-            c.cd.Type = source.cd.Type;
-            c.cd.Format = source.cd.Format;
-            c.cd.TextAlign = source.cd.TextAlign;
+                case "CTextBox":
+                    newControl = ControlFactory.BuildCTextBox(model.CurrentClickedControl);
+                    break;
 
-            c.cd.Width = source.cd.Width;
-            c.cd.Height = source.cd.Height;
+                case "CButton":
+                    newControl = ControlFactory.BuildCButton(model.CurrentClickedControl);
+                    break;
 
-            c.cd.CurrentFont = source.cd.CurrentFont;
-            c.cd.BackColor = source.cd.BackColor;
-            c.cd.ThisControl = c as Control;
+                case "CBitmap":
+                    newControl = ControlFactory.BuildCBitmap(model.CurrentClickedControl);
+                    break;
 
-            c.cd.DisplayRight = source.cd.DisplayRight;
-            c.cd.ModificationRight = source.cd.ModificationRight;
+                case "CCheckBox":
+                    newControl = ControlFactory.BuildCCheckBox(model.CurrentClickedControl);
+                    break;
+
+                case "CComboBox":
+                    newControl = ControlFactory.BuildCComboBox(model.CurrentClickedControl);
+                    break;
+
+                case "CPanel":
+                    newControl = ControlFactory.BuildCPanel(model.CurrentClickedControl);
+                    break;
+
+                case "CTabControl":
+                    newControl = ControlFactory.BuildCTabControl(model.CurrentClickedControl);
+                    break;
+
+                case "CGroupBox":
+                    newControl = ControlFactory.BuildCGroupBox(model.CurrentClickedControl);
+                    break;
+            }
+
+            return newControl;
+        }
+
+        private Control CopyControlProperties(ICustomControl dest, ICustomControl source)
+        {
+            dest.cd.Text = source.cd.Text;
+            dest.cd.Changed = source.cd.Changed;
+            dest.cd.RealText = source.cd.RealText;
+            dest.cd.Type = source.cd.Type;
+            dest.cd.Format = source.cd.Format;
+            dest.cd.TextAlign = source.cd.TextAlign;
+
+            dest.cd.Width = source.cd.Width;
+            dest.cd.Height = source.cd.Height;
+
+            dest.cd.CurrentFont = source.cd.CurrentFont;
+            dest.cd.BackColor = source.cd.BackColor;
+            dest.cd.ThisControl = dest as Control;
+
+            dest.cd.DisplayRight = source.cd.DisplayRight;
+            dest.cd.ModificationRight = source.cd.ModificationRight;
 
             //c.cd.operatorModification = source.cd.operatorModification;
             //c.cd.operatorVisibility = source.cd.operatorVisibility;
 
-            c.cd.checkBoxCheckedValue = source.cd.checkBoxCheckedValue;
-            c.cd.checkBoxUncheckedValue = source.cd.checkBoxUncheckedValue;
+            dest.cd.checkBoxCheckedValue = source.cd.checkBoxCheckedValue;
+            dest.cd.checkBoxUncheckedValue = source.cd.checkBoxUncheckedValue;
 
-            c.cd.DestinationType = source.cd.DestinationType;
-            c.cd.MainDestination = source.cd.MainDestination;
-            c.cd.SubDestination = source.cd.SubDestination;
-            c.cd.RealSubDestination = source.cd.RealSubDestination;
+            dest.cd.DestinationType = source.cd.DestinationType;
+            dest.cd.MainDestination = source.cd.MainDestination;
+            dest.cd.SubDestination = source.cd.SubDestination;
+            dest.cd.RealSubDestination = source.cd.RealSubDestination;
 
-            c.cd.RealPath = source.cd.RealPath;
-            c.cd.Parameters = source.cd.Parameters;
+            dest.cd.RealPath = source.cd.RealPath;
+            dest.cd.Parameters = source.cd.Parameters;
 
-            c.cd.RelatedRead.AddRange(source.cd.RelatedRead);
-            c.cd.RelatedVisibility.AddRange(source.cd.RelatedVisibility);
-            c.cd.CoupledControls.AddRange(source.cd.CoupledControls);
+            //dest.cd.RelatedRead.AddRange(source.cd.RelatedRead);
+            //dest.cd.RelatedVisibility.AddRange(source.cd.RelatedVisibility);
+            //dest.cd.CoupledControls.AddRange(source.cd.CoupledControls);
+
+            dest.cd.ParentSection = model.CurrentSection;
+            //dest.cd.Parent = model.CurrentClickedControl;
+
+            dest.cd.Top = source.cd.Top;
+            dest.cd.Left = source.cd.Left;
 
             if (source.cd.comboBoxItems != null)
             {
-                c.cd.comboBoxItems.AddRange(source.cd.comboBoxItems);
-                c.cd.comboBoxRealItems.AddRange(source.cd.comboBoxRealItems);
-                c.cd.comboBoxConfigItems.AddRange(source.cd.comboBoxConfigItems);
+                dest.cd.comboBoxItems.AddRange(source.cd.comboBoxItems);
+                dest.cd.comboBoxRealItems.AddRange(source.cd.comboBoxRealItems);
+                dest.cd.comboBoxConfigItems.AddRange(source.cd.comboBoxConfigItems);
+                (dest as ComboBox).SelectedIndex = 0;
             }
 
-            c.cd.Visible = source.cd.Visible;
-
-            return c as Control;
+            dest.cd.Visible = source.cd.Visible;
+            return dest as Control;
         }
 
-        public void RecursiveControlCopy(Control currParent)
+        public void MultiplyControl()
         {
-            currParent = CreateControlCopy();
-            if (currParent.HasChildren)
+            if (model.CurrentClickedControl is CLabel)
             {
-                foreach (Control child in currParent.Controls)
-                {
+                CLabel lbl = ControlFactory.BuildCLabel(model.CurrentClickedControl.Parent);
+                lbl.cd.Top = model.CurrentClickedControl.Top + 25;
+                lbl.cd.Left = model.CurrentClickedControl.Left;
+                lbl.cd.Width = model.CurrentClickedControl.Width;
+                lbl.cd.RealSubDestination = (model.CurrentClickedControl as ICustomControl).cd.RealSubDestination;
+                lbl.cd.MainDestination = (model.CurrentClickedControl as ICustomControl).cd.MainDestination;
+                lbl.cd.DestinationType = (model.CurrentClickedControl as ICustomControl).cd.DestinationType;
 
-                    currParent.Controls.Add(child);
-                }
+                model.CurrentClickedControl = lbl;
+            }
+            else if (model.CurrentClickedControl is CTextBox)
+            {
+                CTextBox txtb = ControlFactory.BuildCTextBox(model.CurrentClickedControl.Parent);
+                txtb.cd.Top = model.CurrentClickedControl.Top + 25;
+                txtb.cd.Left = model.CurrentClickedControl.Left;
+                txtb.cd.Width = model.CurrentClickedControl.Width;
+                txtb.cd.RealSubDestination = (model.CurrentClickedControl as ICustomControl).cd.RealSubDestination;
+                txtb.cd.MainDestination = (model.CurrentClickedControl as ICustomControl).cd.MainDestination;
+                txtb.cd.DestinationType = (model.CurrentClickedControl as ICustomControl).cd.DestinationType;
+
+                model.CurrentClickedControl = txtb;
             }
         }
     }

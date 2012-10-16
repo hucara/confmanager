@@ -57,7 +57,7 @@ namespace Configuration_Manager.Views
 
 				if (s.Selected == true)
 				{
-					SetUpInfoLabel();
+					SetUpInfoTextBox();
 					s.Button.PerformClick();
 				}
 			}
@@ -214,30 +214,30 @@ namespace Configuration_Manager.Views
 			else return true;
 		}
 
-		private void SetUpInfoLabel()
+		private void SetUpInfoTextBox()
 		{
 			if (sectionMenu.Items.Count > 0)
 			{
-				ToolStripTextBox infoLabel = new ToolStripTextBox();
+				ToolStripTextBox infoTextBox = new ToolStripTextBox();
 
 				// We should add the label
-				int index = sectionMenu.Items.Add(infoLabel);
+				int index = sectionMenu.Items.Add(infoTextBox);
 
-				infoLabel.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-				infoLabel.AutoSize = false;
-				infoLabel.MaxLength = 320;
-				infoLabel.BorderStyle = BorderStyle.None;
-                infoLabel.BackColor = System.Drawing.SystemColors.Control;
+				infoTextBox.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+				infoTextBox.AutoSize = false;
+				infoTextBox.MaxLength = 320;
+				infoTextBox.BorderStyle = BorderStyle.None;
+                infoTextBox.BackColor = System.Drawing.SystemColors.Control;
 
                 
-				infoLabel.TextBox.MinimumSize = new System.Drawing.Size(100, 275);
-				infoLabel.TextBox.Enabled = false;
-				infoLabel.TextBox.Multiline = true;
+				infoTextBox.TextBox.MinimumSize = new System.Drawing.Size(100, model.infoTextBoxHeight);
+				infoTextBox.TextBox.Enabled = false;
+				infoTextBox.TextBox.Multiline = true;
 				
-				infoLabel.ReadOnly = true;
+				infoTextBox.ReadOnly = true;
 
 				int selButtonIndex = sectionMenu.Items.IndexOf(SelectedButton);
-				int lablIndex = sectionMenu.Items.IndexOf(infoLabel);
+				int lablIndex = sectionMenu.Items.IndexOf(infoTextBox);
 
 				MoveInfoLabel(index, lablIndex);
 			}
@@ -256,7 +256,6 @@ namespace Configuration_Manager.Views
 			if (buttonIndex +1 >= sectionMenu.Items.Count)
 			{
 				sectionMenu.Items.Add(infoLabel);
-				
 				model.InfoLabel = infoLabel;
 			}
 			else

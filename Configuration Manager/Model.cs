@@ -34,6 +34,7 @@ namespace Configuration_Manager
         public int maxControls = 30;
         public int controlMarging = 10;
         public int containerMargin = 10;
+        public int infoTextBoxHeight = 200;
 
         public int cellHeight = 40;
         public int cellWidth = 120;
@@ -308,6 +309,8 @@ namespace Configuration_Manager
                 Int32.TryParse(settings.Element("ControlMargin").Value.ToString(), out this.controlMarging);
                 Int32.TryParse(settings.Element("ContainerMargin").Value.ToString(), out this.containerMargin);
 
+                Int32.TryParse(settings.Element("InfoBoxHeight").Value.ToString(), out this.infoTextBoxHeight);
+
                 this.textToken = settings.Element("TextToken").Value.ToString();
                 this.controlToken = settings.Element("ControlToken").Value.ToString();
             }
@@ -315,8 +318,11 @@ namespace Configuration_Manager
             {
                 System.Diagnostics.Debug.WriteLine("*** INFO *** There was a problem reading the Settings section in the configuration file.");
 
-                String caption = Model.GetTranslationFromID(37);
-                String msg = Model.GetTranslationFromID(44) + " " + Model.GetTranslationFromID(52);
+                //String caption = Model.GetTranslationFromID(37);
+                //String msg = Model.GetTranslationFromID(44) + " " + Model.GetTranslationFromID(52);
+
+                String caption = "Critical error";
+                String msg = "Error reading Configuration Manager setup file. Please, check it and try again.";
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 System.Environment.Exit(1);
