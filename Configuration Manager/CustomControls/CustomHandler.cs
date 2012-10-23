@@ -21,6 +21,13 @@ namespace Configuration_Manager.CustomControls
 		ControlEditor editor;
 		Timer t = new Timer(); // Drag and drop timer.
 
+        // Tool tip properties.
+        ToolTip controlTip = new ToolTip();
+        String mainDestination = Model.GetTranslationFromID(15);
+        String subDestination = Model.GetTranslationFromID(16);
+        String relatedRead = Model.GetTranslationFromID(22);
+        String relatedVisibility = Model.GetTranslationFromID(24);
+
         Bitmap previewImage = System.Drawing.SystemIcons.Error.ToBitmap();
         Rectangle previewRectangle = Rectangle.Empty;
         Rectangle snapRectangle = Rectangle.Empty;
@@ -29,8 +36,15 @@ namespace Configuration_Manager.CustomControls
 		{
 			this.contextMenu = cms;
 			this.model = Model.getInstance();
-			this.t.Interval = 200;
+			this.t.Interval = 100;
 			this.t.Tick += TimerTick;
+
+            this.controlTip.Active = true;
+            this.controlTip.ShowAlways = true;
+            this.controlTip.InitialDelay = 3000;
+            this.controlTip.AutoPopDelay = 5000;
+            this.controlTip.IsBalloon = true;
+            this.controlTip.UseFading = true; 
 		}
 
 		public void CTextBox_RightClick(object sender, EventArgs e)
@@ -240,6 +254,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void editToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+            if (model.CurrentClickedControl == null) return; 
 			editor = new ControlEditor();
 			model.LastClickedX = model.CurrentClickedControl.Location.X;
 			model.LastClickedY = model.CurrentClickedControl.Location.Y;
@@ -433,6 +448,8 @@ namespace Configuration_Manager.CustomControls
             }
             else if (model.CutControl)
                 MoveControl();
+
+            Model.getInstance().uiChanged = true;
         }
 
         public void cutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -607,7 +624,9 @@ namespace Configuration_Manager.CustomControls
                 dest.cd.comboBoxItems.AddRange(source.cd.comboBoxItems);
                 dest.cd.comboBoxRealItems.AddRange(source.cd.comboBoxRealItems);
                 dest.cd.comboBoxConfigItems.AddRange(source.cd.comboBoxConfigItems);
-                (dest as ComboBox).SelectedIndex = 0;
+                (dest as ComboBox).Items.AddRange(dest.cd.comboBoxItems.ToArray());
+                (dest as ComboBox).SelectedItem = dest.cd.comboBoxItems.First();
+                (dest as ComboBox).Update();
             }
 
             dest.cd.Visible = source.cd.Visible;
@@ -639,6 +658,44 @@ namespace Configuration_Manager.CustomControls
                 txtb.cd.DestinationType = (model.CurrentClickedControl as ICustomControl).cd.DestinationType;
 
                 model.CurrentClickedControl = txtb;
+            }
+
+            Model.getInstance().uiChanged = true;
+        }
+
+        public void TransportControl(KeyEventArgs e)
+        {
+            if(model.CurrentClickedControl is CTextBox || model.CurrentClickedControl is CLabel
+                || model.CurrentClickedControl is CCheckBox)
+            {
+                if(e.KeyCode == Keys.Down) (model.CurrentClickedControl as ICustomControl).cd.Top += 25;
+                else if (e.KeyCode == Keys.Up) (model.CurrentClickedControl as ICustomControl).cd.Top -= 25;
+            }
+
+            Model.getInstance().uiChanged = true;
+        }
+
+        public void ShowControlInfoHint(object sender, EventArgs e)
+        {
+            if (model.progMode && sender != null)
+            {
+                Control s = (sender as Control);
+                ICustomControl cc = (sender as ICustomControl);
+                string text = " ";
+
+                this.controlTip.ToolTipTitle = cc.cd.Name;
+                this.controlTip.ToolTipTitle += " " + cc.cd.RealText;
+
+                if (!String.IsNullOrEmpty(cc.cd.MainDestination)) text += "\n" + this.mainDestination + ":  " + cc.cd.MainDestination;
+                if (!String.IsNullOrEmpty(cc.cd.RealSubDestination)) text += "\n" + this.subDestination + ":  " + cc.cd.RealSubDestination;
+
+                //if(cc.cd.RelatedRead.Count > 0) 
+                //    text += "\n" +this.relatedRead +":  " + String.Join(", ", cc.cd.RelatedRead.ToArray());
+
+                //if(cc.cd.RelatedVisibility.Count > 0)
+                //    text += "\n" +this.relatedVisibility +":  " +cc.cd.RelatedVisibility.ToString();
+
+                this.controlTip.SetToolTip(s, text);
             }
         }
     }

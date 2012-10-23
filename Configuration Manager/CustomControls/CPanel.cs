@@ -14,6 +14,7 @@ namespace Configuration_Manager.CustomControls
         {
             this.Name = "CPanel" + count;
 			this.AllowDrop = true;
+            this.DoubleBuffered = true;
 
             this.Text = this.Name;
             count++;

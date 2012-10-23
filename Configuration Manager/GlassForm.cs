@@ -135,7 +135,7 @@ namespace Configuration_Manager
             e.Effect = DragDropEffects.Move;
             Point cord = System.Windows.Forms.Cursor.Position;
 
-            this.Enabled = false;
+            //this.Enabled = false;
             Control parent = GetTopChildOnCoordinates(model.CurrentSection.Tab, cord);
             this.Enabled = true;
 
@@ -161,8 +161,8 @@ namespace Configuration_Manager
                     {
                         (dragControl as Control).Enabled = true;
                         (dragControl as Control).BringToFront();
-                        int tpi = (parent.Parent as TabControl).SelectedIndex;
-                        parent = (parent.Parent as TabControl).TabPages[tpi];
+                        int tabPageindex = (parent.Parent as TabControl).SelectedIndex;
+                        parent = (parent.Parent as TabControl).TabPages[tabPageindex];
                         this.Controls.Remove(model.CurrentClickedControl);
                         parent.Controls.Add(model.CurrentClickedControl);
                         (model.CurrentClickedControl as ICustomControl).cd.Parent = parent;
@@ -230,6 +230,8 @@ namespace Configuration_Manager
                 p = p.GetChildAtPoint(relCoord, GetChildAtPointSkip.Disabled);
                 if (p != null)
                 {
+                    if (p is CTabPage) p = (p.Parent as CTabControl).SelectedTab; 
+                    System.Diagnostics.Debug.WriteLine(p.Name +":"+ p.PointToClient(screenCoord));
                     if (p.GetType().Equals(sectionTab)) return p;
                     newParent = p;
                 }

@@ -274,7 +274,10 @@ namespace Configuration_Manager
             c.MouseDown += ch.Control_Click;
             c.MouseUp += ch.CancelDragDropTimer;
             c.MouseHover += model.UpdateInfoLabel;
+            //c.MouseHover += ch.ShowControlInfoHint;
             c.MouseLeave += model.EraseInfoLabel;
+
+            Model.getInstance().uiChanged = true;
         }
 
         static private void SetDragDropHandlers(Control c)

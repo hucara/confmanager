@@ -198,6 +198,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="SectionEditor.resx">
       <DependentUpon>SectionEditor.cs</DependentUpon>
@@ -219,6 +220,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1337169278_advancedsettings.ico" />
+    <None Include="Resources\1350628015_stock_save.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

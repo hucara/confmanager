@@ -58,8 +58,13 @@ namespace Configuration_Manager
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
+            this.notificationPopUp = new System.Windows.Forms.GroupBox();
+            this.notificationLabel = new System.Windows.Forms.Label();
+            this.notificationPictureBox = new System.Windows.Forms.PictureBox();
             this.contextNavMenu.SuspendLayout();
             this.contextMenu.SuspendLayout();
+            this.notificationPopUp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.notificationPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // sectionBar
@@ -121,7 +126,7 @@ namespace Configuration_Manager
             this.deleteToolStripMenuItem});
             this.contextMenu.Name = "contextMenuStrip1";
             this.contextMenu.ShowImageMargin = false;
-            this.contextMenu.Size = new System.Drawing.Size(128, 182);
+            this.contextMenu.Size = new System.Drawing.Size(98, 160);
             // 
             // newToolStripMenuItem
             // 
@@ -139,7 +144,7 @@ namespace Configuration_Manager
             this.tabControlMenuItem,
             this.tabPageMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
             this.newToolStripMenuItem.Text = "New";
             // 
             // labelToolStripMenuItem
@@ -226,41 +231,41 @@ namespace Configuration_Manager
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(124, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(94, 6);
             // 
             // copyStripMenuItem
             // 
             this.copyStripMenuItem.Name = "copyStripMenuItem";
-            this.copyStripMenuItem.Size = new System.Drawing.Size(127, 24);
+            this.copyStripMenuItem.Size = new System.Drawing.Size(97, 24);
             this.copyStripMenuItem.Text = "Copy";
             // 
             // cutToolStripMenuItem
             // 
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
             this.cutToolStripMenuItem.Text = "Cut";
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
             this.pasteToolStripMenuItem.Text = "Paste";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(124, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(94, 6);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // tabControl
@@ -274,11 +279,40 @@ namespace Configuration_Manager
             this.tabControl.TabIndex = 0;
             this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             // 
+            // notificationPopUp
+            // 
+            this.notificationPopUp.Controls.Add(this.notificationLabel);
+            this.notificationPopUp.Controls.Add(this.notificationPictureBox);
+            this.notificationPopUp.Location = new System.Drawing.Point(0, 565);
+            this.notificationPopUp.Name = "notificationPopUp";
+            this.notificationPopUp.Size = new System.Drawing.Size(180, 144);
+            this.notificationPopUp.TabIndex = 3;
+            this.notificationPopUp.TabStop = false;
+            this.notificationPopUp.Text = "groupBox1";
+            // 
+            // notificationLabel
+            // 
+            this.notificationLabel.Location = new System.Drawing.Point(12, 56);
+            this.notificationLabel.Name = "notificationLabel";
+            this.notificationLabel.Size = new System.Drawing.Size(159, 65);
+            this.notificationLabel.TabIndex = 1;
+            this.notificationLabel.Text = "label1";
+            // 
+            // notificationPictureBox
+            // 
+            this.notificationPictureBox.Image = global::Configuration_Manager.Properties.Resources._1350628015_stock_save;
+            this.notificationPictureBox.Location = new System.Drawing.Point(12, 22);
+            this.notificationPictureBox.Name = "notificationPictureBox";
+            this.notificationPictureBox.Size = new System.Drawing.Size(32, 31);
+            this.notificationPictureBox.TabIndex = 0;
+            this.notificationPictureBox.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(992, 709);
+            this.Controls.Add(this.notificationPopUp);
             this.Controls.Add(this.sectionBar);
             this.Controls.Add(this.tabControl);
             this.DoubleBuffered = true;
@@ -298,6 +332,8 @@ namespace Configuration_Manager
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.contextNavMenu.ResumeLayout(false);
             this.contextMenu.ResumeLayout(false);
+            this.notificationPopUp.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.notificationPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -331,6 +367,9 @@ namespace Configuration_Manager
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem copyStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.GroupBox notificationPopUp;
+        private System.Windows.Forms.Label notificationLabel;
+        private System.Windows.Forms.PictureBox notificationPictureBox;
 
     }
 }

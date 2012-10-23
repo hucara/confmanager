@@ -51,11 +51,16 @@ namespace Configuration_Manager
             this.TopMost = false;
             this.Focus();
 
+            this.notificationPopUp.Top = this.Size.Height;
+            this.notificationPopUp.BringToFront();
+
             gf = new GlassForm();
             SetUpGlassForm();
 
             this.Width += 1;
             this.Width -= 1;
+
+            model.uiChanged = false;
         }
 
         private void SetUpGlassForm()
@@ -205,52 +210,63 @@ namespace Configuration_Manager
                 this.Refresh();
             }
 
-            if (e.Alt && e.Control && e.KeyCode == Keys.S)
-                odm.SerializeObjectDefinition();
-
-            if (e.Alt && e.Control && e.KeyCode == Keys.G)
+            if (e.Alt && e.Control && e.KeyCode == Keys.G && !model.Saving)
+            {
                 WriteConfigurationManager.SaveChanges();
-
-            if (e.Alt && e.Control && e.KeyCode == Keys.D)
-            {
-                System.Diagnostics.Debug.WriteLine("\n###################################");
-                System.Diagnostics.Debug.WriteLine("! Printing Sections:");
-
-                foreach (Section s in model.Sections)
-                    System.Diagnostics.Debug.WriteLine(
-                        s.Name + " " + s.Tab.GetType().Name + ":" + s.Tab.Name + " " + s.Button.GetType().Name + ":" + s.Button.Text);
-
-                System.Diagnostics.Debug.WriteLine("-----------------------------------");
-                System.Diagnostics.Debug.WriteLine("! Printing List of Controls: ");
-                System.Diagnostics.Debug.WriteLine("\tControl        Parent");
-                System.Diagnostics.Debug.WriteLine("___________________________________");
-                foreach (ICustomControl c in model.AllControls)
-                {
-                    String line = "\t";
-                    if (c.cd.Name != null) line += c.cd.Name + " ..... ";
-                    if (c.cd.Parent != null) line += c.cd.Parent.Name;
-                    System.Diagnostics.Debug.WriteLine(line);
-                }
-                System.Diagnostics.Debug.WriteLine("#####################################");
+                ShowNotificationPanel(Model.GetTranslationFromID(74));
             }
-
-            if (e.Alt && e.Control && e.KeyCode == Keys.R)
+            if (model.progMode)
             {
-                System.Diagnostics.Debug.WriteLine("\n###################################");
-                Debug.WriteLine("Main Visibility Rights: " + model.MainDisplayRights.ToString());
-                Debug.WriteLine("Main Modificiation Rights: " + model.MainModificationRights.ToString());
-                Debug.WriteLine("---------------------------------------------------------");
-                foreach (ICustomControl c in model.AllControls)
+                if (e.Alt && e.Control && e.KeyCode == Keys.S && !model.Saving)
                 {
-                    string line = "\t";
-                    line += "- "+ c.cd.Name + "\t\t Display: " + c.cd.operatorVisibility + "\t Modify: " + c.cd.operatorModification;
-                    System.Diagnostics.Debug.WriteLine(line);
+                    odm.SerializeObjectDefinition();
+                    ShowNotificationPanel(Model.GetTranslationFromID(72));
                 }
-            }
+                if (e.Alt && e.Control && e.KeyCode == Keys.D)
+                {
+                    System.Diagnostics.Debug.WriteLine("\n###################################");
+                    System.Diagnostics.Debug.WriteLine("! Printing Sections:");
 
-            if (e.Control && e.KeyCode == Keys.Down)
-            {
-                ch.MultiplyControl();
+                    foreach (Section s in model.Sections)
+                        System.Diagnostics.Debug.WriteLine(
+                            s.Name + " " + s.Tab.GetType().Name + ":" + s.Tab.Name + " " + s.Button.GetType().Name + ":" + s.Button.Text);
+
+                    System.Diagnostics.Debug.WriteLine("-----------------------------------");
+                    System.Diagnostics.Debug.WriteLine("! Printing List of Controls: ");
+                    System.Diagnostics.Debug.WriteLine("\tControl        Parent");
+                    System.Diagnostics.Debug.WriteLine("___________________________________");
+                    foreach (ICustomControl c in model.AllControls)
+                    {
+                        String line = "\t";
+                        if (c.cd.Name != null) line += c.cd.Name + " ..... ";
+                        if (c.cd.Parent != null) line += c.cd.Parent.Name;
+                        System.Diagnostics.Debug.WriteLine(line);
+                    }
+                    System.Diagnostics.Debug.WriteLine("#####################################");
+                }
+
+                if (e.Alt && e.Control && e.KeyCode == Keys.R)
+                {
+                    System.Diagnostics.Debug.WriteLine("\n###################################");
+                    Debug.WriteLine("Main Visibility Rights: " + model.MainDisplayRights.ToString());
+                    Debug.WriteLine("Main Modificiation Rights: " + model.MainModificationRights.ToString());
+                    Debug.WriteLine("---------------------------------------------------------");
+                    foreach (ICustomControl c in model.AllControls)
+                    {
+                        string line = "\t";
+                        line += "- " + c.cd.Name + "\t\t Display: " + c.cd.operatorVisibility + "\t Modify: " + c.cd.operatorModification;
+                        System.Diagnostics.Debug.WriteLine(line);
+                    }
+                }
+
+                if (e.Alt && e.KeyCode == Keys.Down)
+                    ch.MultiplyControl();
+
+                if (e.Control && (e.KeyCode == Keys.Down || e.KeyCode == Keys.Up))
+                    ch.TransportControl(e);
+
+                if (e.Control && e.KeyCode == Keys.E)
+                    editToolStripMenuItem.PerformClick();
             }
         }
 
@@ -445,6 +461,82 @@ namespace Configuration_Manager
                 Size difference = this.tabControl.Size - this.tabControl.SelectedTab.ClientSize;
                 gf.DesktopLocation = this.PointToScreen(this.tabControl.Location + difference);
             }
+        }
+
+        private void ShowNotificationPanel(String message)
+        {
+            //Show
+            notificationPopUp.Text = " " + Model.GetTranslationFromID(70) + " ";
+            notificationLabel.Text = message;
+            notificationPopUp.Update();
+
+            for (int i = 0; i < notificationPopUp.Height + 10; i++)
+            {
+                notificationPopUp.Top -= 1;
+                notificationPopUp.Update();
+                System.Threading.Thread.Sleep(1);
+            }
+
+            //rotate icon
+            System.Threading.Thread.Sleep(1000);
+            //RotateImage();
+            
+            for (int i = 0; i < notificationPopUp.Height + 10; i++)
+            {
+                notificationPopUp.Top += 1;
+                sectionBar.Update();
+                notificationPopUp.Update();
+                System.Threading.Thread.Sleep(1);
+            }
+
+            notificationPopUp.Top = this.Height ;
+        }
+
+        private void RotateImage()
+        {
+            if (notificationPictureBox.Image == null) return;
+
+            Image image = notificationPictureBox.Image;
+            Bitmap bmp = new Bitmap(image.Width, image.Height);
+
+            Graphics gfx = Graphics.FromImage(bmp);
+
+            //now we set the rotation point to the center of our image
+            gfx.TranslateTransform((float)bmp.Width / 2, (float)bmp.Height / 2);
+
+            //now rotate the image
+            gfx.RotateTransform(85f);
+
+            gfx.TranslateTransform(-(float)bmp.Width / 2, -(float)bmp.Height / 2);
+
+            //set the InterpolationMode to HighQualityBicubic so to ensure a high
+            //quality image once it is transformed to the specified size
+            gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+
+            //now draw our new image onto the graphics object
+            gfx.DrawImage(image, new Point(0, 0));
+            //gfx.Dispose();
+            notificationPictureBox.Image = image;
+            notificationPictureBox.Invalidate();
+            notificationPopUp.Invalidate();
+
+            //dispose of our Graphics object
+
+            System.Threading.Thread.Sleep(1000);
+
+            //Bitmap rotated = new Bitmap(image.Width, image.Height);
+
+            //Graphics g = Graphics.FromImage(image);
+
+            //g.TranslateTransform(image.Width / 2, image.Height / 2);
+
+            //for (int i = 0; i < 361; i++)
+            //{
+            //    g.RotateTransform(i);
+            //    g.DrawImage(image, new Point(0, 0));
+            //    System.Threading.Thread.Sleep(1);
+            //    notificationPictureBox.Update();
+            //}
         }
     }
 }

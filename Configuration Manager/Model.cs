@@ -48,6 +48,7 @@ namespace Configuration_Manager
         public int sectionMenuWidth = 131;
 
         public bool editingUI = false;
+        public bool Saving = false;
         public bool creatingNewComponent = false;
         public bool editingOldComponent = false;
         public bool ObjectDefinitionExists { get; set; }
@@ -257,10 +258,10 @@ namespace Configuration_Manager
                     logDeleter = new LogDeletion("ConfigurationManager", "CM", this.maxAgeOfLogs);
                 }
 
-                if (this.textToken == "" || this.textToken == null) TokenTextTranslator.SetTokenTextTranslator(null, this.TextsFilePath);
+                if (String.IsNullOrEmpty(this.textToken)) TokenTextTranslator.SetTokenTextTranslator(null, this.TextsFilePath);
                 else TokenTextTranslator.SetTokenTextTranslator(textToken, this.TextsFilePath);
 
-                if (this.controlToken == "" || this.controlToken == null) TokenControlTranslator.SetTokenKey("##");
+                if (String.IsNullOrEmpty(this.controlToken)) TokenControlTranslator.SetTokenKey("##");
                 else TokenControlTranslator.SetTokenKey(controlToken);
 
                 System.Diagnostics.Debug.WriteLine(" ");

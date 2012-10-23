@@ -35,6 +35,8 @@ namespace Configuration_Manager
 
         public void SerializeObjectDefinition()
         {
+            model.Saving = true;
+
             try
             {
                 XDocument doc = new XDocument(
@@ -138,11 +140,15 @@ namespace Configuration_Manager
                 model.uiChanged = false;
                 System.Diagnostics.Debug.WriteLine("*** Object Definition File created ***");
                 model.logCreator.AppendCenteredWithFrame(" Object Definition File saved ");
+
+                model.Saving = false;
             }
             catch (Exception e)
             {
                 String errMsg = "Something went wrong while writing the Object Definition file.\nPlease, try again.";
                 MessageBox.Show(errMsg, " Error creating XML file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                model.Saving = false;
 
                 System.Diagnostics.Debug.WriteLine("[ERROR] Something went wrong when creating Object Definition File.");
                 model.logCreator.Append("! ERROR: Something went wrong when creating Object Definition File.");

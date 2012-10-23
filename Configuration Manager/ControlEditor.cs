@@ -87,7 +87,11 @@ namespace Configuration_Manager
         public void Show(Control c)
         {
             this.control = (ICustomControl)c;
-            if (this.control == null) return;
+            if (this.control == null)
+            {
+                this.Close();
+                return;
+            }
 
             this.parent = control.cd.Parent;
             this.type = c.GetType().Name;
@@ -525,28 +529,31 @@ namespace Configuration_Manager
 
         private void CheckCommonAttributes()
         {
-            ParseTop();
-            ParseLeft();
-            ParseWidth();
-            ParseHeight();
+            if (!(control is CTabPage))
+            {
+                ParseTop();
+                ParseLeft();
+                ParseWidth();
+                ParseHeight();
 
-            if (!(control is CComboBox) && !(control is CTabControl) && !CheckText()) ErrorMsg += "\n - " + Model.GetTranslationFromID(140);
+                if (!(control is CComboBox) && !(control is CTabControl) && !CheckText()) ErrorMsg += "\n - " + Model.GetTranslationFromID(140);
 
-            if (CheckTop() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(147) + " " + Model.GetTranslationFromID(145);
-            if (CheckLeft() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(148) + " " + Model.GetTranslationFromID(145);
-            if (CheckWidth() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(150) + " " + Model.GetTranslationFromID(145);
-            if (CheckHeight() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(151) + " " + Model.GetTranslationFromID(145);
+                if (CheckTop() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(147) + " " + Model.GetTranslationFromID(145);
+                if (CheckLeft() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(148) + " " + Model.GetTranslationFromID(145);
+                if (CheckWidth() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(150) + " " + Model.GetTranslationFromID(145);
+                if (CheckHeight() > 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(151) + " " + Model.GetTranslationFromID(145);
 
-            if (CheckTop() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(147) + " " + Model.GetTranslationFromID(146);
-            if (CheckLeft() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(148) + " " + Model.GetTranslationFromID(146);
-            if (CheckWidth() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(150) + " " + Model.GetTranslationFromID(146);
-            if (CheckHeight() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(151) + " " + Model.GetTranslationFromID(146);
+                if (CheckTop() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(147) + " " + Model.GetTranslationFromID(146);
+                if (CheckLeft() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(148) + " " + Model.GetTranslationFromID(146);
+                if (CheckWidth() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(150) + " " + Model.GetTranslationFromID(146);
+                if (CheckHeight() < 0) ErrorMsg += "\n- " + Model.GetTranslationFromID(151) + " " + Model.GetTranslationFromID(146);
 
-            if (!CheckDisplayRight()) ErrorMsg += "\n - " + Model.GetTranslationFromID(142);
-            if (!CheckModificationRight()) ErrorMsg += "\n - " + Model.GetTranslationFromID(143);
+                if (!CheckDisplayRight()) ErrorMsg += "\n - " + Model.GetTranslationFromID(142);
+                if (!CheckModificationRight()) ErrorMsg += "\n - " + Model.GetTranslationFromID(143);
 
-            if (control is CCheckBox && !CheckCheckBoxAttributes()) ErrorMsg += "\n - " + Model.GetTranslationFromID(153);
-            if (control is CButton && !CheckButtonExePath()) ErrorMsg += "\n - " + Model.GetTranslationFromID(67);
+                if (control is CCheckBox && !CheckCheckBoxAttributes()) ErrorMsg += "\n - " + Model.GetTranslationFromID(153);
+                if (control is CButton && !CheckButtonExePath()) ErrorMsg += "\n - " + Model.GetTranslationFromID(67);
+            }
         }
 
         private bool CheckButtonExePath()
@@ -558,8 +565,8 @@ namespace Configuration_Manager
         private bool CheckCheckBoxAttributes()
         {
             if (checkedTextBox.Text == uncheckedTextBox.Text) return false;
-            if (checkedTextBox.Text == "" || checkedTextBox.Text == null) return false;
-            if (uncheckedTextBox.Text == "" || uncheckedTextBox.Text == null) return false;
+            if (String.IsNullOrEmpty(checkedTextBox.Text)) return false;
+            if (String.IsNullOrEmpty(uncheckedTextBox.Text)) return false;
             return true;
         }
 
@@ -722,6 +729,12 @@ namespace Configuration_Manager
 
         public void ReadFromControl()
         {
+            if (control == null)
+            {
+                this.Close();
+                return;
+            }
+
             ShowHeadLine();
             model.ApplyRelations(control);
 
