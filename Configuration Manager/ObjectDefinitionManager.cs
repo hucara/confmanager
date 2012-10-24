@@ -117,7 +117,7 @@ namespace Configuration_Manager
 
                                     new XElement("Paths",
                                         new XElement("DestinationType", item.cd.DestinationType),
-                                        new XElement("DestinationFile", item.cd.MainDestination),
+                                        new XElement("DestinationFile", item.cd.RealMainDestination),
                                         new XElement("SubDestination", item.cd.RealSubDestination)
                                     ),
                                     new XElement("Relations",
@@ -167,11 +167,14 @@ namespace Configuration_Manager
 
         private IEnumerable<XElement> WriteComboBoxConfigItems(CComboBox cb)
         {
-            if (cb.SelectedIndex > -1)
-                yield return new XElement("Selected", cb.cd.comboBoxConfigItems[cb.SelectedIndex]);
+            if (cb.cd.comboBoxConfigItems.Count > 0)
+            {
+                if (cb.SelectedIndex > -1)
+                    yield return new XElement("Selected", cb.cd.comboBoxConfigItems[cb.SelectedIndex]);
 
-            foreach (String s in cb.cd.comboBoxConfigItems)
-                yield return new XElement("Item", s);
+                foreach (String s in cb.cd.comboBoxConfigItems)
+                    yield return new XElement("Item", s);
+            }
         }
 
 
@@ -469,7 +472,8 @@ namespace Configuration_Manager
         private void SetPaths(ICustomControl c, XElement i)
         {
             c.cd.DestinationType = i.Element("Paths").Element("DestinationType").Value;
-            c.cd.MainDestination = i.Element("Paths").Element("DestinationFile").Value;
+            String p = i.Element("Paths").Element("DestinationFile").Value;
+            c.cd.RealMainDestination = p;
             c.cd.RealSubDestination = i.Element("Paths").Element("SubDestination").Value;
             c.cd.SubDestination = i.Element("Paths").Element("SubDestination").Value;
         }

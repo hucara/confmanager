@@ -68,7 +68,9 @@ namespace Configuration_Manager
 
         private void configValues_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            this.shownValues.SelectedIndex = this.configValues.SelectedIndex;
+            if (shownValues.Items.Count == this.configValues.Items.Count)
+                this.shownValues.SelectedIndex = this.configValues.SelectedIndex;
+            
             SetButtons();
             FillOutTextInputBoxes();
             SetMoveButtons();
@@ -77,7 +79,9 @@ namespace Configuration_Manager
 
         private void shownValues_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.configValues.SelectedIndex = this.shownValues.SelectedIndex;
+            if(shownValues.Items.Count == this.configValues.Items.Count)
+                this.configValues.SelectedIndex = this.shownValues.SelectedIndex;
+
             SetButtons();
             FillOutTextInputBoxes();
             SetMoveButtons();
@@ -86,11 +90,10 @@ namespace Configuration_Manager
 
         private void FillOutTextInputBoxes()
         {
-            if (shownValues.SelectedIndex > -1)
-            {
+            if (shownValues.SelectedIndex > -1 && shownValues.Items.Count > 0)
                 this.shownTextBox.Text = cb.cd.comboBoxRealItems[shownValues.SelectedIndex];
-                this.configTextBox.Text = cb.cd.comboBoxConfigItems[shownValues.SelectedIndex];
-            }
+            if (configValues.SelectedIndex > -1 && configValues.Items.Count > 0)
+                this.configTextBox.Text = cb.cd.comboBoxConfigItems[configValues.SelectedIndex];
         }
 
         // Adding the new item
@@ -99,8 +102,7 @@ namespace Configuration_Manager
             int index = 0;
             if((cb as ComboBox).Items.Count > 1) index = (cb as ComboBox).SelectedIndex;
 
-            if (shownTextBox.Text != "" && shownTextBox.Text != null &&
-                configTextBox.Text != "" && configTextBox.Text != null)
+            if (!String.IsNullOrEmpty(shownTextBox.Text) && !String.IsNullOrEmpty(configTextBox.Text))
             {
                 if (!ItemAlreadyExists(ADDING_NEW_ITEM))
                 {
@@ -112,9 +114,7 @@ namespace Configuration_Manager
                     cb.cd.comboBoxConfigItems.Add(configTextBox.Text);
                 }
             }
-
-            if (shownTextBox.Text != "" && shownTextBox.Text != null &&
-                configTextBox.Text == "")
+            else if (!String.IsNullOrEmpty(shownTextBox.Text) && String.IsNullOrEmpty(configTextBox.Text))
             {
                 if (!shownValues.Items.Contains(shownTextBox.Text))
                 {
@@ -123,7 +123,7 @@ namespace Configuration_Manager
 
                     cb.cd.comboBoxItems.Add(translated);
                     cb.cd.comboBoxRealItems.Add(shownTextBox.Text);
-                    //cb.cd.comboBoxConfigItems.Add(String.Empty);
+                    cb.cd.comboBoxConfigItems.Add(String.Empty);
                 }
             }
 
@@ -345,7 +345,8 @@ namespace Configuration_Manager
             for (int i = 0; i < cb.cd.comboBoxItems.Count; i++)
             {
                 shownValues.Items.Add(cb.cd.comboBoxItems[i]);
-                configValues.Items.Add(cb.cd.comboBoxConfigItems[i]);
+                if(cb.cd.comboBoxConfigItems.Count > 0) 
+                    configValues.Items.Add(cb.cd.comboBoxConfigItems[i]);
             }
 
             //foreach (String s in cb.cd.comboBoxItems)

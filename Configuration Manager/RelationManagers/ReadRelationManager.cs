@@ -125,16 +125,19 @@ namespace Configuration_Manager.CustomControls
             {
                 XmlDocument xdoc = new XmlDocument();
                 xdoc.Load(r.cd.MainDestination);
-
                 String value = xdoc.SelectSingleNode(r.cd.SubDestination).InnerText;
-                //if(String.IsNullOrEmpty(value))
-                //    value = xdoc.SelectSingleNode(r.cd.SubDestination)
 
+                if (r.cd.SubDestination.Contains('*') || r.cd.SubDestination.Contains("node()"))
+                {
+                    foreach (XmlNode n in xdoc.SelectNodes(r.cd.SubDestination))
+                        value += n.InnerText;
+                }
                 return value;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("*** ERROR *** Re-Reading XML file for: " + r.cd.Name);
+                System.Diagnostics.Debug.WriteLine(e.ToString());
                 Model.getInstance().logCreator.Append("[ERROR] Re-Reading XML file for " + r.cd.Name);
             }
             return "";

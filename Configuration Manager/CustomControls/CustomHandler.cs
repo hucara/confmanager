@@ -603,6 +603,7 @@ namespace Configuration_Manager.CustomControls
 
             dest.cd.DestinationType = source.cd.DestinationType;
             dest.cd.MainDestination = source.cd.MainDestination;
+            dest.cd.RealMainDestination = source.cd.RealMainDestination;
             dest.cd.SubDestination = source.cd.SubDestination;
             dest.cd.RealSubDestination = source.cd.RealSubDestination;
 
@@ -619,7 +620,7 @@ namespace Configuration_Manager.CustomControls
             dest.cd.Top = source.cd.Top;
             dest.cd.Left = source.cd.Left;
 
-            if (source.cd.comboBoxItems != null)
+            if (source.cd.comboBoxItems != null && source.cd.comboBoxItems.Count > 0)
             {
                 dest.cd.comboBoxItems.AddRange(source.cd.comboBoxItems);
                 dest.cd.comboBoxRealItems.AddRange(source.cd.comboBoxRealItems);
@@ -642,7 +643,7 @@ namespace Configuration_Manager.CustomControls
                 lbl.cd.Left = model.CurrentClickedControl.Left;
                 lbl.cd.Width = model.CurrentClickedControl.Width;
                 lbl.cd.RealSubDestination = (model.CurrentClickedControl as ICustomControl).cd.RealSubDestination;
-                lbl.cd.MainDestination = (model.CurrentClickedControl as ICustomControl).cd.MainDestination;
+                lbl.cd.RealMainDestination = (model.CurrentClickedControl as ICustomControl).cd.RealMainDestination;
                 lbl.cd.DestinationType = (model.CurrentClickedControl as ICustomControl).cd.DestinationType;
 
                 model.CurrentClickedControl = lbl;
@@ -654,7 +655,7 @@ namespace Configuration_Manager.CustomControls
                 txtb.cd.Left = model.CurrentClickedControl.Left;
                 txtb.cd.Width = model.CurrentClickedControl.Width;
                 txtb.cd.RealSubDestination = (model.CurrentClickedControl as ICustomControl).cd.RealSubDestination;
-                txtb.cd.MainDestination = (model.CurrentClickedControl as ICustomControl).cd.MainDestination;
+                txtb.cd.RealMainDestination = (model.CurrentClickedControl as ICustomControl).cd.RealMainDestination;
                 txtb.cd.DestinationType = (model.CurrentClickedControl as ICustomControl).cd.DestinationType;
 
                 model.CurrentClickedControl = txtb;

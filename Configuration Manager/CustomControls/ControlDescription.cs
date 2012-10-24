@@ -57,7 +57,10 @@ namespace Configuration_Manager
         public String checkBoxUncheckedValue { get; set; }
 
         public String DestinationType { get; set; }
-        public String MainDestination { get; set; }
+
+        public String MainDestination { get; set; }         // File destination path already translated to absolute
+        private String realMainDestination;     // File destination without being transalted
+
         public String SubDestination { get; set; }          // SubDestination path already translated
         public String RealSubDestination { get; set; }      // SubDestination path without being translated
 
@@ -274,6 +277,32 @@ namespace Configuration_Manager
                 {
                     (this.control as CTabControl).SelectedIndex = value;
                     this.selectedTab = value;
+                }
+            }
+        }
+
+        public String RealMainDestination
+        {
+            get { return this.realMainDestination; }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    this.realMainDestination = value;
+                    this.realMainDestination = this.realMainDestination.Trim('\\');
+
+                    if (!System.IO.Path.IsPathRooted(this.realMainDestination))
+                    {
+                        System.IO.DirectoryInfo d = new System.IO.DirectoryInfo(System.IO.Path.GetFullPath(this.realMainDestination));
+#if DEBUG
+                        this.MainDestination = d.Parent.Parent.Parent.FullName + "\\config\\" + d.Name;
+#else
+                        this.MainDestination = d.Parent.Parent.FullName + "\\config\\" + d.Name;
+#endif
+                        Model.getInstance().logCreator.Append(this.realMainDestination);
+                        Model.getInstance().logCreator.Append(this.MainDestination);
+                    }
+                    else this.MainDestination = value;
                 }
             }
         }

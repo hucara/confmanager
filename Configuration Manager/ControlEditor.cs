@@ -681,7 +681,7 @@ namespace Configuration_Manager
             control.cd.Left = this.left;
 
             control.cd.DestinationType = this.destinationTypeComboBox.Text;
-            control.cd.MainDestination = this.fileDestinationTextBox.Text;
+            control.cd.RealMainDestination = this.fileDestinationTextBox.Text;
             control.cd.RealSubDestination = this.subDestinatonTextBox.Text;
             control.cd.Format = this.formattingTextBox.Text;
 
@@ -757,7 +757,7 @@ namespace Configuration_Manager
             this.left = control.cd.Left;
             this.leftTextBox.Text = this.left.ToString();
 
-            this.fileDestinationTextBox.Text = control.cd.MainDestination;
+            this.fileDestinationTextBox.Text = control.cd.RealMainDestination;
             this.subDestinatonTextBox.Text = control.cd.RealSubDestination;
             this.formattingTextBox.Text = control.cd.Format;
 
@@ -1159,6 +1159,15 @@ namespace Configuration_Manager
                 {
                     exePathTextBox.Text = openFileDialog1.FileName;
                 }
+            }
+        }
+
+        private void managePath()
+        {
+            // Check if the path is rooted or relative
+            if (System.IO.Path.IsPathRooted(this.fileDestinationTextBox.Text))
+            {
+
             }
         }
     }
