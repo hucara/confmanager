@@ -25,13 +25,13 @@ namespace Configuration_Manager
 
         static public Section BuildSection(String name, String text, bool selected)
         {
-            while (model.Sections.Exists(e => e.Name == "Section" + Section.count)) Section.count++;
+            while (model.sections.Exists(e => e.Name == "Section" + Section.count)) Section.count++;
             CToolStripButton ctsb = BuildCToolStripButton(text);
             TabPage tp = BuildTabPage(name);
 
             Section s = new Section(ctsb, tp, text, selected);
-            Model.getInstance().CurrentSection = s;
-            Model.getInstance().Sections.Add(s);
+            Model.getInstance().currentSection = s;
+            Model.getInstance().sections.Add(s);
 
             model.logCreator.Append("+ Added: " + s.Name);
             return s;
@@ -49,7 +49,7 @@ namespace Configuration_Manager
 
         static public CLabel BuildCLabel(Control parent)
         {
-            while (model.AllControls.Exists(l => l.cd.Name == "CLabel" + CLabel.count)) CLabel.count++;
+            while (model.allControls.Exists(l => l.cd.Name == "CLabel" + CLabel.count)) CLabel.count++;
 
             CLabel c = new CLabel();
             parent.Controls.Add(c);
@@ -57,7 +57,7 @@ namespace Configuration_Manager
             c.SetControlDescription();
             SetCommonHandlers(c);
 
-            Model.getInstance().AllControls.Add(c);
+            Model.getInstance().allControls.Add(c);
             c.cd.RealText = c.cd.Text;
             model.logCreator.Append("+ Added: " + c.cd.Name);
             return c;
@@ -83,7 +83,7 @@ namespace Configuration_Manager
 
         static public CTabPage BuildCTabPage(Control parent)
         {
-            while (model.AllControls.Exists(l => l.cd.Name == "CTabPage" + CTabPage.count)) CTabPage.count++;
+            while (model.allControls.Exists(l => l.cd.Name == "CTabPage" + CTabPage.count)) CTabPage.count++;
             CTabPage c = new CTabPage();
             parent.Controls.Add(c);
             (parent as CTabControl).SelectedTab = c;
@@ -91,7 +91,7 @@ namespace Configuration_Manager
             SetCommonHandlers(c);
             SetDragDropHandlers(c);
 
-            Model.getInstance().AllControls.Add(c);
+            Model.getInstance().allControls.Add(c);
             c.SetControlDescription();
             c.Parent = parent;
 
@@ -103,7 +103,7 @@ namespace Configuration_Manager
 
         static public CTabControl BuildCTabControl(Control parent)
         {
-            while (model.AllControls.Exists(l => l.cd.Name == "CTabControl" + CTabControl.count)) CTabControl.count++;
+            while (model.allControls.Exists(l => l.cd.Name == "CTabControl" + CTabControl.count)) CTabControl.count++;
             CTabControl c = new CTabControl();
             parent.Controls.Add(c);
 
@@ -114,7 +114,7 @@ namespace Configuration_Manager
             c.cd.RealText = c.cd.Text;
             //c.SelectedIndexChanged += IndexChanged;
 
-            Model.getInstance().AllControls.Add(c);
+            Model.getInstance().allControls.Add(c);
             model.logCreator.Append("+ Added: " + c.cd.Name);
 
             return c;
@@ -122,7 +122,7 @@ namespace Configuration_Manager
 
         static public CComboBox BuildCComboBox(Control parent)
         {
-            while (model.AllControls.Exists(l => l.cd.Name == "CComboBox" + CComboBox.count)) CComboBox.count++;
+            while (model.allControls.Exists(l => l.cd.Name == "CComboBox" + CComboBox.count)) CComboBox.count++;
             CComboBox c = new CComboBox();
             parent.Controls.Add(c);
 
@@ -133,7 +133,7 @@ namespace Configuration_Manager
             SetCommonHandlers(c);
             SetChangesHandler(c);
 
-            Model.getInstance().AllControls.Add(c);
+            Model.getInstance().allControls.Add(c);
             c.SetControlDescription();
             c.DropDownStyle = ComboBoxStyle.DropDownList;
 
@@ -144,7 +144,7 @@ namespace Configuration_Manager
 
         static public CTextBox BuildCTextBox(Control parent)
         {
-            while (model.AllControls.Exists(l => l.cd.Name == "CTextBox" + CTextBox.count)) CTextBox.count++;
+            while (model.allControls.Exists(l => l.cd.Name == "CTextBox" + CTextBox.count)) CTextBox.count++;
             CTextBox c = new CTextBox();
             parent.Controls.Add(c);
 
@@ -155,7 +155,7 @@ namespace Configuration_Manager
             c.TextChanged += ch.TextChanged;
             c.TextChanged += ReadRelationManager.ReadRelationUpdate;
 
-            Model.getInstance().AllControls.Add(c);
+            Model.getInstance().allControls.Add(c);
             c.SetControlDescription();
 
             c.cd.RealText = c.cd.Text;
@@ -168,14 +168,14 @@ namespace Configuration_Manager
 
         static public CButton BuildCButton(Control parent)
         {
-            while (model.AllControls.Exists(l => l.cd.Name == "CButton" + CButton.count)) CButton.count++;
+            while (model.allControls.Exists(l => l.cd.Name == "CButton" + CButton.count)) CButton.count++;
             CButton c = new CButton();
             parent.Controls.Add(c);
 
             SetCommonHandlers(c);
             //SetChangesHandler(c);
 
-            Model.getInstance().AllControls.Add(c);
+            Model.getInstance().allControls.Add(c);
             c.SetControlDescription();
 
             c.cd.RealText = c.cd.Text;
@@ -188,14 +188,14 @@ namespace Configuration_Manager
 
         static public CBitmap BuildCBitmap(Control parent)
         {
-            while (model.AllControls.Exists(l => l.cd.Name == "CBitmap" + CBitmap.count)) CBitmap.count++;
+            while (model.allControls.Exists(l => l.cd.Name == "CBitmap" + CBitmap.count)) CBitmap.count++;
             CBitmap c = new CBitmap();
             parent.Controls.Add(c);
 
             SetCommonHandlers(c);
             SetChangesHandler(c);
 
-            Model.getInstance().AllControls.Add(c);
+            Model.getInstance().allControls.Add(c);
             c.SetControlDescription();
             (c as PictureBox).SizeMode = PictureBoxSizeMode.StretchImage;
             (c as PictureBox).Image = System.Drawing.SystemIcons.Error.ToBitmap();
@@ -206,7 +206,7 @@ namespace Configuration_Manager
 
         static public CCheckBox BuildCCheckBox(Control parent)
         {
-            while (model.AllControls.Exists(l => l.cd.Name == "CCheckBox" + CCheckBox.count)) CCheckBox.count++;
+            while (model.allControls.Exists(l => l.cd.Name == "CCheckBox" + CCheckBox.count)) CCheckBox.count++;
             CCheckBox c = new CCheckBox();
             parent.Controls.Add(c);
 
@@ -217,7 +217,7 @@ namespace Configuration_Manager
             SetCommonHandlers(c);
             SetChangesHandler(c);
 
-            Model.getInstance().AllControls.Add(c);
+            Model.getInstance().allControls.Add(c);
             c.SetControlDescription();
 
             c.cd.RealText = c.cd.Text;
@@ -229,13 +229,13 @@ namespace Configuration_Manager
 
         static public CGroupBox BuildCGroupBox(Control parent)
         {
-            while (model.AllControls.Exists(l => l.cd.Name == "CGroupBox" + CGroupBox.count)) CGroupBox.count++;
+            while (model.allControls.Exists(l => l.cd.Name == "CGroupBox" + CGroupBox.count)) CGroupBox.count++;
             CGroupBox c = new CGroupBox();
             parent.Controls.Add(c);
             SetCommonHandlers(c);
             SetDragDropHandlers(c);
 
-            Model.getInstance().AllControls.Add(c);
+            Model.getInstance().allControls.Add(c);
             c.SetControlDescription();
 
             c.cd.RealText = c.cd.Text;
@@ -250,14 +250,14 @@ namespace Configuration_Manager
 
         static public CPanel BuildCPanel(Control parent)
         {
-            while (model.AllControls.Exists(l => l.cd.Name == "CPanel" + CPanel.count)) CPanel.count++;
+            while (model.allControls.Exists(l => l.cd.Name == "CPanel" + CPanel.count)) CPanel.count++;
             CPanel c = new CPanel();
             parent.Controls.Add(c);
 
             SetCommonHandlers(c);
             SetDragDropHandlers(c);
 
-            Model.getInstance().AllControls.Add(c);
+            Model.getInstance().allControls.Add(c);
             c.SetControlDescription();
 
             c.cd.RealText = c.cd.Text;

@@ -97,7 +97,7 @@ namespace Configuration_Manager
 
         private bool CheckDuplicatedText()
         {
-            foreach (Section s in Model.getInstance().Sections)
+            foreach (Section s in Model.getInstance().sections)
                 if(s != section && 
                     (s.RealText == this.NameTextBox.Text || s.Text == this.NameTextBox.Text)) return false;
             return true;
@@ -145,7 +145,7 @@ namespace Configuration_Manager
 
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
+                xdoc = XDocument.Load(Model.getInstance().textsFilePath);
                 IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
 
                 if(section.Text == "" || section.Text == null)

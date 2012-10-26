@@ -29,8 +29,6 @@ namespace Configuration_Manager.Views
 			this.sectionMenu = ts;
 			this.tabContextMenu = cms;
 			this.sectionTabControl = tc;
-
-            //this.cf = ControlFactory.getInstance();
 		}
 
 		// Takes the info from the UI, gets the changes made by the 
@@ -46,7 +44,7 @@ namespace Configuration_Manager.Views
 			CleanUpView();
 
 			//SetUpInfoLabel();
-			foreach (Section s in model.Sections)
+			foreach (Section s in model.sections)
 			{
 				sectionMenu.Items.Add(s.Button);
 				sectionTabControl.TabPages.Add(s.Tab);
@@ -55,7 +53,7 @@ namespace Configuration_Manager.Views
 				s.Button.Click -= ToolStripButton_Click;
 				s.Button.Click += ToolStripButton_Click;
 
-				if (s.Selected == true)
+				if (s.Selected)
 				{
 					SetUpInfoTextBox();
 					s.Button.PerformClick();
@@ -96,38 +94,36 @@ namespace Configuration_Manager.Views
 
         public void RenameSection(String oldName, String newName)
         {
-            foreach (Section s in model.Sections)
+            foreach (Section s in model.sections)
             {
                 if (s.Button.Text == oldName)
-                {
                     s.Text = newName;
-                }
             }
         }
 
 		public void RemoveSection()
 		{
-			if (SelectedButton != null && model.Sections.Count > 0)
+			if (SelectedButton != null && model.sections.Count > 0)
 			{
-				Section s = model.Sections.Find(se => se.Button == SelectedButton);
+				Section s = model.sections.Find(se => se.Button == SelectedButton);
 				Debug.WriteLine("! Removed: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
 
 				model.logCreator.Append("- Removed: " + s.Name);
 				model.DeleteControl(s.Tab, true);
-				model.Sections.Remove(s);
+				model.sections.Remove(s);
 
                 Model.getInstance().uiChanged = true;
 			}
 
-			if (model.Sections.Count > 0) model.Sections[0].Selected = true;
+			if (model.sections.Count > 0) model.sections[0].Selected = true;
 			readAndShow();
 		}
 
         public void RemoveSection(Section s)
         {
-            if (SelectedButton != null && model.Sections.Count > 0)
+            if (SelectedButton != null && model.sections.Count > 0)
             {
-                model.Sections.Remove(s);
+                model.sections.Remove(s);
                 Model.getInstance().uiChanged = true;
 
                 Debug.WriteLine("! Removed: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
@@ -159,7 +155,7 @@ namespace Configuration_Manager.Views
 				UnCheckButtons();
 				SelectedButton.Checked = true;
 
-				Section s = model.Sections.Find(se => se.Button == SelectedButton);
+				Section s = model.sections.Find(se => se.Button == SelectedButton);
 
 				UnSelectSections();
 				s.Selected = true;
@@ -175,11 +171,11 @@ namespace Configuration_Manager.Views
 				MoveInfoLabel(buttonIndex, labelIndex);
 				sectionMenu.Refresh();
 
-				model.CurrentSection = s;
+				model.currentSection = s;
 
 				Debug.WriteLine("! Clicked: " + b.Name + " \"" + b.Text + "\"");
 				sectionTabControl.SelectTab(s.Tab);
-				Debug.WriteLine("! Selected: " + model.CurrentSection.Name + " with Text: " + s.Text);
+				Debug.WriteLine("! Selected: " + model.currentSection.Name + " with Text: " + s.Text);
 			}
 		}
 
@@ -193,7 +189,7 @@ namespace Configuration_Manager.Views
 
 		private void UnSelectSections()
 		{
-			foreach (Section se in model.Sections)
+			foreach (Section se in model.sections)
 			{
 				se.Selected = false;
 			}
@@ -210,7 +206,7 @@ namespace Configuration_Manager.Views
 
 		private bool MaxSectionsReached()
 		{
-			if (model.Sections.Count < Model.getInstance().maxSections) return false;
+			if (model.sections.Count < Model.getInstance().maxSections) return false;
 			else return true;
 		}
 
@@ -256,7 +252,7 @@ namespace Configuration_Manager.Views
 			if (buttonIndex +1 >= sectionMenu.Items.Count)
 			{
 				sectionMenu.Items.Add(infoLabel);
-				model.InfoLabel = infoLabel;
+				model.infoLabel = infoLabel;
 			}
 			else
 			{
@@ -266,7 +262,7 @@ namespace Configuration_Manager.Views
 				sectionMenu.Items.Remove(fb);
 				sectionMenu.Items.Insert(buttonIndex, fb);
 
-				model.InfoLabel = infoLabel;
+				model.infoLabel = infoLabel;
 			}
 		}
 	}

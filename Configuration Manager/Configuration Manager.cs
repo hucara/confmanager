@@ -73,7 +73,7 @@ namespace Configuration_Manager
 
         public void ShowSplashScreen()
         {
-            sc.Show(model.Headline, Application.ProductVersion);
+            sc.Show(model.headline, Application.ProductVersion);
             sc.SendToBack();
             sc.Dispose();
         }
@@ -93,7 +93,7 @@ namespace Configuration_Manager
         // Checks if the structure of the XML file is correct. Deal with it.
         private void CheckObjectDefinitionIntegrity()
         {
-            if (System.IO.File.Exists(model.ObjectDefinitionsPath) && !model.ObjectDefinitionExists)
+            if (System.IO.File.Exists(model.objectDefinitionsPath) && !model.objectDefinitionExists)
             {
                 // The structure is broken
                 String caption = Model.GetTranslationFromID(37);
@@ -109,7 +109,7 @@ namespace Configuration_Manager
 
         private void SetUpHeadLine()
         {
-            this.Text = model.Headline;
+            this.Text = model.headline;
         }
 
         private void PrintWellcomeLogMessage()
@@ -178,9 +178,9 @@ namespace Configuration_Manager
             sectionTabsView = new SectionTabsView(tabControl, ch);
             sectionMenuView = new SectionMenuView(sectionBar, tabControl, contextMenu);
 
-            if (model.ObjectDefinitionExists)
+            if (model.objectDefinitionExists)
             {
-                odm.SetDocument(model.ConfigObjects);
+                odm.SetDocument(model.configObjects);
                 odm.RestoreOldUI();
                 sectionMenuView.readAndShow();
                 sectionTabsView.readAndShow();
@@ -210,14 +210,14 @@ namespace Configuration_Manager
                 this.Refresh();
             }
 
-            if (e.Alt && e.Control && e.KeyCode == Keys.G && !model.Saving)
+            if (e.Alt && e.Control && e.KeyCode == Keys.G && !model.saving)
             {
                 WriteConfigurationManager.SaveChanges();
                 ShowNotificationPanel(Model.GetTranslationFromID(74));
             }
             if (model.progMode)
             {
-                if (e.Alt && e.Control && e.KeyCode == Keys.S && !model.Saving)
+                if (e.Alt && e.Control && e.KeyCode == Keys.S && !model.saving)
                 {
                     odm.SerializeObjectDefinition();
                     ShowNotificationPanel(Model.GetTranslationFromID(72));
@@ -227,7 +227,7 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine("\n###################################");
                     System.Diagnostics.Debug.WriteLine("! Printing Sections:");
 
-                    foreach (Section s in model.Sections)
+                    foreach (Section s in model.sections)
                         System.Diagnostics.Debug.WriteLine(
                             s.Name + " " + s.Tab.GetType().Name + ":" + s.Tab.Name + " " + s.Button.GetType().Name + ":" + s.Button.Text);
 
@@ -235,7 +235,7 @@ namespace Configuration_Manager
                     System.Diagnostics.Debug.WriteLine("! Printing List of Controls: ");
                     System.Diagnostics.Debug.WriteLine("\tControl        Parent");
                     System.Diagnostics.Debug.WriteLine("___________________________________");
-                    foreach (ICustomControl c in model.AllControls)
+                    foreach (ICustomControl c in model.allControls)
                     {
                         String line = "\t";
                         if (c.cd.Name != null) line += c.cd.Name + " ..... ";
@@ -248,10 +248,10 @@ namespace Configuration_Manager
                 if (e.Alt && e.Control && e.KeyCode == Keys.R)
                 {
                     System.Diagnostics.Debug.WriteLine("\n###################################");
-                    Debug.WriteLine("Main Visibility Rights: " + model.MainDisplayRights.ToString());
-                    Debug.WriteLine("Main Modificiation Rights: " + model.MainModificationRights.ToString());
+                    Debug.WriteLine("Main Visibility Rights: " + model.mainDisplayRights.ToString());
+                    Debug.WriteLine("Main Modificiation Rights: " + model.mainModificationRights.ToString());
                     Debug.WriteLine("---------------------------------------------------------");
-                    foreach (ICustomControl c in model.AllControls)
+                    foreach (ICustomControl c in model.allControls)
                     {
                         string line = "\t";
                         line += "- " + c.cd.Name + "\t\t Display: " + c.cd.operatorVisibility + "\t Modify: " + c.cd.operatorModification;
@@ -280,7 +280,7 @@ namespace Configuration_Manager
             }
             else
             {
-                model.Sections.Remove(se.section);
+                model.sections.Remove(se.section);
                 sectionTabsView.readAndShow();
             }
 
@@ -320,7 +320,7 @@ namespace Configuration_Manager
                     editSectionNameToolStripMenuItem.Enabled = false;
                 }
 
-                if (model.Sections.Count >= Model.getInstance().maxSections)
+                if (model.sections.Count >= Model.getInstance().maxSections)
                     newSectionToolStripMenuItem.Enabled = false;
                 else
                     newSectionToolStripMenuItem.Enabled = true;
@@ -339,7 +339,7 @@ namespace Configuration_Manager
             XDocument xdoc;
             try
             {
-                xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
+                xdoc = XDocument.Load(Model.getInstance().textsFilePath);
                 IEnumerable<XElement> texts = xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text");
                 this.Text = texts.Single(x => (int?)x.Attribute("id") == 26).Value;
             }
@@ -368,7 +368,7 @@ namespace Configuration_Manager
                     e.Cancel = true;
             }
 
-            foreach (ICustomControl c in Model.getInstance().AllControls)
+            foreach (ICustomControl c in Model.getInstance().allControls)
             {
                 if (c.cd.Changed && c.cd.MainDestination != "")
                 {
@@ -390,6 +390,7 @@ namespace Configuration_Manager
                     break;
                 }
             }
+
             SaveBoundaries();
         }
 
@@ -398,7 +399,7 @@ namespace Configuration_Manager
             XDocument xdoc;
             try
             {
-                xdoc = XDocument.Load(model.ConfigFilePath);
+                xdoc = XDocument.Load(model.configFilePath);
                 XElement settings = xdoc.Element("ConfigurationManager").Element("Settings");
 
                 settings.Element("Top").Value = this.Top.ToString();
@@ -406,7 +407,7 @@ namespace Configuration_Manager
                 settings.Element("Height").Value = this.ClientSize.Height.ToString();
                 settings.Element("Width").Value = this.ClientSize.Width.ToString();
 
-                xdoc.Save(model.ConfigFilePath);
+                xdoc.Save(model.configFilePath);
             }
             catch (Exception)
             {
@@ -419,12 +420,12 @@ namespace Configuration_Manager
             MouseEventArgs me = e as MouseEventArgs;
             CToolStripButton tb = null;
 
-            foreach (Section s in model.Sections)
+            foreach (Section s in model.sections)
                 if (s.Selected) tb = s.Button;
 
             if (tb != null)
             {
-                SectionEditor se = new SectionEditor(model.CurrentSection);
+                SectionEditor se = new SectionEditor(model.currentSection);
                 se.ShowDialog();
                 //sectionMenuView.readAndShow();
             }

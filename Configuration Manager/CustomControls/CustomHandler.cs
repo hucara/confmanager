@@ -57,9 +57,9 @@ namespace Configuration_Manager.CustomControls
 			{
 				c.ContextMenuStrip = contextMenu;
 
-				model.CurrentClickedControl = c;
-				model.LastClickedX = me.X;
-				model.LastClickedY = me.Y;
+				model.currentClickedControl = c;
+				model.lastClickedX = me.X;
+				model.lastClickedY = me.Y;
 
 				SetContextMenuStrip(type);
 				contextMenu.Show(c, me.X, me.Y);
@@ -68,9 +68,9 @@ namespace Configuration_Manager.CustomControls
 			{
 				c.ContextMenuStrip = null;
 
-				model.CurrentClickedControl = c;
-				model.LastClickedX = me.X;
-				model.LastClickedY = me.Y;
+				model.currentClickedControl = c;
+				model.lastClickedX = me.X;
+				model.lastClickedY = me.Y;
 
 				SetContextMenuStrip(type);
 			}
@@ -114,7 +114,7 @@ namespace Configuration_Manager.CustomControls
 				contextMenu.Items[7].Enabled = true;
 
 				// Check if it is the only and last tab inside the CTabcontrol
-				CTabPage p = model.CurrentClickedControl as CTabPage;
+				CTabPage p = model.currentClickedControl as CTabPage;
 				if ((p.Parent as CTabControl).TabCount <= 1)
 					contextMenu.Items[7].Enabled = false;
 			}
@@ -141,7 +141,7 @@ namespace Configuration_Manager.CustomControls
             }
 
             // Set the PASTE option
-            if (model.CopiedControl || model.CutControl)
+            if (model.copiedControl || model.cutControl)
                 contextMenu.Items[5].Enabled = true;
             else
                 contextMenu.Items[5].Enabled = false;
@@ -170,7 +170,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void labelToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CLabel label = ControlFactory.BuildCLabel(model.CurrentClickedControl);
+			CLabel label = ControlFactory.BuildCLabel(model.currentClickedControl);
 
 			editor = new ControlEditor();
 			editor.Show(label);
@@ -178,7 +178,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void textBoxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-            CTextBox textBox = ControlFactory.BuildCTextBox(model.CurrentClickedControl);
+            CTextBox textBox = ControlFactory.BuildCTextBox(model.currentClickedControl);
 
 			editor = new ControlEditor();
 			editor.Show(textBox);
@@ -186,7 +186,7 @@ namespace Configuration_Manager.CustomControls
 
         public void bitmapToolSTripMenuItem_Click(object sender, EventArgs e)
         {
-            CBitmap bitmap = ControlFactory.BuildCBitmap(model.CurrentClickedControl);
+            CBitmap bitmap = ControlFactory.BuildCBitmap(model.currentClickedControl);
 
             editor = new ControlEditor();
             editor.Show(bitmap);
@@ -194,7 +194,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void comboBoxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-            CComboBox comboBox = ControlFactory.BuildCComboBox(model.CurrentClickedControl);
+            CComboBox comboBox = ControlFactory.BuildCComboBox(model.currentClickedControl);
 
 			editor = new ControlEditor();
 			editor.Show(comboBox);
@@ -202,7 +202,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void checkBoxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-            CCheckBox checkBox = ControlFactory.BuildCCheckBox(model.CurrentClickedControl);
+            CCheckBox checkBox = ControlFactory.BuildCCheckBox(model.currentClickedControl);
 
 			editor = new ControlEditor();
 			editor.Show(checkBox);
@@ -210,7 +210,7 @@ namespace Configuration_Manager.CustomControls
 
         public void buttonToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CButton button = ControlFactory.BuildCButton(model.CurrentClickedControl);
+            CButton button = ControlFactory.BuildCButton(model.currentClickedControl);
 
             editor = new ControlEditor();
             editor.Show(button);
@@ -218,7 +218,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void groupBoxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-            CGroupBox groupBox = ControlFactory.BuildCGroupBox(model.CurrentClickedControl);
+            CGroupBox groupBox = ControlFactory.BuildCGroupBox(model.currentClickedControl);
 
 			editor = new ControlEditor();
 			editor.Show(groupBox);
@@ -226,7 +226,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void shapeToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-            CPanel panel = ControlFactory.BuildCPanel(model.CurrentClickedControl);
+            CPanel panel = ControlFactory.BuildCPanel(model.currentClickedControl);
 
 			editor = new ControlEditor();
 			editor.Show(panel);
@@ -234,7 +234,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void tabControlToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-            CTabControl tabControl = ControlFactory.BuildCTabControl(model.CurrentClickedControl);
+            CTabControl tabControl = ControlFactory.BuildCTabControl(model.currentClickedControl);
             CTabPage ctab = ControlFactory.BuildCTabPage(tabControl);
 
 			tabControl.MouseDown += Control_Click;
@@ -245,7 +245,7 @@ namespace Configuration_Manager.CustomControls
 
 		public void tabPageToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-            CTabPage tabPage = ControlFactory.BuildCTabPage(model.CurrentClickedControl);
+            CTabPage tabPage = ControlFactory.BuildCTabPage(model.currentClickedControl);
 			tabPage.MouseDown += Control_Click;
 
 			editor = new ControlEditor();
@@ -254,21 +254,21 @@ namespace Configuration_Manager.CustomControls
 
 		public void editToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-            if (model.CurrentClickedControl == null) return; 
+            if (model.currentClickedControl == null) return; 
 			editor = new ControlEditor();
-			model.LastClickedX = model.CurrentClickedControl.Location.X;
-			model.LastClickedY = model.CurrentClickedControl.Location.Y;
-			model.logCreator.Append("! Editing: " + model.CurrentClickedControl.Name);
+			model.lastClickedX = model.currentClickedControl.Location.X;
+			model.lastClickedY = model.currentClickedControl.Location.Y;
+			model.logCreator.Append("! Editing: " + model.currentClickedControl.Name);
 
             foreach (ControlEditor ed in Application.OpenForms.OfType<ControlEditor>())
             {
-                if (ed.control == model.CurrentClickedControl)
+                if (ed.control == model.currentClickedControl)
                 {
                     ed.Focus();
                     return;
                 }
             }
-			editor.Show(model.CurrentClickedControl);
+			editor.Show(model.currentClickedControl);
 		}
 
 		public void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -276,11 +276,11 @@ namespace Configuration_Manager.CustomControls
             // Close editor if oppened
             ControlEditor closing = null;
             foreach (ControlEditor ed in Application.OpenForms.OfType<ControlEditor>())
-                if (ed.control == model.CurrentClickedControl) closing = ed;
+                if (ed.control == model.currentClickedControl) closing = ed;
             if (closing != null) closing.Close();
 
             // Delete control
-			model.DeleteControl(model.CurrentClickedControl, false);
+			model.DeleteControl(model.currentClickedControl, false);
             Model.getInstance().uiChanged = true;
         }
 
@@ -304,16 +304,16 @@ namespace Configuration_Manager.CustomControls
 				Pen p = new Pen(SystemColors.Highlight, 1);
 				Graphics g = c.Parent.CreateGraphics();
 
-				model.CurrentSection.Tab.Refresh();
+				model.currentSection.Tab.Refresh();
 
 				rect = c.Bounds;
 				rect.Inflate(1, 1);
 				g.DrawRectangle(p, rect);
 			}
 
-			model.CurrentClickedControl = c;
-			model.LastClickedX = me.X;
-			model.LastClickedY = me.Y;
+			model.currentClickedControl = c;
+			model.lastClickedX = me.X;
+			model.lastClickedY = me.Y;
 
 			if (model.progMode && me.Button == MouseButtons.Right)
 			{
@@ -325,12 +325,12 @@ namespace Configuration_Manager.CustomControls
                 if (type != "TabControl" && type != "TabPage" && type != "CTabPage")
                 {
 					t.Start();
-                    CreatePreviewRectangle(model.CurrentClickedControl as ICustomControl);
+                    CreatePreviewRectangle(model.currentClickedControl as ICustomControl);
 					Debug.WriteLine("! Timer Started");
 				}
 			}
 
-			Debug.WriteLine("! Clicked: " + model.CurrentClickedControl.Name + " in X: " + model.LastClickedX + " - Y: " + model.LastClickedY);
+			Debug.WriteLine("! Clicked: " + model.currentClickedControl.Name + " in X: " + model.lastClickedX + " - Y: " + model.lastClickedY);
 		}
 
         // This is the exact moment where the control is selected to begin the drag and drop process
@@ -339,7 +339,7 @@ namespace Configuration_Manager.CustomControls
 			(sender as Timer).Stop();
 			MouseEventArgs me = e as MouseEventArgs;
 
-            if (model.CurrentClickedControl != null)
+            if (model.currentClickedControl != null)
                 model.glassScreen.ActivateDragDrop(editor);
 		}
 
@@ -388,7 +388,7 @@ namespace Configuration_Manager.CustomControls
         {
             foreach (ControlEditor ed in Application.OpenForms.OfType<ControlEditor>())
             {
-                if (ed.control == model.CurrentClickedControl)
+                if (ed.control == model.currentClickedControl)
                     ed.ReadFromControl();
             }
         }
@@ -435,18 +435,18 @@ namespace Configuration_Manager.CustomControls
 
         public void copyStripMenuItem_Click(object sender, EventArgs e)
         {
-            model.copiedControlData = model.CurrentClickedControl as ICustomControl;
-            model.CopiedControl = true;
-            model.CutControl = false;
+            model.copiedControlData = model.currentClickedControl as ICustomControl;
+            model.copiedControl = true;
+            model.cutControl = false;
         }
 
         public void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (model.CopiedControl)
+            if (model.copiedControl)
             {
                 CreateControlCopy(model.copiedControlData as ICustomControl);
             }
-            else if (model.CutControl)
+            else if (model.cutControl)
                 MoveControl();
 
             Model.getInstance().uiChanged = true;
@@ -454,25 +454,25 @@ namespace Configuration_Manager.CustomControls
 
         public void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(model.CurrentClickedControl != null)
+            if(model.currentClickedControl != null)
             {
-                model.cutControlData = model.CurrentClickedControl as ICustomControl;
-                model.CurrentClickedControl.Parent.Controls.Remove(model.CurrentClickedControl);
-                model.CopiedControl = false;
-                model.CutControl = true;
+                model.cutControlData = model.currentClickedControl as ICustomControl;
+                model.currentClickedControl.Parent.Controls.Remove(model.currentClickedControl);
+                model.copiedControl = false;
+                model.cutControl = true;
             }
         }
 
         private void MoveControl()
         {
-            model.cutControlData.cd.Top = model.LastClickedY;
-            model.cutControlData.cd.Left = model.LastClickedX;
-            model.CurrentClickedControl.Controls.Add(model.cutControlData as Control);
-            model.cutControlData.cd.Parent = model.CurrentClickedControl;
-            model.cutControlData.cd.ParentSection = model.CurrentSection;
+            model.cutControlData.cd.Top = model.lastClickedY;
+            model.cutControlData.cd.Left = model.lastClickedX;
+            model.currentClickedControl.Controls.Add(model.cutControlData as Control);
+            model.cutControlData.cd.Parent = model.currentClickedControl;
+            model.cutControlData.cd.ParentSection = model.currentSection;
 
-            model.CopiedControl = false;
-            model.CutControl = false;
+            model.copiedControl = false;
+            model.cutControl = false;
         }
 
         private Control CreateControlCopy(ICustomControl source)
@@ -503,11 +503,11 @@ namespace Configuration_Manager.CustomControls
 
                 if (newControl.cd.RealText == model.copiedControlData.cd.RealText)
                 {
-                    newControl.cd.ParentSection = model.CurrentSection;
-                    newControl.cd.Parent = model.CurrentClickedControl;
+                    newControl.cd.ParentSection = model.currentSection;
+                    newControl.cd.Parent = model.currentClickedControl;
 
-                    newControl.cd.Top = model.LastClickedY;
-                    newControl.cd.Left = model.LastClickedX;
+                    newControl.cd.Top = model.lastClickedY;
+                    newControl.cd.Left = model.lastClickedX;
                 }
 
                 CheckSnapOnDrop(newControl as Control, newControl.cd.Parent);
@@ -537,39 +537,39 @@ namespace Configuration_Manager.CustomControls
             switch (sourceType)
             {
                 case "CLabel":
-                    newControl = ControlFactory.BuildCLabel(model.CurrentClickedControl);
+                    newControl = ControlFactory.BuildCLabel(model.currentClickedControl);
                     break;
 
                 case "CTextBox":
-                    newControl = ControlFactory.BuildCTextBox(model.CurrentClickedControl);
+                    newControl = ControlFactory.BuildCTextBox(model.currentClickedControl);
                     break;
 
                 case "CButton":
-                    newControl = ControlFactory.BuildCButton(model.CurrentClickedControl);
+                    newControl = ControlFactory.BuildCButton(model.currentClickedControl);
                     break;
 
                 case "CBitmap":
-                    newControl = ControlFactory.BuildCBitmap(model.CurrentClickedControl);
+                    newControl = ControlFactory.BuildCBitmap(model.currentClickedControl);
                     break;
 
                 case "CCheckBox":
-                    newControl = ControlFactory.BuildCCheckBox(model.CurrentClickedControl);
+                    newControl = ControlFactory.BuildCCheckBox(model.currentClickedControl);
                     break;
 
                 case "CComboBox":
-                    newControl = ControlFactory.BuildCComboBox(model.CurrentClickedControl);
+                    newControl = ControlFactory.BuildCComboBox(model.currentClickedControl);
                     break;
 
                 case "CPanel":
-                    newControl = ControlFactory.BuildCPanel(model.CurrentClickedControl);
+                    newControl = ControlFactory.BuildCPanel(model.currentClickedControl);
                     break;
 
                 case "CTabControl":
-                    newControl = ControlFactory.BuildCTabControl(model.CurrentClickedControl);
+                    newControl = ControlFactory.BuildCTabControl(model.currentClickedControl);
                     break;
 
                 case "CGroupBox":
-                    newControl = ControlFactory.BuildCGroupBox(model.CurrentClickedControl);
+                    newControl = ControlFactory.BuildCGroupBox(model.currentClickedControl);
                     break;
             }
 
@@ -614,7 +614,7 @@ namespace Configuration_Manager.CustomControls
             //dest.cd.RelatedVisibility.AddRange(source.cd.RelatedVisibility);
             //dest.cd.CoupledControls.AddRange(source.cd.CoupledControls);
 
-            dest.cd.ParentSection = model.CurrentSection;
+            dest.cd.ParentSection = model.currentSection;
             //dest.cd.Parent = model.CurrentClickedControl;
 
             dest.cd.Top = source.cd.Top;
@@ -636,29 +636,29 @@ namespace Configuration_Manager.CustomControls
 
         public void MultiplyControl()
         {
-            if (model.CurrentClickedControl is CLabel)
+            if (model.currentClickedControl is CLabel)
             {
-                CLabel lbl = ControlFactory.BuildCLabel(model.CurrentClickedControl.Parent);
-                lbl.cd.Top = model.CurrentClickedControl.Top + 25;
-                lbl.cd.Left = model.CurrentClickedControl.Left;
-                lbl.cd.Width = model.CurrentClickedControl.Width;
-                lbl.cd.RealSubDestination = (model.CurrentClickedControl as ICustomControl).cd.RealSubDestination;
-                lbl.cd.RealMainDestination = (model.CurrentClickedControl as ICustomControl).cd.RealMainDestination;
-                lbl.cd.DestinationType = (model.CurrentClickedControl as ICustomControl).cd.DestinationType;
+                CLabel lbl = ControlFactory.BuildCLabel(model.currentClickedControl.Parent);
+                lbl.cd.Top = model.currentClickedControl.Top + 25;
+                lbl.cd.Left = model.currentClickedControl.Left;
+                lbl.cd.Width = model.currentClickedControl.Width;
+                lbl.cd.RealSubDestination = (model.currentClickedControl as ICustomControl).cd.RealSubDestination;
+                lbl.cd.RealMainDestination = (model.currentClickedControl as ICustomControl).cd.RealMainDestination;
+                lbl.cd.DestinationType = (model.currentClickedControl as ICustomControl).cd.DestinationType;
 
-                model.CurrentClickedControl = lbl;
+                model.currentClickedControl = lbl;
             }
-            else if (model.CurrentClickedControl is CTextBox)
+            else if (model.currentClickedControl is CTextBox)
             {
-                CTextBox txtb = ControlFactory.BuildCTextBox(model.CurrentClickedControl.Parent);
-                txtb.cd.Top = model.CurrentClickedControl.Top + 25;
-                txtb.cd.Left = model.CurrentClickedControl.Left;
-                txtb.cd.Width = model.CurrentClickedControl.Width;
-                txtb.cd.RealSubDestination = (model.CurrentClickedControl as ICustomControl).cd.RealSubDestination;
-                txtb.cd.RealMainDestination = (model.CurrentClickedControl as ICustomControl).cd.RealMainDestination;
-                txtb.cd.DestinationType = (model.CurrentClickedControl as ICustomControl).cd.DestinationType;
+                CTextBox txtb = ControlFactory.BuildCTextBox(model.currentClickedControl.Parent);
+                txtb.cd.Top = model.currentClickedControl.Top + 25;
+                txtb.cd.Left = model.currentClickedControl.Left;
+                txtb.cd.Width = model.currentClickedControl.Width;
+                txtb.cd.RealSubDestination = (model.currentClickedControl as ICustomControl).cd.RealSubDestination;
+                txtb.cd.RealMainDestination = (model.currentClickedControl as ICustomControl).cd.RealMainDestination;
+                txtb.cd.DestinationType = (model.currentClickedControl as ICustomControl).cd.DestinationType;
 
-                model.CurrentClickedControl = txtb;
+                model.currentClickedControl = txtb;
             }
 
             Model.getInstance().uiChanged = true;
@@ -666,11 +666,11 @@ namespace Configuration_Manager.CustomControls
 
         public void TransportControl(KeyEventArgs e)
         {
-            if(model.CurrentClickedControl is CTextBox || model.CurrentClickedControl is CLabel
-                || model.CurrentClickedControl is CCheckBox)
+            if(model.currentClickedControl is CTextBox || model.currentClickedControl is CLabel
+                || model.currentClickedControl is CCheckBox)
             {
-                if(e.KeyCode == Keys.Down) (model.CurrentClickedControl as ICustomControl).cd.Top += 25;
-                else if (e.KeyCode == Keys.Up) (model.CurrentClickedControl as ICustomControl).cd.Top -= 25;
+                if(e.KeyCode == Keys.Down) (model.currentClickedControl as ICustomControl).cd.Top += 25;
+                else if (e.KeyCode == Keys.Up) (model.currentClickedControl as ICustomControl).cd.Top -= 25;
             }
 
             Model.getInstance().uiChanged = true;

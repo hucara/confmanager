@@ -348,12 +348,6 @@ namespace Configuration_Manager
                 if(cb.cd.comboBoxConfigItems.Count > 0) 
                     configValues.Items.Add(cb.cd.comboBoxConfigItems[i]);
             }
-
-            //foreach (String s in cb.cd.comboBoxItems)
-            //    shownValues.Items.Add(s);
-
-            //foreach (String s in cb.cd.comboBoxConfigItems)
-            //    configValues.Items.Add(s);
         }
 
         private void shownTextBox_TextChanged(object sender, EventArgs e)
@@ -402,8 +396,6 @@ namespace Configuration_Manager
             SetButtons();
             RefreshActualComboBox();
 
-            //shownTextBox.Text = "";
-            //configTextBox.Text = "";
             shownValues.SelectedItem = shownTextBox.Text;
 
             if ((cb as ComboBox).Items.Count == 1) (cb as ComboBox).SelectedIndex = 0;

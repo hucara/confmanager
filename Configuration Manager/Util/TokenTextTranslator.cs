@@ -164,9 +164,9 @@ namespace Configuration_Manager.Util
 		{
 			try
 			{
-				if (System.IO.File.Exists(Model.getInstance().TextsFilePath))
+				if (System.IO.File.Exists(Model.getInstance().textsFilePath))
 				{
-					XDocument xdoc = XDocument.Load(Model.getInstance().TextsFilePath);
+					XDocument xdoc = XDocument.Load(Model.getInstance().textsFilePath);
 					foreach (String s in valuesToTranslate)
 					{
 						var q = from c in xdoc.Descendants("TextFile").Descendants("Texts").Descendants("Text")

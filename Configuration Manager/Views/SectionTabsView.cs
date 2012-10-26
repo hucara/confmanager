@@ -35,7 +35,7 @@ namespace Configuration_Manager.Views
         // UI with that info, refreshing the components.
         public void readAndShow()
         {
-            foreach (Section s in model.Sections)
+            foreach (Section s in model.sections)
             {
 				s.Tab.MouseClick -= ch.Control_Click;
 				s.Tab.MouseClick += ch.Control_Click;

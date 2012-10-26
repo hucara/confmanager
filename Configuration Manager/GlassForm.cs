@@ -55,12 +55,12 @@ namespace Configuration_Manager
             this.editor = editor;
             this.Activate();
 
-            dragControl = model.CurrentClickedControl as ICustomControl;
+            dragControl = model.currentClickedControl as ICustomControl;
             if (dragControl != null)
             {
-                oldLocation = model.CurrentClickedControl.Location;
-                oldParent = model.CurrentClickedControl.Parent;
-                model.CurrentClickedControl.BringToFront();
+                oldLocation = model.currentClickedControl.Location;
+                oldParent = model.currentClickedControl.Parent;
+                model.currentClickedControl.BringToFront();
 
                 dragControl.cd.Parent.Controls.Remove(dragControl as Control);
                 this.Controls.Add(dragControl as Control);
@@ -85,8 +85,8 @@ namespace Configuration_Manager
             {
                 Point cord = System.Windows.Forms.Cursor.Position;
                 cord = this.PointToClient(cord);
-                dragControl.cd.Top = cord.Y - model.LastClickedY;
-                dragControl.cd.Left = cord.X - model.LastClickedX;
+                dragControl.cd.Top = cord.Y - model.lastClickedY;
+                dragControl.cd.Left = cord.X - model.lastClickedX;
                 //CalculateSnapToGrid();
             }
             else
@@ -136,7 +136,7 @@ namespace Configuration_Manager
             Point cord = System.Windows.Forms.Cursor.Position;
 
             //this.Enabled = false;
-            Control parent = GetTopChildOnCoordinates(model.CurrentSection.Tab, cord);
+            Control parent = GetTopChildOnCoordinates(model.currentSection.Tab, cord);
             this.Enabled = true;
 
             if (parent != dragControl && dragControl != null)
@@ -144,8 +144,8 @@ namespace Configuration_Manager
                 if (parent is CGroupBox || parent is CPanel || parent is CTabPage || parent is TabPage)
                 {
                     cord = parent.PointToClient(cord);
-                    dragControl.cd.Top = cord.Y - model.LastClickedY;
-                    dragControl.cd.Left = cord.X - model.LastClickedX;
+                    dragControl.cd.Top = cord.Y - model.lastClickedY;
+                    dragControl.cd.Left = cord.X - model.lastClickedX;
 
                     CheckSnapOnDrop(dragControl as Control, parent);
 
@@ -153,9 +153,9 @@ namespace Configuration_Manager
                     {
                         (dragControl as Control).Enabled = true;
                         (dragControl as Control).BringToFront();
-                        this.Controls.Remove(model.CurrentClickedControl);
-                        parent.Controls.Add(model.CurrentClickedControl);
-                        (model.CurrentClickedControl as ICustomControl).cd.Parent = parent;
+                        this.Controls.Remove(model.currentClickedControl);
+                        parent.Controls.Add(model.currentClickedControl);
+                        (model.currentClickedControl as ICustomControl).cd.Parent = parent;
                     }
                     else
                     {
@@ -163,14 +163,14 @@ namespace Configuration_Manager
                         (dragControl as Control).BringToFront();
                         int tabPageindex = (parent.Parent as TabControl).SelectedIndex;
                         parent = (parent.Parent as TabControl).TabPages[tabPageindex];
-                        this.Controls.Remove(model.CurrentClickedControl);
-                        parent.Controls.Add(model.CurrentClickedControl);
-                        (model.CurrentClickedControl as ICustomControl).cd.Parent = parent;
+                        this.Controls.Remove(model.currentClickedControl);
+                        parent.Controls.Add(model.currentClickedControl);
+                        (model.currentClickedControl as ICustomControl).cd.Parent = parent;
                     }
 
                     model.uiChanged = true;
                     System.Diagnostics.Debug.WriteLine("Dropped on: " + (dragControl as Control).Location);
-                    System.Diagnostics.Debug.WriteLine("New parent: " + model.CurrentClickedControl.Parent.Name);
+                    System.Diagnostics.Debug.WriteLine("New parent: " + model.currentClickedControl.Parent.Name);
                 }
                 else
                 {

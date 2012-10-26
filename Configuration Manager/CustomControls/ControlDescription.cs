@@ -117,7 +117,7 @@ namespace Configuration_Manager
                 this.comboBoxConfigItems = new List<String>();
 			}
 			
-            this.parentSection = Model.getInstance().CurrentSection;
+            this.parentSection = Model.getInstance().currentSection;
             this.control.BringToFront();
             count++;
         }
@@ -158,7 +158,6 @@ namespace Configuration_Manager
             set 
             {
                 this.control.Text = value;
-                //this.Changed = true;
                 this.text = value;
             }
         }
@@ -292,17 +291,9 @@ namespace Configuration_Manager
                     this.realMainDestination = this.realMainDestination.Trim('\\');
 
                     if (!System.IO.Path.IsPathRooted(this.realMainDestination))
-                    {
-                        System.IO.DirectoryInfo d = new System.IO.DirectoryInfo(System.IO.Path.GetFullPath(this.realMainDestination));
-#if DEBUG
-                        this.MainDestination = d.Parent.Parent.Parent.FullName + "\\config\\" + d.Name;
-#else
-                        this.MainDestination = d.Parent.Parent.FullName + "\\config\\" + d.Name;
-#endif
-                        Model.getInstance().logCreator.Append(this.realMainDestination);
-                        Model.getInstance().logCreator.Append(this.MainDestination);
-                    }
-                    else this.MainDestination = value;
+                        this.MainDestination = System.IO.Path.Combine(Model.getInstance().mainFolderPath, this.realMainDestination);
+                    else 
+                        this.MainDestination = value;
                 }
             }
         }
@@ -314,7 +305,7 @@ namespace Configuration_Manager
             {
                 this.displayRight = value;
                 this.DisplayBytes = Model.HexToData(value);
-                this.operatorVisibility = Model.ObtainRights(this.DisplayBytes, Model.getInstance().MainDisplayRights);
+                this.operatorVisibility = Model.ObtainRights(this.DisplayBytes, Model.getInstance().mainDisplayRights);
             }
         }
 
@@ -325,7 +316,7 @@ namespace Configuration_Manager
             {
                 this.modificationRight = value;
                 this.ModificationBytes = Model.HexToData(value);
-                this.operatorModification = Model.ObtainRights(this.ModificationBytes, Model.getInstance().MainModificationRights);
+                this.operatorModification = Model.ObtainRights(this.ModificationBytes, Model.getInstance().mainModificationRights);
             }
         }
 

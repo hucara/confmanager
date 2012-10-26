@@ -35,7 +35,7 @@ namespace Configuration_Manager
 
         public void SerializeObjectDefinition()
         {
-            model.Saving = true;
+            model.saving = true;
 
             try
             {
@@ -44,7 +44,7 @@ namespace Configuration_Manager
                     new XComment(""),
                     new XElement("ObjectDefinition",
                         new XElement("Sections",
-                                Model.getInstance().Sections.Select(item =>
+                                Model.getInstance().sections.Select(item =>
                                 new XElement("Section",
                                     new XAttribute("id", item.Id),
                                     new XElement("Name", item.Name),
@@ -57,7 +57,7 @@ namespace Configuration_Manager
                                 )
                         ),       //end Sections
                         new XElement("Controls",
-                                Model.getInstance().AllControls.Select(item =>
+                                Model.getInstance().allControls.Select(item =>
                                 new XElement("Control",
                                     new XAttribute("id", item.cd.Id),
                                     new XAttribute("type", item.cd.Type),
@@ -136,19 +136,19 @@ namespace Configuration_Manager
                             )
                             )
                         );
-                doc.Save(Model.getInstance().ObjectDefinitionsPath);
+                doc.Save(Model.getInstance().objectDefinitionsPath);
                 model.uiChanged = false;
                 System.Diagnostics.Debug.WriteLine("*** Object Definition File created ***");
                 model.logCreator.AppendCenteredWithFrame(" Object Definition File saved ");
 
-                model.Saving = false;
+                model.saving = false;
             }
             catch (Exception e)
             {
                 String errMsg = "Something went wrong while writing the Object Definition file.\nPlease, try again.";
                 MessageBox.Show(errMsg, " Error creating XML file", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                model.Saving = false;
+                model.saving = false;
 
                 System.Diagnostics.Debug.WriteLine("[ERROR] Something went wrong when creating Object Definition File.");
                 model.logCreator.Append("! ERROR: Something went wrong when creating Object Definition File.");
@@ -200,7 +200,7 @@ namespace Configuration_Manager
 
         private void SetChangedFlagToFalse()
         {
-            foreach (ICustomControl c in model.AllControls)
+            foreach (ICustomControl c in model.allControls)
                 c.cd.Changed = false;
         }
 
@@ -219,10 +219,10 @@ namespace Configuration_Manager
 
                 foreach (var i in items)
                 {
-                    if (model.Sections.Count < Model.getInstance().maxSections)
+                    if (model.sections.Count < Model.getInstance().maxSections)
                     {
                         Section s = CreateDefinedSection(i);
-                        if (s.Selected) model.CurrentSection = s;
+                        if (s.Selected) model.currentSection = s;
                         System.Diagnostics.Debug.WriteLine("+ Read: (" + s.Text + ") \t" + s.Name + " {" + s.Button.Name + " , " + s.Tab.Name + "}");
                     }
                 }
@@ -259,8 +259,8 @@ namespace Configuration_Manager
                 s.ModificationRight = modify;
                 s.Hint = hint;
 
-                Model.getInstance().CurrentSection = s;
-                Model.getInstance().Sections.Add(s);
+                Model.getInstance().currentSection = s;
+                Model.getInstance().sections.Add(s);
                 return s;
             }
             catch (Exception e)
@@ -296,7 +296,7 @@ namespace Configuration_Manager
                     CTabs.Add(i);
                 else
                 {
-                    Section s = model.Sections.Find(se => se.Name == i.Element("Section").Value);
+                    Section s = model.sections.Find(se => se.Name == i.Element("Section").Value);
                     CreatePreviewControls(s, i);
                 }
             }
@@ -307,7 +307,7 @@ namespace Configuration_Manager
             {
                 foreach (XElement e in CTabs)
                 {
-                    CTabControl parentControl = model.AllControls.Find(p => p.cd.Name == e.Element("Parent").Value) as CTabControl;
+                    CTabControl parentControl = model.allControls.Find(p => p.cd.Name == e.Element("Parent").Value) as CTabControl;
                     CTabPage ctp = ControlFactory.BuildCTabPage(parentControl);
                     ctp.cd.Name = e.Element("Name").Value;
                     ctp.cd.RealText = e.Element("Text").Value;
@@ -319,7 +319,7 @@ namespace Configuration_Manager
             //Fill out the controls with the info from ObjectDefinition.xml
             foreach (var i in items)
             {
-                foreach (ICustomControl c in model.AllControls)
+                foreach (ICustomControl c in model.allControls)
                 {
                     if (c.cd.Name == i.Element("Name").Value)
                     {
@@ -541,13 +541,13 @@ namespace Configuration_Manager
             if (c != null && i != null)
             {
                 if (i.Element("Parent").Value.Contains("Section"))
-                    c.cd.Parent = model.Sections.Find(s => s.Name == i.Element("Parent").Value).Tab;
+                    c.cd.Parent = model.sections.Find(s => s.Name == i.Element("Parent").Value).Tab;
                 else
                 {
                     String definedParent = i.Element("Parent").Value;
                     String definedName = i.Element("Name").Value;
 
-                    foreach (ICustomControl p in Model.getInstance().AllControls)
+                    foreach (ICustomControl p in Model.getInstance().allControls)
                     {
                         if (p.cd.Name == definedParent)
                         {
@@ -573,7 +573,7 @@ namespace Configuration_Manager
             c.cd.Hint = i.Element("Hint").Value;
             c.cd.Hint = c.cd.Hint.Replace("&#13;&#10;", "\r\n");
 
-            c.cd.ParentSection = Model.getInstance().Sections.Find(se => se.Name == i.Element("Section").Value);
+            c.cd.ParentSection = Model.getInstance().sections.Find(se => se.Name == i.Element("Section").Value);
 
             c.cd.Top = Convert.ToInt32(i.Element("Settings").Element("Top").Value);
             c.cd.Left = Convert.ToInt32(i.Element("Settings").Element("Left").Value);
@@ -630,7 +630,7 @@ namespace Configuration_Manager
             List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             foreach (String r in rel)
-                c.cd.RelatedRead.Add(model.AllControls.Find(p => p.cd.Name == r));
+                c.cd.RelatedRead.Add(model.allControls.Find(p => p.cd.Name == r));
         }
 
         private void SetCoupledControls(ICustomControl c, XElement i)
@@ -642,7 +642,7 @@ namespace Configuration_Manager
             List<String> rel = s.Split(f, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             foreach (String r in rel)
-                c.cd.CoupledControls.Add(model.AllControls.Find(p => p.cd.Name == r));
+                c.cd.CoupledControls.Add(model.allControls.Find(p => p.cd.Name == r));
         }
 
         private void SetRelatedVisibility(ICustomControl c, XElement i)
@@ -655,7 +655,7 @@ namespace Configuration_Manager
 
             foreach (String r in rel)
             {
-                ICustomControl p = model.AllControls.Find(x => x.cd.Name == r);
+                ICustomControl p = model.allControls.Find(x => x.cd.Name == r);
                 p.cd.inRelatedVisibility = true;
                 c.cd.RelatedVisibility.Add(p);
             }

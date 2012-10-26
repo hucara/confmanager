@@ -26,7 +26,7 @@ namespace Configuration_Manager.RelationManagers
         // - Have the "Changed" property as true.
         public static void SaveChanges()
         {
-            foreach (ICustomControl c in Model.getInstance().AllControls.Where(p => p.cd.Changed))
+            foreach (ICustomControl c in Model.getInstance().allControls.Where(p => p.cd.Changed))
             {
                 if (c.cd.MainDestination != null && c.cd.MainDestination != "")
                 {
@@ -35,7 +35,7 @@ namespace Configuration_Manager.RelationManagers
                 }
             }
 
-            foreach (ICustomControl c in Model.getInstance().AllControls.Where(p => p.cd.Changed))
+            foreach (ICustomControl c in Model.getInstance().allControls.Where(p => p.cd.Changed))
             {
                 ReReadControl(c);
                 c.cd.Changed = false;

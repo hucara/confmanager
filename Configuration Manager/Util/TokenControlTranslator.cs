@@ -96,7 +96,7 @@ namespace Configuration_Manager.Util
                 String name = s;
                 if (name.Contains("_CONF"))
                     name = name.Remove(name.IndexOf("_CONF"));
-                ICustomControl control = Model.getInstance().AllControls.Find(c => c.cd.Name == name);
+                ICustomControl control = Model.getInstance().allControls.Find(c => c.cd.Name == name);
 
                 text = "";
                 if (control != null)

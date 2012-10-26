@@ -113,7 +113,7 @@ namespace Configuration_Manager
             SetCheckBoxValuesOptions();
 
             base.Show();
-            SaveToControl();
+            //SaveToControl();
         }
 
         private void SetOpenFileDialog()
@@ -141,11 +141,11 @@ namespace Configuration_Manager
 
         private void ShowMousePosition()
         {
-            this.topTextBox.Text = model.LastClickedY.ToString();
-            this.control.cd.Top = model.LastClickedY;
+            this.topTextBox.Text = model.lastClickedY.ToString();
+            this.control.cd.Top = model.lastClickedY;
 
-            this.leftTextBox.Text = model.LastClickedX.ToString();
-            this.control.cd.Left = model.LastClickedX;
+            this.leftTextBox.Text = model.lastClickedX.ToString();
+            this.control.cd.Left = model.lastClickedX;
 
             ((Control)this.control).Refresh();
         }
@@ -190,17 +190,17 @@ namespace Configuration_Manager
             {
                 if (relationsComboBox.SelectedItem.ToString() == this.COUPLED && control is CComboBox)
                 {
-                    foreach (ICustomControl c in model.AllControls.Where(p => p is CComboBox))
+                    foreach (ICustomControl c in model.allControls.Where(p => p is CComboBox))
                         controlListBox.Items.Add(c.cd.Name);
                 }
                 else if (relationsComboBox.SelectedItem.ToString() == this.COUPLED && control is CCheckBox)
                 {
-                    foreach (ICustomControl c in model.AllControls.Where(p => p is CCheckBox))
+                    foreach (ICustomControl c in model.allControls.Where(p => p is CCheckBox))
                         controlListBox.Items.Add(c.cd.Name);
                 }
                 else
                 {
-                    foreach (ICustomControl c in model.AllControls)
+                    foreach (ICustomControl c in model.allControls)
                         controlListBox.Items.Add(c.cd.Name);
                 }
                 controlListBox.Items.Remove(control.cd.Name);
@@ -246,7 +246,7 @@ namespace Configuration_Manager
 
         private void FillOutFileTypeComboBox()
         {
-            foreach (String s in model.DestinationFileTypes)
+            foreach (String s in model.destinationFileTypes)
                 destinationTypeComboBox.Items.Add(s);
         }
 
@@ -711,6 +711,8 @@ namespace Configuration_Manager
 
             if (control.cd.Format != null && control.cd.Format != "")
                 FormatValue(control);
+
+            model.uiChanged = true;
         }
 
         private void FormatValue(ICustomControl control)
@@ -805,7 +807,7 @@ namespace Configuration_Manager
         private void controlListBox_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             //Get the control that was checked.
-            ICustomControl checkedControl = model.AllControls.Find(c => c.cd.Name == controlListBox.Items[e.Index].ToString());
+            ICustomControl checkedControl = model.allControls.Find(c => c.cd.Name == controlListBox.Items[e.Index].ToString());
             System.Diagnostics.Debug.WriteLine(this.control.cd.RelatedRead.Count);
 
             // If item is being activated
@@ -942,7 +944,7 @@ namespace Configuration_Manager
 
             foreach (Control c in currentVisibleList)
             {
-                if (c.Visible && model.AllControls.Contains(c as ICustomControl))
+                if (c.Visible && model.allControls.Contains(c as ICustomControl))
                 {
                     rect = c.Bounds;
                     rect.Inflate(3, 3);
@@ -1159,15 +1161,6 @@ namespace Configuration_Manager
                 {
                     exePathTextBox.Text = openFileDialog1.FileName;
                 }
-            }
-        }
-
-        private void managePath()
-        {
-            // Check if the path is rooted or relative
-            if (System.IO.Path.IsPathRooted(this.fileDestinationTextBox.Text))
-            {
-
             }
         }
     }

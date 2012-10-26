@@ -39,8 +39,8 @@ namespace Configuration_Manager
         public int cellHeight = 40;
         public int cellWidth = 120;
 
-        public byte[] MainModificationRights = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
-        public byte[] MainDisplayRights = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
+        public byte[] mainModificationRights = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
+        public byte[] mainDisplayRights = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
 
         public bool createLogs = false;
         public int maxAgeOfLogs = -1;
@@ -48,60 +48,56 @@ namespace Configuration_Manager
         public int sectionMenuWidth = 131;
 
         public bool editingUI = false;
-        public bool Saving = false;
+        public bool saving = false;
         public bool creatingNewComponent = false;
         public bool editingOldComponent = false;
-        public bool ObjectDefinitionExists { get; set; }
-        public bool ConfigFileExists { get; set; }
+        public bool objectDefinitionExists { get; set; }
+        public bool configFileExists { get; set; }
         
-        public bool CopiedControl { get; set; }
-        public bool CutControl { get; set; }
+        public bool copiedControl { get; set; }
+        public bool cutControl { get; set; }
         public ICustomControl copiedControlData { get; set; }
         public ICustomControl cutControlData { get; set; } 
 
-        public String Headline { get; private set; }
+        public String headline { get; private set; }
+        public String textToken { get; set; }
+        public String controlToken { get; set; }
 
-        public String ExePath { get; private set; }
-        public String AppFolderPath { get; private set; }
+        public String exePath { get; private set; }
+        public String appFolderPath { get; private set; }
+        public String mainFolderPath { get; private set; }
+        public String configFolderPath { get; private set; }
+        public String logFolderPath { get; private set; }
+        public String configFilePath { get; private set; }
 
-        public String MainFolderPath { get; private set; }
-        public String ConfigFolderPath { get; private set; }
-        public String LogFolderPath { get; private set; }
-        public String ConfigFilePath { get; private set; }
+        public string langID { get; set; }
+        public String textsFilesFolderPath { get; private set; }
+        public String textsFilePath { get; private set; }
+        public String translationLangPath { get; private set; }
+        public String objectDefinitionsPath { get; private set; }
 
-        public string LangID { get; set; }
-        public String TextsFilesFolderPath { get; private set; }
-        public String TextsFilePath { get; private set; }
-        public String TranslationLangPath { get; private set; }
-        private static String translationPath;
-        public String DefaultLangPath { get; private set; }
-        public String ObjectDefinitionsPath { get; private set; }
+        public List<String> langsPath { get; private set; }
+        public List<String> destinationFileTypes;
+        public List<String> relationTypes;
 
-        public List<String> LangsPath { get; private set; }
-        public List<String> DestinationFileTypes;
-        public List<String> RelationTypes;
+        public List<ICustomControl> allControls { get; private set; }
 
-        public List<ICustomControl> AllControls { get; private set; }
+        public Control currentClickedControl { get; set; }
+        public int lastClickedX { get; set; }
+        public int lastClickedY { get; set; }
 
-        public Control CurrentClickedControl { get; set; }
-        public int LastClickedX { get; set; }
-        public int LastClickedY { get; set; }
+        public Section currentSection;
+        public List<Section> sections { get; set; }
 
-        public Section CurrentSection;
-        public List<Section> Sections { get; set; }
-
-        public XDocument ConfigObjects { get; private set; }
-        public XDocument ConfigFile { get; private set; }
+        public XDocument configObjects { get; private set; }
+        public XDocument configFile { get; private set; }
         public static XDocument translationFile { get; private set; }
-        public static XDocument TextFile { get; private set; }
+        public static XDocument textsFile { get; private set; }
 
         public LogCreation logCreator { get; private set; }
         public LogDeletion logDeleter { get; private set; }
 
-        public ToolStripTextBox InfoLabel { get; set; }
-
-        public String textToken { get; set; }
-        public String controlToken { get; set; }
+        public ToolStripTextBox infoLabel { get; set; }
 
         public System.Drawing.Font lastSelectedFont { get; set; }
 
@@ -110,30 +106,28 @@ namespace Configuration_Manager
         // Private constructor
         private Model()
         {
-            ObjectDefinitionExists = false;
+            objectDefinitionExists = false;
             uiChanged = false;
 
-            AllControls = new List<ICustomControl>();
-            Sections = new List<Section>();
-            DestinationFileTypes = new List<String>();
-            RelationTypes = new List<String>();
+            allControls = new List<ICustomControl>();
+            sections = new List<Section>();
+            destinationFileTypes = new List<String>();
+            relationTypes = new List<String>();
 
             SetPaths();
             LoadFiles();
             CheckPaths();
-            //ReadConfigurationFile();
 
             FillDestinationFileTypes();
         }
 
         private void CheckPaths()
         {
-            if (!File.Exists(ConfigFilePath))
+            if (!File.Exists(configFilePath))
             {
                 //String caption = Model.GetTranslationFromID(37);
                 //String msg = GetTranslationFromID(41) + " " + GetTranslationFromID(43);
-                MessageBox.Show(ConfigFilePath + " not found. The application will now close.", "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                MessageBox.Show(configFilePath + " not found. The application will now close.", "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Environment.Exit(0);
             }
         }
@@ -159,18 +153,18 @@ namespace Configuration_Manager
         {
             try
             {
-                ConfigFile = XDocument.Load(ConfigFilePath);
-                ConfigFileExists = true;
-                System.Diagnostics.Debug.WriteLine("** OK ** " + ConfigFilePath + " - File found");
+                configFile = XDocument.Load(configFilePath);
+                configFileExists = true;
+                System.Diagnostics.Debug.WriteLine("** OK ** " + configFilePath + " - File found");
             }
             catch (FileNotFoundException)
             {
-                ConfigFileExists = false;
-                System.Diagnostics.Debug.WriteLine("** ERROR ** " + ConfigFilePath + " - File not found");
+                configFileExists = false;
+                System.Diagnostics.Debug.WriteLine("** ERROR ** " + configFilePath + " - File not found");
 
                 String caption = GetTranslationFromID(37);
                 String msg = GetTranslationFromID(41) +" "+ GetTranslationFromID(43);
-                MessageBox.Show(ConfigFilePath + " not found. The application will now close.", "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(configFilePath + " not found. The application will now close.", "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Environment.Exit(0);
             }
         }
@@ -179,27 +173,27 @@ namespace Configuration_Manager
         {
             try
             {
-                ConfigObjects = XDocument.Load(ObjectDefinitionsPath);
-                ObjectDefinitionExists = true;
-                System.Diagnostics.Debug.WriteLine("** OK ** " + ObjectDefinitionsPath + " - File found");
+                configObjects = XDocument.Load(objectDefinitionsPath);
+                objectDefinitionExists = true;
+                System.Diagnostics.Debug.WriteLine("** OK ** " + objectDefinitionsPath + " - File found");
             }
             catch (Exception)
             {
-                ObjectDefinitionExists = false;
-                System.Diagnostics.Debug.WriteLine("** INFO ** " + ObjectDefinitionsPath + " - File not found");
+                objectDefinitionExists = false;
+                System.Diagnostics.Debug.WriteLine("** INFO ** " + objectDefinitionsPath + " - File not found");
                 System.Diagnostics.Debug.WriteLine("** Creating new empty UI **");
             }
         }
 
         private void SetPaths()
         {
-            this.ExePath = GetExePath();
-            this.MainFolderPath = GetMainFolderPath();
-            this.ConfigFolderPath = this.MainFolderPath + "\\config";
-            this.LogFolderPath = this.MainFolderPath + "\\log";
-            this.TextsFilesFolderPath = this.MainFolderPath + "\\texts";
-            this.ObjectDefinitionsPath = this.ConfigFolderPath + "\\ObjectDefinition.xml";
-            this.ConfigFilePath = this.ConfigFolderPath + "\\ConfigurationManager.xml";
+            this.exePath = GetExePath();
+            this.mainFolderPath = GetMainFolderPath();
+            this.configFolderPath = this.mainFolderPath + "\\config";
+            this.logFolderPath = this.mainFolderPath + "\\log";
+            this.textsFilesFolderPath = this.mainFolderPath + "\\texts";
+            this.objectDefinitionsPath = this.configFolderPath + "\\ObjectDefinition.xml";
+            this.configFilePath = this.configFolderPath + "\\ConfigurationManager.xml";
         }
 
         private string GetExePath()
@@ -216,15 +210,15 @@ namespace Configuration_Manager
 
         private void FillDestinationFileTypes()
         {
-            DestinationFileTypes.Add(".INI");
-            DestinationFileTypes.Add(".XML");
-            DestinationFileTypes.Add("REG");
+            destinationFileTypes.Add(".INI");
+            destinationFileTypes.Add(".XML");
+            destinationFileTypes.Add("REG");
         }
 
         public String DeleteControlReferences(Control c)
         {
             ICustomControl d = c as ICustomControl;
-            foreach (ICustomControl s in AllControls)
+            foreach (ICustomControl s in allControls)
             {
                 s.cd.RelatedRead.Remove(d);
                 s.cd.RelatedVisibility.Remove(d);
@@ -236,11 +230,11 @@ namespace Configuration_Manager
 
         public void ReadConfigurationFile()
         {
-            if (ConfigFileExists)
+            if (configFileExists)
             {
-                XDocument xdoc = this.ConfigFile;
+                XDocument xdoc = this.configFile;
 
-                this.Headline = (String)xdoc.Element("ConfigurationManager").Element("Headline") ?? "Configuration Manager - DEFAULT HEADLINE";
+                this.headline = (String)xdoc.Element("ConfigurationManager").Element("Headline") ?? "Configuration Manager - DEFAULT HEADLINE";
 
                 ReadSettingsSection(xdoc);
                 ReadLanguagesSection(xdoc);
@@ -258,32 +252,11 @@ namespace Configuration_Manager
                     logDeleter = new LogDeletion("ConfigurationManager", "CM", this.maxAgeOfLogs);
                 }
 
-                if (String.IsNullOrEmpty(this.textToken)) TokenTextTranslator.SetTokenTextTranslator(null, this.TextsFilePath);
-                else TokenTextTranslator.SetTokenTextTranslator(textToken, this.TextsFilePath);
+                if (String.IsNullOrEmpty(this.textToken)) TokenTextTranslator.SetTokenTextTranslator(null, this.textsFilePath);
+                else TokenTextTranslator.SetTokenTextTranslator(textToken, this.textsFilePath);
 
                 if (String.IsNullOrEmpty(this.controlToken)) TokenControlTranslator.SetTokenKey("##");
                 else TokenControlTranslator.SetTokenKey(controlToken);
-
-                System.Diagnostics.Debug.WriteLine(" ");
-                System.Diagnostics.Debug.WriteLine("** INFO ** Config file and arguments read. Printing info.");
-                System.Diagnostics.Debug.WriteLine(" - Top: " + this.top);
-                System.Diagnostics.Debug.WriteLine(" - Left: " + this.left);
-                System.Diagnostics.Debug.WriteLine(" - Height: " + this.height);
-                System.Diagnostics.Debug.WriteLine(" - Width: " + this.width);
-                System.Diagnostics.Debug.WriteLine(" - StayOnTop: " + this.stayOnTop);
-                System.Diagnostics.Debug.WriteLine(" - Movable: " + this.movable);
-                System.Diagnostics.Debug.WriteLine(" - Resizable: " + this.resizable);
-                System.Diagnostics.Debug.WriteLine(" - Lang: " + this.TextsFilePath);
-                System.Diagnostics.Debug.WriteLine(" - DefLang: " + this.DefaultLangPath);
-                System.Diagnostics.Debug.WriteLine(" - Createlogs: " + this.createLogs);
-                System.Diagnostics.Debug.WriteLine(" - MaxAgeOfLogs: " + this.maxAgeOfLogs);
-
-                System.Diagnostics.Debug.WriteLine(" - ProgModeAllowed: " + this.progModeAllowed);
-                System.Diagnostics.Debug.WriteLine(" - ProgMode: " + this.progMode);
-                System.Diagnostics.Debug.WriteLine(" - Modification: " + this.MainModificationRights);
-                System.Diagnostics.Debug.WriteLine(" - Display: " + this.MainDisplayRights);
-                System.Diagnostics.Debug.WriteLine("** INFO ** Config file end.");
-                System.Diagnostics.Debug.WriteLine(" ");
             }
         }
 
@@ -318,10 +291,6 @@ namespace Configuration_Manager
             catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("*** INFO *** There was a problem reading the Settings section in the configuration file.");
-
-                //String caption = Model.GetTranslationFromID(37);
-                //String msg = Model.GetTranslationFromID(44) + " " + Model.GetTranslationFromID(52);
-
                 String caption = "Critical error";
                 String msg = "Error reading Configuration Manager setup file. Please, check it and try again.";
                 MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -335,25 +304,31 @@ namespace Configuration_Manager
             try
             {
                 XElement languages = xdoc.Element("ConfigurationManager").Element("Languages");
-                this.TextsFilePath = languages.Element("Text").Value.ToString();
-                this.TranslationLangPath = languages.Element("Translation").Value.ToString();
-                this.DefaultLangPath = languages.Element("Translation").Value.ToString();
+                this.textsFilePath = languages.Element("Text").Value.ToString();
+                this.translationLangPath = languages.Element("Translation").Value.ToString();
 
-                if (this.TextsFilePath != "" && this.TextsFilePath != null)
+                if (!String.IsNullOrEmpty(this.translationLangPath) && System.IO.File.Exists(this.translationLangPath))
+                    translationFile = XDocument.Load(this.translationLangPath);
+                else
                 {
-                    if (!System.IO.File.Exists(this.TextsFilePath))
-                    {
-                        System.Diagnostics.Debug.WriteLine("** INFO ** Language file not found.");
+                    System.Diagnostics.Debug.WriteLine("** INFO ** Translation file not found");
 
-                        String caption = GetTranslationFromID(37);
-                        String msg = GetTranslationFromID(439) +" "+ GetTranslationFromID(43);
-                        MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        System.Environment.Exit(0);
-                    }
-                    else
-                        Model.translationPath = this.TranslationLangPath;
+                    String caption = "Critical error";
+                    String msg = "Translation file not found. The application will now close.";
+                    MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Environment.Exit(0);
+                }
 
-                    translationFile = XDocument.Load(this.TranslationLangPath);
+                if (!String.IsNullOrEmpty(this.textsFilePath) && System.IO.File.Exists(this.textsFilePath))
+                    textsFile = XDocument.Load(this.textsFilePath);
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("** INFO ** Texts file not found.");
+
+                    String caption = GetTranslationFromID(37);
+                    String msg = GetTranslationFromID(40) + " " + GetTranslationFromID(43);
+                    MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Environment.Exit(0);
                 }
             }
             catch (Exception)
@@ -374,8 +349,8 @@ namespace Configuration_Manager
                 else
                     this.progModeAllowed = false;
 
-                this.MainModificationRights = HexToData(rights.Element("Modification").Value.Substring(2));
-                this.MainDisplayRights = HexToData(rights.Element("Display").Value.Substring(2));
+                this.mainModificationRights = HexToData(rights.Element("Modification").Value.Substring(2));
+                this.mainDisplayRights = HexToData(rights.Element("Display").Value.Substring(2));
             }
             catch (Exception)
             {
@@ -432,7 +407,7 @@ namespace Configuration_Manager
                     DeleteChildren(c);
                     logCreator.Append("- Deleted: " + c.Name);
 
-                    AllControls.Remove(c as ICustomControl);
+                    allControls.Remove(c as ICustomControl);
                     DeleteControlReferences(c);
 
                     Control p = c.Parent;
@@ -445,7 +420,7 @@ namespace Configuration_Manager
                 DeleteChildren(c);
                 logCreator.Append("- Deleted: " + c.Name);
 
-                AllControls.Remove(c as ICustomControl);
+                allControls.Remove(c as ICustomControl);
                 DeleteControlReferences(c);
 
                 Control p = c.Parent;
@@ -464,7 +439,7 @@ namespace Configuration_Manager
             {
                 DeleteChildren(child);
 
-                model.AllControls.Remove(child as ICustomControl);
+                model.allControls.Remove(child as ICustomControl);
                 model.DeleteControlReferences(child);
             }
 
@@ -504,7 +479,7 @@ namespace Configuration_Manager
         {
             referencedBy = "";
 
-            foreach (ICustomControl co in model.AllControls)
+            foreach (ICustomControl co in model.allControls)
             {
                 if (co.cd.RelatedRead.Contains(c)) referencedBy += co.cd.Name + " ";
                 else if (co.cd.RelatedWrite.Contains(c)) referencedBy += co.cd.Name + " ";
@@ -579,7 +554,7 @@ namespace Configuration_Manager
                     if (r.Length <= 8)
                     {
                         while (r.Length < 8) r = "0" + r;
-                        this.MainModificationRights = Model.HexToData(r);
+                        this.mainModificationRights = Model.HexToData(r);
                     }
                     else throw new ArgumentOutOfRangeException();
                 }
@@ -591,7 +566,7 @@ namespace Configuration_Manager
                     if (r.Length <= 8)
                     {
                         while (r.Length < 8) r = "0" + r;
-                        this.MainDisplayRights = Model.HexToData(r);
+                        this.mainDisplayRights = Model.HexToData(r);
                     }
                     else throw new ArgumentOutOfRangeException();
                 }
@@ -631,7 +606,7 @@ namespace Configuration_Manager
                 if (ag.Contains("-l"))
                 {
                     int i = ag.IndexOf("-l");
-                    this.LangID = ag[i + 1];
+                    this.langID = ag[i + 1];
                 }
             }
             catch (ArgumentOutOfRangeException)
@@ -650,7 +625,7 @@ namespace Configuration_Manager
             if (sender is CToolStripButton)
             {
                 CToolStripButton ct = sender as CToolStripButton;
-                if(CurrentSection.Button == ct)
+                if(currentSection.Button == ct)
                     SetInfoLabelText((sender as CToolStripButton).ToolTipText);
             }
             else
@@ -660,20 +635,20 @@ namespace Configuration_Manager
 
         private void SetInfoLabelText(String hint)
         {
-            this.InfoLabel.Text = "";
-            this.InfoLabel.Text = hint;
-            if (this.InfoLabel.Text != "")
+            this.infoLabel.Text = "";
+            this.infoLabel.Text = hint;
+            if (this.infoLabel.Text != "")
             {
-                this.InfoLabel.Text = TokenControlTranslator.TranslateFromControl(this.InfoLabel.Text);
-                this.InfoLabel.Text = TokenTextTranslator.TranslateFromTextFile(this.InfoLabel.Text);
-                this.InfoLabel.BackColor = System.Drawing.Color.Lavender;
+                this.infoLabel.Text = TokenControlTranslator.TranslateFromControl(this.infoLabel.Text);
+                this.infoLabel.Text = TokenTextTranslator.TranslateFromTextFile(this.infoLabel.Text);
+                this.infoLabel.BackColor = System.Drawing.Color.Lavender;
             }
         }
 
         public void EraseInfoLabel(object sender, EventArgs e)
         {
-            this.InfoLabel.Text = "";
-            this.InfoLabel.BackColor = System.Drawing.SystemColors.Control;
+            this.infoLabel.Text = "";
+            this.infoLabel.BackColor = System.Drawing.SystemColors.Control;
         }
 
         // Converts the string of characters to array of bytes.
@@ -748,7 +723,7 @@ namespace Configuration_Manager
         {
             if (progModeAllowed)
             {
-                foreach (ICustomControl c in AllControls)
+                foreach (ICustomControl c in allControls)
                 {
                     if (progMode)
                     {
@@ -778,7 +753,7 @@ namespace Configuration_Manager
             {
                 if (progMode)
                 {
-                    foreach (Section s in this.Sections)
+                    foreach (Section s in this.sections)
                     {
                         s.Button.Visible = true;
                         s.Button.Enabled = true;
@@ -786,22 +761,22 @@ namespace Configuration_Manager
                 }
                 else
                 {
-                    foreach (Section s in this.Sections)
+                    foreach (Section s in this.sections)
                     {
-                        bool visibility = ObtainRights(s.DisplayBytes, model.MainDisplayRights);
+                        bool visibility = ObtainRights(s.DisplayBytes, model.mainDisplayRights);
                         if (!visibility)
                         {
                             s.Button.Visible = false;
-                            if (s.Selected) this.Sections.First().Button.PerformClick();
+                            if (s.Selected) this.sections.First().Button.PerformClick();
                         }
                         else
                             s.Button.Visible = true;
 
-                        bool modification = ObtainRights(s.ModificationBytes, model.MainModificationRights);
+                        bool modification = ObtainRights(s.ModificationBytes, model.mainModificationRights);
                         if (!modification)
                         {
                             s.Button.Enabled = false;
-                            if (s.Selected) this.Sections.First().Button.PerformClick();
+                            if (s.Selected) this.sections.First().Button.PerformClick();
                         }
                         else
                             s.Button.Enabled = true;
@@ -842,7 +817,9 @@ namespace Configuration_Manager
             }
             catch (Exception)
             {
-                MessageBox.Show("Error found in the translation file. The application will now close.", "Critical error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                String caption = "Critical error";
+                String msg = "Error while reading the translation file. The application will now close.";
+                MessageBox.Show(msg, caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 System.Environment.Exit(1);
             }
             return text;

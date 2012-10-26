@@ -87,12 +87,12 @@ namespace TokenControlTranslator_Tests
         {
             System.Windows.Forms.Form f = new System.Windows.Forms.Form();
 
-            m.AllControls.Add(ControlFactory.BuildCLabel(f));
-            m.AllControls.Add(ControlFactory.BuildCComboBox(f));
-            m.AllControls.Add(ControlFactory.BuildCLabel(f));
-            m.AllControls.Add(ControlFactory.BuildCComboBox(f));
-            m.AllControls.Add(ControlFactory.BuildCLabel(f));
-            m.AllControls.Add(ControlFactory.BuildCComboBox(f));
+            m.allControls.Add(ControlFactory.BuildCLabel(f));
+            m.allControls.Add(ControlFactory.BuildCComboBox(f));
+            m.allControls.Add(ControlFactory.BuildCLabel(f));
+            m.allControls.Add(ControlFactory.BuildCComboBox(f));
+            m.allControls.Add(ControlFactory.BuildCLabel(f));
+            m.allControls.Add(ControlFactory.BuildCComboBox(f));
         }
     }
 }
